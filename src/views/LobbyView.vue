@@ -2,6 +2,7 @@
   <div>
     {{pollId}}
     <div v-if="!joined">
+      <!--Lägg till att välja färg-->
       <input type="text" v-model="userName">
       <button v-on:click="participateInPoll">
         {{ this.uiLabels.participateInPoll }}

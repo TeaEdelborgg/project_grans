@@ -13,6 +13,7 @@
     <button v-on:click="switchLanguage">
       {{ uiLabels.changeLanguage }}
     </button>
+    <!--Ta bort att man går med, utan lägg in en knapp som tar en till join sidan-->
     <router-link to="/create/">
       {{ uiLabels.createPoll }}
     </router-link>

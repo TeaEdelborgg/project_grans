@@ -22,6 +22,7 @@
       Add question
     </button>
     <input type="number" v-model="questionNumber">
+    <!--När man startat kommer man till en egen admin vue-->
     <button v-on:click="startPoll">
       Start poll
     </button>
