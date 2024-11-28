@@ -10,9 +10,11 @@
       <input type="text" v-model="question">
       <div>
         Answers:
-        <input v-for="(_, i) in answers" 
-               v-model="answers[i]" 
-               v-bind:key="'answer' + i">
+        <input v-model="correctAnswer"
+               v-bind:key="'correctAnswer'">
+        <input v-for="(_, i) in wrongAnswers" 
+               v-model="wrongAnswers[i]" 
+               v-bind:key="'wrongAnswer' + i">
         <!-- Tar bort knappen för att skapa nya svar
         <button v-on:click="addAnswer">
           Add answer alternative
@@ -46,7 +48,9 @@ export default {
       lang: localStorage.getItem("lang") || "en",
       pollId: "",
       question: "",
-      answers: ["", "", "", ""],
+      answers: {},
+      correctAnswer: "",
+      wrongAnswers: ["", "", ""],
       questionNumber: 0,
       pollData: {},
       uiLabels: {},
@@ -67,7 +71,9 @@ export default {
       socket.emit("startPoll", this.pollId)
     },
     addQuestion: function () {
-      socket.emit("addQuestion", {pollId: this.pollId, q: this.question, a: this.answers } )
+      this.answers = {correct: this.correctAnswer, wrong: this.wrongAnswers}
+      socket.emit("addQuestion", {pollId: this.pollId, q: this.question, a: this.answers} )
+      console.log(this.answers)
     },
 
     /* tar bort denna funktion som inte längre används
