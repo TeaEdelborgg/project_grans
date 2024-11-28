@@ -13,7 +13,8 @@
     <button v-on:click="switchLanguage">
       {{ uiLabels.changeLanguage }}
     </button>
-    <!--Ta bort att man går med, utan lägg in en knapp som tar en till join sidan-->
+    <!--Ta bort att man går med, utan lägg in en knapp som tar en till join sidan
+    När man skapar så tas man till en sida där man-->
     <router-link to="/create/">
       {{ uiLabels.createPoll }}
     </router-link>
@@ -24,6 +25,14 @@
   </ResponsiveNav>
   <h1>{{ uiLabels["sales-pitch"] }}</h1>
   <h2>{{ uiLabels.subHeading }}</h2>
+  <!--Gå med-->
+  <router-link to="/create/">
+    <button>{{ uiLabels.createQuiz }}</button>
+  </router-link>
+  <!--Gå med i quiz-->
+  <router-link to="/join/">
+    <button>{{ uiLabels.joinQuiz }}</button>
+  </router-link>
   <label>
     Write poll id: 
     <input type="text" v-model="newPollId">
