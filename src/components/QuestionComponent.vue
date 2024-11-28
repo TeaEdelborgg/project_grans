@@ -4,11 +4,6 @@
   {{ a }}
 </button>
 
-<!--
-<button v-bind:key="question.a[0]" v-on:click="selectAnswer(question.a[0])"> {{ question.a[0] }}</button>
-<button v-bind:key="question.a[1]" v-on:click="selectAnswer(question.a[1])"> {{ question.a[1] }}</button>
-<button v-bind:key="question.a[2]" v-on:click="selectAnswer(question.a[2])"> {{ question.a[2] }}</button>
-<button v-bind:key="question.a[3]" v-on:click="selectAnswer(question.a[3])"> {{ question.a[3] }}</button>-->
 <button v-on:click="answer">
   Submitt answer
 </button>
