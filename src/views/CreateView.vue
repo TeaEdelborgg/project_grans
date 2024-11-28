@@ -13,9 +13,10 @@
         <input v-for="(_, i) in answers" 
                v-model="answers[i]" 
                v-bind:key="'answer' + i">
+        <!-- Tar bort knappen för att skapa nya svar
         <button v-on:click="addAnswer">
           Add answer alternative
-        </button>
+        </button> -->
       </div>
     </div>
     <button v-on:click="addQuestion">
@@ -45,7 +46,7 @@ export default {
       lang: localStorage.getItem("lang") || "en",
       pollId: "",
       question: "",
-      answers: ["", ""],
+      answers: ["", "", "", ""],
       questionNumber: 0,
       pollData: {},
       uiLabels: {},
@@ -68,9 +69,11 @@ export default {
     addQuestion: function () {
       socket.emit("addQuestion", {pollId: this.pollId, q: this.question, a: this.answers } )
     },
+
+    /* tar bort denna funktion som inte längre används
     addAnswer: function () {
       this.answers.push("");
-    },
+    },*/
     runQuestion: function () {
       socket.emit("runQuestion", {pollId: this.pollId, questionNumber: this.questionNumber})
     }
