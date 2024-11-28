@@ -71,9 +71,15 @@ export default {
       socket.emit("startPoll", this.pollId)
     },
     addQuestion: function () {
+      /*this.answers = [this.correctAnswer, this.wrongAnswers]
+      socket.emit("addQuestion", {pollId: this.pollId, q: this.question, a: this.answers} )
+      console.log(this.correctAnswer)
+      console.log(this.wrongAnswers) */
+      
       this.answers = {correct: this.correctAnswer, wrong: this.wrongAnswers}
       socket.emit("addQuestion", {pollId: this.pollId, q: this.question, a: this.answers} )
       console.log(this.answers)
+      console.log({pollId: this.pollId, q: this.question, a: this.answers})
     },
 
     /* tar bort denna funktion som inte längre används
