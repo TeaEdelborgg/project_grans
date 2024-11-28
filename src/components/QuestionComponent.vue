@@ -16,13 +16,17 @@ export default {
   },
   data: function(){
     return{
-      selectedAnswer:''
+      selectedAnswer:'',
+      sent:false
     }
   },
   emits: ["answer"],
   methods: {
     answer: function () {
-      this.$emit("answer", this.selectedAnswer);
+      if (!this.sent){
+        this.sent=true
+        this.$emit("answer", this.selectedAnswer);
+      }
     },
     selectAnswer: function(answer){
         console.log(answer)
