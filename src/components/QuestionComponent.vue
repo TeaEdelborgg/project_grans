@@ -8,9 +8,10 @@
 </button>
 
 <button v-on:click="answer">
-  Submitt answer
+  Submit answer
 </button>
 </template>
+
 <script>
 export default {
   name: 'QuestionComponent',
@@ -20,7 +21,8 @@ export default {
   data: function(){
     return{
       selectedAnswer:'',
-      sent:false
+      sent:false, 
+      correctAnswer:false
     }
   },
   emits: ["answer"],
@@ -29,7 +31,11 @@ export default {
       if (!this.sent){
         this.sent=true
         this.$emit("answer", this.selectedAnswer);
+        console.log('skickat')
       }
+    },
+    updateSent: function() {
+      this.sent = false
     },
     selectAnswer: function(answer){
         console.log(answer)

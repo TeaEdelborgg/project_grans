@@ -105,10 +105,22 @@ Data.prototype.getSubmittedAnswers = function(pollId) {
   return {}
 }
 
-Data.prototype.submitAnswer = function(pollId, answer) {
+Data.prototype.submitAnswer = function(pollId, answer, userId) { // och ta emot userId, måste skicka svaret till individuell lista
   if (this.pollExists(pollId)) {
     const poll = this.polls[pollId];
-    let answers = poll.answers[poll.currentQuestion];
+    const users = poll.participants;
+    for (const key in users) {
+      const user = users[key]
+      console.log('in for loop', users[key])
+      console.log('userId', user.userId)
+      if (userId==user.userId) {
+        user.information.answers.push(answer)
+        console.log(user.information.answers, 'lyckades')
+      }
+    }
+
+    /*
+    let answers = poll.answers[poll.currentQuestion]; // poll.participant.information.answer
     // create answers object if no answers have yet been submitted
     if (typeof answers !== 'object') {
       answers = {};
@@ -123,6 +135,7 @@ Data.prototype.submitAnswer = function(pollId, answer) {
     else
       answers[answer] += 1
     console.log("answers looks like ", answers, typeof answers);
+    */
   }
 }
 

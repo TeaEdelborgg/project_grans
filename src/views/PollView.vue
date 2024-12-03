@@ -1,7 +1,7 @@
 <template>
   <div>
     {{pollId}}
-    <QuestionComponent v-bind:question="question"
+    <QuestionComponent ref="questionComponent" v-bind:question="question"
               v-on:answer="submitAnswer($event)"/>
     <hr>
     <span>{{submittedAnswers}}</span>
@@ -32,7 +32,10 @@ export default {
   created: function () {
     this.pollId = this.$route.params.id;
     this.userId = this.$route.params.userId;
-    socket.on( "questionUpdate", q => this.question = q );
+    socket.on( "questionUpdate", q => { 
+      this.question = q; 
+      this.$refs.questionComponent.updateSent();              
+     }); 
     socket.on( "submittedAnswersUpdate", answers => this.submittedAnswers = answers );
     socket.on( "uiLabels", labels => this.uiLabels = labels );
     socket.emit( "getUILabels", this.lang );
@@ -40,7 +43,7 @@ export default {
   },
   methods: {
     submitAnswer: function (answer) {
-      socket.emit("submitAnswer", {pollId: this.pollId, answer: answer})
+      socket.emit("submitAnswer", {pollId: this.pollId, answer: answer, userId: this.userId}) // skicka userId
     }
   },
   // lägg till computed där vi hämtar userId
