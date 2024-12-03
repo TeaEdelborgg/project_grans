@@ -31,6 +31,7 @@ export default {
   },
   created: function () {
     this.pollId = this.$route.params.id;
+    this.userId = this.$route.params.userId;
     socket.on( "questionUpdate", q => this.question = q );
     socket.on( "submittedAnswersUpdate", answers => this.submittedAnswers = answers );
     socket.on( "uiLabels", labels => this.uiLabels = labels );
@@ -41,6 +42,17 @@ export default {
     submitAnswer: function (answer) {
       socket.emit("submitAnswer", {pollId: this.pollId, answer: answer})
     }
+  },
+  // lägg till computed där vi hämtar userId
+
+/*
+computed: {
+  userId() {
+    return this.$route.params.userId;
   }
+}
+*/
+
+  
 }
 </script>

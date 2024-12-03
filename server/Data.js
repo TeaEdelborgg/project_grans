@@ -8,10 +8,12 @@ function Data() {
     lang: "en",
     questions: [
       {q: "How old are you?", 
-       a: ["0-13", "14-18", "19-25", "26-35", "36-45","45-"]
+       a: { "correct": "21", "wrong": [ "22", "23", "24" ] }
+       /*["0-13", "14-18", "19-25", "26-35", "36-45","45-"] */
       },
       {q: "How much do you enjoy coding?", 
-       a: ["1", "2", "3", "4", "5"]
+       a: { "correct": "1", wrong: ['2', '3', '4']}
+       /*["1", "2", "3", "4", "5"]*/
       }
     ],
     answers: [],
@@ -59,10 +61,10 @@ Data.prototype.getPoll = function(pollId) {
   return {};
 }
 
-Data.prototype.participateInPoll = function(pollId, name) {
-  console.log("participant will be added to", pollId, name);
+Data.prototype.participateInPoll = function(pollId, name, userId) {
+  console.log("participant will be added to", pollId, name, userId);
   if (this.pollExists(pollId)) {
-    this.polls[pollId].participants.push({name: name, answers: []})
+    this.polls[pollId].participants.push({userId: userId, information: {name: name, answers: [], time:0, lives:2}}) //lägg till liv, tid ect alltså allt som är samma till en början
   }
 }
 

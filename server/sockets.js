@@ -21,7 +21,7 @@ function sockets(io, socket, data) {
   });
 
   socket.on('participateInPoll', function(d) {
-    data.participateInPoll(d.pollId, d.name);
+    data.participateInPoll(d.pollId, d.name, d.userId); //allt ska läggas in här när vi skapat det i LobbyView, id, namn och färg (det som skiljer varje spelare)
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   });
   socket.on('startPoll', function(pollId) {
