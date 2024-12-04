@@ -1,6 +1,6 @@
 <template>
 <p>{{question.q}}</p>
-<button v-on:cick="selectAnswer(question.a.correct)" v-bind:key="question.a.correct"> 
+<button v-on:click="selectAnswer(question.a.correct)" v-bind:key="question.a.correct"> 
   {{ question.a.correct }}
 </button>
 <button v-for="a in question.a.wrong" v-on:click="selectAnswer(a)" v-bind:key="a">
@@ -30,7 +30,10 @@ export default {
     answer: function () {
       if (!this.sent){
         this.sent=true
-        this.$emit("answer", this.selectedAnswer);
+        if (this.selectedAnswer==this.question.a.correct){
+          this.correctAnswer=true
+        }
+        this.$emit("answer", [this.selectedAnswer, this.correctAnswer]); //skicka med correctAnswer
         console.log('skickat')
       }
     },
@@ -38,7 +41,7 @@ export default {
       this.sent = false
     },
     selectAnswer: function(answer){
-        console.log(answer)
+        console.log('selectanswer: ', answer)
         this.selectedAnswer = answer
     }
 

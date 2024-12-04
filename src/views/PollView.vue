@@ -42,9 +42,10 @@ export default {
     socket.emit( "joinPoll", this.pollId );
   },
   methods: {
-    submitAnswer: function (answer) {
-      socket.emit("submitAnswer", {pollId: this.pollId, answer: answer, userId: this.userId}) // skicka userId
-    }
+    submitAnswer: function (answer) { //här måste correct answer också va med, inte bara answer
+      socket.emit("submitAnswer", {pollId: this.pollId, answer: answer[0], correctAnswer: answer[1], userId: this.userId}) // skicka userId & skicka med correct answer
+      console.log('svar: ', answer)
+    } 
   },
   // lägg till computed där vi hämtar userId
 

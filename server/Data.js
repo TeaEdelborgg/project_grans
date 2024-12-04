@@ -20,7 +20,7 @@ function Data() {
         a: { "correct": "10 miljoner", wrong: ['9 miljoner', '5 miljoner', '15 miljoner']}
        },
     ],
-    answers: [],
+    answers: [], //behöver egentligen inte
     currentQuestion: 0,
     participants: []
   }
@@ -68,7 +68,7 @@ Data.prototype.getPoll = function(pollId) {
 Data.prototype.participateInPoll = function(pollId, name, userId) {
   console.log("participant will be added to", pollId, name, userId);
   if (this.pollExists(pollId)) {
-    this.polls[pollId].participants.push({userId: userId, information: {name: name, answers: [], time:0, lives:2}}) //lägg till liv, tid ect alltså allt som är samma till en början
+    this.polls[pollId].participants.push({userId: userId, information: {name: name, answers: [], correctAnswers: [], time:0, lives:2}}) //lägg till liv, tid ect alltså allt som är samma till en början
   }
 }
 
@@ -109,7 +109,7 @@ Data.prototype.getSubmittedAnswers = function(pollId) {
   return {}
 }
 
-Data.prototype.submitAnswer = function(pollId, answer, userId) { // och ta emot userId, måste skicka svaret till individuell lista
+Data.prototype.submitAnswer = function(pollId, answer, correctAnswer, userId) { // och ta emot userId, måste skicka svaret till individuell lista & ha med correctAnswer
   if (this.pollExists(pollId)) {
     const poll = this.polls[pollId];
     const users = poll.participants;
@@ -119,6 +119,7 @@ Data.prototype.submitAnswer = function(pollId, answer, userId) { // och ta emot 
       console.log('userId', user.userId)
       if (userId==user.userId) {
         user.information.answers.push(answer)
+        user.information.correctAnswers.push(correctAnswer)
         console.log(user.information.answers, 'lyckades')
       }
     }

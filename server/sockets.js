@@ -34,7 +34,7 @@ function sockets(io, socket, data) {
   });
 
   socket.on('submitAnswer', function(d) {
-    data.submitAnswer(d.pollId, d.answer, d.userId); // ta emot userId
+    data.submitAnswer(d.pollId, d.answer, d.correctAnswer, d.userId); // ta emot userId & ha med correctAnswer
     io.to(d.pollId).emit('submittedAnswersUpdate', data.getSubmittedAnswers(d.pollId));
   }); 
 }

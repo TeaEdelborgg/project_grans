@@ -1,20 +1,23 @@
 <template>
-    <!-- saker som måste sparas i denna: 
-    playerName + färg?
-    om person har svarat eller inte
-    vad personen har svarat?
-    spara en lista på flest true innan det blir false
-
-
-    måste skickas till resultat och personliga vyn:
-    hur många liv som finns kvar
-    den totala tiden som personen har fått
-
-    skickas till den personliga vyn: 
-    livlinor som finns kvar
-
-
-
-
--->
+    <div>
+        namn: {{player.information.name}} svar: {{ player.information.answers }} correctsvar: {{ player.information.correctAnswers }}
+    </div>
 </template>
+
+<script>
+export default {
+  name: 'Player',
+  props: {
+    player: Object
+  },
+  data: function(){
+    return{
+      
+    }
+  },
+  //emits: ["answer"],
+  methods: {
+    //från player ska vi kalla på en funktion i resultat som sedan kallar på en funktion i data som tittar om svaren är korrekt.
+  }
+}
+</script>
