@@ -3,28 +3,29 @@
     <div v-bind:class="['hamburger', {'close': !hideNav}]" 
          v-on:click="toggleNav">
     </div>
-    <div class="logo">
-      <img src="/img/logo.png">
-      Polly polling tool 
-      <img src="../assets/logo.svg">
-    </div>
-  </header>
-  <ResponsiveNav v-bind:hideNav="hideNav">
-    <button v-on:click="switchLanguage">
+     <button v-on:click="switchLanguage">
       {{ uiLabels.changeLanguage }}
     </button>
+ 
+  </header>
+  
+   
+
     <!--Ta bort att man går med, utan lägg in en knapp som tar en till join sidan
-    När man skapar så tas man till en sida där man-->
+    När man skapar så tas man till en sida där man
     <router-link to="/create/">
       {{ uiLabels.createPoll }}
     </router-link>
+
     <a href="">
       {{ uiLabels.about }}
     </a>
+
     <a href="">FAQ</a>
-  </ResponsiveNav>
+    -->
+
+
   <h1>{{ uiLabels["sales-pitch"] }}</h1>
-  <h2>{{ uiLabels.subHeading }}</h2>
   <!--Gå med-->
   <router-link to="/create/">
     <button>{{ uiLabels.createQuiz }}</button>
@@ -33,13 +34,7 @@
   <router-link to="/join/">
     <button>{{ uiLabels.joinQuiz }}</button>
   </router-link>
-  <label>
-    Write poll id: 
-    <input type="text" v-model="newPollId">
-  </label>
-  <router-link v-bind:to="'/lobby/' + newPollId">
-    {{ uiLabels.participatePoll }}
-  </router-link>
+  
 </template>
 
 <script>
@@ -49,15 +44,15 @@ const socket = io("localhost:3000");
 
 export default {
   name: 'StartView',
-  components: {
+  /*components: {
     ResponsiveNav
   },
+  */
   data: function () {
     return {
       uiLabels: {},
-      newPollId: "",
       lang: localStorage.getItem( "lang") || "en",
-      hideNav: true
+      //hideNav: true
     }
   },
   created: function () {
@@ -81,6 +76,7 @@ export default {
   }
 }
 </script>
+
 <style scoped>
   header {
     background-color: gray;
@@ -88,7 +84,7 @@ export default {
     display: grid;
     grid-template-columns: 2em auto;
   }
-  .logo {
+  .logo { /* Kolla cursor i hemsidan, konstigt ändra den så att det blir vanlig pil över logon */
     text-transform: uppercase;
     letter-spacing: 0.25em;
     font-size: 2.5rem;
@@ -113,6 +109,10 @@ export default {
     cursor: pointer;
     font-size: 1.5rem;
   }
+  button:hover {
+    background-color: rgb(152, 135, 135);
+    cursor: pointer; 
+  }
 
 @media screen and (max-width:50em) {
   .logo {
@@ -122,10 +122,10 @@ export default {
     justify-content: center;
   }
   .hamburger::before {
-    content: "☰";
+    content: "☰"; /* toggle menu */
   }
   .close::before {
-    content: "✕";
+    content: "✕";  /* close menu */
   }
   .hide {
     left:-12em;
