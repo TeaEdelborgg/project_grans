@@ -5,16 +5,20 @@ import {readFileSync} from "fs";
 function Data() {
   this.polls = {};
   this.polls['test'] = {
-    lang: "en",
+    lang: "sv",
     questions: [
-      {q: "How old are you?", 
-       a: { "correct": "21", "wrong": [ "22", "23", "24" ] }
-       /*["0-13", "14-18", "19-25", "26-35", "36-45","45-"] */
+      {q: "Hur långt är ett civilingenjörsprogram?", 
+       a: { "correct": "5 år", "wrong": [ "3 år", "6 år", "4 år" ] }
       },
-      {q: "How much do you enjoy coding?", 
-       a: { "correct": "1", wrong: ['2', '3', '4']}
-       /*["1", "2", "3", "4", "5"]*/
-      }
+      {q: "Vad är Sveriges sjätte största stad?", 
+       a: { "correct": "Västerås", wrong: ['Uppsala', 'Linköping', 'Helsingborg']}
+      }, 
+      {q: "Vad heter huvudstaden i Frankrike?", 
+        a: { "correct": "Paris", wrong: ['London', 'Stockholm', 'Oslo']}
+       },
+       {q: "Hur många invånare finns i Sverige?", 
+        a: { "correct": "10 miljoner", wrong: ['9 miljoner', '5 miljoner', '15 miljoner']}
+       },
     ],
     answers: [],
     currentQuestion: 0,
