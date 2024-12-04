@@ -1,9 +1,9 @@
 <template>
   <div>
-    Poll link: 
-    <input type="text" v-model="pollId">
+    <p>Poll link: {{pollId}}</p>
     <button v-on:click="createPoll">
       Create poll
+      <!-- generate random poll id-->
     </button>
     <div>
       {{ uiLabels.question }}:
@@ -63,7 +63,12 @@ export default {
     socket.emit( "getUILabels", this.lang );
   },
   methods: {
+    generatePollId: function(){
+      return Math.random().toString(36).substring(2,10).toUpperCase();
+      /*id ska tas bort om det genererats tidigare?*/
+    },
     createPoll: function () {
+      this.pollId=this.generatePollId();
       socket.emit("createPoll", {pollId: this.pollId, lang: this.lang })
       socket.emit("joinPoll", this.pollId);
     },
