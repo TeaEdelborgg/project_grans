@@ -26,16 +26,26 @@ export default {
         a: []
       },
       pollId: "inactive poll",
-      submittedAnswers: {}
+      submittedAnswers: {},
+      questionRandom:{
+        q:"",
+        a:[]
+      }
     }
   },
   created: function () {
     this.pollId = this.$route.params.id;
     this.userId = this.$route.params.userId;
-    socket.on( "questionUpdate", q => { 
+    /*socket.on( "questionUpdate", q => { 
+      console.log("tog emot fråga, ", q)
       this.question = q; 
       this.$refs.questionComponent.updateSent();              
-     }); 
+     }); */
+    socket.on("randomOrderUpdate", q =>{
+      console.log("tog emot ranodm fråga, ",q);
+      this.question=q;
+      this.$refs.questionComponent.updateSent(); 
+    })
     socket.on( "submittedAnswersUpdate", answers => this.submittedAnswers = answers );
     socket.on( "uiLabels", labels => this.uiLabels = labels );
     socket.emit( "getUILabels", this.lang );

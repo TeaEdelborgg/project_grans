@@ -29,6 +29,8 @@ function sockets(io, socket, data) {
   })
   socket.on('runQuestion', function(d) {
     let question = data.getQuestion(d.pollId, d.questionNumber);
+    let randomOrder = data.getQuestionAnswerRandom(d.pollId, d.questionNumber);
+    io.to(d.pollId).emit('randomOrderUpdate', randomOrder);
     io.to(d.pollId).emit('questionUpdate', question);
     io.to(d.pollId).emit('submittedAnswersUpdate', data.getSubmittedAnswers(d.pollId));
   });

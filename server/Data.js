@@ -98,6 +98,31 @@ Data.prototype.getQuestion = function(pollId, qId = null) {
   return {}
 }
 
+Data.prototype.getQuestionAnswerRandom = function(pollId, qId = null) {
+  if (this.pollExists(pollId)) {
+    const poll = this.polls[pollId];
+    if (qId !== null) {
+      poll.currentQuestion = qId;
+    }
+    let answers = ['','','','']
+    let currentQuest = poll.questions[poll.currentQuestion];
+    let avalibleSlots = [0,1,2,3];
+    var index = Math.floor(Math.random()*4);
+    answers[index] = currentQuest.a.correct;
+    avalibleSlots.splice(index,1);
+    for(const wrongAnsw of currentQuest.a.wrong){
+      index=Math.floor(Math.random()*avalibleSlots.length);
+      answers[avalibleSlots[index]]=wrongAnsw;
+      avalibleSlots.splice(index,1);
+    };
+    //return poll.questions[poll.currentQuestion];
+    //var test={q:poll.questions[poll.currentQuestion].q, a:{correct:"",wrong:answers}}
+    var test={q:poll.questions[poll.currentQuestion].q, a:answers}
+    return(test)
+  }
+  return {}
+}
+
 Data.prototype.getSubmittedAnswers = function(pollId) {
   if (this.pollExists(pollId)) {
     const poll = this.polls[pollId];
@@ -146,5 +171,17 @@ Data.prototype.submitAnswer = function(pollId, answer, correctAnswer, userId) { 
 
 export { Data };
 
+/*let answers=['','','',''];
+let currentQuest = poll.question[poll.currentQuestion];
+let avalibleSlots = [0,1,2,3];
+var index = Math.floor(Math.random()*4);
+answers[index] = currentQuest.a.correct;
+avalibleSlots.slice(index,1);
+for(const wrongAnsw of currentQuest.a.wrong){
+  index=Math.floor(Math.random()*avalibleSlots.length);
+  answers[avalibleSlots[index]]=wrongAnsw;
+  avalibleSlots.splice(index,1);
+};*/
+//return {q:currentQuest.q, a:{correct:"",wrong:["h","j","t","e"]}}
 
 

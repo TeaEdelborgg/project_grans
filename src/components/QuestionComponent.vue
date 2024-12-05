@@ -1,9 +1,9 @@
 <template>
 <p>{{question.q}}</p>
-<button v-on:click="selectAnswer(question.a.correct)" v-bind:key="question.a.correct"> 
+<!--<button v-on:click="selectAnswer(question.a.correct)" v-bind:key="question.a.correct"> 
   {{ question.a.correct }}
-</button>
-<button v-for="a in question.a.wrong" v-on:click="selectAnswer(a)" v-bind:key="a">
+</button>-->
+<button v-for="a in question.a" v-on:click="selectAnswer(a)" v-bind:key="a">
   {{ a }}
 </button>
 
