@@ -173,7 +173,7 @@ Data.prototype.checkAnswer = function(pollId, qId=null){ //tittar på svaret fö
     const poll = this.polls[pollId];
     if (qId != null){
       for(const user of poll.participants){
-          if(user.information.answers[qId]==poll.questions[qId].a.correct){
+          if(user.information.answers[qId][0]==poll.questions[qId].a.correct){
             answers[user.userId] = true;
           }
           else{
@@ -190,18 +190,20 @@ Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){
   if(this.pollExists(pollId)){
     const poll = this.polls[pollId];
     const users = poll.participants;
-    console.log("hej från checkUser")
     if(qId !=null){
       for (const user of users){
         if(user.userId == userId){
-          console.log("user: ",user);
-          console.log("qId: ",qId);
-          console.log("question: ",poll.questions[qId])
-          if(user.information.answers[qId-1]==poll.questions[qId].a.correct){ //ta bort -1 sen, är bara för att de inte skickar randomOrder på första
-            console.log("svar rätt")
+          if(user.information.answers[qId-1][0]==poll.questions[qId].a.correct){ //ta bort -1 sen, är bara för att de inte skickar randomOrder på första
+            //lägg till tiden för användaren
+            user.information.time += user.information.answers[qId-1][1];
+            console.log("totala tiden: ",user.information.time)
             return true;
           }
           else{
+            if(user.information.lives>0){
+              user.information.lives--;
+              console.log(user.information.lives)
+            }
             return false;
           }
         }
@@ -211,17 +213,15 @@ Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){
   return null
 }
 
-Data.prototype.submitAnswer = function(pollId, answer, correctAnswer, userId) { // och ta emot userId, måste skicka svaret till individuell lista & ha med correctAnswer
-  if (this.pollExists(pollId)) {
+Data.prototype.submitAnswer = function(pollId, answer, userId) { // och ta emot userId, måste skicka svaret till individuell lista & ha med correctAnswer
+  if (this.pollExists(pollId)) { //vill lägga till tiden när svaret togs emot
     const poll = this.polls[pollId];
     const users = poll.participants;
     for (const key in users) {
       const user = users[key]
-      console.log('in for loop', users[key])
-      console.log('userId', user.userId)
       if (userId==user.userId) {
-        user.information.answers.push(answer)
-        user.information.correctAnswers.push(correctAnswer)
+        let time = poll.timer.timeLeft;
+        user.information.answers.push([answer,time])
         console.log(user.information.answers, 'lyckades')
       }
     }

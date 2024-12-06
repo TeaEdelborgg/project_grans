@@ -10,11 +10,11 @@
       <input type="text" v-model="question">
       <div>
         Answers:
-        <input v-model="correctAnswer"
-               v-bind:key="'correctAnswer'">
+        <input v-model="correctAnswer" placeholder="Correct answer" />
         <input v-for="(_, i) in wrongAnswers" 
                v-model="wrongAnswers[i]" 
-               v-bind:key="'wrongAnswer' + i">
+               v-bind:key="'wrongAnswer' + i"
+               placeholder="Wrong answer"/>
         <!-- Tar bort knappen för att skapa nya svar
         <button v-on:click="addAnswer">
           Add answer alternative
@@ -36,6 +36,15 @@
       Check answers
     </button>
     <router-link v-bind:to="'/result/' + pollId">Check result</router-link>
+
+    <div v-if="pollData.questions && pollData.questions.length > 0">
+      <h3>Added Questions:</h3>
+      <div v-for="(q, index) in pollData.questions" :key="index">
+        <p>Question {{ index + 1 }}:{{ q.q }}</p>
+        <p>Correct Answer: {{ q.a.correct }}</p>
+        <p>Wrong Answers: {{ q.a.wrong.join(', ') }}</p>
+      </div>
+    </div>
     Data: {{ pollData }}
     CheckedAnswers: {{ checkedAnswers }}
     Time Left:{{ timeLeft }}
@@ -57,7 +66,9 @@ export default {
       correctAnswer: "",
       wrongAnswers: ["", "", ""],
       questionNumber: 0,
-      pollData: {},
+      pollData: {
+        questions: []
+      },
       uiLabels: {},
       checkedAnswers: {},
       timeLeft:0,
@@ -112,9 +123,19 @@ export default {
       socket.emit("addQuestion", {pollId: this.pollId, q: this.question, a: this.answers} )
       console.log(this.correctAnswer)
       console.log(this.wrongAnswers) */
+      const newQuestion = {
+        q: this.question,
+        a: {
+          correct: this.correctAnswer,
+          wrong: this.wrongAnswers,
+        },
+      };
       
       this.answers = {correct: this.correctAnswer, wrong: this.wrongAnswers}
-      socket.emit("addQuestion", {pollId: this.pollId, q: this.question, a: this.answers} )
+      socket.emit("addQuestion", {pollId: this.pollId, q: this.question, a: this.answers, newQuestion});
+      this.pollData.questions.push(newQuestion);
+
+
       console.log(this.answers)
       console.log({pollId: this.pollId, q: this.question, a: this.answers})
     },

@@ -10,7 +10,6 @@
 <button v-on:click="answer">
   Submit answer
 </button>
-Checked answer {{ checkedAnswer }}
 </template>
 
 <script>
@@ -22,19 +21,15 @@ export default {
   data: function(){
     return{
       selectedAnswer:'',
-      sent:false, 
-      correctAnswer:false
-    }
+      sent:false
+      }
   },
   emits: ["answer"],
   methods: {
     answer: function () {
       if (!this.sent){
         this.sent=true
-        if (this.selectedAnswer==this.question.a.correct){
-          this.correctAnswer=true
-        }
-        this.$emit("answer", [this.selectedAnswer, this.correctAnswer]); //skicka med correctAnswer
+        this.$emit("answer", this.selectedAnswer); //ändra här
         console.log('skickat')
       }
     },
