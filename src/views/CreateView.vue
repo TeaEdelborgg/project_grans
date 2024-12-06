@@ -1,6 +1,13 @@
 <template>
   <div>
-    <p>Poll link: {{pollId}}</p>
+    <!--<p>Poll link: {{pollId}}</p>
+    <button v-on:click="createPoll">
+      Create poll
+      <!-- generate random poll id
+    </button>-->
+
+  Poll link: 
+    <input type="text" v-model="pollId">
     <button v-on:click="createPoll">
       Create poll
       <!-- generate random poll id-->
@@ -67,8 +74,13 @@ export default {
       return Math.random().toString(36).substring(2,10).toUpperCase();
       /*id ska tas bort om det genererats tidigare?*/
     },
+    /*createPoll: function () {
+      this.pollId=this.generatePollId();*/
+
     createPoll: function () {
-      this.pollId=this.generatePollId();
+      if (!this.pollId) {
+        this.pollId = this.generatePollId(); // Generate if not already set
+      }
       socket.emit("createPoll", {pollId: this.pollId, lang: this.lang })
       socket.emit("joinPoll", this.pollId);
     },
