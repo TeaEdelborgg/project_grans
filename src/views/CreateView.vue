@@ -99,6 +99,8 @@ export default {
       socket.emit("startTime",{pollId:this.pollId, time:10})
       this.timerQuestion()
     },
+
+    //ska finnas en annan timer som först är 5 sekunder och visar en viss rad inför nästa fråga, i resultat, sen ska timern köras.
     timerQuestion: function (){
         let time ={
           timeLeft:10,
@@ -112,7 +114,7 @@ export default {
           } else{
             console.log("tiden uppe i timerQuestion")
             socket.emit("timesUp",this.pollId)
-            time.timeLeft=0
+            this.timeLeft=0
             clearInterval(time.interval)
             //här vill man göra så att alla personer skickar deras svar för att checkas, annars kan man titta under spelets gång 
           }
