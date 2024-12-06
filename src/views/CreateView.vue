@@ -97,9 +97,24 @@ export default {
     startPoll: function () {
       socket.emit("startPoll", this.pollId)
       socket.emit("startTime",{pollId:this.pollId, time:10})
-      this.timerQuestion()
+      //this.timerQuestion()
+      this.timerBeforeQUestion();
     },
-
+    timerBeforeQUestion: function(){
+        let time={
+          timeLeft:3,
+          interval:null
+        }
+        time.interval = setInterval(()=>{
+          if (time.timeLeft>0){
+            time.timeLeft--;
+            console.log("tiden innan fråga, ", time.timeLeft)
+          } else {
+            this.timerQuestion();
+            clearInterval(time.interval)
+          }
+        },1000);
+    },
     //ska finnas en annan timer som först är 5 sekunder och visar en viss rad inför nästa fråga, i resultat, sen ska timern köras.
     timerQuestion: function (){
         let time ={
