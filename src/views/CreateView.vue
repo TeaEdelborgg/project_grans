@@ -32,8 +32,13 @@
     <button v-on:click="runQuestion">
       Run question
     </button>
+    <button v-on:click="checkAnswers">
+      Check answers
+    </button>
     <router-link v-bind:to="'/result/' + pollId">Check result</router-link>
     Data: {{ pollData }}
+    CheckedAnswers: {{ checkedAnswers }}
+    Time Left:{{ timeLeft }}
   </div>
 </template>
 
@@ -54,6 +59,8 @@ export default {
       questionNumber: 0,
       pollData: {},
       uiLabels: {},
+      checkedAnswers: {},
+      timeLeft:0,
     }
   },
   created: function () {
@@ -61,6 +68,10 @@ export default {
     socket.on( "pollData", data => this.pollData = data );
     socket.on( "participantsUpdate", p => this.pollData.participants = p );
     socket.emit( "getUILabels", this.lang );
+    socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
+    socket.on('getTime',time =>this.timeLeft=time);
+
+
   },
   methods: {
     generatePollId: function(){
@@ -74,6 +85,27 @@ export default {
     },
     startPoll: function () {
       socket.emit("startPoll", this.pollId)
+      socket.emit("startTime",{pollId:this.pollId, time:10})
+      this.timerQuestion()
+    },
+    timerQuestion: function (){
+        let time ={
+          timeLeft:10,
+          interval:null
+        }
+        time.interval = setInterval(()=>{
+          if (time.timeLeft>0){
+            time.timeLeft--;
+            console.log("tiden i create ",time.timeLeft)
+            socket.emit("getTimer",this.pollId)
+          } else{
+            console.log("tiden uppe i timerQuestion")
+            socket.emit("timesUp",this.pollId)
+            time.timeLeft=0
+            clearInterval(time.interval)
+            //här vill man göra så att alla personer skickar deras svar för att checkas, annars kan man titta under spelets gång 
+          }
+        },1000);
     },
     addQuestion: function () {
       /*this.answers = [this.correctAnswer, this.wrongAnswers]
@@ -86,6 +118,9 @@ export default {
       console.log(this.answers)
       console.log({pollId: this.pollId, q: this.question, a: this.answers})
     },
+    checkAnswers: function(){
+      socket.emit("checkAnswer", {pollId:this.pollId, questionNumber:this.questionNumber})
+    },
 
     /* tar bort denna funktion som inte längre används
     addAnswer: function () {
@@ -93,6 +128,8 @@ export default {
     },*/
     runQuestion: function () {
       socket.emit("runQuestion", {pollId: this.pollId, questionNumber: this.questionNumber})
+      socket.emit("startTime",{pollId:this.pollId, time:10})
+      this.timerQuestion()
     }
   }
 }

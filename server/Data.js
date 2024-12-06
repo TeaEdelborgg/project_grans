@@ -25,7 +25,7 @@ function Data() {
     participants: []
   }
 }
-
+//timern, fungerar med intervall
 /***********************************************
 For performance reasons, methods are added to the
 prototype of the Data object/class
@@ -51,7 +51,8 @@ Data.prototype.createPoll = function(pollId, lang="en") {
     poll.questions = [];
     poll.answers = [];
     poll.participants = [];
-    poll.currentQuestion = 0;              
+    poll.currentQuestion = 0; 
+    poll.timer = {timeLeft:10,interval:null}             
     this.polls[pollId] = poll;
     console.log("poll created", pollId, poll);
   }
@@ -79,6 +80,34 @@ Data.prototype.getParticipants = function(pollId) {
     return this.polls[pollId].participants
   }
   return [];
+}
+
+Data.prototype.startTimer = function(pollId, totalTime){
+  console.log("i start timer")
+  if(this.pollExists(pollId)){
+    console.log("pollId existerar")
+    const poll = this.polls[pollId];
+    poll.timer.timeLeft = totalTime;
+    poll.timer.interval = null;
+    poll.timer.interval = setInterval(()=>{
+      if( poll.timer.timeLeft > 0){
+        poll.timer.timeLeft--;
+        console.log("tid kvar: ", poll.timer.timeLeft)
+      } else {
+        clearInterval(poll.timer.interval);
+        poll.timer.timeLeft=0;
+      }
+    },1000);
+  }
+}
+
+Data.prototype.getTime = function(pollId){
+  if(this.pollExists(pollId)){
+    let time = this.polls[pollId].timer.timeLeft
+    console.log("tid i getTime: ",time)
+    return time
+  }
+  return 0
 }
 
 Data.prototype.addQuestion = function(pollId, q) {
@@ -132,6 +161,54 @@ Data.prototype.getSubmittedAnswers = function(pollId) {
     }
   }
   return {}
+}
+
+Data.prototype.checkAnswer = function(pollId, qId=null){ //tittar på svaret för alla deltagare, ha en separat för enskild spelare?
+  //för spelaren kanske inte ska få allas svar, då får den även andras ID, ej bra
+  //gör om den här sedan för att se om svaren är rätt varje gång det blir ny fråga
+  //alternativt när tiden går ut, pushas allas svar socket, där den för varje svar skickar till createView som lägger ihop det i en lista
+  //som sedan töms när en ny fråga ställs, alternativt ha ett object med correct/false för varje spelare för varje svar
+  let answers = {};
+  if (this.pollExists(pollId)){
+    const poll = this.polls[pollId];
+    if (qId != null){
+      for(const user of poll.participants){
+          if(user.information.answers[qId]==poll.questions[qId].a.correct){
+            answers[user.userId] = true;
+          }
+          else{
+            answers[user.userId] = false;
+          }
+      }
+      return answers;
+    }
+  }
+  return {}
+}
+
+Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){
+  if(this.pollExists(pollId)){
+    const poll = this.polls[pollId];
+    const users = poll.participants;
+    console.log("hej från checkUser")
+    if(qId !=null){
+      for (const user of users){
+        if(user.userId == userId){
+          console.log("user: ",user);
+          console.log("qId: ",qId);
+          console.log("question: ",poll.questions[qId])
+          if(user.information.answers[qId-1]==poll.questions[qId].a.correct){ //ta bort -1 sen, är bara för att de inte skickar randomOrder på första
+            console.log("svar rätt")
+            return true;
+          }
+          else{
+            return false;
+          }
+        }
+      }
+    }
+  }
+  return null
 }
 
 Data.prototype.submitAnswer = function(pollId, answer, correctAnswer, userId) { // och ta emot userId, måste skicka svaret till individuell lista & ha med correctAnswer

@@ -10,6 +10,7 @@
 <button v-on:click="answer">
   Submit answer
 </button>
+Checked answer {{ checkedAnswer }}
 </template>
 
 <script>

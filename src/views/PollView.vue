@@ -5,6 +5,7 @@
               v-on:answer="submitAnswer($event)"/>
     <hr>
     <span>{{submittedAnswers}}</span>
+    Checked answer {{ checkedAnswer }}
   </div>
 </template>
 
@@ -30,7 +31,9 @@ export default {
       questionRandom:{
         q:"",
         a:[]
-      }
+      },
+      questionNumber: null,
+      checkedAnswer: false,
     }
   },
   created: function () {
@@ -42,12 +45,24 @@ export default {
       this.$refs.questionComponent.updateSent();              
      }); */
     socket.on("randomOrderUpdate", q =>{
-      console.log("tog emot ranodm fråga, ",q);
-      this.question=q;
+      console.log("tog emot ranodm fråga, ",q.q);
+      this.question=q.q;
+      this.questionNumber=q.questionNumber;
+      console.log("tog emot random fråga, ",q.questionNumber)
       this.$refs.questionComponent.updateSent(); 
     })
     socket.on( "submittedAnswersUpdate", answers => this.submittedAnswers = answers );
     socket.on( "uiLabels", labels => this.uiLabels = labels );
+    socket.on("checkedUserAnswer", checkedAns => {
+      this.checkedAnswer = checkedAns;
+      console.log("tagit emot checked Answer: ",checkedAns)
+    });
+    socket.on("timeUp",up =>{
+      console.log("tittar om timeUp")
+      if(up==true){
+        this.timeUp();
+      }
+    });
     socket.emit( "getUILabels", this.lang );
     socket.emit( "joinPoll", this.pollId );
   },
@@ -55,7 +70,10 @@ export default {
     submitAnswer: function (answer) { //här måste correct answer också va med, inte bara answer
       socket.emit("submitAnswer", {pollId: this.pollId, answer: answer[0], correctAnswer: answer[1], userId: this.userId}) // skicka userId & skicka med correct answer
       console.log('svar: ', answer)
-    } 
+    },
+    timeUp: function(){
+      socket.emit("checkUserAnswer", {pollId:this.pollId, questionNumber:this.questionNumber,userId:this.userId}) //den ska sedan vara när timern går ut
+    }
   },
   // lägg till computed där vi hämtar userId
 
