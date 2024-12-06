@@ -94,11 +94,10 @@ export default {
       socket.emit("createPoll", {pollId: this.pollId, lang: this.lang })
       socket.emit("joinPoll", this.pollId);
     },
-    startPoll: function () {
-      socket.emit("startPoll", this.pollId)
-      socket.emit("startTime",{pollId:this.pollId, time:10})
+    startPoll: function () { 
       //this.timerQuestion()
-      this.timerBeforeQUestion();
+      socket.emit("startPoll", this.pollId)
+      this.timerQuestion();
     },
     timerBeforeQUestion: function(){
         let time={
@@ -110,6 +109,8 @@ export default {
             time.timeLeft--;
             console.log("tiden innan fråga, ", time.timeLeft)
           } else {
+            socket.emit("startTime",{pollId:this.pollId, time:10})
+            socket.emit("runQuestion", {pollId: this.pollId, questionNumber: this.questionNumber})
             this.timerQuestion();
             clearInterval(time.interval)
           }
@@ -165,9 +166,8 @@ export default {
       this.answers.push("");
     },*/
     runQuestion: function () {
-      socket.emit("runQuestion", {pollId: this.pollId, questionNumber: this.questionNumber})
-      socket.emit("startTime",{pollId:this.pollId, time:10})
-      this.timerQuestion()
+      //socket.emit("startTime",{pollId:this.pollId, time:10})
+      this.timerBeforeQUestion()
     }
   }
 }
