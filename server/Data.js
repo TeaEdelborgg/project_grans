@@ -148,6 +148,8 @@ Data.prototype.submitAnswer = function(pollId, answer, correctAnswer, userId) { 
         console.log(user.information.answers, 'lyckades')
       }
     }
+  }
+} 
 
   // För redigering av frågor
 Data.prototype.updateQuestion = function (pollId, question) {
@@ -180,8 +182,8 @@ Data.prototype.updateQuestion = function (pollId, question) {
       answers[answer] += 1
     console.log("answers looks like ", answers, typeof answers);
     */
-  }
-}
+  
+
 
 export { Data };
 
