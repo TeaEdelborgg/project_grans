@@ -149,6 +149,20 @@ Data.prototype.submitAnswer = function(pollId, answer, correctAnswer, userId) { 
       }
     }
 
+  // För redigering av frågor
+Data.prototype.updateQuestion = function (pollId, question) {
+  const poll = this.getPoll(pollId);
+  if (!poll) {
+    return null;
+  }
+  const questionIndex = poll.questions.findIndex(q => q.q === question.q);
+  if (questionIndex === -1) {
+    return null; 
+  }
+  poll.questions[questionIndex] = question;
+  return question;
+};  
+
     /*
     let answers = poll.answers[poll.currentQuestion]; // poll.participant.information.answer
     // create answers object if no answers have yet been submitted

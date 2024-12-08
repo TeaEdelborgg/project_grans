@@ -14,6 +14,26 @@ function sockets(io, socket, data) {
     socket.emit('questionUpdate', data.getQuestion(d.pollId));
   });
 
+  // Refactored updateQuestion handler
+  socket.on("updateQuestion", ({ pollId, question }) => {
+    // Use the method from the data module to update the question
+    const updatedQuestion = data.updateQuestion(pollId, question);
+    if (updatedQuestion) {
+      socket.emit('questionUpdate', updatedQuestion);  // Emit updated question
+    } else {
+      socket.emit('error', 'Question update failed');
+    }
+  });
+
+  socket.on("updateQuestion", ({ pollId, question }) => {
+    const updatedQuestion = data.updateQuestion(pollId, question);
+    if (updatedQuestion) {
+      io.to(pollId).emit('questionUpdate', updatedQuestion); 
+    } else {
+      socket.emit('error', 'Question update failed');
+    }
+  });
+
   socket.on('joinPoll', function(pollId) {
     socket.join(pollId);
     socket.emit('questionUpdate', data.getQuestion(pollId))
