@@ -52,7 +52,9 @@ Data.prototype.createPoll = function(pollId, lang="en") {
     poll.answers = [];
     poll.participants = [];
     poll.currentQuestion = 0; 
-    poll.timer = {timeLeft:10,interval:null}             
+    poll.timer = {timeLeft:10,interval:null} 
+    poll.timerBeforeQuestion = {timeLeft:3, interval:null}    
+    poll.allCorrectedAnswers = {}       
     this.polls[pollId] = poll;
     console.log("poll created", pollId, poll);
   }
@@ -69,7 +71,7 @@ Data.prototype.getPoll = function(pollId) {
 Data.prototype.participateInPoll = function(pollId, name, userId) {
   console.log("participant will be added to", pollId, name, userId);
   if (this.pollExists(pollId)) {
-    this.polls[pollId].participants.push({userId: userId, information: {name: name, answers: [], correctAnswers: [], time:0, lives:2}}) //lägg till liv, tid ect alltså allt som är samma till en början
+    this.polls[pollId].participants.push({userId: userId, information: {name: name, answers: [], correctedAnswers:[], time:0, lives:2}}) //lägg till liv, tid ect alltså allt som är samma till en början
   }
 }
 
@@ -101,10 +103,37 @@ Data.prototype.startTimer = function(pollId, totalTime){
   }
 }
 
+Data.prototype.startTimeBeforeQuestion = function (pollId, totalTime){
+  console.log("i time före fråga")
+  if(this.pollExists(pollId)){
+    const poll = this.polls[pollId];
+    poll.timerBeforeQuestion.timeLeft=totalTime;
+    poll.timerBeforeQuestion.interval=null;
+    poll.timerBeforeQuestion.interval = setInterval(()=>{
+      if(poll.timerBeforeQuestion.timeLeft > 0){
+        poll.timerBeforeQuestion.timeLeft--;
+        console.log("tid kvar innan fråga: ",poll.timerBeforeQuestion.timeLeft)
+      } else{
+        clearInterval(poll.timerBeforeQuestion.interval);
+        poll.timerBeforeQuestion.timeLeft=0
+      }
+    },1000);
+  }
+}
+
 Data.prototype.getTime = function(pollId){
   if(this.pollExists(pollId)){
     let time = this.polls[pollId].timer.timeLeft
     console.log("tid i getTime: ",time)
+    return time
+  }
+  return 0
+}
+
+Data.prototype.getTimeBeforeQuestion = function(pollId){
+  if(this.pollExists(pollId)){
+    let time = this.polls[pollId].timerBeforeQuestion.timeLeft
+    console.log("tiden i getTimeBeforeQuestion: ",time)
     return time
   }
   return 0
@@ -162,25 +191,51 @@ Data.prototype.getSubmittedAnswers = function(pollId) {
   }
   return {}
 }
-
+//använder inte checkAnswer
 Data.prototype.checkAnswer = function(pollId, qId=null){ //tittar på svaret för alla deltagare, ha en separat för enskild spelare?
   //för spelaren kanske inte ska få allas svar, då får den även andras ID, ej bra
   //gör om den här sedan för att se om svaren är rätt varje gång det blir ny fråga
   //alternativt när tiden går ut, pushas allas svar socket, där den för varje svar skickar till createView som lägger ihop det i en lista
   //som sedan töms när en ny fråga ställs, alternativt ha ett object med correct/false för varje spelare för varje svar
-  let answers = {};
+
+  //pusha allt till allCorrectedAnswers, om personen inte finns där => lägg till, annars pusha in i listan om det är correct/false
   if (this.pollExists(pollId)){
     const poll = this.polls[pollId];
     if (qId != null){
       for(const user of poll.participants){
-          if(user.information.answers[qId][0]==poll.questions[qId].a.correct){
-            answers[user.userId] = true;
+        console.log("för varje spelare")
+        if(!(user.information.answers[qId-1])){
+          user.information.answers.push(["NULL",0]) //ändra sen
+          console.log("tittar om svaret finns")
+        }
+        if(!poll.allCorrectedAnswers[user.userId]){
+          poll.allCorrectedAnswers[user.userId] = []
+        }
+        if(user.information.answers[qId-1][0]==poll.questions[qId].a.correct){
+          console.log("tittar om svare är rätt")
+          poll.allCorrectedAnswers[user.userId].push(true)
+        } else{
+          poll.allCorrectedAnswers[user.userId].push(false)
+        } /*
+          if(user.information.answers[qId-1][0]==poll.questions[qId].a.correct){ //ta bort -1 sen när första frågan också finns med
+            if (typeof poll.allCorrectedAnswers[user.userId]=='undefined'){
+              poll.allCorrectedAnswers[user.userId]=true
+            } else{
+              poll.allCorrectedAnswers[user.userId].push(true)
+            }
+            //answers[user.userId] = true; //här vill man pusha
           }
           else{
-            answers[user.userId] = false;
-          }
+            if (typeof poll.allCorrectedAnswers[user.userId]=='undefined'){
+              poll.allCorrectedAnswers[user.userId]=false
+            } else{
+              poll.allCorrectedAnswers[user.userId].push(false)
+            }
+            //answers[user.userId] = false;
+          }*/
       }
-      return answers;
+      console.log("alla svar: ",poll.allCorrectedAnswers)
+      return poll.allCorrectedAnswers;
     }
   }
   return {}
@@ -192,9 +247,13 @@ Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){
     const users = poll.participants;
     if(qId !=null){
       for (const user of users){
+        if(user.information.answers[qId-1]==null){
+          user.information.answers.push(["-",0])
+        }
         if(user.userId == userId){
           if(user.information.answers[qId-1][0]==poll.questions[qId].a.correct){ //ta bort -1 sen, är bara för att de inte skickar randomOrder på första
             //lägg till tiden för användaren
+            user.information.correctedAnswers.push(true)
             user.information.time += user.information.answers[qId-1][1];
             console.log("totala tiden: ",user.information.time)
             return true;
@@ -204,6 +263,7 @@ Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){
               user.information.lives--;
               console.log(user.information.lives)
             }
+            user.information.correctedAnswers.push(false)
             return false;
           }
         }

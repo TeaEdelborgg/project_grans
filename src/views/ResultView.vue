@@ -8,10 +8,15 @@
 
   <span>{{ submittedAnswers }}</span>
 
-  <span> Test spelare: {{ participants[0].information }} </span>
   <span> Allt från player component:</span>
+  <div v-if="participants.length>0">
+    <Player v-for="player in participants" v-bind:player="player" :key="player.id"/>
+  </div>
   
-  <Player v-for="player in participants" v-bind:player="player" :key="player.id"/>
+  <br>
+  Time Left:{{ timeLeft }} <br>
+  Time before Question:{{ timeLeftBeforeQuestion }} <br>
+  Checked Answers: {{ checkedAnswers }}
 </template>
 
 <script>
@@ -31,26 +36,38 @@ export default {
     return {
       lang: localStorage.getItem("lang") || "en",
       pollId: "",
-      question: "",
+      question: {q: " ", answers: []}, //ändra så att question bara är tomt
       submittedAnswers: {},
-      participants: []
+      participants: [],
+      timeLeft:0,
+      timeLeftBeforeQuestion:0,
+      checkedAnswers: {}
     }
   },
   created: function () {
     this.pollId = this.$route.params.id
     socket.on( "uiLabels", labels => this.uiLabels = labels );
-    socket.on("submittedAnswersUpdate", update => this.submittedAnswers = update);
-    socket.on("questionUpdate", update => this.question = update );
+    //socket.on("submittedAnswersUpdate", update => this.submittedAnswers = update);
+    //socket.on("questionUpdate", update => this.question = update );
     socket.on( "participantsUpdate", p => {
       console.log('hej från resultatview')
       this.participants = p;})
+    //socket.on("startFirstTimer", this.TimerBeforeQuestion())
+    socket.on('getTime',time =>this.timeLeft=time);
+    socket.on('getTimeBeforeQuestion',timeTwo => this.timeLeftBeforeQuestion=timeTwo);
+    //socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
     socket.emit( "getUILabels", this.lang );
     socket.emit( "joinPoll", this.pollId );
+
+    //lyssna på timern
+    //när timern är uppe vill man lyssna på alla korrekta svar och sätta dem till varje spelare
   },
   methods:{
     test: function(){
       console.log(this.pollData.participants)
-    }
+    },
+
+
   }
 }
 </script>

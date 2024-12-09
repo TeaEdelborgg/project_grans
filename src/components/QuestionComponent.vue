@@ -35,7 +35,6 @@ export default {
     },
     updateSent: function() {
       this.sent = false
-      this.correctAnswer = false
     },
     selectAnswer: function(answer){
         console.log('selectanswer: ', answer)

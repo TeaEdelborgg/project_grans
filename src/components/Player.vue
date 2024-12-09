@@ -1,6 +1,6 @@
 <template>
     <div>
-        namn: {{player.information.name}} svar: {{ player.information.answers }} correctsvar: {{ player.information.correctAnswers }}
+        namn: {{player.information.name}} svar: {{ player.information.answers }} corrected Answers: {{ player.information.correctedAnswers }}
     </div>
 </template>
 

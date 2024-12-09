@@ -46,8 +46,9 @@
       </div>
     </div>
     Data: {{ pollData }}
-    CheckedAnswers: {{ checkedAnswers }}
-    Time Left:{{ timeLeft }}
+    CheckedAnswers: {{ checkedAnswers }} <br>
+    Time Left:{{ timeLeft }} <br>
+    Time before Question:{{ timeLeftBeforeQuestion }}
   </div>
 </template>
 
@@ -72,6 +73,7 @@ export default {
       uiLabels: {},
       checkedAnswers: {},
       timeLeft:0,
+      timeLeftBeforeQuestion:0
     }
   },
   created: function () {
@@ -81,6 +83,7 @@ export default {
     socket.emit( "getUILabels", this.lang );
     socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
     socket.on('getTime',time =>this.timeLeft=time);
+    socket.on('getTimeBeforeQuestion',timeTwo => this.timeLeftBeforeQuestion=timeTwo);
 
 
   },
@@ -108,6 +111,7 @@ export default {
           if (time.timeLeft>0){
             time.timeLeft--;
             console.log("tiden innan fråga, ", time.timeLeft)
+            socket.emit("getTimerBeforeQuestion",this.pollId)
           } else {
             socket.emit("startTime",{pollId:this.pollId, time:10})
             socket.emit("runQuestion", {pollId: this.pollId, questionNumber: this.questionNumber})
@@ -166,7 +170,9 @@ export default {
     },*/
     runQuestion: function () {
       //socket.emit("startTime",{pollId:this.pollId, time:10})
+      socket.emit("startTimeBeforeQuestion",{pollId:this.pollId, time:3})
       this.timerBeforeQUestion()
+      //här måste timer köras för 
     }
   }
 }

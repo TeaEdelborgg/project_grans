@@ -47,6 +47,7 @@ function sockets(io, socket, data) {
   socket.on('checkUserAnswer', function(d){
     let checkedUserAnswer = data.checkUserAnswer(d.pollId,d.questionNumber,d.userId);
     io.to(d.pollId).emit('checkedUserAnswer', checkedUserAnswer);
+    io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   });
   socket.on('getTimer', function(pollId){
     let time = data.getTime(pollId)
@@ -54,6 +55,16 @@ function sockets(io, socket, data) {
   })
   socket.on('startTime', function(d){
     data.startTimer(d.pollId,d.time)
+    //skicka till socket i resultat att timern startat
+  })
+  socket.on('startTimeBeforeQuestion', function(d){
+    data.startTimeBeforeQuestion(d.pollId,d.time)
+    //socket.emit("startFirstTimer")
+    //skicka till socket i resultat att timern startat
+  })
+  socket.on('getTimerBeforeQuestion',function(pollId){
+    let time = data.getTimeBeforeQuestion(pollId)
+    io.to(pollId).emit('getTimeBeforeQuestion',time)
   })
   socket.on('timesUp', function(pollId){
     io.to(pollId).emit('timeUp',true)
