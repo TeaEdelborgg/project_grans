@@ -60,10 +60,12 @@ function sockets(io, socket, data) {
   })
   socket.on('startTime', function(d){
     data.startTimer(d.pollId,d.time)
+    io.to(d.pollId).emit('startTimer')
     //skicka till socket i resultat att timern startat
   })
   socket.on('startTimeBeforeQuestion', function(d){
     data.startTimeBeforeQuestion(d.pollId,d.time)
+    io.to(d.pollId).emit('startTimerBeforeQuest')
     //socket.emit("startFirstTimer")
     //skicka till socket i resultat att timern startat
   })

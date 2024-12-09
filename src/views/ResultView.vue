@@ -16,8 +16,8 @@
   </div>
   
   <br>
-  Time Left:{{ timeLeft }} <br>
-  Time before Question:{{ timeLeftBeforeQuestion }} <br>
+  Time Left:{{ timer.time }} <br>
+  Time before Question:{{ timerBefore.time }} <br>
   <div id="pedestaler">
         <PlayerPedestal v-if="participants.length>0" v-for="player in participants" v-bind:player="player" :key="player.id" id="pedestal"/>
   </div>
@@ -47,7 +47,14 @@ export default {
       participants: [],
       timeLeft:0,
       timeLeftBeforeQuestion:0,
-      
+      timerBefore: {
+        time:3,
+        interval:null
+      },
+      timer:{
+        time:10,
+        interval:null
+      }
     }
   },
   created: function () {
@@ -56,11 +63,17 @@ export default {
     //socket.on("submittedAnswersUpdate", update => this.submittedAnswers = update);
     //socket.on("questionUpdate", update => this.question = update );
     socket.on( "participantsUpdate", p => {
-      console.log('hej från resultatview')
+      
       this.participants = p;})
     //socket.on("startFirstTimer", this.TimerBeforeQuestion())
-    socket.on('getTime',time =>this.timeLeft=time);
-    socket.on('getTimeBeforeQuestion',timeTwo => this.timeLeftBeforeQuestion=timeTwo);
+    //socket.on('getTime',time =>this.timeLeft=time);
+    //socket.on('getTimeBeforeQuestion',timeTwo => this.timeLeftBeforeQuestion=timeTwo);
+    socket.on('startTimerBeforeQuest', () =>{this.timerBeforeQUestion()
+      console.log("försöker starta timer")
+    });
+    socket.on('startTimer', () =>{this.timerQuestion()
+      console.log("försöker starta timer")
+    });
     //socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
 
     //behöver mängden frågor
@@ -73,6 +86,32 @@ export default {
   methods:{
     test: function(){
       console.log(this.pollData.participants)
+    },
+    timerBeforeQUestion: function(){ //denna ska göra så att resultat också får count down
+        console.log("i timer innan fråga")
+        this.timerBefore.time=3;
+        this.timerBefore.interval=null;
+        this.timerBefore.interval = setInterval(()=>{
+          if (this.timerBefore.time>0){
+            this.timerBefore.time--;
+          } else {
+            clearInterval(this.timerBefore.interval)
+          }
+        },1000);
+    },
+    timerQuestion: function (){ //resultat ska få denna också
+        const progress = document.getElementById('progress');
+        this.timer.time = 10;
+        this.timer.interval = null;
+        this.timer.interval = setInterval(()=>{
+          if (this.timer.time>0){
+            this.timer.time--;
+            const percentage = (this.timer.time / 10) * 100
+            progress.style.width=`${percentage}%`;
+          } else{
+            clearInterval(this.timer.interval)
+          }
+        },1000);
     },
 
 
@@ -127,6 +166,7 @@ export default {
   width:100%;
   height:100%;
   background-color: yellow;
+  transition: width 0.5s linear;
 }
 
 </style>

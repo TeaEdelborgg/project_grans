@@ -1,4 +1,5 @@
 <template>
+    <input type="number" v-model="questionNumber">
     <button v-on:click="runQuestion">
       Run question
     </button>
@@ -105,7 +106,7 @@ export default {
 
     runQuestion: function () {
       //socket.emit("startTime",{pollId:this.pollId, time:10})
-      socket.emit("startTimeBeforeQuestion",{pollId:this.pollId, time:3})
+      socket.emit("startTimeBeforeQuestion",{pollId:this.pollId, time:3}) //alla ska starta deras egna, samtiidgt som vi har en på servern
       this.timerBeforeQUestion()
       //här måste timer köras för 
     }
