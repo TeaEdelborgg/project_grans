@@ -5,7 +5,9 @@
   </div>
   
   <BarsComponent v-bind:labels="question.a" v-bind:data="submittedAnswers"/>
-
+  <div id="progressbar">
+    <div id="progress"></div>
+  </div>
   <div id="players">
     <!-- Lägg in componenter för varje steg för priset -->
     <div id="contain">
@@ -113,6 +115,18 @@ export default {
   width: 80%;
   display: flex;
   margin:auto
+}
+#progressbar{
+  width:80%;
+  height:20px;
+  background-color: lightgray;
+  margin-left:auto;
+  margin-right: auto;
+}
+#progress{
+  width:100%;
+  height:100%;
+  background-color: yellow;
 }
 
 </style>
