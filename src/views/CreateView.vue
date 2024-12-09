@@ -99,7 +99,7 @@ export default {
       socket.emit("startPoll", this.pollId)
       this.timerQuestion();
     },
-    timerBeforeQUestion: function(){
+    timerBeforeQUestion: function(){ //denna ska göra så att resultat också får count down
         let time={
           timeLeft:3,
           interval:null
@@ -116,8 +116,7 @@ export default {
           }
         },1000);
     },
-    //ska finnas en annan timer som först är 5 sekunder och visar en viss rad inför nästa fråga, i resultat, sen ska timern köras.
-    timerQuestion: function (){
+    timerQuestion: function (){ //resultat ska få denna också
         let time ={
           timeLeft:10,
           interval:null
@@ -157,7 +156,7 @@ export default {
       console.log(this.answers)
       console.log({pollId: this.pollId, q: this.question, a: this.answers})
     },
-    checkAnswers: function(){
+    checkAnswers: function(){ //resultat behöver också den
       socket.emit("checkAnswer", {pollId:this.pollId, questionNumber:this.questionNumber})
     },
 
