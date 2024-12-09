@@ -36,7 +36,7 @@
       Check answers
     </button>
     <router-link v-bind:to="'/result/' + pollId">Check result</router-link>
-
+    <router-link v-bind:to="'/admin/' +pollId" v-on:click="startPoll">Start poll</router-link>
     <div v-if="pollData.questions && pollData.questions.length > 0">
       <h3>Added Questions:</h3>
       <div v-for="(q, index) in pollData.questions" :key="index">
@@ -46,9 +46,6 @@
       </div>
     </div>
     Data: {{ pollData }}
-    CheckedAnswers: {{ checkedAnswers }} <br>
-    Time Left:{{ timeLeft }} <br>
-    Time before Question:{{ timeLeftBeforeQuestion }}
   </div>
 </template>
 
@@ -98,9 +95,7 @@ export default {
       socket.emit("joinPoll", this.pollId);
     },
     startPoll: function () { 
-      //this.timerQuestion()
       socket.emit("startPoll", this.pollId)
-      this.timerQuestion();
     },
     timerBeforeQUestion: function(){ //denna ska göra så att resultat också får count down
         let time={

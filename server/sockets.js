@@ -40,10 +40,6 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('submittedAnswersUpdate', data.getSubmittedAnswers(d.pollId));
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   }); 
-  socket.on('checkAnswer', function(d) {
-    let checkedAnswers = data.checkAnswer(d.pollId, d.questionNumber);
-    io.to(d.pollId).emit('checkedAnswer', checkedAnswers);
-  });
   socket.on('checkUserAnswer', function(d){
     let checkedUserAnswer = data.checkUserAnswer(d.pollId,d.questionNumber,d.userId);
     io.to(d.pollId).emit('checkedUserAnswer', checkedUserAnswer);
@@ -68,6 +64,10 @@ function sockets(io, socket, data) {
   })
   socket.on('timesUp', function(pollId){
     io.to(pollId).emit('timeUp',true)
+  })
+  socket.on('updateResult', function(pollId){
+    io.to(pollId).emit('participantsUpdate', data.getParticipants(pollId));
+    socket.emit('pollData', data.getPoll(pollId));
   })
 }
 

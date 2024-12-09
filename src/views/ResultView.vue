@@ -16,7 +16,6 @@
   <br>
   Time Left:{{ timeLeft }} <br>
   Time before Question:{{ timeLeftBeforeQuestion }} <br>
-  Checked Answers: {{ checkedAnswers }}
   <div id="pedestaler">
         <PlayerPedestal v-if="participants.length>0" v-for="player in participants" v-bind:player="player" :key="player.id" id="pedestal"/>
   </div>
@@ -46,7 +45,7 @@ export default {
       participants: [],
       timeLeft:0,
       timeLeftBeforeQuestion:0,
-      checkedAnswers: {}
+      
     }
   },
   created: function () {
@@ -66,6 +65,7 @@ export default {
 
     socket.emit( "getUILabels", this.lang );
     socket.emit( "joinPoll", this.pollId );
+    socket.emit("updateResult", this.pollId)
 
   },
   methods:{

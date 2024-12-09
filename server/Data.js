@@ -191,55 +191,6 @@ Data.prototype.getSubmittedAnswers = function(pollId) {
   }
   return {}
 }
-//använder inte checkAnswer
-Data.prototype.checkAnswer = function(pollId, qId=null){ //tittar på svaret för alla deltagare, ha en separat för enskild spelare?
-  //för spelaren kanske inte ska få allas svar, då får den även andras ID, ej bra
-  //gör om den här sedan för att se om svaren är rätt varje gång det blir ny fråga
-  //alternativt när tiden går ut, pushas allas svar socket, där den för varje svar skickar till createView som lägger ihop det i en lista
-  //som sedan töms när en ny fråga ställs, alternativt ha ett object med correct/false för varje spelare för varje svar
-
-  //pusha allt till allCorrectedAnswers, om personen inte finns där => lägg till, annars pusha in i listan om det är correct/false
-  if (this.pollExists(pollId)){
-    const poll = this.polls[pollId];
-    if (qId != null){
-      for(const user of poll.participants){
-        console.log("för varje spelare")
-        if(!(user.information.answers[qId-1])){
-          user.information.answers.push(["NULL",0]) //ändra sen
-          console.log("tittar om svaret finns")
-        }
-        if(!poll.allCorrectedAnswers[user.userId]){
-          poll.allCorrectedAnswers[user.userId] = []
-        }
-        if(user.information.answers[qId-1][0]==poll.questions[qId].a.correct){
-          console.log("tittar om svare är rätt")
-          poll.allCorrectedAnswers[user.userId].push(true)
-        } else{
-          poll.allCorrectedAnswers[user.userId].push(false)
-        } /*
-          if(user.information.answers[qId-1][0]==poll.questions[qId].a.correct){ //ta bort -1 sen när första frågan också finns med
-            if (typeof poll.allCorrectedAnswers[user.userId]=='undefined'){
-              poll.allCorrectedAnswers[user.userId]=true
-            } else{
-              poll.allCorrectedAnswers[user.userId].push(true)
-            }
-            //answers[user.userId] = true; //här vill man pusha
-          }
-          else{
-            if (typeof poll.allCorrectedAnswers[user.userId]=='undefined'){
-              poll.allCorrectedAnswers[user.userId]=false
-            } else{
-              poll.allCorrectedAnswers[user.userId].push(false)
-            }
-            //answers[user.userId] = false;
-          }*/
-      }
-      console.log("alla svar: ",poll.allCorrectedAnswers)
-      return poll.allCorrectedAnswers;
-    }
-  }
-  return {}
-}
 
 Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){
   if(this.pollExists(pollId)){
@@ -247,14 +198,14 @@ Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){
     const users = poll.participants;
     if(qId !=null){
       for (const user of users){
-        if(user.information.answers[qId-1]==null){
+        if(user.information.answers[qId]==null){
           user.information.answers.push(["-",0])
         }
         if(user.userId == userId){
-          if(user.information.answers[qId-1][0]==poll.questions[qId].a.correct){ //ta bort -1 sen, är bara för att de inte skickar randomOrder på första
+          if(user.information.answers[qId][0]==poll.questions[qId].a.correct){ //ta bort -1 sen, är bara för att de inte skickar randomOrder på första
             //lägg till tiden för användaren
             user.information.correctedAnswers.push(true)
-            user.information.time += user.information.answers[qId-1][1];
+            user.information.time += user.information.answers[qId][1];
             console.log("totala tiden: ",user.information.time)
             return true;
           }
@@ -285,40 +236,11 @@ Data.prototype.submitAnswer = function(pollId, answer, userId) { // och ta emot 
         console.log(user.information.answers, 'lyckades')
       }
     }
-
-    /*
-    let answers = poll.answers[poll.currentQuestion]; // poll.participant.information.answer
-    // create answers object if no answers have yet been submitted
-    if (typeof answers !== 'object') {
-      answers = {};
-      answers[answer] = 1;
-      poll.answers.push(answers);
-    }
-    // create answer property if that specific answer has not yet been submitted
-    else if (typeof answers[answer] === 'undefined') {
-      answers[answer] = 1;
-    }
-    // if the property already exists, increase the number
-    else
-      answers[answer] += 1
-    console.log("answers looks like ", answers, typeof answers);
-    */
   }
 }
 
 export { Data };
 
-/*let answers=['','','',''];
-let currentQuest = poll.question[poll.currentQuestion];
-let avalibleSlots = [0,1,2,3];
-var index = Math.floor(Math.random()*4);
-answers[index] = currentQuest.a.correct;
-avalibleSlots.slice(index,1);
-for(const wrongAnsw of currentQuest.a.wrong){
-  index=Math.floor(Math.random()*avalibleSlots.length);
-  answers[avalibleSlots[index]]=wrongAnsw;
-  avalibleSlots.splice(index,1);
-};*/
-//return {q:currentQuest.q, a:{correct:"",wrong:["h","j","t","e"]}}
+
 
 
