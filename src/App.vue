@@ -3,7 +3,14 @@ import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <RouterView />
+  <div>
+  <header>
+  <button v-if="$route.name !== 'Start'" @click="$router.push('/')">
+      Home
+  </button>
+  </header>
+ <RouterView />
+  </div>
 </template>
 
 <style>

@@ -118,6 +118,11 @@ export default {
     },
     
     addQuestion() {
+      if (this.pollData.questions.length <=16) {
+        console.warn("Max frågor tillagda, aja baja");
+        alert("Maximum number of questions already added");
+        return;
+      }
       const newQuestion = {
         id: this.newQuestionId,
         q: this.question,

@@ -1,8 +1,5 @@
 <template>
   <header>
-    <div v-bind:class="['hamburger', {'close': !hideNav}]" 
-         v-on:click="toggleNav">
-    </div>
      <button v-on:click="switchLanguage">
       {{ uiLabels.changeLanguage }}
     </button>
@@ -38,7 +35,7 @@
 </template>
 
 <script>
-import ResponsiveNav from '@/components/ResponsiveNav.vue';
+/*import ResponsiveNav from '@/components/ResponsiveNav.vue'; /*vad är detta?*/
 import io from 'socket.io-client';
 const socket = io("localhost:3000");
 
@@ -78,37 +75,42 @@ export default {
 </script>
 
 <style scoped>
+/*
   header {
     background-color: gray;
     width: 100%;
     display: grid;
     grid-template-columns: 2em auto;
   }
-  .logo { /* Kolla cursor i hemsidan, konstigt ändra den så att det blir vanlig pil över logon */
+
+  .logo { 
     text-transform: uppercase;
     letter-spacing: 0.25em;
     font-size: 2.5rem;
     color: white;
     padding-top:0.2em;
   }
+  *//* Kolla cursor i hemsidan, konstigt ändra den så att det blir vanlig pil över logon */
   .logo img {
     height:2.5rem;
     vertical-align: bottom;
     margin-right: 0.5rem; 
-  }
+  }/*
   .hamburger {
     color:white;
     width:1em;
+    
     display: flex;
     align-items: center;
     justify-content: left;
     padding:0.5rem;
     top:0;
     left:0;
+    
     height: 2rem;
     cursor: pointer;
     font-size: 1.5rem;
-  }
+  }*/
   button:hover {
     background-color: rgb(152, 135, 135);
     cursor: pointer; 
@@ -121,14 +123,15 @@ export default {
     align-items: center;
     justify-content: center;
   }
+/*
   .hamburger::before {
-    content: "☰"; /* toggle menu */
+    content: "☰"; 
   }
   .close::before {
-    content: "✕";  /* close menu */
+    content: "✕";   
   }
   .hide {
     left:-12em;
-  }
+  }*/
 }
 </style>
