@@ -40,7 +40,6 @@
     </div>
     </div>
     Data: {{ pollData }}
-  </div>
 </template>
 
 <script>
