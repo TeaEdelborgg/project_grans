@@ -1,9 +1,12 @@
 <template>
   <div>
     <p>Poll link: {{pollId}}</p>
+    <button v-on:click="createPoll">
+      Create poll
+    </button>
     <div>
-      {{ uiLabels.question + ' ' + newQuestionId}}:
-      <input type="text" v-model="question" placeholder="Question">
+      {{ uiLabels.question }}:
+      <input type="text" v-model="question">
       <div>
         Answers:
         <input v-model="correctAnswer" placeholder="Correct answer" />
@@ -36,10 +39,10 @@
         <p>Question {{ index + 1 }}:{{ q.q }}</p>
         <p>Correct Answer: {{ q.a.correct }}</p>
         <p>Wrong Answers: {{ q.a.wrong.join(', ') }}</p>
-    </div>
-    </div>
+      </div>
     </div>
     Data: {{ pollData }}
+  </div>
 </template>
 
 <script>
@@ -57,8 +60,8 @@ export default {
       correctAnswer: "",
       wrongAnswers: ["", "", ""],
       questionNumber: 0,
-      newQuestionId: 1,
-      editingQuestion: null,
+      //newQuestionId: 1,
+      //editingQuestion: null,
       pollData: {
         questions: []
       },
@@ -72,12 +75,12 @@ export default {
     socket.on( "uiLabels", labels => this.uiLabels = labels );
     socket.on( "pollData", data => this.pollData = data );
     socket.on( "participantsUpdate", p => this.pollData.participants = p );
-    socket.on("questionUpdate", updatedQuestion => this.updateQuestionInPollData(updatedQuestion));
+    //socket.on("questionUpdate", updatedQuestion => this.updateQuestionInPollData(updatedQuestion));
     socket.emit( "getUILabels", this.lang );
     socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
     socket.on('getTime',time =>this.timeLeft=time);
     socket.on('getTimeBeforeQuestion',timeTwo => this.timeLeftBeforeQuestion=timeTwo);
-    this.createPoll();
+    
 
 },
   methods: {
