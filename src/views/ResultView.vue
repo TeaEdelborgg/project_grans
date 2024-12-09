@@ -17,12 +17,16 @@
   Time Left:{{ timeLeft }} <br>
   Time before Question:{{ timeLeftBeforeQuestion }} <br>
   Checked Answers: {{ checkedAnswers }}
+  <div id="pedestaler">
+        <PlayerPedestal v-if="participants.length>0" v-for="player in participants" v-bind:player="player" :key="player.id" id="pedestal"/>
+  </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import BarsComponent from '@/components/BarsComponent.vue';
 import Player from '@/components/Player.vue';
+import PlayerPedestal from '@/components/PlayerPedestal.vue';
 import io from 'socket.io-client';
 const socket = io("localhost:3000");
 
@@ -30,7 +34,8 @@ export default {
   name: 'ResultView',
   components: {
     BarsComponent,
-    Player
+    Player,
+    PlayerPedestal
   },
   data: function () {
     return {
@@ -71,3 +76,22 @@ export default {
   }
 }
 </script>
+
+<style>
+#pedestaler{
+  width:80%;
+  display: flex;
+  justify-content: space-evenly;
+  height:200px;
+  background-color: grey;
+  margin:auto;
+}
+#pedestal{
+  flex:1;
+ max-width: 10%;
+  height:100px;
+  margin:auto;
+  background-color: lightpink;
+}
+
+</style>
