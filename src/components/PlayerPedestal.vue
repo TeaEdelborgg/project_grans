@@ -1,6 +1,8 @@
 <template>
     <div>
-        {{player.information.name}}
+        {{player.information.name}} <br>
+        {{ player.information.lives }} <br>
+        {{ player.information.time }}
     </div>
 </template>
 

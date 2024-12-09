@@ -3,14 +3,14 @@
     lang: {{ lang }}
     {{ question.q }}
   </div>
-
+  
   <BarsComponent v-bind:labels="question.a" v-bind:data="submittedAnswers"/>
 
-  <span>{{ submittedAnswers }}</span>
-
-  <span> Allt från player component:</span>
-  <div v-if="participants.length>0">
-    <Player v-for="player in participants" v-bind:player="player" :key="player.id"/>
+  <div id="players">
+    <!-- Lägg in componenter för varje steg för priset -->
+    <div id="contain">
+      <Player v-if="participants.length>0" v-for="player in participants" v-bind:player="player" :key="player.id" id="player"/>
+    </div>
   </div>
   
   <br>
@@ -61,11 +61,12 @@ export default {
     socket.on('getTime',time =>this.timeLeft=time);
     socket.on('getTimeBeforeQuestion',timeTwo => this.timeLeftBeforeQuestion=timeTwo);
     //socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
+
+    //behöver mängden frågor
+
     socket.emit( "getUILabels", this.lang );
     socket.emit( "joinPoll", this.pollId );
 
-    //lyssna på timern
-    //när timern är uppe vill man lyssna på alla korrekta svar och sätta dem till varje spelare
   },
   methods:{
     test: function(){
@@ -92,6 +93,26 @@ export default {
   height:100px;
   margin:auto;
   background-color: lightpink;
+}
+#players{
+  width:80%;
+  display: flex;
+  justify-content: space-evenly;
+  height:400px;
+  background-color: aquamarine;
+  margin: auto;
+}
+#player{
+  flex:1;
+  max-width: 80%;
+  background-color: white;
+  height: 300px;
+  margin:5px
+}
+#contain{
+  width: 80%;
+  display: flex;
+  margin:auto
 }
 
 </style>
