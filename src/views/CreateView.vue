@@ -1,13 +1,9 @@
 <template>
   <div>
     <p>Poll link: {{pollId}}</p>
-    <button v-on:click="createPoll">
-      Create poll
-      <!-- generate random poll id-->
-    </button>
     <div>
-      {{ uiLabels.question }}:
-      <input type="text" v-model="question">
+      {{ uiLabels.question + ' ' + newQuestionId}}:
+      <input type="text" v-model="question" placeholder="Question">
       <div>
         Answers:
         <input v-model="correctAnswer" placeholder="Correct answer" />
@@ -15,10 +11,6 @@
                v-model="wrongAnswers[i]" 
                v-bind:key="'wrongAnswer' + i"
                placeholder="Wrong answer"/>
-        <!-- Tar bort knappen för att skapa nya svar
-        <button v-on:click="addAnswer">
-          Add answer alternative
-        </button> -->
       </div>
     </div>
     <button v-on:click="addQuestion">
@@ -46,6 +38,7 @@
         <p>Wrong Answers: {{ q.a.wrong.join(', ') }}</p>
     </div>
     </div>
+    </div>
     Data: {{ pollData }}
   </div>
 </template>
@@ -65,6 +58,8 @@ export default {
       correctAnswer: "",
       wrongAnswers: ["", "", ""],
       questionNumber: 0,
+      newQuestionId: 1,
+      editingQuestion: null,
       pollData: {
         questions: []
       },
@@ -78,11 +73,12 @@ export default {
     socket.on( "uiLabels", labels => this.uiLabels = labels );
     socket.on( "pollData", data => this.pollData = data );
     socket.on( "participantsUpdate", p => this.pollData.participants = p );
+    socket.on("questionUpdate", updatedQuestion => this.updateQuestionInPollData(updatedQuestion));
     socket.emit( "getUILabels", this.lang );
     socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
     socket.on('getTime',time =>this.timeLeft=time);
     socket.on('getTimeBeforeQuestion',timeTwo => this.timeLeftBeforeQuestion=timeTwo);
-
+    this.createPoll();
 
 },
   methods: {
@@ -153,6 +149,10 @@ export default {
       socket.emit("addQuestion", {pollId: this.pollId, q: this.question, a: this.answers, newQuestion});
       this.pollData.questions.push(newQuestion);
 
+      this.newQuestionId += 1;
+      this.question = "";
+      this.correctAnswer = "";
+      this.wrongAnswers = ["", "", ""];
 
       console.log(this.answers)
       console.log({pollId: this.pollId, q: this.question, a: this.answers})
@@ -174,3 +174,5 @@ export default {
   }
 }
 </script>
+
+
