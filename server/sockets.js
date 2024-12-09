@@ -49,6 +49,31 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('submittedAnswersUpdate', data.getSubmittedAnswers(d.pollId));
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   }); 
+
+  socket.on('selectBox', function (payload) {
+    const { pollId, boxIndex, userId, label } = payload;
+    const poll = data.getPoll(pollId);
+  
+    if (!poll || !poll.participants) {
+      console.error("Poll or participants not found");
+      return;
+    }
+    const participant = poll.participants.find((p) => p.userId === userId);
+    if (participant) {
+      participant.selectedBox = boxIndex;
+      participant.information.boxLabel = label;
+    } else {
+        console.error("participant not found")
+    }
+  
+    const boxStates = poll.participants.map((p) => ({
+      boxIndex: p.selectedBox,
+      userId: p.userId,
+      label: p.information.name || `Player ${p.userId}`,
+    }));
+  
+    io.to(pollId).emit('boxStatesUpdate', boxStates);
+  });
 }
 
 export { sockets };
