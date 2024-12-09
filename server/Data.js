@@ -71,7 +71,11 @@ Data.prototype.getPoll = function(pollId) {
 Data.prototype.participateInPoll = function(pollId, name, userId) {
   console.log("participant will be added to", pollId, name, userId);
   if (this.pollExists(pollId)) {
+<<<<<<< HEAD
     this.polls[pollId].participants.push({userId: userId, information: {name: name, answers: [], correctedAnswers:[], time:0, lives:2}}) //lägg till liv, tid ect alltså allt som är samma till en början
+=======
+    this.polls[pollId].participants.push({userId: userId, selectedBox: null, information: {name: name, answers: [], correctAnswers: [], time:0, lives:2}}) //lägg till liv, tid ect alltså allt som är samma till en början
+>>>>>>> 664cc43a17cfd1c5a00ca2a68fd6ae6baad65eec
   }
 }
 
@@ -285,6 +289,20 @@ Data.prototype.submitAnswer = function(pollId, answer, userId) { // och ta emot 
         console.log(user.information.answers, 'lyckades')
       }
     }
+
+  // För redigering av frågor
+Data.prototype.updateQuestion = function (pollId, question) {
+  const poll = this.getPoll(pollId);
+  if (!poll) {
+    return null;
+  }
+  const questionIndex = poll.questions.findIndex(q => q.q === question.q);
+  if (questionIndex === -1) {
+    return null; 
+  }
+  poll.questions[questionIndex] = question;
+  return question;
+};  
 
     /*
     let answers = poll.answers[poll.currentQuestion]; // poll.participant.information.answer

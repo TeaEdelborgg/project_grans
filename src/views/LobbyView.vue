@@ -1,17 +1,32 @@
 <template>
   <div>
-    {{pollId}}
+    {{ pollId }}
     <div v-if="!joined">
-      <!--Lägg till att välja färg-->
-      <input type="text" v-model="userName"> <!-- kalla på en funktion -->
+      <input type="text" v-model="userName" placeholder="Enter your name" />
       <button v-on:click="participateInPoll">
-        {{ this.uiLabels.participateInPoll }}
+        {{ uiLabels.participateInPoll || "Join Poll" }}
       </button>
     </div>
     <div v-if="joined">
       <p>Waiting for host to start poll</p>
-      {{ participants }}  <!-- rimligt att man ser vilka som är med men inte all info om dem-->
-  </div>
+      <div class="boxes">
+        <div 
+          v-for="(box, index) in playerBoxes" 
+          :key="index" 
+          class="box" 
+          :class="{ taken: box.taken }" 
+          @click="selectBox(index)"
+        >
+          {{ box.label }}
+        </div>
+      </div>
+      <p>Current Participants:</p>
+      <ul>
+        <li v-for="participant in participants" :key="participant.userId">
+          {{ participant.information.name || `Player ${participant.userId}` }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -21,7 +36,7 @@ const socket = io("localhost:3000");
 
 export default {
   name: 'LobbyView',
-  data: function () {
+  data() {
     return {
       userID: "",
       userName: "",
@@ -29,23 +44,109 @@ export default {
       uiLabels: {},
       joined: false,
       lang: localStorage.getItem("lang") || "en",
-      participants: []
-    }
+      participants: [],
+      playerBoxes: [
+        { taken: false, label: "Box 1", userId: null },
+        { taken: false, label: "Box 2", userId: null },
+        { taken: false, label: "Box 3", userId: null },
+        { taken: false, label: "Box 4", userId: null },
+      ],
+      selectedBox: null,
+    };
   },
-  created: function () {
+  created() {
     this.pollId = this.$route.params.id;
-    socket.on( "uiLabels", labels => this.uiLabels = labels );
-    socket.on( "participantsUpdate", p => this.participants = p );
-    socket.on( "startPoll", () => this.$router.push("/poll/" + this.pollId + '/' + this.userID) ); // lägga till userId i route, ska man skicka med userID i startPoll eller ska man stora här direkt?
-    socket.emit( "joinPoll", this.pollId );
-    socket.emit( "getUILabels", this.lang );
+    socket.on("uiLabels", (labels) => (this.uiLabels = labels));
+    socket.on("participantsUpdate", (p) => {
+      this.participants = p;
+      this.updatePlayerBoxes();
+    });
+    socket.on("boxStatesUpdate", (boxStates) => {
+      this.syncPlayerBoxes(boxStates);
+    });
+    socket.on("startPoll", () =>
+      this.$router.push("/poll/" + this.pollId + "/" + this.userID)
+    );
+    socket.emit("joinPoll", this.pollId);
+    socket.emit("getUILabels", this.lang);
   },
   methods: {
-    participateInPoll: function () {
-      this.userID = Math.ceil(Math.random()*1000000)  // random generatred id, ska vi spara som en global konstant eller räcker det att skicka här?
-      socket.emit( "participateInPoll", {pollId: this.pollId, name: this.userName, userId: this.userID} ) //färg sen
+    participateInPoll() {
+      this.userID = Math.ceil(Math.random() * 1000000); // Generate unique ID
+      socket.emit("participateInPoll", {
+        pollId: this.pollId,
+        name: this.userName,
+        userId: this.userID,
+      });
       this.joined = true;
-    }
-  }
-}
+    },
+    selectBox(index) {
+      if (this.selectedBox !== null) {
+        console.log("you can only select one box");
+        return;
+      }
+      const selecterbox = this.playerBoxes[index];
+      if (!selecterbox.taken) { 
+        selecterbox.taken = true;
+        selecterbox.label = this.userName || `Player ${this.userID}`;
+        selecterbox.userId = this.userID;
+        this.selectedBox = index;
+
+        socket.emit("selectBox", {
+          pollId: this.pollId,
+          boxIndex: index,
+          userId: this.userID,
+          label: selecterbox.label,
+        });
+      }
+    },
+    updatePlayerBoxes() {
+      this.playerBoxes.forEach((box, index) => {
+        const takenBy = this.participants.find((p) => p.selectedBox === index);
+        if (takenBy) {
+          box.taken = true;
+          box.label = takenBy.information.name || `Player ${takenBy.userId}`;
+          box.userId = takenBy.userId;
+        } else {
+          box.taken = false;
+          box.label = `Box ${index + 1}`;
+          box.userId = null;
+        }
+      });
+    },
+    syncPlayerBoxes(boxStates) {
+    this.playerBoxes.forEach((box, index) => {
+      const state = boxStates.find((s) => s.boxIndex === index);
+      if (state) {
+        box.taken = true;
+        box.label = state.label;
+        box.userId = state.userId;
+      } else {
+        box.taken = false;
+        box.label = `Box ${index + 1}`;
+        box.userId = null;
+      }
+    });
+  },
+}};
 </script>
+
+<style scoped>
+.boxes {
+  display: flex;
+  gap: 10px;
+}
+.box {
+  width: 100px;
+  height: 100px;
+  border: 1px solid #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.box.taken {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+</style>
