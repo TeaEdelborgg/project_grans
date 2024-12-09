@@ -24,13 +24,14 @@
     <button v-on:click="addQuestion">
       Add question
     </button>
+    <!--<input type="number" v-model="questionNumber">-->
     <input type="number" v-model="questionNumber">
     <!--När man startat kommer man till en egen admin vue-->
     <button v-on:click="startPoll">
       Start poll
     </button>
-    <button v-on:click="runQuestion">
-      Run question
+    <button v-on:click="runQuestion"> 
+     Run question
     </button>
     <button v-on:click="checkAnswers">
       Check answers
@@ -43,7 +44,7 @@
         <p>Question {{ index + 1 }}:{{ q.q }}</p>
         <p>Correct Answer: {{ q.a.correct }}</p>
         <p>Wrong Answers: {{ q.a.wrong.join(', ') }}</p>
-      </div>
+    </div>
     </div>
     Data: {{ pollData }}
   </div>
@@ -83,8 +84,9 @@ export default {
     socket.on('getTimeBeforeQuestion',timeTwo => this.timeLeftBeforeQuestion=timeTwo);
 
 
-  },
+},
   methods: {
+
     generatePollId: function(){
       return Math.random().toString(36).substring(2,10).toUpperCase();
       /*id ska tas bort om det genererats tidigare?*/
