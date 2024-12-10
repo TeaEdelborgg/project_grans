@@ -6,6 +6,7 @@
     
     <!--<BarsComponent v-bind:labels="question.a" v-bind:data="submittedAnswers"/>-->
     <QuestionComponentResult v-if="questionActive" v-bind:question="question" v-bind:questionActive="questionActive" @timeUp="questionActive=false"></QuestionComponentResult> <!--Lägg till questionId senare-->
+    <BeforeQuestionComponent v-if="beforeQuestion" v-bind:beforeQuestion="beforeQuestion" @timeUp="beforeQuestion=false"></BeforeQuestionComponent>
     <div id="players">
       <!-- Lägg in componenter för varje steg för priset -->
       <div id="contain">
@@ -14,8 +15,6 @@
     </div>
     
     <br>
-    Time Left:{{ timer.time }} <br>
-    Time before Question:{{ timerBefore.time }} <br>
     <div id="pedestaler">
           <PlayerPedestal v-show="participants.length>0" v-for="player in participants" v-bind:player="player" :key="player.id" id="pedestal"/>
     </div>
@@ -29,6 +28,7 @@ import Player from '@/components/Player.vue';
 import PlayerPedestal from '@/components/PlayerPedestal.vue';
 import io from 'socket.io-client';
 import QuestionComponentResult from '@/components/QuestionComponentResult.vue';
+import BeforeQuestionComponent from '@/components/BeforeQuestionComponent.vue';
 const socket = io("localhost:3000");
 
 export default {
@@ -37,7 +37,8 @@ export default {
     BarsComponent,
     Player,
     PlayerPedestal,
-    QuestionComponentResult
+    QuestionComponentResult,
+    BeforeQuestionComponent
   },
   data: function () {
     return {
@@ -58,6 +59,7 @@ export default {
         interval:null
       },
       questionActive:false,
+      beforeQuestion:false,
       windowHeight:0,
       windowWidth:0
     }
@@ -73,11 +75,12 @@ export default {
     //socket.on("startFirstTimer", this.TimerBeforeQuestion())
     //socket.on('getTime',time =>this.timeLeft=time);
     //socket.on('getTimeBeforeQuestion',timeTwo => this.timeLeftBeforeQuestion=timeTwo);
-    socket.on('startTimerBeforeQuest', () =>{this.timerBeforeQUestion()
+    socket.on('startTimerBeforeQuest', () =>{this.beforeQuestion=true;
       console.log("försöker starta timer")
     });
-    socket.on('startTimer', () =>{this.questionActive=true;
-
+    socket.on('startTimer', () =>{
+      this.beforeQuestion=false;
+      this.questionActive=true;
       console.log("försöker starta timer")
     });
     //socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
@@ -101,18 +104,7 @@ export default {
     test: function(){
       console.log(this.pollData.participants)
     },
-    timerBeforeQUestion: function(){ //vill ha pop up där timern syns med en text, när tiden är 0 försvinner den, ha component med detta, mörklägg bakgrunden
-        console.log("i timer innan fråga")
-        this.timerBefore.time=3;
-        this.timerBefore.interval=null;
-        this.timerBefore.interval = setInterval(()=>{
-          if (this.timerBefore.time>0){
-            this.timerBefore.time--;
-          } else {
-            clearInterval(this.timerBefore.interval)
-          }
-        },1000);
-    }
+    
 
 
   }
