@@ -4,6 +4,7 @@
         <div id="questionFrame">
             <p>Tid innan nästa fråga</p>
             {{ timerBefore.time }}
+            <img src="/img/test.png" style="width:100px">
         </div>
 </template>
     
@@ -46,27 +47,3 @@
     },
     }
 </script>
-<style>
-#questionFrame{
-    height: 400px;
-    width: 80%;
-    margin:auto;
-    background-color: white;
-    position: absolute;
-    z-index: 3;
-}
-#backgroundFrame{
-    height: 100%;
-    width: 100%;
-    opacity: 0.5;
-    position: absolute;
-    z-index: 2;
-    background-color: black;
-}
-#windowContainer{
-    height: 100%;
-    width: 100%;
-    position: relative;
-}
-
-</style>

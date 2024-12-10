@@ -50,14 +50,6 @@ export default {
       participants: [],
       timeLeft:0,
       timeLeftBeforeQuestion:0,
-      timerBefore: {
-        time:3,
-        interval:null
-      },
-      timer:{
-        time:10,
-        interval:null
-      },
       questionActive:false,
       beforeQuestion:false,
       windowHeight:0,
@@ -151,6 +143,39 @@ export default {
   background-color: wheat;
   position: fixed;
   z-index: 1;
+}
+#questionFrame{
+    height: 400px;
+    width: 80%;
+    margin:auto;
+    background-color: white;
+    position: absolute;
+    z-index: 3;
+}
+#backgroundFrame{
+    height: 100%;
+    width: 100%;
+    opacity: 0.5;
+    position: absolute;
+    z-index: 2;
+    background-color: black;
+}
+#windowContainer{
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+#progressbar{
+  width:100%;
+  height:20px;
+  background-color: lightgray;
+  margin-left:auto;
+  margin-right: auto;
+}
+#progress{
+  width:100%;
+  height:100%;
+  background-color: yellow;
 }
 
 </style>
