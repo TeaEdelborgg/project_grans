@@ -41,6 +41,7 @@ function sockets(io, socket, data) {
     let randomOrder = data.getQuestionAnswerRandom(d.pollId, d.questionNumber);
     io.to(d.pollId).emit('randomOrderUpdate', {q:randomOrder, questionNumber:d.questionNumber});
     io.to(d.pollId).emit('questionUpdate', question);
+    io.to(d.pollId).emit('questionUpdateResult',randomOrder.q)
     io.to(d.pollId).emit('submittedAnswersUpdate', data.getSubmittedAnswers(d.pollId)); 
   });
 

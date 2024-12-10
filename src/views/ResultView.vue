@@ -1,25 +1,24 @@
 <template>
-  <div>
-    lang: {{ lang }}
-    {{ question.q }}
-  </div>
-  
-  <BarsComponent v-bind:labels="question.a" v-bind:data="submittedAnswers"/>
-  <div id="progressbar">
-    <div id="progress"></div>
-  </div>
-  <div id="players">
-    <!-- Lägg in componenter för varje steg för priset -->
-    <div id="contain">
-      <Player v-if="participants.length>0" v-for="player in participants" v-bind:player="player" :key="player.id" id="player"/>
+  <div id="background">
+    <div>
+      lang: {{ lang }}
     </div>
-  </div>
-  
-  <br>
-  Time Left:{{ timer.time }} <br>
-  Time before Question:{{ timerBefore.time }} <br>
-  <div id="pedestaler">
-        <PlayerPedestal v-if="participants.length>0" v-for="player in participants" v-bind:player="player" :key="player.id" id="pedestal"/>
+    
+    <!--<BarsComponent v-bind:labels="question.a" v-bind:data="submittedAnswers"/>-->
+    <QuestionComponentResult v-if="questionActive" v-bind:question="question" v-bind:questionActive="questionActive" @timeUp="questionActive=false"></QuestionComponentResult> <!--Lägg till questionId senare-->
+    <div id="players">
+      <!-- Lägg in componenter för varje steg för priset -->
+      <div id="contain">
+        <Player v-if="participants.length>0" v-for="player in participants" v-bind:player="player" :key="player.id" id="player"/>
+      </div>
+    </div>
+    
+    <br>
+    Time Left:{{ timer.time }} <br>
+    Time before Question:{{ timerBefore.time }} <br>
+    <div id="pedestaler">
+          <PlayerPedestal v-show="participants.length>0" v-for="player in participants" v-bind:player="player" :key="player.id" id="pedestal"/>
+    </div>
   </div>
 </template>
 
@@ -29,6 +28,7 @@ import BarsComponent from '@/components/BarsComponent.vue';
 import Player from '@/components/Player.vue';
 import PlayerPedestal from '@/components/PlayerPedestal.vue';
 import io from 'socket.io-client';
+import QuestionComponentResult from '@/components/QuestionComponentResult.vue';
 const socket = io("localhost:3000");
 
 export default {
@@ -36,13 +36,15 @@ export default {
   components: {
     BarsComponent,
     Player,
-    PlayerPedestal
+    PlayerPedestal,
+    QuestionComponentResult
   },
   data: function () {
     return {
       lang: localStorage.getItem("lang") || "en",
       pollId: "",
-      question: {q: " ", answers: []}, //ändra så att question bara är tomt
+      //question: {q: " ", answers: []}, //ändra så att question bara är tomt
+      question:"",
       submittedAnswers: {},
       participants: [],
       timeLeft:0,
@@ -54,14 +56,17 @@ export default {
       timer:{
         time:10,
         interval:null
-      }
+      },
+      questionActive:false,
+      windowHeight:0,
+      windowWidth:0
     }
   },
   created: function () {
     this.pollId = this.$route.params.id
     socket.on( "uiLabels", labels => this.uiLabels = labels );
     //socket.on("submittedAnswersUpdate", update => this.submittedAnswers = update);
-    //socket.on("questionUpdate", update => this.question = update );
+    socket.on("questionUpdateResult", update => this.question = update );
     socket.on( "participantsUpdate", p => {
       
       this.participants = p;})
@@ -71,7 +76,8 @@ export default {
     socket.on('startTimerBeforeQuest', () =>{this.timerBeforeQUestion()
       console.log("försöker starta timer")
     });
-    socket.on('startTimer', () =>{this.timerQuestion()
+    socket.on('startTimer', () =>{this.questionActive=true;
+
       console.log("försöker starta timer")
     });
     //socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
@@ -80,14 +86,22 @@ export default {
 
     socket.emit( "getUILabels", this.lang );
     socket.emit( "joinPoll", this.pollId );
-    socket.emit("updateResult", this.pollId)
+    socket.emit("updateResult", this.pollId);
+    
 
+  },
+  mounted (){
+    this.windowHeight = document.documentElement.clientHeight
+    this.windowWidth = document.documentElement.clientWidth;
+    const backgroundResult = document.getElementById('background');
+    backgroundResult.style.width=this.windowWidth +"px";
+    backgroundResult.style.height=this.windowHeight + "px";
   },
   methods:{
     test: function(){
       console.log(this.pollData.participants)
     },
-    timerBeforeQUestion: function(){ //denna ska göra så att resultat också får count down
+    timerBeforeQUestion: function(){ //vill ha pop up där timern syns med en text, när tiden är 0 försvinner den, ha component med detta, mörklägg bakgrunden
         console.log("i timer innan fråga")
         this.timerBefore.time=3;
         this.timerBefore.interval=null;
@@ -98,21 +112,7 @@ export default {
             clearInterval(this.timerBefore.interval)
           }
         },1000);
-    },
-    timerQuestion: function (){ //resultat ska få denna också
-        const progress = document.getElementById('progress');
-        this.timer.time = 10;
-        this.timer.interval = null;
-        this.timer.interval = setInterval(()=>{
-          if (this.timer.time>0){
-            this.timer.time--;
-            const percentage = (this.timer.time / 10) * 100
-            progress.style.width=`${percentage}%`;
-          } else{
-            clearInterval(this.timer.interval)
-          }
-        },1000);
-    },
+    }
 
 
   }
@@ -155,18 +155,10 @@ export default {
   display: flex;
   margin:auto
 }
-#progressbar{
-  width:80%;
-  height:20px;
-  background-color: lightgray;
-  margin-left:auto;
-  margin-right: auto;
-}
-#progress{
-  width:100%;
-  height:100%;
-  background-color: yellow;
-  transition: width 0.5s linear;
+#background{
+  background-color: wheat;
+  position: fixed;
+  z-index: 1;
 }
 
 </style>
