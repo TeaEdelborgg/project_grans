@@ -82,6 +82,7 @@ export default {
       //titta i servern hur tid och svar kopplas, du vill koppla tiden här direkt så att det stämmer med personens 
       //timer och inte servern!!!!
       // ska skickas som [svaret de valt, tid kvar], kolla i data
+      // kolla så att allt som varit koppat till serven fortfarande är det
       socket.emit("submitAnswer", {pollId: this.pollId, answer: answer, userId: this.userId}) // ta bort correctAnswer
       console.log('svar: ', answer)
     },
