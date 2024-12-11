@@ -97,6 +97,7 @@ export default {
       console.log(this.pollData.participants)
     },
     
+    
 
 
   }
