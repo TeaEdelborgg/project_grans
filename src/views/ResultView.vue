@@ -67,6 +67,9 @@ export default {
     //socket.on("startFirstTimer", this.TimerBeforeQuestion())
     //socket.on('getTime',time =>this.timeLeft=time);
     //socket.on('getTimeBeforeQuestion',timeTwo => this.timeLeftBeforeQuestion=timeTwo);
+
+    //dessa två vill jag ej ha
+    
     socket.on('startTimerBeforeQuest', () =>{this.beforeQuestion=true;
       console.log("försöker starta timer")
     });
@@ -78,6 +81,8 @@ export default {
     //socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
 
     //behöver mängden frågor
+
+    socket.on('')
 
     socket.emit( "getUILabels", this.lang );
     socket.emit( "joinPoll", this.pollId );
@@ -96,6 +101,7 @@ export default {
     test: function(){
       console.log(this.pollData.participants)
     },
+  
     
     
 
