@@ -85,24 +85,12 @@ export default {
     socket.on( "participantsUpdate", p => this.pollData.participants = p );
     socket.on("questionUpdate", updatedQuestion => this.updateQuestionInPollData(updatedQuestion));
     socket.emit( "getUILabels", this.lang );
-<<<<<<< HEAD
-<<<<<<< HEAD
-    socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
-    socket.on('getTime',time =>this.timeLeft=time);
-
-
-=======
-    this.createPoll();
->>>>>>> 664cc43a17cfd1c5a00ca2a68fd6ae6baad65eec
-  },
-=======
     socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
     socket.on('getTime',time =>this.timeLeft=time);
     socket.on('getTimeBeforeQuestion',timeTwo => this.timeLeftBeforeQuestion=timeTwo);
     this.createPoll();
 
-},
->>>>>>> teas-branch
+  },
   methods: {
 
     generatePollId: function(){
@@ -167,10 +155,6 @@ export default {
           }
         },1000);
     },
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> teas-branch
     addQuestion: function () {
       /*this.answers = [this.correctAnswer, this.wrongAnswers]
       socket.emit("addQuestion", {pollId: this.pollId, q: this.question, a: this.answers} )
@@ -198,12 +182,7 @@ export default {
     addAnswer: function () {
       this.answers.push("");
     },*/
-<<<<<<< HEAD
-=======
-    
->>>>>>> 664cc43a17cfd1c5a00ca2a68fd6ae6baad65eec
-=======
->>>>>>> teas-branch
+
     runQuestion: function () {
       //socket.emit("startTime",{pollId:this.pollId, time:10})
       socket.emit("startTimeBeforeQuestion",{pollId:this.pollId, time:3})
