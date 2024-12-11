@@ -5,8 +5,8 @@
     </div>
     
     <!--<BarsComponent v-bind:labels="question.a" v-bind:data="submittedAnswers"/>-->
-    <QuestionComponentResult v-if="questionActive" v-bind:question="question" v-bind:questionActive="questionActive" @timeUp="questionActive=false"></QuestionComponentResult> <!--Lägg till questionId senare-->
-    <BeforeQuestionComponent v-if="beforeQuestion" v-bind:beforeQuestion="beforeQuestion" @timeUp="beforeQuestion=false"></BeforeQuestionComponent>
+    <QuestionComponentResult v-if="questionActive" v-bind:progress="percentage" v-bind:question="question"  ></QuestionComponentResult> <!--Lägg till questionId senare-->
+    <BeforeQuestionComponent v-if="beforeQuestion" v-bind:timeLeft="timeLeftBeforeQuestion" ></BeforeQuestionComponent>
     <div id="players">
       <!-- Lägg in componenter för varje steg för priset -->
       <div id="contain">
@@ -53,14 +53,15 @@ export default {
       questionActive:false,
       beforeQuestion:false,
       windowHeight:0,
-      windowWidth:0
+      windowWidth:0,
+      percentage:100
     }
   },
   created: function () {
     this.pollId = this.$route.params.id
     socket.on( "uiLabels", labels => this.uiLabels = labels );
     //socket.on("submittedAnswersUpdate", update => this.submittedAnswers = update);
-    socket.on("questionUpdateResult", update => this.question = update );
+   //behlver inte tror jag socket.on("questionUpdateResult", update => this.question = update );
     socket.on( "participantsUpdate", p => {
       
       this.participants = p;})
@@ -70,19 +71,22 @@ export default {
 
     //dessa två vill jag ej ha
     
-    socket.on('startTimerBeforeQuest', () =>{this.beforeQuestion=true;
+    /*socket.on('startTimerBeforeQuest', () =>{this.beforeQuestion=true;
       console.log("försöker starta timer")
     });
     socket.on('startTimer', () =>{
       this.beforeQuestion=false;
       this.questionActive=true;
       console.log("försöker starta timer")
-    });
+    });*/
     //socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
 
     //behöver mängden frågor
 
-    socket.on('')
+    socket.on('startCountdownResults', question =>{
+      this.question=question;
+      this.countdownResult();
+    })
 
     socket.emit( "getUILabels", this.lang );
     socket.emit( "joinPoll", this.pollId );
@@ -98,11 +102,33 @@ export default {
     backgroundResult.style.height=this.windowHeight + "px";
   },
   methods:{
-    test: function(){
-      console.log(this.pollData.participants)
+    countdownResult: function(){
+      let startTime = Date.now();
+
+      let timerDuration = 13000;
+      let timerAnswer = 10000;
+      
+      let interval = setInterval(() =>{
+        //behöver skicka tiden till komponenterna
+        let elapsedTime = Date.now() - startTime;
+        let timeLeftTest = timerDuration - elapsedTime;
+
+        if (timeLeftTest > timerAnswer) {
+          this.beforeQuestion = true
+          this.timeLeftBeforeQuestion = Math.floor((3000 - elapsedTime)/1000);
+        } else if (timeLeftTest > 0) {
+          this.beforeQuestion = false
+          this.questionActive = true;
+          this.percentage = Math.floor(timeLeftTest / 100);
+          console.log('Procent kvar: ', this.percentage, Math.floor(timeLeftTest / 10000))
+        } else {
+          this.questionActive=false
+          clearInterval(interval)
+          console.log('Resultatview, interval clear')
+          this.percentage =100
+        }
+      }, 100);  
     },
-  
-    
     
 
 
@@ -172,17 +198,6 @@ export default {
     width: 100%;
     position: relative;
 }
-#progressbar{
-  width:100%;
-  height:20px;
-  background-color: lightgray;
-  margin-left:auto;
-  margin-right: auto;
-}
-#progress{
-  width:100%;
-  height:100%;
-  background-color: yellow;
-}
+
 
 </style>
