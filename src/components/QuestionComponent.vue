@@ -41,6 +41,9 @@ export default {
         this.selectedAnswer = answer
     }
 
+  },
+  mounted(){
+    this.sent=false
   }
 }
 //ha en "selected button, så om en knapp trycks på så väljs den knappen till selected, den ändrar också färg?"

@@ -113,7 +113,7 @@ export default {
       let timerAnswer = 10000;
       
       let interval = setInterval(() =>{
-        let elapsedTime = this.checkTime(startTime);
+        let elapsedTime = Date.now() - startTime;
         let timeLeftTest = timerDuration - elapsedTime;
 
         if (timeLeftTest > timerAnswer) {
@@ -125,27 +125,17 @@ export default {
 
           console.log('test, interval clear')
         }
-      }, 1000);
-
-      setTimeout(() => {
-        socket.emit("startTime",{pollId:this.pollId, time:10})
-        socket.emit("runQuestion", {pollId: this.pollId, questionNumber: this.questionNumber})
-      }, 3000); 
-
-      setTimeout(() => {
-        
-      }, 13000);    
-    },
-
-    checkTime: function(startTime) {
-      let elapsedTime = Date.now() - startTime
-      return elapsedTime
+      }, 1000);  
     },
  
 
     runQuestion: function () {
       //socket.emit("startTime",{pollId:this.pollId, time:10})
       socket.emit("startTimeBeforeQuestion",{pollId:this.pollId, time:3}) //alla ska starta deras egna, samtiidgt som vi har en på servern
+
+      //ny socket
+      socket.emit('runCountdown', {pollId: this.pollId, questionNumber: this.questionNumber})
+
       this.timerBeforeQUestion()
       this.testCountdown()
       //här måste timer köras för 

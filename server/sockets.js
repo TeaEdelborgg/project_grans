@@ -78,6 +78,12 @@ function sockets(io, socket, data) {
     io.to(pollId).emit('timeUp',true)
   })
 
+  socket.on('runCountdown', function(d){
+    let randomOrder = data.getQuestionAnswerRandom(d.pollId, d.questionNumber);
+    io.to(d.pollId).emit('startCountdownPlayer', {q:randomOrder, questionNumber:d.questionNumber});
+    io.to(d.pollId).emit('startCountdownResults',randomOrder.q);
+  })
+
   socket.on('updateResult', function(pollId){
     io.to(pollId).emit('participantsUpdate', data.getParticipants(pollId));
     socket.emit('pollData', data.getPoll(pollId));
