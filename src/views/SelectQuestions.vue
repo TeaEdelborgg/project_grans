@@ -64,12 +64,10 @@
         socket.emit("startPoll", this.pollId)
       },
       addQuestion: function () {
-
         console.log(this.answers)
         console.log({pollId: this.pollId, q: this.question, a: this.answers})
       },
   
-
       runQuestion: function () {
         socket.emit("runQuestion", {pollId: this.pollId, questionNumber: this.questionNumber})
       }

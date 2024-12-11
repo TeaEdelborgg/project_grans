@@ -1,12 +1,14 @@
 <template>
     <div>
-        namn: {{player.information.name}} svar: {{ player.information.answers }} corrected Answers: {{ player.information.correctedAnswers }}
+        {{player.information.name}} <br>
+        {{ player.information.lives }} <br>
+        {{ player.information.time }}
     </div>
 </template>
 
 <script>
 export default {
-  name: 'Player',
+  name: 'PlayerPedestal',
   props: {
     player: Object
   },
