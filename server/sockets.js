@@ -50,14 +50,6 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('submittedAnswersUpdate', data.getSubmittedAnswers(d.pollId));
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   }); 
-<<<<<<< HEAD
-<<<<<<< HEAD
-  socket.on('checkAnswer', function(d) {
-    let checkedAnswers = data.checkAnswer(d.pollId, d.questionNumber);
-    io.to(d.pollId).emit('checkedAnswer', checkedAnswers);
-  });
-=======
->>>>>>> teas-branch
   socket.on('checkUserAnswer', function(d){
     let checkedUserAnswer = data.checkUserAnswer(d.pollId,d.questionNumber,d.userId);
     io.to(d.pollId).emit('checkedUserAnswer', checkedUserAnswer);
@@ -85,15 +77,11 @@ function sockets(io, socket, data) {
   socket.on('timesUp', function(pollId){
     io.to(pollId).emit('timeUp',true)
   })
-<<<<<<< HEAD
-=======
 
-=======
   socket.on('updateResult', function(pollId){
     io.to(pollId).emit('participantsUpdate', data.getParticipants(pollId));
     socket.emit('pollData', data.getPoll(pollId));
   })
->>>>>>> teas-branch
   socket.on('selectBox', function (payload) {
     const { pollId, boxIndex, userId, label } = payload;
     const poll = data.getPoll(pollId);
@@ -118,10 +106,7 @@ function sockets(io, socket, data) {
   
     io.to(pollId).emit('boxStatesUpdate', boxStates);
   });
-<<<<<<< HEAD
->>>>>>> 664cc43a17cfd1c5a00ca2a68fd6ae6baad65eec
-=======
->>>>>>> teas-branch
+
 }
 
 export { sockets };

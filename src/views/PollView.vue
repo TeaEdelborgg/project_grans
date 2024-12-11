@@ -1,8 +1,11 @@
 <template>
-  <div>
+  <div id="background">
     {{pollId}}
-    <QuestionComponent ref="questionComponent" v-bind:question="question"
+    <div class="answeralternatives">
+      <QuestionComponent ref="questionComponent" v-bind:question="question"
               v-on:answer="submitAnswer($event)"/>
+    </div>
+    
     <hr>
     <span>{{submittedAnswers}}</span>
     Checked answer {{ checkedAnswer }}
@@ -84,7 +87,26 @@ computed: {
   }
 }
 */
-
+mounted (){
+    this.windowHeight = document.documentElement.clientHeight
+    this.windowWidth = document.documentElement.clientWidth;
+    const backgroundPlayer = document.getElementById('background');
+    backgroundPlayer.style.width=this.windowWidth +"px";
+    backgroundPlayer.style.height=this.windowHeight + "px";
+  },
   
 }
 </script>
+
+<style>
+  .answeralternatives {
+    height: 100%;
+    width: 100%;
+    justify-content: space-evenly;
+  } 
+
+ #background {
+  background-color: #444;
+  position: fixed;
+ }
+</style>

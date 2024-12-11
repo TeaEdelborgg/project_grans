@@ -1,15 +1,15 @@
 <template>
-<p>{{question.q}}</p>
-<!--<button v-on:click="selectAnswer(question.a.correct)" v-bind:key="question.a.correct"> 
-  {{ question.a.correct }}
-</button>-->
-<button v-for="a in question.a" v-on:click="selectAnswer(a)" v-bind:key="a">
-  {{ a }}
-</button>
-
-<button v-on:click="answer">
-  Submit answer
-</button>
+  <div class="playerview">
+    <p>{{question.q}}</p> <!-- ta bort sen i slutet -->
+    <button class="answeralternative" v-for="a in question.a" v-on:click="selectAnswer(a)" v-bind:key="a">
+      {{ a }}
+    </button> <br/>
+    
+    <button class="submitbutton" v-on:click="answer">
+      Submit answer
+    </button>
+  </div>
+  
 </template>
 
 <script>
@@ -45,3 +45,21 @@ export default {
 }
 //ha en "selected button, så om en knapp trycks på så väljs den knappen till selected, den ändrar också färg?"
 </script>
+
+<style scoped>
+
+  .answeralternative {
+    background-color: #556B2F;
+    border-color: #5c2c13;
+    color: #FAF8F1;
+    border-radius: 1em;
+    margin: 1em;
+    width: 40vw;
+    height: 20vh;
+  }
+
+  .submitbutton {
+    width: 80vw;
+  }
+
+</style>
