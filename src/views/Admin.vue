@@ -7,7 +7,7 @@
     <br>
     Data: {{ pollData }}
     CheckedAnswers: {{ checkedAnswers }} <br>
-    Time Left:{{ timeLeft }} <br>
+    Time Left:{{ timeLeft }}, Time Left Test: {{ timeLeftTest }}<br>
     Time before Question:{{ timeLeftBeforeQuestion }}
 </template>
 
@@ -32,7 +32,10 @@ export default {
       uiLabels: {},
       checkedAnswers: {},
       timeLeft:0,
-      timeLeftBeforeQuestion:0
+      timeLeftBeforeQuestion:0,
+
+
+      timeLeftTest:0,
     }
   },
   created: function () {
@@ -102,12 +105,49 @@ export default {
           }
         },1000);
     },
+
+    testCountdown: function() {
+      let startTime = Date.now();
+
+      let timerDuration = 13000;
+      let timerAnswer = 10000;
+      
+      let interval = setInterval(() =>{
+        let elapsedTime = this.checkTime(startTime);
+        let timeLeftTest = timerDuration - elapsedTime;
+
+        if (timeLeftTest > timerAnswer) {
+          console.log('test, tid innan frågan: ', timeLeftTest - timerAnswer)
+        } else if (timeLeftTest > 0) {
+          console.log('test, tid kvar för att svara: ', timeLeftTest)
+        } else {
+          clearInterval(interval)
+
+          console.log('test, interval clear')
+        }
+      }, 1000);
+
+      setTimeout(() => {
+        socket.emit("startTime",{pollId:this.pollId, time:10})
+        socket.emit("runQuestion", {pollId: this.pollId, questionNumber: this.questionNumber})
+      }, 3000); 
+
+      setTimeout(() => {
+        
+      }, 13000);    
+    },
+
+    checkTime: function(startTime) {
+      let elapsedTime = Date.now() - startTime
+      return elapsedTime
+    },
  
 
     runQuestion: function () {
       //socket.emit("startTime",{pollId:this.pollId, time:10})
       socket.emit("startTimeBeforeQuestion",{pollId:this.pollId, time:3}) //alla ska starta deras egna, samtiidgt som vi har en på servern
       this.timerBeforeQUestion()
+      this.testCountdown()
       //här måste timer köras för 
     }
   }
