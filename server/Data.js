@@ -238,6 +238,21 @@ Data.prototype.submitAnswer = function(pollId, answer, userId) { // och ta emot 
     }
   }
 }
+Data.prototype.updateQuestion = function (pollId,question){
+  if(this.pollExists(pollId)){
+    //i question borde question.id finnas, question är undefined
+    console.log(question)
+    const poll = this.polls[pollId]
+    const questionIndex = poll.questions.findIndex(q =>q.q ===question.q);
+    if(questionIndex ===-1){
+      return null
+    }
+    poll.questions[questionIndex] = question;
+    return question;
+  }
+  return null
+}
+
 
 export { Data };
 

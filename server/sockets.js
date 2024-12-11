@@ -14,14 +14,14 @@ function sockets(io, socket, data) {
     socket.emit('questionUpdate', data.getQuestion(d.pollId));
   });
 
-  /*socket.on("updateQuestion", ({ pollId, question }) => {
+  socket.on("updateQuestion", ({ pollId, question }) => {
     const updatedQuestion = data.updateQuestion(pollId, question);
     if (updatedQuestion) {
       io.to(pollId).emit('questionUpdate', updatedQuestion); 
     } else {
       socket.emit('error', 'Question update failed');
     }
-  });*/
+  });
 
   socket.on('joinPoll', function(pollId) {
     socket.join(pollId);
@@ -81,6 +81,30 @@ function sockets(io, socket, data) {
     io.to(pollId).emit('participantsUpdate', data.getParticipants(pollId));
     socket.emit('pollData', data.getPoll(pollId));
   })
+  socket.on('selectBox', function (payload) {
+    const { pollId, boxIndex, userId, label } = payload;
+    const poll = data.getPoll(pollId);
+  
+    if (!poll || !poll.participants) {
+      console.error("Poll or participants not found");
+      return;
+    }
+    const participant = poll.participants.find((p) => p.userId === userId);
+    if (participant) {
+      participant.selectedBox = boxIndex;
+      participant.information.boxLabel = label;
+    } else {
+        console.error("participant not found")
+    }
+  
+    const boxStates = poll.participants.map((p) => ({
+      boxIndex: p.selectedBox,
+      userId: p.userId,
+      label: p.information.name || `Player ${p.userId}`,
+    }));
+  
+    io.to(pollId).emit('boxStatesUpdate', boxStates);
+  });
 }
 
 export { sockets };

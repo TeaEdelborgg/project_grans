@@ -1,8 +1,8 @@
 <template>
   <header>
-    <div v-bind:class="['hamburger', {'close': !hideNav}]" 
+    <!--<div v-bind:class="['hamburger', {'close': !hideNav}]" 
          v-on:click="toggleNav">
-    </div>
+    </div>-->
      <button v-on:click="switchLanguage">
       {{ uiLabels.changeLanguage }}
     </button>
@@ -78,13 +78,14 @@ export default {
 </script>
 
 <style scoped>
+/*
   header {
     background-color: gray;
     width: 100%;
     display: grid;
     grid-template-columns: 2em auto;
   }
-  .logo { /* Kolla cursor i hemsidan, konstigt ändra den så att det blir vanlig pil över logon */
+  .logo {  Kolla cursor i hemsidan, konstigt ändra den så att det blir vanlig pil över logon 
     text-transform: uppercase;
     letter-spacing: 0.25em;
     font-size: 2.5rem;
@@ -108,7 +109,7 @@ export default {
     height: 2rem;
     cursor: pointer;
     font-size: 1.5rem;
-  }
+  }*/
   button:hover {
     background-color: rgb(152, 135, 135);
     cursor: pointer; 

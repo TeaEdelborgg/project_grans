@@ -1,12 +1,12 @@
 <template>
   <div>
     <p>Poll link: {{pollId}}</p>
-    <button v-on:click="createPoll">
+    <!--<button v-on:click="createPoll">
       Create poll
-    </button>
+    </button>-->
     <div>
-      {{ uiLabels.question }}:
-      <input type="text" v-model="question">
+      {{ uiLabels.question +' '+newQuestionId }}:
+      <input type="text" v-model="question" placeholder="Question"> 
       <div>
         Answers:
         <input v-model="correctAnswer" placeholder="Correct answer" />
@@ -19,26 +19,34 @@
     <button v-on:click="addQuestion">
       Add question
     </button>
-    <!--<input type="number" v-model="questionNumber">-->
-    <input type="number" v-model="questionNumber">
-    <!--När man startat kommer man till en egen admin vue-->
-    <button v-on:click="startPoll">
+    <!--<button v-on:click="startPoll">
       Start poll
-    </button>
-    <button v-on:click="runQuestion"> 
-     Run question
-    </button>
-    <button v-on:click="checkAnswers">
-      Check answers
-    </button>
-    <router-link v-bind:to="'/result/' + pollId">Check result</router-link>
+    </button>-->
+    <!--<router-link v-bind:to="'/result/' + pollId">Check result</router-link>-->
     <router-link v-bind:to="'/admin/' +pollId" v-on:click="startPoll">Start poll</router-link>
-    <div v-if="pollData.questions && pollData.questions.length > 0">
+    <!--<div v-if="pollData.questions && pollData.questions.length > 0">-->
+    <div>
       <h3>Added Questions:</h3>
-      <div v-for="(q, index) in pollData.questions" :key="index">
-        <p>Question {{ index + 1 }}:{{ q.q }}</p>
-        <p>Correct Answer: {{ q.a.correct }}</p>
-        <p>Wrong Answers: {{ q.a.wrong.join(', ') }}</p>
+      <!--Fixa detta avsnitt, q är undefied i data när ni skickar det-->
+      <div v-for="(q, index) in pollData.questions" :key="q.id">
+        <div v-if="q.isEditing">
+          <p>Editing Question: {{ q.id }}</p>
+          <input type="text" v-model="q.q" placeholder="Edit question" />
+          <input type="text" v-model="q.a.correct" placeholder="Edit correct answer" />
+          <input 
+            v-for="(answer,i) in q.a.wrong"
+            :key="'editWrongAnswer' +q.id+i"
+            v-model="q.a.wrong"
+            placeholder="Edit wrong answer"
+          />
+          <button @click="saveEditedQuestion(q)">Save</button>
+        </div>
+        <div v-else>
+          <p>Question {{ q.id }}:{{ q.q }}</p>
+          <p>Correct Answer: {{ q.a.correct }}</p>
+          <p>Wrong Answers: {{ q.a.wrong.join(', ') }}</p>
+          <button @click="editQuestion(q)">Edit</button>
+        </div>
       </div>
     </div>
     Data: {{ pollData }}
@@ -60,8 +68,8 @@ export default {
       correctAnswer: "",
       wrongAnswers: ["", "", ""],
       questionNumber: 0,
-      //newQuestionId: 1,
-      //editingQuestion: null,
+      newQuestionId: 1,
+      editingQuestion: null,
       pollData: {
         questions: []
       },
@@ -75,12 +83,12 @@ export default {
     socket.on( "uiLabels", labels => this.uiLabels = labels );
     socket.on( "pollData", data => this.pollData = data );
     socket.on( "participantsUpdate", p => this.pollData.participants = p );
-    //socket.on("questionUpdate", updatedQuestion => this.updateQuestionInPollData(updatedQuestion));
+    socket.on("questionUpdate", updatedQuestion => this.updateQuestionInPollData(updatedQuestion));
     socket.emit( "getUILabels", this.lang );
     socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
     socket.on('getTime',time =>this.timeLeft=time);
     socket.on('getTimeBeforeQuestion',timeTwo => this.timeLeftBeforeQuestion=timeTwo);
-    
+    this.createPoll();
 
 },
   methods: {
@@ -93,6 +101,19 @@ export default {
       this.pollId=this.generatePollId();
       socket.emit("createPoll", {pollId: this.pollId, lang: this.lang })
       socket.emit("joinPoll", this.pollId);
+    },
+    editQuestion(question){
+      question.isEditing=true;
+    },
+    saveEditedQuestion(question){
+      question.isEditing=false;
+      socket.emit("updateQuestion",{pollId:this.pollId,q:question})
+    },
+    updateQuestionInPollData(updatedQuestion){
+      const questionIndex = this.pollData.questions.findIndex(q =>q.id===updatedQuestion.id);
+      if(questionIndex !==-1){
+        this.pollData.questions[questionIndex] = updatedQuestion;
+      }
     },
     startPoll: function () { 
       socket.emit("startPoll", this.pollId)
@@ -146,21 +167,15 @@ export default {
           wrong: this.wrongAnswers,
         },
       };
-      
-      this.answers = {correct: this.correctAnswer, wrong: this.wrongAnswers}
-      socket.emit("addQuestion", {pollId: this.pollId, q: this.question, a: this.answers, newQuestion});
       this.pollData.questions.push(newQuestion);
+      this.answers = {correct: this.correctAnswer, wrong: this.wrongAnswers}
+      //kolla över hur sockets fungerar och ändra sedan till newQuestion, var vaksam över hur variablerna skickas
+      socket.emit("addQuestion", {pollId: this.pollId, q: this.question, a: this.answers});
 
       this.newQuestionId += 1;
       this.question = "";
       this.correctAnswer = "";
       this.wrongAnswers = ["", "", ""];
-
-      console.log(this.answers)
-      console.log({pollId: this.pollId, q: this.question, a: this.answers})
-    },
-    checkAnswers: function(){ //resultat behöver också den
-      socket.emit("checkAnswer", {pollId:this.pollId, questionNumber:this.questionNumber})
     },
 
     /* tar bort denna funktion som inte längre används
