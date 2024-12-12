@@ -5,8 +5,9 @@
       <QuestionComponent ref="questionComponent" v-bind:question="question"
               v-on:answer="submitAnswer($event)"/>
     </div>
-    
-    <hr>
+    <div id="slidercontainer">
+      <SliderCompoment/>
+    </div>
     <span>{{submittedAnswers}}</span>
     Checked answer {{ checkedAnswer }}
   </div>
@@ -15,13 +16,15 @@
 <script>
 // @ is an alias to /src
 import QuestionComponent from '@/components/QuestionComponent.vue';
+import SliderCompoment from '@/components/SliderCompoment.vue';
 import io from 'socket.io-client';
 const socket = io("localhost:3000");
 
 export default {
   name: 'PollView',
   components: {
-    QuestionComponent
+    QuestionComponent,
+    SliderCompoment
   },
   data: function () {
     return {
@@ -152,5 +155,10 @@ mounted (){
  #background {
   background-color: #444;
   position: fixed;
+ }
+ #slidercontainer{
+  background-color: greenyellow;
+  width: 100%;
+  height: 5%; 
  }
 </style>
