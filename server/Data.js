@@ -253,6 +253,37 @@ Data.prototype.updateQuestion = function (pollId,question){
 }
 
 
+Data.prototype.selectBox = function (info) {
+  const { pollId, boxIndex, userId, label } = info;
+  if(this.pollExists(pollId)){
+  const poll = this.getPoll(pollId);
+  if (!poll.participants||poll.participants.length === 0) {
+    console.error("Participants not found");
+    return null; // Returning null to indicate failure
+  }
+
+  const participant = poll.participants.find((p) => p.userId === userId);
+  if (participant) {
+    participant.selectedBox = boxIndex;
+    participant.information.boxLabel = label;
+  } else {
+    console.error("Participant not found");
+    return null;
+  }
+
+  const boxStates = poll.participants.map((p) => ({
+    boxIndex: p.selectedBox,
+    userId: p.userId,
+    label: p.information.boxLabel || `Player ${p.userId}`,
+  }));
+
+  return boxStates; // Returning the updated box states for use in the socket file
+}}
+
+
+
+
+
 export { Data };
 
 

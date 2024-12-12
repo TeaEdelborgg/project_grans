@@ -14,9 +14,10 @@
       Create Poll with Poll 2 ID
     </button>
 
-    <button v-on:click="startPoll">
+    <!--<button v-on:click="startPoll">
       Start poll
-    </button>
+    </button>-->
+    <router-link v-bind:to="'/admin/' +pollId" v-on:click="startPoll">Start poll</router-link> 
 
     <button v-on:click="runQuestion">
       Run question
