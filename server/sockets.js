@@ -46,7 +46,7 @@ function sockets(io, socket, data) {
   });
 
   socket.on('submitAnswer', function(d) {
-    data.submitAnswer(d.pollId, d.answer, d.userId); // ta bort correctAnswer
+    data.submitAnswer(d.pollId, d.answer, d.userId, d.time); // ta bort correctAnswer
     io.to(d.pollId).emit('submittedAnswersUpdate', data.getSubmittedAnswers(d.pollId));
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   }); 

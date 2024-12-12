@@ -224,15 +224,14 @@ Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){
   return null
 }
 
-Data.prototype.submitAnswer = function(pollId, answer, userId) { // och ta emot userId, måste skicka svaret till individuell lista & ha med correctAnswer
+Data.prototype.submitAnswer = function(pollId, answer, userId, timeLeft) { // och ta emot userId, måste skicka svaret till individuell lista & ha med correctAnswer
   if (this.pollExists(pollId)) { //vill lägga till tiden när svaret togs emot
     const poll = this.polls[pollId];
     const users = poll.participants;
     for (const key in users) {
       const user = users[key]
       if (userId==user.userId) {
-        let time = poll.timer.timeLeft;
-        user.information.answers.push([answer,time])
+        user.information.answers.push([answer, timeLeft])
         console.log(user.information.answers, 'lyckades')
       }
     }

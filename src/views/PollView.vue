@@ -38,11 +38,15 @@ export default {
       questionNumber: null,
       checkedAnswer: false,
       questionActive: false,
+      timeLeft: 0,
     }
   },
   created: function () {
     this.pollId = this.$route.params.id;
     this.userId = this.$route.params.userId;
+    socket.on( "uiLabels", labels => this.uiLabels = labels );
+
+
     /*socket.on( "questionUpdate", q => { 
       console.log("tog emot fråga, ", q)
       this.question = q; 
@@ -55,18 +59,22 @@ export default {
       console.log("tog emot random fråga, ",q.questionNumber)
       //this.$refs.questionComponent.updateSent(); 
     })*/
-    socket.on( "submittedAnswersUpdate", answers => this.submittedAnswers = answers );
-    socket.on( "uiLabels", labels => this.uiLabels = labels );
-    socket.on("checkedUserAnswer", checkedAns => {
-      this.checkedAnswer = checkedAns;
-      console.log("tagit emot checked Answer: ",checkedAns)
-    });
+    
     /*socket.on("timeUp",up =>{
       console.log("tittar om timeUp")
       if(up==true){
         this.timeUp();
       }
     });*/ 
+    
+    // socket.on( "submittedAnswersUpdate", answers => this.submittedAnswers = answers );
+    
+    socket.on("checkedUserAnswer", checkedAns => {
+      this.checkedAnswer = checkedAns;
+      console.log("tagit emot checked Answer: ",checkedAns)
+    });
+
+    
     socket.emit( "getUILabels", this.lang );
     socket.emit( "joinPoll", this.pollId );
 
@@ -78,13 +86,12 @@ export default {
     })
   },
   methods: {
-    submitAnswer: function (answer) { //här måste correct answer också va med, inte bara answer
+    submitAnswer: function (answer) { //här måste correct answer också va med, inte bara answer ?????
       //titta i servern hur tid och svar kopplas, du vill koppla tiden här direkt så att det stämmer med personens 
       //timer och inte servern!!!!
       // ska skickas som [svaret de valt, tid kvar], kolla i data
       // kolla så att allt som varit koppat till serven fortfarande är det
-      socket.emit("submitAnswer", {pollId: this.pollId, answer: answer, userId: this.userId}) // ta bort correctAnswer
-      console.log('svar: ', answer)
+      socket.emit("submitAnswer", {pollId: this.pollId, answer: answer, userId: this.userId, time: Math.floor(this.timeLeft/1000)}) // ta bort correctAnswer
     },
     timeUp: function(){
       socket.emit("checkUserAnswer", {pollId:this.pollId, questionNumber:this.questionNumber,userId:this.userId}) //den ska sedan vara när timern går ut
@@ -97,13 +104,13 @@ export default {
       
       let interval = setInterval(() =>{
         let elapsedTime = Date.now() - startTime;
-        let timeLeftTest = timerDuration - elapsedTime;
+        this.timeLeft = timerDuration - elapsedTime;
 
-        if (timeLeftTest > timerAnswer) {
-          console.log('PollView, tid innan frågan: ', timeLeftTest - timerAnswer)
-        } else if (timeLeftTest > 0) {
+        if (this.timeLeft > timerAnswer) {
+          console.log('PollView, tid innan frågan: ', this.timeLeft - timerAnswer)
+        } else if (this.timeLeft > 0) {
           this.questionActive = true;
-          console.log('PollView, tid kvar för att svara: ', timeLeftTest)
+          console.log('PollView, tid kvar för att svara: ', this.timeLeft)
         } else {
           this.questionActive = false;
           clearInterval(interval)
@@ -122,6 +129,8 @@ computed: {
   }
 }
 */
+
+//låter skärmen vara fixed så att den inte går att scrolla i
 mounted (){
     this.windowHeight = document.documentElement.clientHeight
     this.windowWidth = document.documentElement.clientWidth;

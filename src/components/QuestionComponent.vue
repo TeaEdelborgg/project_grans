@@ -52,9 +52,9 @@ export default {
 <style scoped>
 
   .answeralternative {
-    background-color: #556B2F;
+    /*background-color: #556B2F;
     border-color: #5c2c13;
-    color: #FAF8F1;
+    color: #FAF8F1;*/
     border-radius: 1em;
     margin: 1em;
     width: 40vw;
