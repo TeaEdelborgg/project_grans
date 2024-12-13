@@ -280,6 +280,12 @@ Data.prototype.selectBox = function (info) {
   return boxStates; // Returning the updated box states for use in the socket file
 }}
 
+Data.prototype.amountOfQuestions = function (pollId){
+  if(this.pollExists(pollId)){
+    return this.polls[pollId].questions.length;
+  }
+}
+
 
 
 

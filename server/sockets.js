@@ -93,7 +93,12 @@ function sockets(io, socket, data) {
     const boxStates = data.selectBox(info);
       io.to(info.pollId).emit('boxStatesUpdate', boxStates);
   });
-  
+
+  socket.on('getAmountQuestions', function(pollId) {
+    const amountOfQuestion = data.amountOfQuestions(pollId);
+    io.to(pollId).emit('sendAmountQuestions', amountOfQuestion)
+  });
+
 
 }
 

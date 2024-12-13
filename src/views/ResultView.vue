@@ -54,7 +54,8 @@ export default {
       beforeQuestion:false,
       windowHeight:0,
       windowWidth:0,
-      percentage:100
+      percentage:100,
+      amountOfQuestions:0,
     }
   },
   created: function () {
@@ -86,6 +87,9 @@ export default {
     socket.on('startCountdownResults', question =>{
       this.question=question;
       this.countdownResult();
+    });
+    socket.on('sendAmountQuestions', value => {this.amountOfQuestions=value
+      console.log("antal frågor: ",value)
     })
 
     socket.emit( "getUILabels", this.lang );
@@ -95,6 +99,8 @@ export default {
 
   },
   mounted (){
+    socket.emit('getAmountQuestions', this.pollId);
+
     this.windowHeight = document.documentElement.clientHeight
     this.windowWidth = document.documentElement.clientWidth;
     const backgroundResult = document.getElementById('background');
