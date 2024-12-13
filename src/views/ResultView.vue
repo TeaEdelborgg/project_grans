@@ -16,7 +16,7 @@
     
     <br>
     <div id="pedestaler">
-          <PlayerPedestal v-show="participants.length>0" v-for="player in participants" v-bind:player="player" :key="player.id" id="pedestal"/>
+          <PlayerPedestal v-show="participants.length>0" v-for="player in participants" v-bind:player="player" :key="player.id" class="pedestal"/>
     </div>
   </div>
 </template>
@@ -151,12 +151,11 @@ export default {
   background-color: grey;
   margin:auto;
 }
-#pedestal{
+.pedestal{
   flex:1;
  max-width: 10%;
   height:100px;
   margin:auto;
-  background-color: lightpink;
 }
 #players{
   width:80%;
