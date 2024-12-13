@@ -1,7 +1,7 @@
 <template>
   <div id="boxes">
     <div id="containerBox">
-        <Levelbox v-for="n in amountOfQuestions"></Levelbox>
+        <Levelbox v-for="n in amountOfQuestions" :id="n"></Levelbox>
         <!--namn: {{player.information.name}} svar: {{ player.information.answers }} corrected Answers: {{ player.information.correctedAnswers }}-->
     </div>
   </div>
@@ -21,17 +21,37 @@ export default {
   },
   data: function(){
     return{
-      color:""
+      color:"",
+      out:false,
+      coloredBoxes:[]
     }
   },
   created:function (){
     this.color=this.player.information.color
+    for (n in this.amountOfQuestions){
+      this.coloredBoxes.push(false)
+    }
   },
   //emits: ["answer"],
   methods: {
-    
+    updateBoxes(){
+      if(!out){
+        if(this.player.information.lives==0){
+          this.out = true
+        }
+        else if(this.player.information.lives >0 ){
+          let answers = this.player.information.correctedAnswers;
+          for(i in answers){
+            this.coloredBoxes[this.amountOfQuestions-1-i] = true;
+          }
+
+        }
+      }
+
+      }
+      //titta om livet är 0, isåfall ska färgen inte uppdateras
+    }
     //från player ska vi kalla på en funktion i resultat som sedan kallar på en funktion i data som tittar om svaren är korrekt.
-  }
 }
 </script>
 <style>
@@ -58,7 +78,7 @@ export default {
   margin:5px 0;
   margin-left:auto;
   margin-right: auto;
-  background-color: lightpink;
+  background-color: lightgray;
   justify-content: center;
   align-items: center;
   display: flex;
