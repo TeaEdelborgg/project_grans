@@ -1,9 +1,8 @@
 <template>
-    <div id="playerpedestal">
+    <div id="playerpedestal" :style="{ '--pedestal-color': player.information.color }">
         {{player.information.name}} <br>
         {{ player.information.lives }} <br>
         {{ player.information.time }} <br>
-        {{ player.information.color }}
     </div>
 </template>
 
@@ -27,7 +26,9 @@ export default {
 
 <style>
   #playerpedestal {
-    color: green;
-    background-color: aqua;
+    color: white;
+    background-color: var(--pedestal-color);
+    padding: 10px;
+    border-radius: 5px;
   }
 </style>
