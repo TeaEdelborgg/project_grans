@@ -3,6 +3,7 @@
     {{ pollId }}
     <div v-if="!joined">
       <input type="text" v-model="userName" placeholder="Enter your name" />
+      <input type="color" v-model="selectedColor" />
       <button v-on:click="participateInPoll">
         {{ uiLabels.participateInPoll || "Join Poll" }}
       </button>
@@ -14,6 +15,7 @@
           v-for="(box, index) in playerBoxes" 
           :key="index" 
           class="box" 
+          :style ="{backgroundColor: box.color}"
           :class="{ taken: box.taken }" 
           @click="selectBox(index)"
         >
@@ -23,7 +25,7 @@
       <p>Current Participants:</p>
       <ul>
         <li v-for="participant in participants" :key="participant.userId">
-          {{ participant.information.name || `Player ${participant.userId}` }}
+          {{ participant.information.name }} - Color:{{ participant.information.color }}
         </li>
       </ul>
     </div>
@@ -44,12 +46,13 @@ export default {
       uiLabels: {},
       joined: false,
       lang: localStorage.getItem("lang") || "en",
+      selectedColor: "#ff0000",
       participants: [],
       playerBoxes: [
-        { taken: false, label: "Box 1", userId: null },
-        { taken: false, label: "Box 2", userId: null },
-        { taken: false, label: "Box 3", userId: null },
-        { taken: false, label: "Box 4", userId: null },
+        { taken: false, label: "Box 1", userId: null, color: "#ff0000" },
+        { taken: false, label: "Box 2", userId: null, color: "#ff0000" },
+        { taken: false, label: "Box 3", userId: null, color: "#ff0000" },
+        { taken: false, label: "Box 4", userId: null, color: "#ff0000" },
       ],
       selectedBox: null,
     };
@@ -77,6 +80,7 @@ export default {
         pollId: this.pollId,
         name: this.userName,
         userId: this.userID,
+        color: this.selectedColor, //skickar färg t admin
       });
       this.joined = true;
     },
@@ -90,14 +94,16 @@ export default {
         selecterbox.taken = true;
         selecterbox.label = this.userName || `Player ${this.userID}`;
         selecterbox.userId = this.userID;
-        this.selectedBox = index;
+        this.selectedBox = this.selectedColor;
 
         socket.emit("selectBox", {
           pollId: this.pollId,
           boxIndex: index,
           userId: this.userID,
           label: selecterbox.label,
+          color: this.selectedColor
         });
+        this.selectedBox = index;
       }
     },
     updatePlayerBoxes() {
@@ -106,10 +112,12 @@ export default {
         if (takenBy) {
           box.taken = true;
           box.label = takenBy.information.name || `Player ${takenBy.userId}`;
+          box.color = takenBy.information.color;
           box.userId = takenBy.userId;
         } else {
           box.taken = false;
           box.label = `Box ${index + 1}`;
+          box.color = "#fff0000";
           box.userId = null;
         }
       });
@@ -124,6 +132,7 @@ export default {
       } else {
         box.taken = false;
         box.label = `Box ${index + 1}`;
+
         box.userId = null;
       }
     });

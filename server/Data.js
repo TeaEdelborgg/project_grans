@@ -68,10 +68,10 @@ Data.prototype.getPoll = function(pollId) {
   return {};
 }
 
-Data.prototype.participateInPoll = function(pollId, name, userId) {
-  console.log("participant will be added to", pollId, name, userId);
+Data.prototype.participateInPoll = function(pollId, name, userId, color) {
+  console.log("participant will be added to", pollId, name, userId, color);
   if (this.pollExists(pollId)) {
-    this.polls[pollId].participants.push({userId: userId, information: {name: name, answers: [], correctedAnswers:[], time:0, lives:2}}) //lägg till liv, tid ect alltså allt som är samma till en början
+    this.polls[pollId].participants.push({userId: userId, information: {name: name, color, answers: [], correctedAnswers:[], time:0, lives:2}}) //lägg till liv, tid ect alltså allt som är samma till en början
   }
 }
 
