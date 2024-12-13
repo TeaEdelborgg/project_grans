@@ -10,7 +10,7 @@
     <div id="players">
       <!-- Lägg in componenter för varje steg för priset -->
       <div id="contain">
-        <Player v-if="participants.length>0" v-for="player in participants" v-bind:player="player" :key="player.id" id="player"/>
+        <Player v-if="participants.length>0" v-for="player in participants" v-bind:player="player"  v-bind:amountOfQuestions="amountOfQuestions":key="player.id" id="player"/>
       </div>
     </div>
     
