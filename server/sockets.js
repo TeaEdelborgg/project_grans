@@ -58,7 +58,8 @@ function sockets(io, socket, data) {
   });
   socket.on('getAllAnswers', function(pollId){
     let participantsWithNewAnswersTest = data.updateColoredBoxes(pollId)
-    io.to(pollId).emit("sendAllAnswers", participantsWithNewAnswersTest)
+    let levelBoxes = data.updateLevelBoxes(pollId)
+    io.to(pollId).emit("sendAllAnswers", [participantsWithNewAnswersTest,levelBoxes])
   })
   socket.on('getTimer', function(pollId){
     let time = data.getTime(pollId)
@@ -101,7 +102,8 @@ function sockets(io, socket, data) {
 
   socket.on('getAmountQuestions', function(pollId) {
     const amountOfQuestion = data.amountOfQuestions(pollId);
-    io.to(pollId).emit('sendAmountQuestions', amountOfQuestion)
+    const levelValues = data.getLevelValues(pollId)
+    io.to(pollId).emit('sendAmountQuestions', [amountOfQuestion, levelValues])
   });
 
 

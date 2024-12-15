@@ -22,21 +22,19 @@ export default {
   data: function(){
     return{
       color:"gray",
-      out:false,
-      coloredBoxes:[]
     }
   },
   mounted(){
     this.color=this.player.information.color
     console.log("färg i watch: ",this.color)
   },
-  watch:{
+  /*watch:{
     amountOfQuestions(){
       for (let n=0; n< this.amountOfQuestions; n++){
         this.coloredBoxes.push(false)
       }
     }
-  },
+  },*/
   //emits: ["answer"],
   methods: {
     updatesBoxes(){

@@ -54,7 +54,8 @@ Data.prototype.createPoll = function(pollId, lang="en") {
     poll.currentQuestion = 0; 
     poll.timer = {timeLeft:10,interval:null} 
     poll.timerBeforeQuestion = {timeLeft:3, interval:null}    
-    poll.allCorrectedAnswers = {}       
+    poll.allCorrectedAnswers = {}   
+    poll.moneyBoxes = [];    
     this.polls[pollId] = poll;
     console.log("poll created", pollId, poll);
   }
@@ -294,6 +295,12 @@ Data.prototype.createBoxes = function(pollId){
         player.information.coloredBoxes.push(false)
       }
     }
+    //fixa pengar levlar här
+    for (let i=0; i<numberOfQuestions;i++){
+      let value = Math.ceil((1000000/numberOfQuestions)*(i+1))
+      poll.moneyBoxes.push(value)
+    }
+    console.log("money levlar: ",poll.moneyBoxes)
   }
 }
 
@@ -315,6 +322,36 @@ Data.prototype.updateColoredBoxes = function(pollId){
     return poll.participants
   }
   return {}
+}
+
+Data.prototype.updateLevelBoxes = function(pollId){
+  if(this.pollExists(pollId)){
+    const poll = this.polls[pollId]
+    let current = poll.currentQuestion
+    let amountQuestions = this.amountOfQuestions(pollId)
+    let boxes =[]
+    for(let i =0; i<amountQuestions; i++){
+      if(i <=current){
+        boxes.push("done")
+      }
+      else{
+        if(i==(current+1)){
+          boxes.push("next")
+        }
+        else{
+          boxes.push("future")
+        }
+      }
+    }
+    console.log("boxes i data: ",boxes)
+    return boxes
+  }
+  return []
+}
+Data.prototype.getLevelValues = function(pollId){
+  if(this.pollExists(pollId)){
+    return this.polls[pollId].moneyBoxes
+  }
 }
 
 

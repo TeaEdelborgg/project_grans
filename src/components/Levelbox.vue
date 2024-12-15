@@ -20,8 +20,6 @@
         },
         methods:{
             updateColor: function(col){
-                console.log("färg i updateColor: ",this.BoxColor)
-                console.log("uppdaterar färg: ",col)
                 if(col){
                     //backgroundCol.style.backgroundColor = "yellow"
                     //this.boxColor=this.BoxColor
