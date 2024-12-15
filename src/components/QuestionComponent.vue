@@ -16,7 +16,8 @@
 export default {
   name: 'QuestionComponent',
   props: {
-    question: Object
+    question: Object,
+    questionActive: Boolean
   },
   data: function(){
     return{
@@ -37,7 +38,7 @@ export default {
       this.sent = false
     },
     selectAnswer: function(answer){
-      if (!this.sent) {
+      if (this.questionActive && !this.sent) {
         console.log('selectanswer: ', answer)
         this.selectedAnswer = answer
       }
