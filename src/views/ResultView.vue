@@ -10,7 +10,7 @@
     <div id="players">
       <!-- Lägg in componenter för varje steg för priset -->
       <div id="contain">
-        <Player v-if="participants.length>0" :ref="players" v-for="player in participants" v-bind:player="player"  v-bind:amountOfQuestions="amountOfQuestions":key="player.id" id="player"/>
+        <Player v-if="participants.length>0"  v-for="player in participants" :ref="player.userId" v-bind:player="player" v-bind:amountOfQuestions="amountOfQuestions":key="player.id" id="player"/>
       </div>
     </div>
     
@@ -56,6 +56,7 @@ export default {
       windowWidth:0,
       percentage:100,
       amountOfQuestions:0,
+      userId:''
     }
   },
   created: function () {
@@ -64,11 +65,24 @@ export default {
     //socket.on("submittedAnswersUpdate", update => this.submittedAnswers = update);
    //behlver inte tror jag socket.on("questionUpdateResult", update => this.question = update );
     socket.on( "participantsUpdate", p => {
-      
       this.participants = p;
-      this.$refs.players.forEach((playerRef,index) =>{
-        playerRef.updatesBoxes();
+    })
+    socket.on("sendAllAnswers",p=>{ 
+      console.log("this.$refs: ",this.$refs)
+      this.participants = p;
+      this.$nextTick(()=>{
+        this.participants.forEach(player =>{
+        const playerRefArr = this.$refs[player.userId]
+        const playerRef = playerRefArr?.[0]
+        console.log("playerRef: ",playerRef)
+        console.log("playerRef metoder, ", Object.keys(playerRef))
+        console.log("playerRef instance: ",playerRef.$.type.name)
+        if(playerRef){
+          playerRef.updatesBoxes();
+        }
       })
+      })
+      
     })
     //socket.on("startFirstTimer", this.TimerBeforeQuestion())
     //socket.on('getTime',time =>this.timeLeft=time);
@@ -130,12 +144,14 @@ export default {
           this.beforeQuestion = false
           this.questionActive = true;
           this.percentage = Math.floor(timeLeftTest / 100);
-          console.log('Procent kvar: ', this.percentage, Math.floor(timeLeftTest / 10000))
         } else {
-          this.questionActive=false
           clearInterval(interval)
-          console.log('Resultatview, interval clear')
-          this.percentage =100
+          setTimeout(()=>{
+            console.log("ska skicka get allanswers")
+            socket.emit("getAllAnswers", this.pollId)
+            this.questionActive=false
+            this.percentage =100
+          },2000)
         }
       }, 100);  
     },

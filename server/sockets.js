@@ -55,6 +55,11 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('checkedUserAnswer', checkedUserAnswer);
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   });
+  socket.on('getAllAnswers', function(pollId){
+    console.log("i socket")
+    let participantsWithNewAnswers = data.getParticipants(pollId)
+    io.to(pollId).emit("sendAllAnswers",participantsWithNewAnswers)
+  })
   socket.on('getTimer', function(pollId){
     let time = data.getTime(pollId)
     io.to(pollId).emit('getTime',time)
