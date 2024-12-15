@@ -71,7 +71,7 @@ Data.prototype.getPoll = function(pollId) {
 Data.prototype.participateInPoll = function(pollId, name, userId, color) {
   console.log("participant will be added to", pollId, name, userId, color);
   if (this.pollExists(pollId)) {
-    this.polls[pollId].participants.push({userId: userId, information: {name: name, color: color, answers: [], correctedAnswers:[], time:0, lives:2}}) //lägg till liv, tid ect alltså allt som är samma till en början
+    this.polls[pollId].participants.push({userId: userId, information: {name: name, color: color, answers: [], correctedAnswers:[], in:true, coloredBoxes:[], time:0, lives:2}}) //lägg till liv, tid ect alltså allt som är samma till en början
   }
 }
 
@@ -285,8 +285,37 @@ Data.prototype.amountOfQuestions = function (pollId){
     return this.polls[pollId].questions.length;
   }
 }
+Data.prototype.createBoxes = function(pollId){
+  if(this.pollExists(pollId)){
+    const poll = this.polls[pollId]
+    const numberOfQuestions = this.amountOfQuestions(pollId)
+    for (let player of poll.participants){
+      for (let n=0; n<numberOfQuestions;n++){
+        player.information.coloredBoxes.push(false)
+      }
+    }
+  }
+}
 
-
+Data.prototype.updateColoredBoxes = function(pollId){
+  if(this.pollExists(pollId)){
+    const poll = this.polls[pollId]
+    for(let player of poll.participants){
+      if(player.information.in){
+        let answers = player.information.correctedAnswers
+        for (let i=0;  i<Object.keys(answers).length;i++){
+          player.information.coloredBoxes[i]=true
+        }
+        console.log("uppdaterar coloredBoxes: ",player.userId, " ", player.information.coloredBoxes)
+        if(player.information.lives==0){
+          player.information.in = false
+        }
+      }
+    }
+    return poll.participants
+  }
+  return {}
+}
 
 
 

@@ -39,36 +39,14 @@ export default {
   },
   //emits: ["answer"],
   methods: {
-    updatesBoxes(){ //gör denna funktion i data sen
-      console.log("i update boxes")
-      if(!this.out){
-        if(this.player.information.lives==0){
-          this.out = true
-        }
-        else if(this.player.information.lives >0 ){
-          console.log("corrected answers: ",this.player.information.correctedAnswers)
-          console.log("colored boxes: ", this.coloredBoxes)
-          let answers = this.player.information.correctedAnswers;
-          for(let i=0; i< Object.keys(answers).length;i++){
-            console.log("i for loop update: ",i)
-            this.coloredBoxes[i] = true; //-i
-          }
-          console.log("colored boxes efter loop: ",this.coloredBoxes)
+    updatesBoxes(){
+      for(let i=0; i<Object.keys(this.player.information.coloredBoxes).length;i++){
+        const box = this.$refs[`box-${i+1}`][0]
+        if(box){
+          box.updateColor(this.player.information.coloredBoxes[i])
         }
       }
-      //console.log("coloredboxes: ",this.coloredBoxes)
-      //console.log("this.refs: ",this.$refs)
-      for(let i=0; i<Object.keys(this.coloredBoxes).length;i++){
-        const boxRef = this.$refs[`box-${i+1}`][0]
-        //console.log("boxref: ",boxRef)
-        //console.log("boxref metoder, ", Object.keys(boxRef))
-        //console.log("boxref instance: ",boxRef.$.type.name)
-        if(boxRef){
-          boxRef.updateColor(this.coloredBoxes[i])
-        }
-      }
-
-    }  //titta om livet är 0, isåfall ska färgen inte uppdateras
+    }
   }  //från player ska vi kalla på en funktion i resultat som sedan kallar på en funktion i data som tittar om svaren är korrekt.
 }
 </script>

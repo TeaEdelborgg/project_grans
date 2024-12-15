@@ -67,23 +67,20 @@ export default {
     socket.on( "participantsUpdate", p => {
       this.participants = p;
     })
-    socket.on("sendAllAnswers",p=>{ 
-      console.log("this.$refs: ",this.$refs)
-      this.participants = p;
+    socket.on("sendAllAnswers", p=>{
+      this.participants = p
       this.$nextTick(()=>{
-        this.participants.forEach(player =>{
-        const playerRefArr = this.$refs[player.userId]
-        const playerRef = playerRefArr?.[0]
-        console.log("playerRef: ",playerRef)
-        console.log("playerRef metoder, ", Object.keys(playerRef))
-        console.log("playerRef instance: ",playerRef.$.type.name)
-        if(playerRef){
-          playerRef.updatesBoxes();
-        }
+        this.participants.forEach(play=>{
+          const playerArray = this.$refs[play.userId]
+          const player = playerArray?.[0]
+          if(player){
+            player.updatesBoxes()
+          }
+        })
       })
-      })
-      
     })
+
+
     //socket.on("startFirstTimer", this.TimerBeforeQuestion())
     //socket.on('getTime',time =>this.timeLeft=time);
     //socket.on('getTimeBeforeQuestion',timeTwo => this.timeLeftBeforeQuestion=timeTwo);
@@ -147,8 +144,8 @@ export default {
         } else {
           clearInterval(interval)
           setTimeout(()=>{
-            console.log("ska skicka get allanswers")
             socket.emit("getAllAnswers", this.pollId)
+            socket.emit("getAllAnswersTest", this.pollId)
             this.questionActive=false
             this.percentage =100
           },2000)

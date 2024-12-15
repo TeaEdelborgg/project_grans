@@ -34,6 +34,7 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   });
   socket.on('startPoll', function(pollId) {
+    data.createBoxes(pollId)
     io.to(pollId).emit('startPoll');
   })
   socket.on('runQuestion', function(d) {
@@ -48,7 +49,7 @@ function sockets(io, socket, data) {
   socket.on('submitAnswer', function(d) {
     data.submitAnswer(d.pollId, d.answer, d.userId, d.time); // ta bort correctAnswer
     io.to(d.pollId).emit('submittedAnswersUpdate', data.getSubmittedAnswers(d.pollId));
-    io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
+    //io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId)); //verkar inte behövas, Tea (2024-12-15)
   }); 
   socket.on('checkUserAnswer', function(d){
     let checkedUserAnswer = data.checkUserAnswer(d.pollId,d.questionNumber,d.userId);
@@ -56,9 +57,8 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   });
   socket.on('getAllAnswers', function(pollId){
-    console.log("i socket")
-    let participantsWithNewAnswers = data.getParticipants(pollId)
-    io.to(pollId).emit("sendAllAnswers",participantsWithNewAnswers)
+    let participantsWithNewAnswersTest = data.updateColoredBoxes(pollId)
+    io.to(pollId).emit("sendAllAnswers", participantsWithNewAnswersTest)
   })
   socket.on('getTimer', function(pollId){
     let time = data.getTime(pollId)
