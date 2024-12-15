@@ -42,6 +42,7 @@ export default {
       checkedAnswer: false,
       questionActive: false,
       seeAlternatives: false,
+      answerChecked: false, 
       timeLeft: 0,
     }
   },
@@ -101,6 +102,8 @@ export default {
       socket.emit("checkUserAnswer", {pollId:this.pollId, questionNumber:this.questionNumber,userId:this.userId}) //den ska sedan vara när timern går ut
     }, 
     countdownPlayer: function() {
+      this.answerChecked = false;
+
       let startTime = Date.now();
 
       let timerDuration = 18000;
@@ -116,11 +119,14 @@ export default {
         } else if (this.timeLeft > timerSeeAnswer) {
           this.questionActive = true;
           console.log('PollView, tid kvar för att svara: ', this.timeLeft - timerSeeAnswer)
-        } else if (this.timeLeft > 0) {
+        } else if (this.timeLeft > 0) { // denna körs flera gånger? hur ska man göra så att den inte gör det?
           this.questionActive = false
           this.seeAlternatives = true
           console.log('Pollview, kolla och se vad man svarat')
-          this.timeUp() //rättar svaret, kanske ska finnas en delay?
+          if (!this.checkedAnswer) {
+            this.timeUp() //rättar svaret, kanske ska finnas en delay?
+            this.checkedAnswer = true
+          }
         } else {
           this.seeAlternatives = false
           clearInterval(interval)
