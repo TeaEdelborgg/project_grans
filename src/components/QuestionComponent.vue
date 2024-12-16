@@ -39,9 +39,10 @@ export default {
   methods: {
     answer: function () {
       if (!this.sent){
+        console.log('innan skickat', this.sent)
         this.sent=true
         this.$emit("answer", this.selectedAnswer); 
-        console.log('skickat')
+        console.log('skickat ', this.sent)
       }
     },
     updateSent: function() {

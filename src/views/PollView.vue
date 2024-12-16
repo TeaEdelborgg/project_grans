@@ -6,6 +6,10 @@
       <div id="timerBarContainer">
         <div id="timerBar" :style="{ width: percentage + '%' }"></div>
       </div>
+      <div>
+        <p>Tid:  sekunder, Liv kvar: </p>
+      </div>
+      
 
       <div class="answeralternatives" v-if="questionActive || seeAlternatives">
         <QuestionComponent 
@@ -64,6 +68,7 @@ export default {
     this.pollId = this.$route.params.id;
     this.userId = this.$route.params.userId;
     socket.on( "uiLabels", labels => this.uiLabels = labels );
+    //socket.emit("getParticipants", this.pollId);
 
 
     /*socket.on( "questionUpdate", q => { 
@@ -111,6 +116,7 @@ export default {
       // ska skickas som [svaret de valt, tid kvar], kolla i data
       // kolla så att allt som varit koppat till serven fortfarande är det
       socket.emit("submitAnswer", {pollId: this.pollId, answer: answer, userId: this.userId, time: Math.floor(this.timeLeft/1000)}) // ta bort correctAnswer
+      console.log('svaret skickas')
     },
     timeUp: function(){
       socket.emit("checkUserAnswer", {pollId:this.pollId, questionNumber:this.questionNumber,userId:this.userId}) //den ska sedan vara när timern går ut
