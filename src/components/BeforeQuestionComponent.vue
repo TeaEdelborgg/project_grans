@@ -2,8 +2,11 @@
     <div id="backgroundFrame"></div>
     <!-- Ha class med margin auto?-->
         <div id="questionFrame">
-            <p>Tid innan nästa fråga</p>
-            {{ timeLeft }}
+            <h1 :style="{color:'white'}">Gör er redo inför nästa fråga</h1>
+            <h2 :style="{color:'white'}">
+              {{ timeLeft }}
+            </h2>
+            
             <img src="/img/test.png" style="width:100px">
         </div>
 </template>

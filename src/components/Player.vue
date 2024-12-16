@@ -62,7 +62,6 @@ export default {
   display: flex;
   justify-content: space-evenly;
   height:100%;
-  background-color: black;
   margin: auto;
 }
 .levelbox{
@@ -76,5 +75,8 @@ export default {
   justify-content: center;
   align-items: center;
   display: flex;
+  border-radius:10px;
+  border-style:dashed;
+  border-color:#FF851B;
 }
 </style>
