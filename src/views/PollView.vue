@@ -2,8 +2,13 @@
   <div id="background">
     {{pollId}}
     <div class="answeralternatives" v-if="questionActive || seeAlternatives">
-      <QuestionComponent ref="questionComponent" v-bind:question="question" v-bind:questionActive="questionActive"
-              v-on:answer="submitAnswer($event)"/>
+      <QuestionComponent 
+        ref="questionComponent" 
+        v-bind:question="question" 
+        v-bind:questionActive="questionActive"
+        v-bind:checkedAnswer="checkedAnswer"
+        v-bind:showCorrectAnswer="showCorrectAnswer"
+        v-on:answer="submitAnswer($event)"/>
     </div>
     <div id="slidercontainer">
       <SliderCompoment/>
@@ -44,6 +49,7 @@ export default {
       seeAlternatives: false, // om man kan se sina svar när man inte kan svara på frågan, ska detta finnas hela tiden? kanske
       answerChecked: false,  // om timeUp ska köras eller inte
       timeLeft: 0, // 
+      showCorrectAnswer: false, // rättar och gör knappen grön om korrekt, annars röd
     }
   },
   created: function () {
@@ -76,7 +82,7 @@ export default {
     
     socket.on("checkedUserAnswer", checkedAns => {
       this.checkedAnswer = checkedAns;
-      console.log("tagit emot checked Answer: ",checkedAns)
+      console.log("tagit emot checked Answer: ", checkedAns)
     });
 
     
@@ -103,12 +109,14 @@ export default {
     }, 
     countdownPlayer: function() {
       this.answerChecked = false;
+      this.seeAlternatives = false;
+      this.showCorrectAnswer = false;
 
       let startTime = Date.now();
 
-      let timerDuration = 18000;
+      let timerDuration = 16000;
       let timerAnswer = 10000;
-      let timerSeeAnswer = 5000;
+      let timerSeeAnswer = 3000;
       
       let interval = setInterval(() =>{
         let elapsedTime = Date.now() - startTime;
@@ -124,13 +132,15 @@ export default {
           this.seeAlternatives = true
           console.log('Pollview, kolla och se vad man svarat')
           if (!this.checkedAnswer) {
-            this.timeUp() //rättar svaret, kanske ska finnas en delay?
+            this.timeUp()
             this.checkedAnswer = true
           }
         } else {
-          this.seeAlternatives = false
+          console.log('showCorrectAnswer innan är: ',this.showCorrectAnswer)
+          this.showCorrectAnswer = true;
           clearInterval(interval)
           console.log('PollView, interval clear')
+          console.log('showCorrectAnswer efter är: ',this.showCorrectAnswer)
         }
       }, 1000);  
     },
