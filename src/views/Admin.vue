@@ -119,7 +119,7 @@ export default {
         if (timeLeftTest > timerAnswer) {
           console.log('test, tid innan frågan: ', timeLeftTest - timerAnswer)
         } else if (timeLeftTest > 0) {
-          console.log('test, tid kvar för att svara: ', timeLeftTest)
+          // console.log('test, tid kvar för att svara: ', timeLeftTest)
         } else {
           clearInterval(interval)
 
