@@ -8,7 +8,6 @@
     <QuestionComponentResult v-if="questionActive" v-bind:progress="percentage" v-bind:question="question"  ></QuestionComponentResult> <!--Lägg till questionId senare-->
     <BeforeQuestionComponent v-if="beforeQuestion" v-bind:timeLeft="timeLeftBeforeQuestion" ></BeforeQuestionComponent>
       <div id="frame">
-
         <div id="moneyframe">
             <div id="switchout">
               <div id="boxesTest">
@@ -28,13 +27,17 @@
       </div>
     <br>
     <div id="pedestaler">
-          <PlayerPedestal v-show="participants.length>0" v-for="player in participants" v-bind:player="player" :key="player.id" class="pedestal"/>
+          <PlayerPedestal v-show="participants.length>0" v-for="player in participants" :ref="'pedestal-'+player.userId" v-bind:player="player" v-bind:questionActive="questionActive":key="player.id" class="pedestal"/>
     </div>
     
   </div>
 </template>
 
 <script>
+//att göra
+//fixa så att pedestalerna hamnar längst ner på sidan, täcker 100% width
+//att när frågan körs, så syns pedestalerna
+
 // @ is an alias to /src
 import BarsComponent from '@/components/BarsComponent.vue';
 import Player from '@/components/Player.vue';
@@ -101,6 +104,17 @@ export default {
         }
       })
     })
+    socket.on('updatePedestalPlayer', user=>{
+      console.log("user: ",user)
+      this.$nextTick(()=>{
+        const Player = this.$refs['pedestal-'+user][0]
+        console.log("player: ",Player)
+        if(Player){
+          console.log("ska uppdatera färg")
+          Player.updateColor(true)
+        }
+      })
+    })
 
     socket.on('startCountdownResults', question =>{ 
       this.question=question;
@@ -163,7 +177,7 @@ export default {
           setTimeout(()=>{
             socket.emit("getAllAnswers", this.pollId)
             socket.emit("getAllAnswersTest", this.pollId)
-            this.questionActive=false
+            this.questionActive=false, //här vill man även ändra färgen på alla pedestaler tillbaka till grå
             this.percentage =100
           },2000)
         }
@@ -280,8 +294,6 @@ export default {
   height:100%;
   background-color: black;
   margin: auto;
-
-  
 }
 
 
