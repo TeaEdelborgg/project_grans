@@ -1,9 +1,20 @@
 'use strict';
 import {readFileSync} from "fs";
+import { createRequire } from 'module';
+
+//import {quiz1} from "./quiz1.json" assert{type:'json';
+//import {quiz1} from 'server\quiz1.json';
+
+
+const require = createRequire(import.meta.url);
+const quizes = require('./quizes.json');
+
 
 // Store data in an object to keep the global namespace clean. In an actual implementation this would be interfacing a database...
 function Data() {
   this.polls = {};
+  this.polls['quiz1']= quizes.quiz1;
+  this.polls['quiz2']= quizes.quiz2;
   this.polls['test'] = {
     lang: "sv",
     questions: [
@@ -140,9 +151,10 @@ Data.prototype.getTimeBeforeQuestion = function(pollId){
   return 0
 }
 
-Data.prototype.addQuestion = function(pollId, q) {
+Data.prototype.addQuestion = function(pollId, newQuestion) {
   if (this.pollExists(pollId)) {
-    this.polls[pollId].questions.push(q);
+    console.log("frågan: ",newQuestion);
+    this.polls[pollId].questions.push(newQuestion);
   }
 }
 

@@ -10,7 +10,7 @@ function sockets(io, socket, data) {
   });
 
   socket.on('addQuestion', function(d) {
-    data.addQuestion(d.pollId, {q: d.q, a: d.a});
+    data.addQuestion(d.pollId, d.newQuestion);//{q: d.q, a: d.a});
     socket.emit('questionUpdate', data.getQuestion(d.pollId));
   });
 
@@ -34,7 +34,7 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   });
   socket.on('startPoll', function(pollId) {
-    data.createBoxes(pollId)
+    //data.createBoxes(pollId)
     io.to(pollId).emit('startPoll');
   })
   socket.on('runQuestion', function(d) {
