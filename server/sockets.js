@@ -10,7 +10,7 @@ function sockets(io, socket, data) {
   });
 
   socket.on('addQuestion', function(d) {
-    data.addQuestion(d.pollId, {q: d.q, a: d.a});
+    data.addQuestion(d.pollId, d.newQuestion);//{q: d.q, a: d.a});
     socket.emit('questionUpdate', data.getQuestion(d.pollId));
   });
 
@@ -24,9 +24,15 @@ function sockets(io, socket, data) {
   });
 
   socket.on('joinPoll', function(pollId) {
-    socket.join(pollId);
-    socket.emit('questionUpdate', data.getQuestion(pollId))
-    socket.emit('submittedAnswersUpdate', data.getSubmittedAnswers(pollId));
+    if (data.pollExists(pollId)) {
+      const pollStarted = data.hasPollStarted(pollId);
+      socket.emit('pollStatus', {started: pollStarted});
+      if (!pollStarted) {
+        socket.join(pollId);
+        socket.emit('questionUpdate', data.getQuestion(pollId))
+        socket.emit('submittedAnswersUpdate', data.getSubmittedAnswers(pollId));
+      }
+    }
   });
 
   socket.on('participateInPoll', function(d) {
@@ -34,7 +40,8 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   });
   socket.on('startPoll', function(pollId) {
-    data.createBoxes(pollId)
+    //data.createBoxes(pollId)
+    data.polls[pollId].started = true;
     io.to(pollId).emit('startPoll');
   })
   socket.on('runQuestion', function(d) {

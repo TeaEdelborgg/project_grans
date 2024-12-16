@@ -1,9 +1,20 @@
 'use strict';
 import {readFileSync} from "fs";
+import { createRequire } from 'module';
+
+//import {quiz1} from "./quiz1.json" assert{type:'json';
+//import {quiz1} from 'server\quiz1.json';
+
+
+const require = createRequire(import.meta.url);
+const quizes = require('./quizes.json');
+
 
 // Store data in an object to keep the global namespace clean. In an actual implementation this would be interfacing a database...
 function Data() {
   this.polls = {};
+  this.polls['quiz1']= quizes.quiz1;
+  this.polls['quiz2']= quizes.quiz2;
   this.polls['test'] = {
     lang: "sv",
     questions: [
@@ -55,7 +66,8 @@ Data.prototype.createPoll = function(pollId, lang="en") {
     poll.timer = {timeLeft:10,interval:null} 
     poll.timerBeforeQuestion = {timeLeft:3, interval:null}    
     poll.allCorrectedAnswers = {}   
-    poll.moneyBoxes = [];    
+    poll.moneyBoxes = []; 
+    poll.started = false;   
     this.polls[pollId] = poll;
     console.log("poll created", pollId, poll);
   }
@@ -67,6 +79,13 @@ Data.prototype.getPoll = function(pollId) {
     return this.polls[pollId];
   }
   return {};
+}
+
+Data.prototype.hasPollStarted = function(pollId) {
+  if (this.pollExists(pollId)) {
+    return this.polls[pollId].started;
+  }
+  return false;
 }
 
 Data.prototype.participateInPoll = function(pollId, name, userId, color) {
@@ -140,9 +159,10 @@ Data.prototype.getTimeBeforeQuestion = function(pollId){
   return 0
 }
 
-Data.prototype.addQuestion = function(pollId, q) {
+Data.prototype.addQuestion = function(pollId, newQuestion) {
   if (this.pollExists(pollId)) {
-    this.polls[pollId].questions.push(q);
+    console.log("frågan: ",newQuestion);
+    this.polls[pollId].questions.push(newQuestion);
   }
 }
 
