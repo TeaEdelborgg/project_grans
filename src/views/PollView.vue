@@ -1,20 +1,27 @@
 <template>
   <div id="background">
-    {{pollId}}
-    <div class="answeralternatives" v-if="questionActive || seeAlternatives">
-      <QuestionComponent 
-        ref="questionComponent" 
-        v-bind:question="question" 
-        v-bind:questionActive="questionActive"
-        v-bind:checkedAnswer="checkedAnswer"
-        v-bind:showCorrectAnswer="showCorrectAnswer"
-        v-on:answer="submitAnswer($event)"/>
+    <div id="playerView">
+      {{pollId}}
+
+      <div id="timerBarContainer">
+        <div id="timerBar" :style="{ width: percentage + '%' }"></div>
+      </div>
+
+      <div class="answeralternatives" v-if="questionActive || seeAlternatives">
+        <QuestionComponent 
+          ref="questionComponent" 
+          v-bind:question="question" 
+          v-bind:questionActive="questionActive"
+          v-bind:checkedAnswer="checkedAnswer"
+          v-bind:showCorrectAnswer="showCorrectAnswer"
+          v-on:answer="submitAnswer($event)"/>
+      </div>
+      <!--<div id="slidercontainer">
+        <SliderCompoment/>
+      </div>-->
+      <span>{{submittedAnswers}}</span>
+      Checked answer {{ checkedAnswer }}
     </div>
-    <div id="slidercontainer">
-      <SliderCompoment/>
-    </div>
-    <span>{{submittedAnswers}}</span>
-    Checked answer {{ checkedAnswer }}
   </div>
 </template>
 
@@ -50,6 +57,7 @@ export default {
       answerChecked: false,  // om timeUp ska köras eller inte
       timeLeft: 0, // 
       showCorrectAnswer: false, // rättar och gör knappen grön om korrekt, annars röd
+      percentage: 100,
     }
   },
   created: function () {
@@ -111,6 +119,7 @@ export default {
       this.answerChecked = false;
       this.seeAlternatives = false;
       this.showCorrectAnswer = false;
+      this.percentage = 100;
 
       let startTime = Date.now();
 
@@ -125,6 +134,7 @@ export default {
         if (this.timeLeft > timerAnswer + timerSeeAnswer) {
           console.log('PollView, tid innan frågan: ', this.timeLeft - timerAnswer - timerSeeAnswer)
         } else if (this.timeLeft > timerSeeAnswer) {
+          this.percentage = Math.floor((this.timeLeft - timerSeeAnswer) / 100); //denna går inte ner till noll?
           this.questionActive = true;
           console.log('PollView, tid kvar för att svara: ', this.timeLeft - timerSeeAnswer)
         } else if (this.timeLeft > 0) { // denna körs flera gånger? hur ska man göra så att den inte gör det?
@@ -136,51 +146,62 @@ export default {
             this.checkedAnswer = true
           }
         } else {
-          console.log('showCorrectAnswer innan är: ',this.showCorrectAnswer)
           this.showCorrectAnswer = true;
           clearInterval(interval)
-          console.log('PollView, interval clear')
-          console.log('showCorrectAnswer efter är: ',this.showCorrectAnswer)
         }
       }, 1000);  
     },
   },
   // lägg till computed där vi hämtar userId
 
-/*
-computed: {
-  userId() {
-    return this.$route.params.userId;
-  }
-}
-*/
 
-//låter skärmen vara fixed så att den inte går att scrolla i
-mounted (){
-    this.windowHeight = document.documentElement.clientHeight
-    this.windowWidth = document.documentElement.clientWidth;
-    const backgroundPlayer = document.getElementById('background');
-    backgroundPlayer.style.width=this.windowWidth +"px";
-    backgroundPlayer.style.height=this.windowHeight + "px";
-  },
-  
+  computed: {
+    //låter skärmen vara fixed så att den inte går att scrolla i
+    mounted (){
+      this.windowHeight = document.documentElement.clientHeight
+      this.windowWidth = document.documentElement.clientWidth;
+      const backgroundPlayer = document.getElementById('background');
+      backgroundPlayer.style.width=this.windowWidth +"px";
+      backgroundPlayer.style.height=this.windowHeight + "px";
+    },
+  }
 }
 </script>
 
 <style>
-  .answeralternatives {
-    height: 100%;
-    width: 100%;
-    justify-content: space-evenly;
-  } 
-
- #background {
+#background {
   background-color: #444;
   position: fixed;
- }
- #slidercontainer{
+}
+#playerView {
+  margin: 2%
+}
+
+.answeralternatives {
+  height: 100%;
+  width: 100%;
+  justify-content: space-evenly;
+} 
+
+
+#slidercontainer{
   background-color: greenyellow;
   width: 100%;
   height: 5%; 
- }
+}
+
+#timerBarContainer {
+  width: 100%;
+  height: 20px;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 2%;
+}
+
+#timerBar {
+  height: 100%;
+  background-color: yellow;
+  transition: width 0.1s linear;
+}
 </style>

@@ -69,7 +69,7 @@ export default {
     border-color: #5c2c13;
     color: #FAF8F1;*/
     border-radius: 1em;
-    margin: 1em;
+    margin: 3%;
     width: 40vw;
     height: 20vh;
   }
