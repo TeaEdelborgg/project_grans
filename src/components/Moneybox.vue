@@ -8,7 +8,7 @@
         name:'MoneyBox',
         data: function(){
             return{
-                moneyColor: "gray",
+                moneyColor: "#7FDBFF",
                 value:0,
             }
         },
@@ -23,10 +23,10 @@
                     //backgroundCol.style.backgroundColor = "yellow"
                     //this.boxColor=this.BoxColor
                     console.log("yellow")
-                    this.moneyColor="yellow"
+                    this.moneyColor="#FF851B"
                 }
                 else if(col == "next"){
-                    this.moneyColor="purple"
+                    this.moneyColor="#FFAD66"
                 }
                 /*else{
                     //backgroundCol.style.backgroundColor = "red"

@@ -51,7 +51,7 @@ function sockets(io, socket, data) {
     //skicka till resultat med pollId och userId
     io.to(d.pollId).emit('updatePedestalPlayer', d.userId)
     io.to(d.pollId).emit('submittedAnswersUpdate', data.getSubmittedAnswers(d.pollId));
-    //io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId)); //verkar inte behövas, Tea (2024-12-15)
+    io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId)); //verkar inte behövas, Tea (2024-12-15)
   }); 
   socket.on('checkUserAnswer', function(d){
     let checkedUserAnswer = data.checkUserAnswer(d.pollId,d.questionNumber,d.userId);

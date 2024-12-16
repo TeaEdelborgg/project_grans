@@ -1,9 +1,9 @@
 <template>
   <div id="background">
-    <div>
+    <div> <!--Fixa lang saken, syns inte atm-->
       lang: {{ lang }}
     </div>
-    
+    <h1 :style="{color:'white'}">Who Wants to Become an Millionaire</h1>
     <!--<BarsComponent v-bind:labels="question.a" v-bind:data="submittedAnswers"/>-->
     <QuestionComponentResult v-if="questionActive" v-bind:progress="percentage" v-bind:question="question"  ></QuestionComponentResult> <!--Lägg till questionId senare-->
     <BeforeQuestionComponent v-if="beforeQuestion" v-bind:timeLeft="timeLeftBeforeQuestion" ></BeforeQuestionComponent>
@@ -27,7 +27,7 @@
       </div>
     <br>
     <div id="pedestaler">
-          <PlayerPedestal v-show="participants.length>0" v-for="player in participants" :ref="'pedestal-'+player.userId" v-bind:player="player" v-bind:questionActive="questionActive":key="player.id" class="pedestal"/>
+          <PlayerPedestal v-if="participants.length>0" v-for="player in participants" :ref="'pedestal-'+player.userId" v-bind:player="player" v-bind:questionActive="questionActive":key="player.id" class="pedestal"/>
     </div>
     
   </div>
@@ -192,54 +192,61 @@ export default {
 
 <style>
 #pedestaler{
-  width:80%;
+  width:100%;
   display: flex;
   justify-content: space-evenly;
-  height:200px;
-  background-color: grey;
-  margin:auto;
+  height:25%;
+  background-color: #FF851B;
+  margin-left:auto;
+  margin-right:auto;
+  bottom:0;
 }
 .pedestal{
   flex:1;
- max-width: 10%;
+  max-width: 10%;
   height:100px;
   margin:auto;
+  
 }
 #players{
   width:80%;
   display: flex;
   justify-content: space-evenly;
   height:400px;
-  background-color: aquamarine;
+  background-color: #4b6ab8;
   margin: auto;
 }
 #player{
   flex:1;
-  max-width: 80%;
-  background-color: white;
-  height: 300px;
-  margin:5px
+  max-width: 95%;
+  /*background-color: white;*/
+  height: 95%;
+  margin:5px;
 }
 .contain{
-  width: 80%;
+  width: 100%;
+  height:90%;
   display: flex;
   margin:auto;
 }
 #background{
-  background-color: wheat;
+  background-color: #001F3F;
   position: fixed;
   z-index: 1;
+  display:flex;
+  flex-direction:column;
 }
 #questionFrame{ 
-    height: 400px;
-    width: 80%;
+    height: 75%;
+    width: 100%;
     margin:auto;
-    background-color: white;
-    position: absolute;
+    background-color: #001F3F;
     z-index: 3;
+    position: absolute;
+
 }
 #backgroundFrame{
-    height: 100%;
+    height: 75%;
     width: 100%;
     opacity: 0.5;
     position: absolute;
@@ -255,10 +262,13 @@ export default {
   height:400px;
   width: 80%;
   margin: auto;
+  border-style:solid;
+  border-color:#FF851B;
+  border-width:5px;
 }
 #moneyframe{
   float: left;
-  background-color: purple;
+  background-color: #39A2DB;
   height: 400px;
   width: 20%;
   margin:auto;
@@ -266,9 +276,9 @@ export default {
 
 #switchout{
   width:80%;
-  background-color: white;
-  height: 300px;
+  height: 400px;
   margin:auto;
+  /*background-color: white;*/
 }
 .moneybox{
   flex: 1; 
@@ -278,6 +288,7 @@ export default {
   justify-content: center;
   align-items: center;
   display: flex;
+  border-radius:10px
 }
 #containerBoxTest{
   width: 100%;
@@ -291,8 +302,7 @@ export default {
   width:100%;
   display: flex;
   justify-content: space-evenly;
-  height:100%;
-  background-color: black;
+  height:300px;
   margin: auto;
 }
 

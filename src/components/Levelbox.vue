@@ -1,6 +1,5 @@
 <template>
     <div class="levelbox" :style="{backgroundColor:boxColor}">
-        hej
     </div>
     
 </template>
@@ -12,7 +11,7 @@
         },
         data: function(){
             return{
-                boxColor: "gray"
+                boxColor: '#7FDBFF'
             }
         },
         mounted(){
