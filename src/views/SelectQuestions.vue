@@ -5,13 +5,13 @@
     </button>
 
     <!--Lägg till extra poll-->
-    <button v-on:click="choosePoll('poll1')">
-      Create Poll with Poll 1 ID
+    <button v-on:click="choosePoll('quiz1')">
+      Create A History Poll
     </button>
 
     <!-- Lägg till extra poll -->
     <button v-on:click="choose('poll2')">
-      Create Poll with Poll 2 ID
+      Create A Geography Poll
     </button>
 
     <!--<button v-on:click="startPoll">
@@ -19,10 +19,10 @@
     </button>-->
     <router-link v-bind:to="'/admin/' +pollId" v-on:click="startPoll">Start poll</router-link> 
 
-    <button v-on:click="runQuestion">
+   <!-- <button v-on:click="runQuestion">
       Run question
     </button>
-    <router-link v-bind:to="'/result/' + pollId">Check result</router-link>
+    <router-link v-bind:to="'/result/' + pollId">Check result</router-link>-->
     
     Data: {{ pollData }}
 
@@ -52,11 +52,12 @@
       socket.on( "pollData", data => this.pollData = data );
       socket.on( "participantsUpdate", p => this.pollData.participants = p );
       socket.emit( "getUILabels", this.lang );
+      socket.emit("getQuiz");
     },
     methods: {
 
       choosePoll: function(id) {
-      this.pollId = id;
+      this.pollId = id; 
       socket.emit("createPoll", { pollId: this.pollId, lang: this.lang });
       socket.emit("joinPoll", this.pollId);
       },

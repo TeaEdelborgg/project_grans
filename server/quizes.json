@@ -1,0 +1,36 @@
+{
+    "quiz1": {
+        "lang": "sv",
+        "questions": [
+        {"q":"Vilket år fick svenska kvinnor rösträtt?",
+        "a": { "correct": "1919", "wrong": [ "1913", "1945", "1909" ] }},
+        {"q":"Vilken dag firas Gustav II Adolf?",
+        "a": { "correct": "6 november", "wrong": [ "6 juni", "6 oktober", "6 februari" ] }},
+        {"q":"Till vilken tro abdikerade drottning Kristina?",
+        "a": { "correct": "Katolicismen", "wrong": [ "Scientologin", "Islam", "Protestantismen" ] }},
+        {"q":"Vem av Gustav Vasas söner blev inte kung?",
+        "a": { "correct": "Magnus", "wrong": [ "Johan", "Erik", "Karl" ] }},
+        {"q":"När flyttade utn till uthgård?",
+        "a": { "correct": "1995", "wrong": [ "1880", "2020", "1955" ] }},
+        {"q":"Hur dog Adolf Fredrik Vasa? Han :",
+        "a": { "correct": "åt för många semlor", "wrong": [ "trillade av hästen", "blev skjuten", "har aldrig existerat" ] }},
+        {"q":"Vilket år grundades Uppsala universitet",
+        "a": { "correct": "1477", "wrong": [ "1632", "1523", "1120" ] }}
+        ],
+        "answers": [],   
+        "currentQuestion": 0,
+        "participants": []
+    },
+    "quiz2": {
+        "lang": "sv",
+        "questions": [
+        {"q":"fråga 1",
+        "a": { "correct": "Ja", "wrong": [ "Nej", "Kanske", "Tja" ] }},
+        {"q":"fråga 2",
+        "a": { "correct": "Nej", "wrong": [ "Ja", "Kanske", "Tja" ] }}
+        ],
+        "answers": [],   
+        "currentQuestion": 0,
+        "participants": []
+    }
+}

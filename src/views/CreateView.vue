@@ -16,7 +16,7 @@
                placeholder="Wrong answer"/>
       </div>
     </div>
-    <button v-on:click="addQuestion">
+    <button v-on:click="addQuestion" :disabled="pollData.questions.length >= maxQuestions">
       Add question
     </button>
     
@@ -74,6 +74,8 @@ export default {
       pollData: {
         questions: []
       },
+      maxQuestions: 15,
+      numberOfQuestions:0,
       uiLabels: {},
       checkedAnswers: {},
       timeLeft:0,
@@ -117,7 +119,8 @@ export default {
       }
     },
     startPoll: function () { 
-      socket.emit("startPoll", this.pollId)
+      const numberOfQuestions = this.pollData.questions.length;
+      socket.emit("startPoll", this.pollId, numberOfQuestions)
     },
     timerBeforeQUestion: function(){ //denna ska göra så att resultat också får count down
         let time={
@@ -162,6 +165,7 @@ export default {
       console.log(this.correctAnswer)
       console.log(this.wrongAnswers) */
       const newQuestion = {
+        //questionId: this.newQuestionId,
         q: this.question,
         a: {
           correct: this.correctAnswer,
@@ -171,7 +175,7 @@ export default {
       this.pollData.questions.push(newQuestion);
       this.answers = {correct: this.correctAnswer, wrong: this.wrongAnswers}
       //kolla över hur sockets fungerar och ändra sedan till newQuestion, var vaksam över hur variablerna skickas
-      socket.emit("addQuestion", {pollId: this.pollId, q: this.question, a: this.answers});
+      socket.emit("addQuestion", {pollId: this.pollId, newQuestion}); //q: this.question, a: this.answers});
 
       this.newQuestionId += 1;
       this.question = "";
