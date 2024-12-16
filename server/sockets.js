@@ -48,6 +48,8 @@ function sockets(io, socket, data) {
 
   socket.on('submitAnswer', function(d) {
     data.submitAnswer(d.pollId, d.answer, d.userId, d.time); // ta bort correctAnswer
+    //skicka till resultat med pollId och userId
+    io.to(d.pollId).emit('updatePedestalPlayer', d.userId)
     io.to(d.pollId).emit('submittedAnswersUpdate', data.getSubmittedAnswers(d.pollId));
     //io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId)); //verkar inte behövas, Tea (2024-12-15)
   }); 
