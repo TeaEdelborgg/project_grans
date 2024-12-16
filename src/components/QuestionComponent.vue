@@ -1,7 +1,7 @@
 <template>
   <div class="playerview">
     <p>{{question.q}}</p> <!-- ta bort sen i slutet -->
-    <button class="answeralternative" v-for="a in question.a" v-on:click="selectAnswer(a)" v-bind:key="a">
+    <button class="answeralternative" :class="{selected: a === selectedAnswer, sended: a === selectedAnswer & sent}" v-for="a in question.a" v-on:click="selectAnswer(a)" v-bind:key="a">
       {{ a }}
     </button> <br/>
     
@@ -16,7 +16,8 @@
 export default {
   name: 'QuestionComponent',
   props: {
-    question: Object
+    question: Object,
+    questionActive: Boolean
   },
   data: function(){
     return{
@@ -29,7 +30,7 @@ export default {
     answer: function () {
       if (!this.sent){
         this.sent=true
-        this.$emit("answer", this.selectedAnswer); //ändra här
+        this.$emit("answer", this.selectedAnswer); 
         console.log('skickat')
       }
     },
@@ -37,8 +38,10 @@ export default {
       this.sent = false
     },
     selectAnswer: function(answer){
+      if (this.questionActive && !this.sent) {
         console.log('selectanswer: ', answer)
         this.selectedAnswer = answer
+      }
     }
 
   },
@@ -59,6 +62,14 @@ export default {
     margin: 1em;
     width: 40vw;
     height: 20vh;
+  }
+  .selected {
+    background-color: lightblue;
+    color: white; 
+  }
+  .sended {
+    background-color: lightskyblue; 
+    color: white; 
   }
 
   .submitbutton {

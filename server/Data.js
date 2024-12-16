@@ -212,6 +212,7 @@ Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){
           }
           else{
             if(user.information.lives>0){
+              console.log('Kollar svaren: pollId ', pollId, 'qId ', qId, 'userId', userId);
               user.information.lives--;
               console.log(user.information.lives)
             }

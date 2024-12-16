@@ -1,8 +1,8 @@
 <template>
   <div id="background">
     {{pollId}}
-    <div class="answeralternatives" v-if="questionActive">
-      <QuestionComponent ref="questionComponent" v-bind:question="question"
+    <div class="answeralternatives" v-if="questionActive || seeAlternatives">
+      <QuestionComponent ref="questionComponent" v-bind:question="question" v-bind:questionActive="questionActive"
               v-on:answer="submitAnswer($event)"/>
     </div>
     <div id="slidercontainer">
@@ -41,6 +41,8 @@ export default {
       questionNumber: null,
       checkedAnswer: false,
       questionActive: false,
+      seeAlternatives: false,
+      answerChecked: false, 
       timeLeft: 0,
     }
   },
@@ -100,25 +102,35 @@ export default {
       socket.emit("checkUserAnswer", {pollId:this.pollId, questionNumber:this.questionNumber,userId:this.userId}) //den ska sedan vara när timern går ut
     }, 
     countdownPlayer: function() {
+      this.answerChecked = false;
+
       let startTime = Date.now();
 
-      let timerDuration = 13000;
+      let timerDuration = 18000;
       let timerAnswer = 10000;
+      let timerSeeAnswer = 5000;
       
       let interval = setInterval(() =>{
         let elapsedTime = Date.now() - startTime;
         this.timeLeft = timerDuration - elapsedTime;
 
-        if (this.timeLeft > timerAnswer) {
-          console.log('PollView, tid innan frågan: ', this.timeLeft - timerAnswer)
-        } else if (this.timeLeft > 0) {
+        if (this.timeLeft > timerAnswer + timerSeeAnswer) {
+          console.log('PollView, tid innan frågan: ', this.timeLeft - timerAnswer - timerSeeAnswer)
+        } else if (this.timeLeft > timerSeeAnswer) {
           this.questionActive = true;
-          console.log('PollView, tid kvar för att svara: ', this.timeLeft)
+          console.log('PollView, tid kvar för att svara: ', this.timeLeft - timerSeeAnswer)
+        } else if (this.timeLeft > 0) { // denna körs flera gånger? hur ska man göra så att den inte gör det?
+          this.questionActive = false
+          this.seeAlternatives = true
+          console.log('Pollview, kolla och se vad man svarat')
+          if (!this.checkedAnswer) {
+            this.timeUp() //rättar svaret, kanske ska finnas en delay?
+            this.checkedAnswer = true
+          }
         } else {
-          this.questionActive = false;
+          this.seeAlternatives = false
           clearInterval(interval)
           console.log('PollView, interval clear')
-          this.timeUp() //rättar svaret, kanske ska finnas en delay?
         }
       }, 1000);  
     },
