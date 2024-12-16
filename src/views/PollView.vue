@@ -39,11 +39,11 @@ export default {
         a:[]
       },
       questionNumber: null,
-      checkedAnswer: false,
-      questionActive: false,
-      seeAlternatives: false,
-      answerChecked: false, 
-      timeLeft: 0,
+      checkedAnswer: false, // kollar om svaret som skickats är korrekt eller inte
+      questionActive: false, // om den fortfarande syns på stora tavlan
+      seeAlternatives: false, // om man kan se sina svar när man inte kan svara på frågan, ska detta finnas hela tiden? kanske
+      answerChecked: false,  // om timeUp ska köras eller inte
+      timeLeft: 0, // 
     }
   },
   created: function () {
