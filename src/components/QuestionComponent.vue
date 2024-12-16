@@ -65,28 +65,33 @@ export default {
 <style scoped>
 
   .answeralternative {
-    /*background-color: #556B2F;
-    border-color: #5c2c13;
-    color: #FAF8F1;*/
+    background-color: #f79743;
+    border-color: #FFAD66;
+    border-style: solid;
+    color: #FAF8F1;
     border-radius: 1em;
     margin: 3%;
     width: 40vw;
     height: 20vh;
   }
   .selected {
-    background-color: lightblue;
+    background-color: #FF5700;
+    border-color: #FF5700;
     color: white; 
   }
   .sended {
-    background-color: lightskyblue; 
+    background-color: #FFAD66; 
+    border-color: #FFAD66;
     color: white; 
   }
   .showCorrect {
     background-color: #2ECC40; 
+    border-color: #2ECC40;
     color: white;
   }
   .showIncorrect {
     background-color: #FF4136; 
+    border-color: #FF4136;
     color: white;
   }
   .submitbutton {

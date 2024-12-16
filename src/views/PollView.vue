@@ -90,7 +90,7 @@ export default {
     
     socket.on("checkedUserAnswer", checkedAns => {
       this.checkedAnswer = checkedAns;
-      console.log("tagit emot checked Answer: ", checkedAns)
+      //console.log("tagit emot checked Answer: ", checkedAns)
     });
 
     
@@ -132,15 +132,15 @@ export default {
         this.timeLeft = timerDuration - elapsedTime;
 
         if (this.timeLeft > timerAnswer + timerSeeAnswer) {
-          console.log('PollView, tid innan frågan: ', this.timeLeft - timerAnswer - timerSeeAnswer)
+          //console.log('PollView, tid innan frågan: ', this.timeLeft - timerAnswer - timerSeeAnswer)
         } else if (this.timeLeft > timerSeeAnswer) {
           this.percentage = Math.floor((this.timeLeft - timerSeeAnswer) / 100); //denna går inte ner till noll?
           this.questionActive = true;
-          console.log('PollView, tid kvar för att svara: ', this.timeLeft - timerSeeAnswer)
+          //console.log('PollView, tid kvar för att svara: ', this.timeLeft - timerSeeAnswer)
         } else if (this.timeLeft > 0) { // denna körs flera gånger? hur ska man göra så att den inte gör det?
           this.questionActive = false
           this.seeAlternatives = true
-          console.log('Pollview, kolla och se vad man svarat')
+          //console.log('Pollview, kolla och se vad man svarat')
           if (!this.checkedAnswer) {
             this.timeUp()
             this.checkedAnswer = true
@@ -149,7 +149,7 @@ export default {
           this.showCorrectAnswer = true;
           clearInterval(interval)
         }
-      }, 1000);  
+      }, 100);  
     },
   },
   // lägg till computed där vi hämtar userId
@@ -170,17 +170,19 @@ export default {
 
 <style>
 #background {
-  background-color: #444;
+  background-color: #001F3F;
+  color: #FFFFFF;
   position: fixed;
+  width: 100%;
+  height: 100%;
 }
 #playerView {
-  margin: 2%
+  width: 100%;
+  margin: 2.5%;
 }
 
 .answeralternatives {
-  height: 100%;
-  width: 100%;
-  justify-content: space-evenly;
+  width: 95%;
 } 
 
 
@@ -191,12 +193,14 @@ export default {
 }
 
 #timerBarContainer {
-  width: 100%;
+  width: 95%; /* Gör containern för timerbaren lika bred som sidan */
   height: 20px;
   background-color: white;
   border-radius: 10px;
   overflow: hidden;
-  margin-top: 2%;
+  margin: 5% 0;
+  padding: 0; /* Säkerställ att det inte finns någon padding */
+  position: relative;
 }
 
 #timerBar {
