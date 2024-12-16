@@ -176,7 +176,7 @@ Data.prototype.getQuestionAnswerRandom = function(pollId, qId = null) {
     };
     //return poll.questions[poll.currentQuestion];
     //var test={q:poll.questions[poll.currentQuestion].q, a:{correct:"",wrong:answers}}
-    var test={q:poll.questions[poll.currentQuestion].q, a:answers}
+    var test={q:poll.questions[poll.currentQuestion].q, a:answers, correct:currentQuest.a.correct}
     return(test)
   }
   return {}

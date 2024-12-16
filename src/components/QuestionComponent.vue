@@ -1,7 +1,15 @@
 <template>
   <div class="playerview">
     <p>{{question.q}}</p> <!-- ta bort sen i slutet -->
-    <button class="answeralternative" :class="{selected: a === selectedAnswer, sended: a === selectedAnswer & sent}" v-for="a in question.a" v-on:click="selectAnswer(a)" v-bind:key="a">
+    <button class="answeralternative" 
+      :class="{ 
+        selected: a === selectedAnswer, 
+        sended: a === selectedAnswer && sent, 
+        showCorrect: a === selectedAnswer && showCorrectAnswer && a === question.correct,
+        showIncorrect: a === selectedAnswer && showCorrectAnswer && a !== question.correct}" 
+      v-for="a in question.a" 
+      v-on:click="selectAnswer(a)" 
+      v-bind:key="a">
       {{ a }}
     </button> <br/>
     
@@ -17,7 +25,9 @@ export default {
   name: 'QuestionComponent',
   props: {
     question: Object,
-    questionActive: Boolean
+    questionActive: Boolean,
+    showCorrectAnswer: Boolean,
+    checkedAnswer: Boolean,
   },
   data: function(){
     return{
@@ -29,9 +39,10 @@ export default {
   methods: {
     answer: function () {
       if (!this.sent){
+        console.log('innan skickat', this.sent)
         this.sent=true
         this.$emit("answer", this.selectedAnswer); 
-        console.log('skickat')
+        console.log('skickat ', this.sent)
       }
     },
     updateSent: function() {
@@ -55,23 +66,35 @@ export default {
 <style scoped>
 
   .answeralternative {
-    /*background-color: #556B2F;
-    border-color: #5c2c13;
-    color: #FAF8F1;*/
+    background-color: #f79743;
+    border-color: #FFAD66;
+    border-style: solid;
+    color: #FAF8F1;
     border-radius: 1em;
-    margin: 1em;
+    margin: 3%;
     width: 40vw;
     height: 20vh;
   }
   .selected {
-    background-color: lightblue;
+    background-color: #FF5700;
+    border-color: #FF5700;
     color: white; 
   }
   .sended {
-    background-color: lightskyblue; 
+    background-color: #FFAD66; 
+    border-color: #FFAD66;
     color: white; 
   }
-
+  .showCorrect {
+    background-color: #2ECC40; 
+    border-color: #2ECC40;
+    color: white;
+  }
+  .showIncorrect {
+    background-color: #FF4136; 
+    border-color: #FF4136;
+    color: white;
+  }
   .submitbutton {
     width: 80vw;
   }
