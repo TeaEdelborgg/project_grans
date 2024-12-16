@@ -19,11 +19,12 @@
     <button v-on:click="addQuestion">
       Add question
     </button>
-    <!--<button v-on:click="startPoll">
-      Start poll
-    </button>-->
+    
+    <router-link v-bind:to="'/admin/' +pollId" v-on:click="startPoll">
+      <button v-on:click="startPoll"> Start poll</button>
+    </router-link>
+    
     <!--<router-link v-bind:to="'/result/' + pollId">Check result</router-link>-->
-    <router-link v-bind:to="'/admin/' +pollId" v-on:click="startPoll">Start poll</router-link>
     <!--<div v-if="pollData.questions && pollData.questions.length > 0">-->
     <div>
       <h3>Added Questions:</h3>

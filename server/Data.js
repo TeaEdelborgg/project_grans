@@ -55,7 +55,8 @@ Data.prototype.createPoll = function(pollId, lang="en") {
     poll.timer = {timeLeft:10,interval:null} 
     poll.timerBeforeQuestion = {timeLeft:3, interval:null}    
     poll.allCorrectedAnswers = {}   
-    poll.moneyBoxes = [];    
+    poll.moneyBoxes = []; 
+    poll.started = false;   
     this.polls[pollId] = poll;
     console.log("poll created", pollId, poll);
   }
@@ -67,6 +68,13 @@ Data.prototype.getPoll = function(pollId) {
     return this.polls[pollId];
   }
   return {};
+}
+
+Data.prototype.hasPollStarted = function(pollId) {
+  if (this.pollExists(pollId)) {
+    return this.polls[pollId].started;
+  }
+  return false;
 }
 
 Data.prototype.participateInPoll = function(pollId, name, userId, color) {
