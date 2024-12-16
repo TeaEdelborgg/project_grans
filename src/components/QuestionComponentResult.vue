@@ -5,7 +5,7 @@
             <div id="progressbar">
                 <div id="progress" :style="{width:progress+'%'}"></div>
             </div>
-            <p>{{question}}</p>
+            <h1 :style="{color:'white'}">{{question}}</h1>
         </div>
 </template>
     
@@ -45,6 +45,6 @@
 #progress{
   width:100%;
   height:100%;
-  background-color: yellow;
+  background-color: #FF851B;
 }
 </style>

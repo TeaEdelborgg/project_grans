@@ -63,5 +63,8 @@ export default {
     height:60%;
     width:10%;
     margin:auto;
+    border-style: solid;
+    border-width:3px;
+    border-color:black;
   }
 </style>

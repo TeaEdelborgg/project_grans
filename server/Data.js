@@ -106,7 +106,7 @@ Data.prototype.startTimer = function(pollId, totalTime){
     poll.timer.interval = setInterval(()=>{
       if( poll.timer.timeLeft > 0){
         poll.timer.timeLeft--;
-        console.log("tid kvar: ", poll.timer.timeLeft)
+        // console.log("tid kvar: ", poll.timer.timeLeft)
       } else {
         clearInterval(poll.timer.interval);
         poll.timer.timeLeft=0;
@@ -124,7 +124,7 @@ Data.prototype.startTimeBeforeQuestion = function (pollId, totalTime){
     poll.timerBeforeQuestion.interval = setInterval(()=>{
       if(poll.timerBeforeQuestion.timeLeft > 0){
         poll.timerBeforeQuestion.timeLeft--;
-        console.log("tid kvar innan fråga: ",poll.timerBeforeQuestion.timeLeft)
+        // console.log("tid kvar innan fråga: ",poll.timerBeforeQuestion.timeLeft)
       } else{
         clearInterval(poll.timerBeforeQuestion.interval);
         poll.timerBeforeQuestion.timeLeft=0
@@ -136,7 +136,7 @@ Data.prototype.startTimeBeforeQuestion = function (pollId, totalTime){
 Data.prototype.getTime = function(pollId){
   if(this.pollExists(pollId)){
     let time = this.polls[pollId].timer.timeLeft
-    console.log("tid i getTime: ",time)
+    // console.log("tid i getTime: ",time)
     return time
   }
   return 0
@@ -188,7 +188,7 @@ Data.prototype.getQuestionAnswerRandom = function(pollId, qId = null) {
     };
     //return poll.questions[poll.currentQuestion];
     //var test={q:poll.questions[poll.currentQuestion].q, a:{correct:"",wrong:answers}}
-    var test={q:poll.questions[poll.currentQuestion].q, a:answers}
+    var test={q:poll.questions[poll.currentQuestion].q, a:answers, correct:currentQuest.a.correct}
     return(test)
   }
   return {}
