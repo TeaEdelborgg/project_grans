@@ -86,16 +86,16 @@ Data.prototype.getParticipants = function(pollId) {
 }
 
 Data.prototype.startTimer = function(pollId, totalTime){
-  console.log("i start timer")
+  //console.log("i start timer")
   if(this.pollExists(pollId)){
-    console.log("pollId existerar")
+    //console.log("pollId existerar")
     const poll = this.polls[pollId];
     poll.timer.timeLeft = totalTime;
     poll.timer.interval = null;
     poll.timer.interval = setInterval(()=>{
       if( poll.timer.timeLeft > 0){
         poll.timer.timeLeft--;
-        console.log("tid kvar: ", poll.timer.timeLeft)
+        //console.log("tid kvar: ", poll.timer.timeLeft)
       } else {
         clearInterval(poll.timer.interval);
         poll.timer.timeLeft=0;
@@ -113,7 +113,7 @@ Data.prototype.startTimeBeforeQuestion = function (pollId, totalTime){
     poll.timerBeforeQuestion.interval = setInterval(()=>{
       if(poll.timerBeforeQuestion.timeLeft > 0){
         poll.timerBeforeQuestion.timeLeft--;
-        console.log("tid kvar innan fråga: ",poll.timerBeforeQuestion.timeLeft)
+        //console.log("tid kvar innan fråga: ",poll.timerBeforeQuestion.timeLeft)
       } else{
         clearInterval(poll.timerBeforeQuestion.interval);
         poll.timerBeforeQuestion.timeLeft=0
@@ -125,7 +125,7 @@ Data.prototype.startTimeBeforeQuestion = function (pollId, totalTime){
 Data.prototype.getTime = function(pollId){
   if(this.pollExists(pollId)){
     let time = this.polls[pollId].timer.timeLeft
-    console.log("tid i getTime: ",time)
+    //console.log("tid i getTime: ",time)
     return time
   }
   return 0
@@ -134,7 +134,7 @@ Data.prototype.getTime = function(pollId){
 Data.prototype.getTimeBeforeQuestion = function(pollId){
   if(this.pollExists(pollId)){
     let time = this.polls[pollId].timerBeforeQuestion.timeLeft
-    console.log("tiden i getTimeBeforeQuestion: ",time)
+    //console.log("tiden i getTimeBeforeQuestion: ",time)
     return time
   }
   return 0
@@ -195,6 +195,7 @@ Data.prototype.getSubmittedAnswers = function(pollId) {
 
 Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){
   if(this.pollExists(pollId)){
+    console.log("i data, tittar om svaret är rätt")
     const poll = this.polls[pollId];
     const users = poll.participants;
     if(qId !=null){
@@ -202,12 +203,14 @@ Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){
         if(user.information.answers[qId]==null){
           user.information.answers.push(["-",0])
         }
+        console.log("svar: ",user.information.answers)
         if(user.userId == userId){
           if(user.information.answers[qId][0]==poll.questions[qId].a.correct){ //ta bort -1 sen, är bara för att de inte skickar randomOrder på första
             //lägg till tiden för användaren
             user.information.correctedAnswers.push(true)
             user.information.time += user.information.answers[qId][1];
             console.log("totala tiden: ",user.information.time)
+            console.log("corrected answers i checkuseranswer: ",user.information.correctedAnswers)
             return true;
           }
           else{
@@ -217,6 +220,7 @@ Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){
               console.log(user.information.lives)
             }
             user.information.correctedAnswers.push(false)
+            console.log("corrected answers i checkuseranswer: ",user.information.correctedAnswers)
             return false;
           }
         }
@@ -310,6 +314,9 @@ Data.prototype.updateColoredBoxes = function(pollId){
     const poll = this.polls[pollId]
     for(let player of poll.participants){
       if(player.information.in){
+        console.log("svar: ",player.information.answers)
+        console.log("corrected Answeres: ",player.information.correctedAnswers)
+        console.log("coloredBoxes: ",player.information.coloredBoxes)
         let answers = player.information.correctedAnswers
         for (let i=0;  i<Object.keys(answers).length;i++){
           player.information.coloredBoxes[i]=true

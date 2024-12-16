@@ -54,6 +54,7 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId)); //verkar inte behövas, Tea (2024-12-15)
   }); 
   socket.on('checkUserAnswer', function(d){
+    console.log("i socket, ska titta om svaret är rätt")
     let checkedUserAnswer = data.checkUserAnswer(d.pollId,d.questionNumber,d.userId);
     io.to(d.pollId).emit('checkedUserAnswer', checkedUserAnswer);
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));

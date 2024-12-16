@@ -1,18 +1,18 @@
-<template>
-    <div v-if="questionActive==false"> <!--När jag lägger v-if här så blir pedestalen väldigt smal, får massa vue varningar ocskå-->
+<template> <!--När jag lägger v-if här så blir pedestalen väldigt smal, får massa vue varningar ocskå-->
       <div class="playerpedestal" :style="{ '--pedestal-color': player.information.color }">
         {{player.information.name}} <br>
         {{ player.information.lives }} <br>
         {{ player.information.time }} <br>
-    </div>
-    </div>
-    <div v-if="questionActive==true">
+        <p v-if="answered==true">Answered</p>
+      </div>
+
+    <!--<div v-if="questionActive==true">
       <div class="playerpedestal" :style="{'--pedestal-color': playColor}">
       {{player.information.name}} <br>
       {{ player.information.lives }} <br>
       {{ player.information.time }} <br>
     </div>
-    </div>
+    </div>-->
     
 </template>
 
@@ -28,7 +28,8 @@ export default {
   data: function(){
     return{
       //questionActive: false,
-      playColor:'purple'
+      playColor:'purple',
+      answered:false,
     }
   },
   //emits: ["answer"],
@@ -37,6 +38,7 @@ export default {
       console.log("uppdaterar färg")
       if(val){
         this.playColor='yellow'
+        this.answered=true;
       }
       else{
         this.playColor='gray'
@@ -46,7 +48,8 @@ export default {
   },
   watch:{
     questionActive(){ //kan möjligtvis göra det till en funktion istället, men måste hitta ett bra sätt att kalla på 
-      this.playColor='purple'
+      //this.playColor=player.information.color
+      this.answered=false
     }
   }
 
