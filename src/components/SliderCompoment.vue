@@ -77,7 +77,7 @@ export default {
             if (this.rightPosition >= this.maxPosition) {
                 slider.style.right = (this.maxPosition - (this.rightPosition-this.leftPosition))+'px';
                 this.sent = true;
-                this.randomFunc(e);
+                this.sendAnswer(e);
             } else {
                 slider.style.left = 0+'px';
             }
@@ -85,8 +85,9 @@ export default {
         //gör funktion som skriver hej, ska köras när den släpps på 100%
         //slidern ska också då fastna på 100% och man kan inte längre flytta den
         //annars ska den hamna på start igen
-        randomFunc: function(e){
-            console.log("ska skicka svar");
+        sendAnswer: function(e){
+            this.$emit("sendAnswer")
+            console.log("ska skicka svar från slidern");
         }
     },
 };

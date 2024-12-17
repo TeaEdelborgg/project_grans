@@ -13,11 +13,12 @@
       {{ a }}
     </button> <br/>
     
-    <button class="submitbutton" v-on:click="answer">
+    <!--<button class="submitbutton" v-on:click="answer">
       Submit answer
-    </button>
+    </button>-->
+    
     <div id="slidercontainer">
-        <SliderCompoment/>
+        <SliderCompoment @sendAnswer="answer"/>
       </div>
   </div>
   
