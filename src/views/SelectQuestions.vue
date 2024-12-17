@@ -1,4 +1,5 @@
 <template>
+    <div v-if="!continueToStart">
 
     <button v-on:click="choosePoll('test')">
       Create Poll with Test ID
@@ -17,14 +18,25 @@
     <!--<button v-on:click="startPoll">
       Start poll
     </button>-->
-    <router-link v-bind:to="'/admin/' +pollId" v-on:click="startPoll">Start poll</router-link> 
+     <!-- <router-link v-bind:to="'/admin/' +pollId" v-on:click="startPoll">Start poll</router-link> 
 
-   <!-- <button v-on:click="runQuestion">
+   <button v-on:click="runQuestion">
       Run question
     </button>
     <router-link v-bind:to="'/result/' + pollId">Check result</router-link>-->
     
+    <button v-on:click="continueToStart=true">
+      Välj poll
+    </button>
     Data: {{ pollData }}
+  </div>
+  <div v-if="continueToStart">
+    Ditt quiz är skapat! Låt alla deltagare gå med innan du klickar vidare.
+    Quizkod: {{ pollId }}
+    <router-link v-bind:to="'/admin/' +pollId" v-on:click="startPoll">
+    <button v-on:click="startPoll"> Yes! Start poll</button>
+    </router-link>
+  </div>
 
   </template>
   
@@ -45,6 +57,8 @@
         questionNumber: 0,
         pollData: {},
         uiLabels: {},
+        continueToStart: false,
+        
       }
     },
     created: function () {
