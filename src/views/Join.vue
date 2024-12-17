@@ -9,8 +9,14 @@
  <!-- <router-link v-bind:to="'/lobby/' + newPollId">
     {{ uiLabels.participatePoll }}
     <button>join</button>
-  </router-link>-->
-  <button v-on:click="checkPollStatus"> {{ uiLabels.participatePoll }} join</button>
+  </router-link>
+  <button v-on:click="checkPollStatus"> {{ uiLabels.participatePoll }} join</button>-->
+  
+  <router-link v-bind:to="'/lobby/' + newPollId">
+    {{ uiLabels.participatePoll }}
+    <button>join</button>
+  </router-link>
+
 
         
    

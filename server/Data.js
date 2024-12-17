@@ -159,10 +159,10 @@ Data.prototype.getTimeBeforeQuestion = function(pollId){
   return 0
 }
 
-Data.prototype.addQuestion = function(pollId, newQuestion) {
+Data.prototype.addQuestion = function(pollId, q) {
   if (this.pollExists(pollId)) {
-    console.log("frågan: ",newQuestion);
-    this.polls[pollId].questions.push(newQuestion);
+    console.log("frågan: ",q);
+    this.polls[pollId].questions.push(q);
   }
 }
 
