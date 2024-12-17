@@ -116,10 +116,9 @@ export default {
       // ska skickas som [svaret de valt, tid kvar], kolla i data
       // kolla så att allt som varit koppat till serven fortfarande är det
       socket.emit("submitAnswer", {pollId: this.pollId, answer: answer, userId: this.userId, time: Math.floor(this.timeLeft/1000)}) // ta bort correctAnswer
-      console.log('svaret skickas i submitAnswer')
+      console.log('svaret skickas')
     },
     timeUp: function(){
-      console.log("i time Up")
       socket.emit("checkUserAnswer", {pollId:this.pollId, questionNumber:this.questionNumber,userId:this.userId}) //den ska sedan vara när timern går ut
       console.log('timeUp körs')
     }, 
@@ -150,15 +149,14 @@ export default {
           this.questionActive = false
           this.seeAlternatives = true
           //console.log('Pollview, kolla och se vad man svarat')
-          if (!this.checkedAnswer) {
+          if (!this.answerChecked) {
             console.log('checked answer innan: ', this.checkedAnswer)
             this.timeUp()
-            this.checkedAnswer = true
+            this.answerChecked = true
             console.log('checked answer efter: ', this.checkedAnswer)
           }
         } else {
           this.showCorrectAnswer = true;
-          
           clearInterval(interval)
         }
       }, 100);  
