@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if = "!doneWithPoll">
     <p>Poll link: {{pollId}}</p>
     <!--<button v-on:click="createPoll">
       Create poll
@@ -19,11 +19,14 @@
     <button v-on:click="addQuestion" :disabled="pollData.questions.length >= maxQuestions">
       Add question
     </button>
+    <button v-on:click="doneWithPoll=true">
+      Done with poll!
+    </button>
     
     <!--<router-link v-bind:to="'/admin/' +pollId" v-on:click="startPoll">
       <button v-on:click="startPoll"> Start poll</button>
     </router-link>-->
-    <router-link v-bind:to="'/admin/' +pollId" v-on:click="startPoll">Start poll</router-link>
+    <!--<router-link v-bind:to="'/admin/' +pollId" v-on:click="startPoll">Start poll</router-link>-->
     
     <!--<router-link v-bind:to="'/result/' + pollId">Check result</router-link>-->
     <!--<div v-if="pollData.questions && pollData.questions.length > 0">-->
@@ -53,6 +56,20 @@
     </div>
     Data: {{ pollData }}
   </div>
+  <div v-if="doneWithPoll">
+    <div v-if="!continueToStart">
+    Are you sure you are done?
+    <button v-on:click="continueToStart = true">Yes, continue</button>
+    <button v-on:click="doneWithPoll = false"> nope </button> //lägg till tillbakaknapp
+    </div>
+  </div>
+  <div v-if="continueToStart">
+    Ditt quiz är skapat! Låt alla deltagare gå med innan du klickar vidare.
+    Quizkod: {{ pollId }}
+    <router-link v-bind:to="'/admin/' +pollId" v-on:click="startPoll">
+    <button v-on:click="startPoll"> Yes! Start poll</button>
+    </router-link>
+  </div>
 </template>
 
 <script>
@@ -80,7 +97,9 @@ export default {
       uiLabels: {},
       checkedAnswers: {},
       timeLeft:0,
-      timeLeftBeforeQuestion:0
+      timeLeftBeforeQuestion:0,
+      doneWithPoll: false,
+      continueToStart: false
     }
   },
   created: function () {

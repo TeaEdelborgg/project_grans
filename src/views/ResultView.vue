@@ -227,8 +227,8 @@ export default {
   flex:1;
   max-width: 95%;
   /*background-color: white;*/
-  height: 95%;
-  margin:5px;
+  /*height: 95%;*/
+  /*margin:5px;*/
 }
 .contain{
   width: 100%;
@@ -294,7 +294,7 @@ export default {
 }
 
 #switchout{
-  width:80%;
+  width:70%;
   height:90%;
   margin:auto;
   display: flex;
