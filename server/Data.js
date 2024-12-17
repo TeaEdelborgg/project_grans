@@ -32,7 +32,7 @@ function Data() {
        },
     ],
     answers: [], //behöver egentligen inte
-    currentQuestion: 0,
+    currentQuestion: -1, //var innan 0
     participants: []
   }
 }
@@ -62,7 +62,7 @@ Data.prototype.createPoll = function(pollId, lang="en") {
     poll.questions = [];
     poll.answers = [];
     poll.participants = [];
-    poll.currentQuestion = 0; 
+    poll.currentQuestion = -1; //var innan 0
     poll.timer = {timeLeft:10,interval:null} 
     poll.timerBeforeQuestion = {timeLeft:3, interval:null}    
     poll.allCorrectedAnswers = {}   
