@@ -278,7 +278,7 @@ Data.prototype.updateQuestion = function (pollId,question){
   return null
 }
 
-
+/*
 Data.prototype.selectBox = function (info) {
   const { pollId, boxIndex, userId, label } = info;
   if(this.pollExists(pollId)){
@@ -304,7 +304,7 @@ Data.prototype.selectBox = function (info) {
   }));
 
   return boxStates; // Returning the updated box states for use in the socket file
-}}
+}}*/
 
 Data.prototype.amountOfQuestions = function (pollId){
   if(this.pollExists(pollId)){

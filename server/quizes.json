@@ -19,7 +19,12 @@
         ],
         "answers": [],   
         "currentQuestion": 0,
-        "participants": []
+        "participants": [],
+        "timer":{"timeLeft":10,"interval":null}, 
+        "timerBeforeQuestion":{"timeLeft":3, "interval":null},    
+        "allCorrectedAnswers": {},   
+        "moneyBoxes": [], 
+        "started": false  
     },
     "quiz2": {
         "lang": "sv",

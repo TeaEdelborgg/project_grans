@@ -108,11 +108,11 @@ function sockets(io, socket, data) {
     io.to(pollId).emit('participantsUpdate', data.getParticipants(pollId));
     socket.emit('pollData', data.getPoll(pollId));
   })
-
+/*
   socket.on('selectBox', function(info) {
     const boxStates = data.selectBox(info);
       io.to(info.pollId).emit('boxStatesUpdate', boxStates);
-  });
+  });*/
 
   socket.on('getAmountQuestions', function(pollId) {
     const amountOfQuestion = data.amountOfQuestions(pollId);
