@@ -66,7 +66,7 @@
   <div v-if="continueToStart">
     Ditt quiz är skapat! Låt alla deltagare gå med innan du klickar vidare.
     Quizkod: {{ pollId }}
-    <router-link v-bind:to="'/admin/' +pollId" v-on:click="startPoll">
+    <router-link v-bind:to="'/admin/' +pollId"> <!-- v-on:click="startPoll"-->
     <button v-on:click="startPoll"> Yes! Start poll</button>
     </router-link>
   </div>
