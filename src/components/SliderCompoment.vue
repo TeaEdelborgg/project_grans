@@ -19,6 +19,7 @@ export default {
             minPosition: 0, // Minimal position för slidern
             leftPosition: 0, 
             rightPosition: 0,
+            sent:false 
         };
     },
     mounted() {
@@ -39,11 +40,13 @@ export default {
     },
     methods: {
         pressedDown: function(e){
-            console.log(e.clientX)
-            this.placePressed = e.clientX;
-            this.pressed = true;
-            window.addEventListener("mousemove",this.move) //inte this.move() för då kallar den inte konstant
-            window.addEventListener("mouseup", this.mouseReleased)
+            if(!this.sent){
+                console.log(e.clientX)
+                this.placePressed = e.clientX;
+                this.pressed = true;
+                window.addEventListener("mousemove",this.move) //inte this.move() för då kallar den inte konstant
+                window.addEventListener("mouseup", this.mouseReleased)
+            }
         },
         move: function(e){
             const sliderRect = slider.getBoundingClientRect();
@@ -69,12 +72,24 @@ export default {
             }
         },
         mouseReleased: function(e){
+            let slider = document.getElementById("slider")
             this.pressed = false;
             console.log("mouse släppt")
-        }
+            
+            if (this.rightPosition >= this.maxPosition) {
+                slider.style.right = (this.maxPosition - (this.rightPosition-this.leftPosition))+'px';
+                this.sent = true;
+                this.randomFunc(e);
+            } else {
+                slider.style.left = 0+'px';
+            }
+        },
         //gör funktion som skriver hej, ska köras när den släpps på 100%
         //slidern ska också då fastna på 100% och man kan inte längre flytta den
         //annars ska den hamna på start igen
+        randomFunc: function(e){
+            console.log("ska skicka svar");
+        }
     },
 };
 </script>
