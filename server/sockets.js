@@ -108,18 +108,21 @@ function sockets(io, socket, data) {
     io.to(pollId).emit('participantsUpdate', data.getParticipants(pollId));
     socket.emit('pollData', data.getPoll(pollId));
   })
-
+/*
   socket.on('selectBox', function(info) {
     const boxStates = data.selectBox(info);
       io.to(info.pollId).emit('boxStatesUpdate', boxStates);
-  });
+  });*/
 
   socket.on('getAmountQuestions', function(pollId) {
     const amountOfQuestion = data.amountOfQuestions(pollId);
     const levelValues = data.getLevelValues(pollId)
-    const levelBoxes = data.updateLevelBoxes(pollId)
-    io.to(pollId).emit('sendAmountQuestions', [amountOfQuestion, levelValues, levelBoxes])
+    io.to(pollId).emit('sendAmountQuestions', [amountOfQuestion, levelValues])
   });
+  socket.on('getStartColors', function(pollId){
+    const levelBoxes = data.updateLevelBoxes(pollId)
+    io.to(pollId).emit('sendStartColors',levelBoxes)
+  })
 
 
 }

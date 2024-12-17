@@ -32,7 +32,7 @@ function Data() {
        },
     ],
     answers: [], //behöver egentligen inte
-    currentQuestion: 0,
+    currentQuestion: -1, //var innan 0
     participants: []
   }
 }
@@ -62,7 +62,7 @@ Data.prototype.createPoll = function(pollId, lang="en") {
     poll.questions = [];
     poll.answers = [];
     poll.participants = [];
-    poll.currentQuestion = 0; 
+    poll.currentQuestion = -1; //var innan 0
     poll.timer = {timeLeft:10,interval:null} 
     poll.timerBeforeQuestion = {timeLeft:3, interval:null}    
     poll.allCorrectedAnswers = {}   
@@ -278,7 +278,7 @@ Data.prototype.updateQuestion = function (pollId,question){
   return null
 }
 
-
+/*
 Data.prototype.selectBox = function (info) {
   const { pollId, boxIndex, userId, label } = info;
   if(this.pollExists(pollId)){
@@ -304,7 +304,7 @@ Data.prototype.selectBox = function (info) {
   }));
 
   return boxStates; // Returning the updated box states for use in the socket file
-}}
+}}*/
 
 Data.prototype.amountOfQuestions = function (pollId){
   if(this.pollExists(pollId)){

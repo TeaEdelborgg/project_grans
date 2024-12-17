@@ -1,5 +1,5 @@
 <template>
-    <div class="moneybox" :style="{backgroundColor:moneyColor}">
+    <div class="moneybox" :style="{backgroundColor:moneyColor, borderColor:borderColor, borderStyle:borderStyle}">
         {{value}}
     </div>
 </template>
@@ -9,6 +9,8 @@
         data: function(){
             return{
                 moneyColor: "#7FDBFF",
+                borderColor:"#FF851B",
+                borderStyle:"dashed",
                 value:0,
             }
         },
@@ -24,9 +26,11 @@
                     //this.boxColor=this.BoxColor
                     console.log("yellow")
                     this.moneyColor="#FF851B"
+                    this.borderStyle='solid'
                 }
                 else if(col == "next"){
                     this.moneyColor="#FFAD66"
+                    this.borderColor='black'
                 }
                 /*else{
                     //backgroundCol.style.backgroundColor = "red"

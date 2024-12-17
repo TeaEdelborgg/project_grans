@@ -10,18 +10,6 @@
     </div>
     <div v-if="joined">
       <p>Waiting for host to start poll</p>
-      <div class="boxes">
-        <div 
-          v-for="(box, index) in playerBoxes" 
-          :key="index" 
-          class="box" 
-          :style ="{backgroundColor: box.color}"
-          :class="{ taken: box.taken }" 
-          @click="selectBox(index)"
-        >
-          {{ box.label }}
-        </div>
-      </div>
       <p>Current Participants:</p>
       <ul>
         <li v-for="participant in participants" :key="participant.userId">
@@ -48,13 +36,6 @@ export default {
       lang: localStorage.getItem("lang") || "en",
       selectedColor: "#ff0000",
       participants: [],
-      playerBoxes: [
-        { taken: false, label: "Box 1", userId: null, color: "#ff0000" },
-        { taken: false, label: "Box 2", userId: null, color: "#ff0000" },
-        { taken: false, label: "Box 3", userId: null, color: "#ff0000" },
-        { taken: false, label: "Box 4", userId: null, color: "#ff0000" },
-      ],
-      selectedBox: null,
     };
   },
   created() {
@@ -62,10 +43,6 @@ export default {
     socket.on("uiLabels", (labels) => (this.uiLabels = labels));
     socket.on("participantsUpdate", (p) => {
       this.participants = p;
-      this.updatePlayerBoxes();
-    });
-    socket.on("boxStatesUpdate", (boxStates) => {
-      this.syncPlayerBoxes(boxStates);
     });
     socket.on("startPoll", () =>
       this.$router.push("/poll/" + this.pollId + "/" + this.userID)
@@ -84,63 +61,11 @@ export default {
       });
       this.joined = true;
     },
-    selectBox(index) {
-      if (this.selectedBox !== null) {
-        console.log("you can only select one box");
-        return;
-      }
-      const selecterbox = this.playerBoxes[index];
-      if (!selecterbox.taken) { 
-        selecterbox.taken = true;
-        selecterbox.label = this.userName || `Player ${this.userID}`;
-        selecterbox.userId = this.userID;
-        this.selectedBox = this.selectedColor;
-
-        socket.emit("selectBox", {
-          pollId: this.pollId,
-          boxIndex: index,
-          userId: this.userID,
-          label: selecterbox.label,
-          color: this.selectedColor
-        });
-        this.selectedBox = index;
-      }
-    },
-    updatePlayerBoxes() {
-      this.playerBoxes.forEach((box, index) => {
-        const takenBy = this.participants.find((p) => p.selectedBox === index);
-        if (takenBy) {
-          box.taken = true;
-          box.label = takenBy.information.name || `Player ${takenBy.userId}`;
-          box.color = takenBy.information.color;
-          box.userId = takenBy.userId;
-        } else {
-          box.taken = false;
-          box.label = `Box ${index + 1}`;
-          box.color = "#fff0000";
-          box.userId = null;
-        }
-      });
-    },
-    syncPlayerBoxes(boxStates) {
-    this.playerBoxes.forEach((box, index) => {
-      const state = boxStates.find((s) => s.boxIndex === index);
-      if (state) {
-        box.taken = true;
-        box.label = state.label;
-        box.userId = state.userId;
-      } else {
-        box.taken = false;
-        box.label = `Box ${index + 1}`;
-
-        box.userId = null;
-      }
-    });
-  },
 }};
 </script>
 
 <style scoped>
+/*
 .boxes {
   display: flex;
   gap: 10px;
@@ -157,5 +82,5 @@ export default {
 .box.taken {
   background-color: #ccc;
   cursor: not-allowed;
-}
+}*/
 </style>

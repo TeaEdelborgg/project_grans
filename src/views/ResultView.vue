@@ -120,7 +120,6 @@ export default {
     socket.on('sendAmountQuestions', value => { //fixa den här
       this.amountOfQuestions=value[0]
       let moneyLevels = value[1]
-      let moneyBox = value[3]
       this.$nextTick(()=>{
         for (let i =0; i<Object.keys(moneyLevels).length;i++){
         
@@ -131,15 +130,18 @@ export default {
         if(box){
           box.updateValue(moneyLevels[i])
         }
-        /*for(let i=0; i<Object.keys(moneyBox).length;i++){ //gör till en funktion
+      }
+      })
+      console.log("antal frågor: ",value)
+    })
+
+    socket.on('sendStartColors', moneyBox=>{ //få ihop till en ny funktion
+      for(let i=0; i<Object.keys(moneyBox).length;i++){ //gör till en funktion
           const box = this.$refs[`level-${i+1}`][0]
           if(box){
             box.updateColor(moneyBox[i])
           }
-        }*/
-      }
-      })
-      console.log("antal frågor: ",value)
+        }
     })
 
     socket.emit( "getUILabels", this.lang );
@@ -150,6 +152,7 @@ export default {
   },
   mounted (){
     socket.emit('getAmountQuestions', this.pollId);
+    socket.emit('getStartColors', this.pollId)
 
     this.windowHeight = document.documentElement.clientHeight
     this.windowWidth = document.documentElement.clientWidth;
