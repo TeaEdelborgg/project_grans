@@ -130,9 +130,13 @@ function sockets(io, socket, data) {
     const scoreBoard = data.countScore(pollId)
     //socket.join(pollId);
     console.log("ska skicka scoreboard")
-    socket.emit('sendScoreBoard',scoreBoard)
+    socket.emit('sendScoreBoard',scoreBoard) //ändra till socket.io
   })
-
+  socket.on('getScoreBoardUser', function(pollId){ //använd den här till användaran på resultat sidan
+    const scoreBoard = data.getScoreBoard(pollId)
+    console.log("getScoreBoardUser")
+    socket.emit("scoreBoardUser", scoreBoard) //ändra till socket.io
+  })
 }
 
 export { sockets };

@@ -37,6 +37,7 @@ export default {
   },
   data: function () {
     return {
+      userId:'',
       question: {
         q: "",
         a: []
@@ -90,7 +91,9 @@ export default {
       this.checkedAnswer = checkedAns;
       //console.log("tagit emot checked Answer: ", checkedAns)
     });
-
+    socket.on("gameFinished", () =>
+      this.$router.push("/finalResultPlayer/" + this.pollId + "/" + this.userId)
+    );
     
     socket.emit( "getUILabels", this.lang );
     socket.emit( "joinPoll", this.pollId );

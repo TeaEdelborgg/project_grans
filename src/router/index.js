@@ -53,7 +53,13 @@ const router = createRouter({
       path:'/finalResult/:id',
       name:'FinalResultView',
       component: () => import('../views/FinalResult.vue')
-    }
+    },
+    {
+      path:'/finalResultPlayer/:id/:userId',
+      name:'FinalResultPlayerView',
+      component: () => import('../views/FinalResultPlayer.vue')
+    } 
+
   ]
 })
 

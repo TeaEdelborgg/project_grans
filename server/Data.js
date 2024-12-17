@@ -67,7 +67,8 @@ Data.prototype.createPoll = function(pollId, lang="en") {
     poll.timerBeforeQuestion = {timeLeft:3, interval:null}    
     poll.allCorrectedAnswers = {}   
     poll.moneyBoxes = []; 
-    poll.started = false;   
+    poll.started = false;  
+    poll.scoreBoard = []; 
     this.polls[pollId] = poll;
     console.log("poll created", pollId, poll);
   }
@@ -423,6 +424,7 @@ Data.prototype.countScore = function(pollId){ //Selection sort
       //scoreBoard[i], scoreBoard[smallest] = scoreBoard[smallest], scoreBoard[i]
     }
     console.log(scoreBoard)
+    this.polls[pollId].scoreBoard=scoreBoard
     return scoreBoard
   }
   return []
@@ -436,6 +438,12 @@ Data.prototype.countPoints = function(player){
     }
   }
   return points
+}
+Data.prototype.getScoreBoard = function(pollId){
+  if(this.pollExists(pollId)){
+    return this.polls[pollId].scoreBoard
+  }
+  return []
 }
 
 export { Data };

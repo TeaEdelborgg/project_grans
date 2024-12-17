@@ -81,6 +81,8 @@ export default {
             } else {
                 slider.style.left = 0+'px';
             }
+            document.removeEventListener("mousemove",this.move)
+            document.removeEventListener("mouseup", this.mouseReleased)
         },
         //gör funktion som skriver hej, ska köras när den släpps på 100%
         //slidern ska också då fastna på 100% och man kan inte längre flytta den
