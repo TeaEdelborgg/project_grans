@@ -211,7 +211,7 @@ export default {
 .pedestal{
   flex:1;
   max-width: 10%;
-  height:100px;
+  height:60%;
   margin:auto;
   
 }
@@ -219,7 +219,7 @@ export default {
   width:80%;
   display: flex;
   justify-content: space-evenly;
-  height:400px;
+  height:100%;
   background-color: #4b6ab8;
   margin: auto;
 }
@@ -266,7 +266,7 @@ export default {
     position: relative;
 }
 #frame{
-  height:400px;
+  height:55%; /*osäker på hur stor den ska va*/
   width: 80%;
   margin: auto;
   border-style:solid;
@@ -276,7 +276,7 @@ export default {
 #moneyframe{
   float: left;
   background-color: #39A2DB;
-  height: 400px;
+  height: 100%;
   width: 20%;
   margin:auto;
   flex-grow: 1;
