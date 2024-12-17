@@ -72,14 +72,9 @@ export default {
             this.pressed = false;
             console.log("mouse släppt")
         }
-        //en funktion för när man trycker ned
-        //kallar på de andra funktionerna genom den här
-
-        //en funktion för när man drar
-        //uppdaterar positionen (vart i den är positionen, förmodligen längst upp i vänster)
-
-        //en funktion för när man släpper
-        //om den inte är 100% ska den åka tillbaka till start
+        //gör funktion som skriver hej, ska köras när den släpps på 100%
+        //slidern ska också då fastna på 100% och man kan inte längre flytta den
+        //annars ska den hamna på start igen
     },
 };
 </script>
