@@ -1,38 +1,43 @@
 <template>
-    <div id="slidercontainer">
-        <SliderCompoment/>
-    </div>
+    {{scoreBoard}}
 </template>
 
 <script>
 // @ is an alias to /src
-import SliderCompoment from '@/components/SliderCompoment.vue';
+
 import io from 'socket.io-client';
 const socket = io("localhost:3000");
 
 export default {
     name: 'FinalResultView',
     components: {
-    SliderCompoment
+    
     },
     data: function () {
         return {
+            pollId:"",
+            scoreBoard:[]
         }
     },
     created: function () {
+        this.pollId = this.$route.params.id
+
         //this.pollId = this.$route.params.id;
+        socket.on("sendScoreBoard", val=>{
+            this.scoreBoard=val
+            console.log("tog emot scoreboard")
+        })
         socket.on( "uiLabels", labels => this.uiLabels = labels );
     },
+    mounted(){
+        socket.emit('getScoreBoard', this.pollId)
+        console.log("skickar efter scoreBoard")
+    }
 }
 
 </script>
 
 <style>
-    
-#slidercontainer{
-  background-color: greenyellow;
-  width: 100%;
-  height: 5%; 
-}
+
 
 </style>

@@ -381,8 +381,62 @@ Data.prototype.getLevelValues = function(pollId){
     return this.polls[pollId].moneyBoxes
   }
 }
-
-
+Data.prototype.countScore = function(pollId){ //Selection sort
+  console.log("i countScore")
+  //kan sortera en lista, gör som algorithm 
+  var scoreBoard = Object.values(this.polls[pollId].participants)
+  if(this.pollExists(pollId)){
+    for(let i=0;i<scoreBoard.length;i++){
+      let smallest =i
+      for(let n=smallest+1;n<scoreBoard.length;n++){
+        let playerOne=scoreBoard[smallest]
+        console.log("participant smallest: ", playerOne)
+        let playerTwo=scoreBoard[n]
+        console.log("participant n: ", playerTwo)
+        let playerOnePoints = this.countPoints(playerOne)
+        let playerTwoPoints = this.countPoints(playerTwo)
+        if(playerOnePoints<playerTwoPoints){
+          console.log("spelare n har mer poäng")
+          smallest = n
+        }
+        else if(playerOnePoints==playerTwoPoints){ //kan sätta ihop vissa av villkoren
+          //titta liv o sen tid
+          console.log("lika måna poäng")
+          if(playerOne.information.lives<playerTwo.information.lives){
+            console.log("smallest spelare har mindre liv")
+            smallest=n
+          }
+          else if(playerOne.information.lives == playerTwo.information.lives){
+            if(playerOne.information.time<playerTwo.information.time){
+              console.log("spelare smallest har minder tid")
+              smallest=n
+            }
+          }
+        }
+        //gör beräkningen här
+        //lägg in smallest=n om den minsta har flyttats
+      }
+      //byt plats på A[i],A[smallest] = A[smallest],A[i]
+      let x = scoreBoard[i]
+      scoreBoard[i] = scoreBoard[smallest]
+      scoreBoard[smallest] = x
+      //scoreBoard[i], scoreBoard[smallest] = scoreBoard[smallest], scoreBoard[i]
+    }
+    console.log(scoreBoard)
+    return scoreBoard
+  }
+  return []
+}
+Data.prototype.countPoints = function(player){
+  let scoreCard = player.information.coloredBoxes
+  let points = 0
+  for(let i=0; i<scoreCard.length;i++){
+    if(scoreCard[i]==true){
+      points++
+    }
+  }
+  return points
+}
 
 export { Data };
 

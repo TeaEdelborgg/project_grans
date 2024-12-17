@@ -4,6 +4,8 @@
       Run question
     </button>
     <router-link v-bind:to="'/result/' + pollId">Check result</router-link>
+    <button v-on:click="finishGame()">Finish Game</button>
+    <!--<router-link v-bind:to="'/finalResult/' +pollId">Finish Game</router-link> ska skicka resultatview till finalResult-->
     <br>
     Data: {{ pollData }}
     CheckedAnswers: {{ checkedAnswers }} <br>
@@ -139,6 +141,9 @@ export default {
       this.timerBeforeQUestion()
       this.testCountdown()
       //här måste timer köras för 
+    },
+    finishGame: function(){
+      socket.emit('finishGame', this.pollId)
     }
   }
 }

@@ -68,7 +68,7 @@ function sockets(io, socket, data) {
     console.log("i socket, ska titta om svaret är rätt")
     let checkedUserAnswer = data.checkUserAnswer(d.pollId,d.questionNumber,d.userId);
     io.to(d.pollId).emit('checkedUserAnswer', checkedUserAnswer);
-    io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
+    //io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   });
   socket.on('getAllAnswers', function(pollId){
     let participantsWithNewAnswersTest = data.updateColoredBoxes(pollId)
@@ -123,7 +123,15 @@ function sockets(io, socket, data) {
     const levelBoxes = data.updateLevelBoxes(pollId)
     io.to(pollId).emit('sendStartColors',levelBoxes)
   })
-
+  socket.on('finishGame', function(pollId){
+    io.to(pollId).emit('gameFinished')
+  })
+  socket.on('getScoreBoard', function(pollId){
+    const scoreBoard = data.countScore(pollId)
+    //socket.join(pollId);
+    console.log("ska skicka scoreboard")
+    socket.emit('sendScoreBoard',scoreBoard)
+  })
 
 }
 

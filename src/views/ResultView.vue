@@ -3,7 +3,7 @@
     <div> <!--Fixa lang saken, syns inte atm-->
       lang: {{ lang }}
     </div>
-    <h1 :style="{color:'white'}">Who Wants to Become an Millionaire</h1>
+    <h1 :style="{color:'white'}">Who Wants to Be an Millionaire</h1>
     <!--<BarsComponent v-bind:labels="question.a" v-bind:data="submittedAnswers"/>-->
     <QuestionComponentResult v-if="questionActive" v-bind:progress="percentage" v-bind:question="question"  ></QuestionComponentResult> <!--Lägg till questionId senare-->
     <BeforeQuestionComponent v-if="beforeQuestion" v-bind:timeLeft="timeLeftBeforeQuestion" ></BeforeQuestionComponent>
@@ -143,6 +143,10 @@ export default {
           }
         }
     })
+    socket.on('gameFinished', ()=>
+      this.$router.push('/finalResult/'+this.pollId)
+    )
+    
 
     socket.emit( "getUILabels", this.lang );
     socket.emit( "joinPoll", this.pollId );
