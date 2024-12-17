@@ -105,12 +105,9 @@ export default {
       })
     })
     socket.on('updatePedestalPlayer', user=>{
-      console.log("user: ",user)
       this.$nextTick(()=>{
         const Player = this.$refs['pedestal-'+user][0]
-        console.log("player: ",Player)
         if(Player){
-          console.log("ska uppdatera färg")
           Player.updateColor(true)
         }
       })
@@ -176,7 +173,7 @@ export default {
           clearInterval(interval)
           setTimeout(()=>{
             socket.emit("getAllAnswers", this.pollId)
-            socket.emit("getAllAnswersTest", this.pollId)
+            //socket.emit("getAllAnswersTest", this.pollId)
             this.questionActive=false, //här vill man även ändra färgen på alla pedestaler tillbaka till grå
             this.percentage =100
           },2000)

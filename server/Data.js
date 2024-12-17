@@ -1,9 +1,20 @@
 'use strict';
 import {readFileSync} from "fs";
+import { createRequire } from 'module';
+
+//import {quiz1} from "./quiz1.json" assert{type:'json';
+//import {quiz1} from 'server\quiz1.json';
+
+
+const require = createRequire(import.meta.url);
+const quizes = require('./quizes.json');
+
 
 // Store data in an object to keep the global namespace clean. In an actual implementation this would be interfacing a database...
 function Data() {
   this.polls = {};
+  this.polls['quiz1']= quizes.quiz1;
+  this.polls['quiz2']= quizes.quiz2;
   this.polls['test'] = {
     lang: "sv",
     questions: [
@@ -55,7 +66,8 @@ Data.prototype.createPoll = function(pollId, lang="en") {
     poll.timer = {timeLeft:10,interval:null} 
     poll.timerBeforeQuestion = {timeLeft:3, interval:null}    
     poll.allCorrectedAnswers = {}   
-    poll.moneyBoxes = [];    
+    poll.moneyBoxes = []; 
+    poll.started = false;   
     this.polls[pollId] = poll;
     console.log("poll created", pollId, poll);
   }
@@ -67,6 +79,13 @@ Data.prototype.getPoll = function(pollId) {
     return this.polls[pollId];
   }
   return {};
+}
+
+Data.prototype.hasPollStarted = function(pollId) {
+  if (this.pollExists(pollId)) {
+    return this.polls[pollId].started;
+  }
+  return false;
 }
 
 Data.prototype.participateInPoll = function(pollId, name, userId, color) {
@@ -86,16 +105,16 @@ Data.prototype.getParticipants = function(pollId) {
 }
 
 Data.prototype.startTimer = function(pollId, totalTime){
-  console.log("i start timer")
+  //console.log("i start timer")
   if(this.pollExists(pollId)){
-    console.log("pollId existerar")
+    //console.log("pollId existerar")
     const poll = this.polls[pollId];
     poll.timer.timeLeft = totalTime;
     poll.timer.interval = null;
     poll.timer.interval = setInterval(()=>{
       if( poll.timer.timeLeft > 0){
         poll.timer.timeLeft--;
-        // console.log("tid kvar: ", poll.timer.timeLeft)
+        //console.log("tid kvar: ", poll.timer.timeLeft)
       } else {
         clearInterval(poll.timer.interval);
         poll.timer.timeLeft=0;
@@ -113,7 +132,7 @@ Data.prototype.startTimeBeforeQuestion = function (pollId, totalTime){
     poll.timerBeforeQuestion.interval = setInterval(()=>{
       if(poll.timerBeforeQuestion.timeLeft > 0){
         poll.timerBeforeQuestion.timeLeft--;
-        // console.log("tid kvar innan fråga: ",poll.timerBeforeQuestion.timeLeft)
+        //console.log("tid kvar innan fråga: ",poll.timerBeforeQuestion.timeLeft)
       } else{
         clearInterval(poll.timerBeforeQuestion.interval);
         poll.timerBeforeQuestion.timeLeft=0
@@ -125,7 +144,7 @@ Data.prototype.startTimeBeforeQuestion = function (pollId, totalTime){
 Data.prototype.getTime = function(pollId){
   if(this.pollExists(pollId)){
     let time = this.polls[pollId].timer.timeLeft
-    // console.log("tid i getTime: ",time)
+    //console.log("tid i getTime: ",time)
     return time
   }
   return 0
@@ -134,7 +153,7 @@ Data.prototype.getTime = function(pollId){
 Data.prototype.getTimeBeforeQuestion = function(pollId){
   if(this.pollExists(pollId)){
     let time = this.polls[pollId].timerBeforeQuestion.timeLeft
-    console.log("tiden i getTimeBeforeQuestion: ",time)
+    //console.log("tiden i getTimeBeforeQuestion: ",time)
     return time
   }
   return 0
@@ -142,6 +161,7 @@ Data.prototype.getTimeBeforeQuestion = function(pollId){
 
 Data.prototype.addQuestion = function(pollId, q) {
   if (this.pollExists(pollId)) {
+    console.log("frågan: ",q);
     this.polls[pollId].questions.push(q);
   }
 }
@@ -195,6 +215,7 @@ Data.prototype.getSubmittedAnswers = function(pollId) {
 
 Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){
   if(this.pollExists(pollId)){
+    console.log("i data, tittar om svaret är rätt")
     const poll = this.polls[pollId];
     const users = poll.participants;
     if(qId !=null){
@@ -202,12 +223,14 @@ Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){
         if(user.information.answers[qId]==null){
           user.information.answers.push(["-",0])
         }
+        console.log("svar: ",user.information.answers)
         if(user.userId == userId){
           if(user.information.answers[qId][0]==poll.questions[qId].a.correct){ //ta bort -1 sen, är bara för att de inte skickar randomOrder på första
             //lägg till tiden för användaren
             user.information.correctedAnswers.push(true)
             user.information.time += user.information.answers[qId][1];
             console.log("totala tiden: ",user.information.time)
+            console.log("corrected answers i checkuseranswer: ",user.information.correctedAnswers)
             return true;
           }
           else{
@@ -217,6 +240,7 @@ Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){
               console.log(user.information.lives)
             }
             user.information.correctedAnswers.push(false)
+            console.log("corrected answers i checkuseranswer: ",user.information.correctedAnswers)
             return false;
           }
         }
@@ -310,6 +334,9 @@ Data.prototype.updateColoredBoxes = function(pollId){
     const poll = this.polls[pollId]
     for(let player of poll.participants){
       if(player.information.in){
+        console.log("svar: ",player.information.answers)
+        console.log("corrected Answeres: ",player.information.correctedAnswers)
+        console.log("coloredBoxes: ",player.information.coloredBoxes)
         let answers = player.information.correctedAnswers
         for (let i=0;  i<Object.keys(answers).length;i++){
           player.information.coloredBoxes[i]=true

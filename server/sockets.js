@@ -27,6 +27,16 @@ function sockets(io, socket, data) {
     socket.join(pollId);
     socket.emit('questionUpdate', data.getQuestion(pollId))
     socket.emit('submittedAnswersUpdate', data.getSubmittedAnswers(pollId));
+    /*
+    if (data.pollExists(pollId)) {
+      const pollStarted = data.hasPollStarted(pollId);
+      socket.emit('pollStatus', {started: pollStarted});
+      if (!pollStarted) {
+        socket.join(pollId);
+        socket.emit('questionUpdate', data.getQuestion(pollId))
+        socket.emit('submittedAnswersUpdate', data.getSubmittedAnswers(pollId));
+      }
+    }*/
   });
 
   socket.on('participateInPoll', function(d) {
@@ -35,6 +45,7 @@ function sockets(io, socket, data) {
   });
   socket.on('startPoll', function(pollId) {
     data.createBoxes(pollId)
+    /*data.polls[pollId].started = true;*/
     io.to(pollId).emit('startPoll');
   })
   socket.on('runQuestion', function(d) {
@@ -54,6 +65,7 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId)); //verkar inte behövas, Tea (2024-12-15)
   }); 
   socket.on('checkUserAnswer', function(d){
+    console.log("i socket, ska titta om svaret är rätt")
     let checkedUserAnswer = data.checkUserAnswer(d.pollId,d.questionNumber,d.userId);
     io.to(d.pollId).emit('checkedUserAnswer', checkedUserAnswer);
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
