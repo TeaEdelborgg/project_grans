@@ -120,9 +120,11 @@ export default {
     },
     timeUp: function(){
       socket.emit("checkUserAnswer", {pollId:this.pollId, questionNumber:this.questionNumber,userId:this.userId}) //den ska sedan vara när timern går ut
+      console.log('timeUp körs')
     }, 
     countdownPlayer: function() {
       this.answerChecked = false;
+      this.checkedAnswer = false;
       this.seeAlternatives = false;
       this.showCorrectAnswer = false;
       this.percentage = 100;
@@ -148,8 +150,10 @@ export default {
           this.seeAlternatives = true
           //console.log('Pollview, kolla och se vad man svarat')
           if (!this.checkedAnswer) {
+            console.log('checked answer innan: ', this.checkedAnswer)
             this.timeUp()
             this.checkedAnswer = true
+            console.log('checked answer efter: ', this.checkedAnswer)
           }
         } else {
           this.showCorrectAnswer = true;

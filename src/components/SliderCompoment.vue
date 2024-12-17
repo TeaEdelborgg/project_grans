@@ -1,11 +1,9 @@
 <template>
     <div id="sliderBox">
         <div 
-            ref="slider" 
             id="slider" 
             @mousedown="pressedDown"
         >
-            hejsan
         </div>
     </div>
 </template>
@@ -14,45 +12,74 @@
 export default {
     data() {
         return {
-            placePressedX: 0,
+            placePressed: 0,
             pressed: false,
             sliderOffsetLeft: 0, // Håller reda på var slidern börjar
             maxPosition: 0, // Maximal position för slidern
             minPosition: 0, // Minimal position för slidern
+            leftPosition: 0, 
+            rightPosition: 0,
         };
     },
     mounted() {
         // Beräkna räckvidden för slidern
-        const sliderBox = this.$refs.slider.parentNode;
-        const slider = this.$refs.slider;
-        this.minPosition = 0;
-        this.maxPosition = sliderBox.offsetWidth - slider.offsetWidth;
+        /*this.windowWidth = document.documentElement.clientWidth;
+        this.minPosition = this.windowWidth*0.1;
+        console.log('minposition: ',this.minPosition)
+        this.maxPosition = this.windowWidth*0.9;
+        console.log('maxposition: ',this.maxPosition)
+        this.rightPosition = this.windowWidth*0.2;
+        console.log('start right: ', this.rightPosition)*/
+
+        const sliderBoxRect = sliderBox.getBoundingClientRect();
+        this.minPosition = sliderBoxRect.left; // Vänstra gränsen
+        this.maxPosition = sliderBoxRect.right; // Högra gränsen
+        console.log('minPosition: ', this.minPosition, 'maxPosition: ', this.maxPosition);
+
     },
     methods: {
-        pressedDown(e) {
+        pressedDown: function(e){
+            console.log(e.clientX)
+            this.placePressed = e.clientX;
             this.pressed = true;
-            this.placePressedX = e.clientX;
-            this.sliderOffsetLeft = this.$refs.slider.offsetLeft;
-            window.addEventListener("mousemove", this.elementDrag);
-            window.addEventListener("mouseup", this.closeDragElement);
+            window.addEventListener("mousemove",this.move) //inte this.move() för då kallar den inte konstant
+            window.addEventListener("mouseup", this.mouseReleased)
         },
-        elementDrag(e) {
-            if (!this.pressed) return;
-            // Räkna ut hur mycket musen har rört sig
-            const deltaX = e.clientX - this.placePressedX;
-            let newLeft = this.sliderOffsetLeft + deltaX;
+        move: function(e){
+            const sliderRect = slider.getBoundingClientRect();
+            this.leftPosition = sliderRect.left;
+            this.rightPosition = sliderRect.right;
+            console.log("gräns höger: ", this.rightPosition)
 
-            // Begränsa rörelsen inom minPosition och maxPosition
-            newLeft = Math.max(this.minPosition, Math.min(newLeft, this.maxPosition));
-
-            // Uppdatera sliderns position
-            this.$refs.slider.style.left = newLeft + "px";
+            if(this.pressed){
+                let slider = document.getElementById("slider")
+                let movedPlaced = e.clientX-this.placePressed
+                if (movedPlaced < 0){
+                    slider.style.left=0+'px';
+                }
+                else if (this.rightPosition > this.maxPosition){
+                    slider.style.right = (this.maxPosition - (this.rightPosition-this.leftPosition))+'px';
+                }
+                else{
+                    slider.style.left = (e.clientX-this.placePressed)+'px'; //-this.placePressed då vi vill ha den i sliderBox och inte på hela sidan
+                }    
+            }
+            else{
+                return 0
+            }
         },
-        closeDragElement() {
+        mouseReleased: function(e){
             this.pressed = false;
-            window.removeEventListener("mousemove", this.elementDrag);
-            window.removeEventListener("mouseup", this.closeDragElement);
-        },
+            console.log("mouse släppt")
+        }
+        //en funktion för när man trycker ned
+        //kallar på de andra funktionerna genom den här
+
+        //en funktion för när man drar
+        //uppdaterar positionen (vart i den är positionen, förmodligen längst upp i vänster)
+
+        //en funktion för när man släpper
+        //om den inte är 100% ska den åka tillbaka till start
     },
 };
 </script>

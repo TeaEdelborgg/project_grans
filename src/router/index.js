@@ -48,6 +48,11 @@ const router = createRouter({
       path: '/join/',
       name: 'Join',
       component: () => import('../views/Join.vue')
+    },
+    {
+      path:'/finalResult/',
+      name:'FinalResultView',
+      component: () => import('../views/FinalResult.vue')
     }
   ]
 })
