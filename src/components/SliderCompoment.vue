@@ -29,17 +29,17 @@ export default {
         console.log('maxposition: ',this.maxPosition)
         this.rightPosition = this.windowWidth*0.2;
         console.log('start right: ', this.rightPosition)*/
+        let sliderBox = document.getElementById("sliderBox");
 
         const sliderBoxRect = sliderBox.getBoundingClientRect();
         this.minPosition = sliderBoxRect.left; // Vänstra gränsen
         this.maxPosition = sliderBoxRect.right; // Högra gränsen
         console.log('minPosition: ', this.minPosition, 'maxPosition: ', this.maxPosition);
-
     },
     methods: {
         pressedDown: function(e){
             if(!this.sent){
-                console.log(e.clientX)
+                //console.log(e.clientX)
                 this.placePressed = e.clientX;
                 this.pressed = true;
                 window.addEventListener("mousemove",this.move) //inte this.move() för då kallar den inte konstant
@@ -50,7 +50,7 @@ export default {
             const sliderRect = slider.getBoundingClientRect();
             this.leftPosition = sliderRect.left;
             this.rightPosition = sliderRect.right;
-            console.log("gräns höger: ", this.rightPosition)
+            //console.log("gräns höger: ", this.rightPosition)
 
             if(this.pressed){
                 let slider = document.getElementById("slider")
@@ -88,6 +88,7 @@ export default {
         sendAnswer: function(e){
             this.$emit("sendAnswer")
             console.log("ska skicka svar från slidern");
+
         }
     },
 };
