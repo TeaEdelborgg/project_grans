@@ -10,11 +10,11 @@
       <div id="frame">
         <div id="moneyframe">
             <div id="switchout">
-              <div id="boxesTest">
+              <!--<div id="boxesTest">-->
                 <div id="containerBoxTest">
                   <Moneybox v-for="level in amountOfQuestions" :ref="'level-'+level" :id="level"/>
                 </div>
-              </div>
+              <!--</div>-->
             </div>
         </div>
 
@@ -269,12 +269,26 @@ export default {
   height: 400px;
   width: 20%;
   margin:auto;
+  flex-grow: 1;
+  /*float: left;
+  background-color: purple;
+  height: 400px;
+  width: 20%;
+  margin: auto;
+  display: flex; /* make the container a flexbox */
+  /*flex-direction: column; /* some it goes vertically, same logic the other way */
+  /*flex-wrap: wrap; /* allow child elements to wrap to the next line */
+  justify-content: space-evenly; /* occupy the space evenly */
+  align-content: center;
+  overflow: hidden; /* prevent overflowing from container*/
 }
 
 #switchout{
   width:80%;
-  height: 400px;
+  height:90%;
   margin:auto;
+  display: flex;
+  justify-content: space-evenly;
   /*background-color: white;*/
 }
 .moneybox{
@@ -297,10 +311,15 @@ export default {
 }
 #boxesTest{
   width:100%;
-  display: flex;
-  justify-content: space-evenly;
+  
   height:300px;
   margin: auto;
+  /*width:100%;
+  height: auto; /* so the height adjust accordingly, same the other way */
+  /*max-height: 400px;
+  background-color: black;
+  margin: auto;
+  flex-grow: 1; /* allow element to grow and fill the remaining space in parent container */
 }
 
 
