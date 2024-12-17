@@ -1,5 +1,5 @@
 <template>
-    <div class="levelbox" :style="{backgroundColor:boxColor}">
+    <div class="levelbox" :style="{backgroundColor:boxColor, borderColor:BorderColor}">
     </div>
     
 </template>
@@ -7,7 +7,8 @@
     export default{
         name:'Levelbox',
         props:{
-            BoxColor: String
+            BoxColor: String,
+            BorderColor:String
         },
         data: function(){
             return{

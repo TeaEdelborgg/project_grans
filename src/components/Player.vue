@@ -1,7 +1,7 @@
 <template>
   <div id="boxes">
     <div id="containerBox">
-      <Levelbox v-for="n in amountOfQuestions" :ref="'box-'+n" v-bind:BoxColor="color" :id="n"></Levelbox>
+      <Levelbox v-for="n in amountOfQuestions" :ref="'box-'+n" v-bind:BoxColor="color" v-bind:BorderColor="color":id="n"></Levelbox>
       <!--namn: {{player.information.name}} svar: {{ player.information.answers }} corrected Answers: {{ player.information.correctedAnswers }}-->
     </div>
   </div>
@@ -77,6 +77,6 @@ export default {
   display: flex;
   border-radius:10px;
   border-style:dashed;
-  border-color:#FF851B;
+  /*border-color:#FF851B;*/
 }
 </style>
