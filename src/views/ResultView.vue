@@ -96,7 +96,7 @@ export default {
             player.updatesBoxes()
           }
         })
-        for(let i=0; i<Object.keys(moneyBox).length;i++){
+        for(let i=0; i<Object.keys(moneyBox).length;i++){ //gör till en funktion
           const box = this.$refs[`level-${i+1}`][0]
           if(box){
             box.updateColor(moneyBox[i])
@@ -117,9 +117,10 @@ export default {
       this.question=question;
       this.countdownResult();
     });
-    socket.on('sendAmountQuestions', value => {
+    socket.on('sendAmountQuestions', value => { //fixa den här
       this.amountOfQuestions=value[0]
       let moneyLevels = value[1]
+      let moneyBox = value[3]
       this.$nextTick(()=>{
         for (let i =0; i<Object.keys(moneyLevels).length;i++){
         
@@ -130,6 +131,12 @@ export default {
         if(box){
           box.updateValue(moneyLevels[i])
         }
+        /*for(let i=0; i<Object.keys(moneyBox).length;i++){ //gör till en funktion
+          const box = this.$refs[`level-${i+1}`][0]
+          if(box){
+            box.updateColor(moneyBox[i])
+          }
+        }*/
       }
       })
       console.log("antal frågor: ",value)
