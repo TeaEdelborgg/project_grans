@@ -1,8 +1,9 @@
 <template> <!--När jag lägger v-if här så blir pedestalen väldigt smal, får massa vue varningar ocskå-->
       <div class="playerpedestal" :style="{ '--pedestal-color': player.information.color }">
         {{player.information.name}} <br>
-        {{ player.information.lives }} <br>
-        {{ player.information.time }} <br>
+        <hr>
+        Lives left:{{ player.information.lives }} <br> <!--Byt ut mot hjärtan-->
+        Total time:{{ player.information.time }} <br>
         <p v-if="answered==true">Answered</p>
       </div>
 

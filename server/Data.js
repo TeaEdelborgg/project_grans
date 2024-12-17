@@ -322,7 +322,7 @@ Data.prototype.createBoxes = function(pollId){
     }
     //fixa pengar levlar här
     for (let i=0; i<numberOfQuestions;i++){
-      let value = Math.ceil((1000000/numberOfQuestions)*(i+1))
+      let value = Math.ceil((1000000/numberOfQuestions)*(i+1)/10000)*10000//Math.ceil((1000000/numberOfQuestions)*(i+1)) //här ska det endast vara två decimaler
       poll.moneyBoxes.push(value)
     }
     console.log("money levlar: ",poll.moneyBoxes)
