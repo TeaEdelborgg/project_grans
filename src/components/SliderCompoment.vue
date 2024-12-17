@@ -1,9 +1,7 @@
 <template>
     <div id="sliderBox">
-        <div 
-            id="slider" 
-            @mousedown="pressedDown"
-        >
+        <div id="slider" @mousedown="pressedDown">
+            Slide to lock
         </div>
     </div>
 </template>
@@ -97,14 +95,14 @@ export default {
 <style scoped>
 #sliderBox {
     width: 80%;
-    height: 100px;
+    height: 5vh;
     margin: auto;
     background-color: aqua;
     position: relative;
 }
 
 #slider {
-    width: 15%;
+    width: 20%;
     height: 100%;
     background-color: orange;
     position: absolute;

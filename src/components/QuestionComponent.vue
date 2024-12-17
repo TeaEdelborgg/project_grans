@@ -16,13 +16,21 @@
     <button class="submitbutton" v-on:click="answer">
       Submit answer
     </button>
+    <div id="slidercontainer">
+        <SliderCompoment/>
+      </div>
   </div>
   
 </template>
 
 <script>
+import SliderCompoment from './SliderCompoment.vue';
+
 export default {
   name: 'QuestionComponent',
+  components: {
+    SliderCompoment
+  },
   props: {
     question: Object,
     questionActive: Boolean,
@@ -71,8 +79,8 @@ export default {
     border-style: solid;
     color: #FAF8F1;
     border-radius: 1em;
-    margin: 3%;
-    width: 40vw;
+    margin: 2vh 2vw;
+    width: 35vw;
     height: 20vh;
   }
   .selected {
@@ -98,5 +106,8 @@ export default {
   .submitbutton {
     width: 80vw;
   }
+  #slidercontainer{
+  background-color: greenyellow;
+}
 
 </style>

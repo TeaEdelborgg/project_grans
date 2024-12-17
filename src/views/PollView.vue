@@ -1,8 +1,6 @@
 <template>
   <div id="background">
     <div id="playerView">
-      {{pollId}}
-
       <div id="timerBarContainer">
         <div id="timerBar" :style="{ width: percentage + '%' }"></div>
       </div>
@@ -20,9 +18,6 @@
           v-bind:showCorrectAnswer="showCorrectAnswer"
           v-on:answer="submitAnswer($event)"/>
       </div>
-      <!--<div id="slidercontainer">
-        <SliderCompoment/>
-      </div>-->
       <span>{{submittedAnswers}}</span>
       Checked answer {{ checkedAnswer }}
     </div>
@@ -32,7 +27,6 @@
 <script>
 // @ is an alias to /src
 import QuestionComponent from '@/components/QuestionComponent.vue';
-import SliderCompoment from '@/components/SliderCompoment.vue';
 import io from 'socket.io-client';
 const socket = io("localhost:3000");
 
@@ -40,7 +34,6 @@ export default {
   name: 'PollView',
   components: {
     QuestionComponent,
-    SliderCompoment
   },
   data: function () {
     return {
@@ -187,29 +180,25 @@ export default {
   height: 100%;
 }
 #playerView {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  margin: 2.5%;
+
 }
 
 .answeralternatives {
   width: 95%;
 } 
 
-
-#slidercontainer{
-  background-color: greenyellow;
-  width: 100%;
-  height: 5%; 
-}
-
 #timerBarContainer {
-  width: 95%; /* Gör containern för timerbaren lika bred som sidan */
+  width: 95%; 
   height: 20px;
   background-color: white;
   border-radius: 10px;
   overflow: hidden;
-  margin: 5% 0;
-  padding: 0; /* Säkerställ att det inte finns någon padding */
+  margin: 3vh 0;
+  padding: 0; 
   position: relative;
 }
 
