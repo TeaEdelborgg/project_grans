@@ -2,15 +2,15 @@
     <div id="background">
         <div id="scoreBoard" v-if="answeresSentIn">
             <div>
-                <h1>The winner is..</h1> <br>
+                <h1>{{uiLabels.winner}}</h1> <br>
                 <p>1. {{ winner.information.name }}</p> <br>
             </div>
             <div>
-                <h2>The losers are..</h2><br>
+                <h2>{{uiLabels.losers}}</h2><br>
                 <p v-for="(player, index) in losers">{{ index + 2 }}. {{ player.information.name }}</p> <br>   
             </div>
             <button id="homeButtom" @click="$router.push('/')">
-                <h3>Return to home page</h3>
+                <h3>{{uiLabels.returnHomeButton}}</h3>
             </button> 
         </div>
     </div>
@@ -30,6 +30,7 @@ export default {
     },
     data: function () {
         return {
+            uiLabels: {},
             pollId:"",
             scoreBoard:[],
             winner:"",
@@ -50,6 +51,7 @@ export default {
             this.answeresSentIn=true
         })
         socket.on( "uiLabels", labels => this.uiLabels = labels );
+        socket.emit( "getUILabels", this.lang );
     },
     mounted(){
         socket.emit('getScoreBoard', this.pollId)

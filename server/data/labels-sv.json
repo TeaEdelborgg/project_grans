@@ -16,5 +16,10 @@
 	"livesLeft": "Liv kvar",
 	"timeTotal": "Tid totalt",
 	"answered": "Svarat",
-	"readyBeforeQuestion": "Gör er redo inför nästa fråga"
+	"readyBeforeQuestion": "Gör er redo inför nästa fråga",
+	"winner": "Vinnaren är..",
+	"losers": "Förlorarna är..",
+	"returnHomeButton": "Gå tillbaka till start sidan",
+	"congratsWon": "Grattis du vann",
+	"betterLuck": "Bättre lycka nästa gång"
 }

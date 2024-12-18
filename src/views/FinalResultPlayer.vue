@@ -2,13 +2,13 @@
     <div id="background">
         <div id="board">
             <div v-if="winner">
-                <h1>Congrats you won</h1>
+                <h1>{{uiLabels.congratsWon}}</h1>
             </div>
             <div v-if="!winner">
-                <h1>Better luck next time</h1>
+                <h1>{{uiLabels.betterLuck}}</h1>
             </div>
             <button id="homeButtom" @click="$router.push('/')">
-                <h3>Return to home page</h3>
+                <h3>{{uiLabels.returnHomeButton}}</h3>
             </button> 
         </div>
     </div>
@@ -26,6 +26,7 @@ export default {
     },
     data: function () {
         return {
+            uiLabels: {},
             winner:false,
             place:0
         }
@@ -41,6 +42,8 @@ export default {
         
         //socket on den som skickar tillbaka scores
         socket.on( "uiLabels", labels => this.uiLabels = labels );
+        socket.emit( "getUILabels", this.lang );
+
     },
     mounted(){
         socket.emit('getScoreBoardUser', this.pollId) //byt ut till den andra

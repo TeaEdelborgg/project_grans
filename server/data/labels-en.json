@@ -16,5 +16,10 @@
 	"livesLeft": "Lives left",
 	"timeTotal": "Total time",
 	"answered": "Answered",
-	"readyBeforeQuestion": "Get ready for the next question"
+	"readyBeforeQuestion": "Get ready for the next question",
+	"winner": "The winner is..",
+	"losers": "The losers are..",
+	"returnHomeButton": "Return to home page",
+	"congratsWon": "Congrats you won",
+	"betterLuck": "Better luck next time"
 }
