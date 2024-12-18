@@ -1,11 +1,17 @@
 <template>
     <div id="background">
         <div id="scoreBoard" v-if="answeresSentIn">
-            <h1>The winner is..</h1> <br>
-            <p>1. {{ winner.information.name }}</p> <br>
-            <h2>The losers are..</h2><br>
-            <p v-for="(player, index) in losers">{{ index + 2 }}. {{ player.information.name }}</p> <br>   
-            <button id="homeButtom" @click="$router.push('/')">Return to home page</button> 
+            <div>
+                <h1>The winner is..</h1> <br>
+                <p>1. {{ winner.information.name }}</p> <br>
+            </div>
+            <div>
+                <h2>The losers are..</h2><br>
+                <p v-for="(player, index) in losers">{{ index + 2 }}. {{ player.information.name }}</p> <br>   
+            </div>
+            <button id="homeButtom" @click="$router.push('/')">
+                <h3>Return to home page</h3>
+            </button> 
         </div>
     </div>
 </template>
@@ -68,13 +74,12 @@ export default {
     margin: auto;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between;
     flex-grow: 1;
 
 }
 #homeButtom{
     width: 100%;
-    margin-bottom: 10px;
     cursor:pointer;
     background-color: #39A2DB;
     color:black;

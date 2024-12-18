@@ -7,7 +7,9 @@
             <div v-if="!winner">
                 <h1>Better luck next time</h1>
             </div>
-            <button id="homeButtom" @click="$router.push('/')">Return to home page</button> 
+            <button id="homeButtom" @click="$router.push('/')">
+                <h3>Return to home page</h3>
+            </button> 
         </div>
     </div>
 </template>
@@ -80,13 +82,12 @@ export default {
     margin: auto;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between;
     flex-grow: 1;
 
 }
 #homeButtom{
     width: 100%;
-    margin-bottom: 10px;
     cursor:pointer;
     background-color: #39A2DB;
     color:black;
