@@ -4,9 +4,9 @@
       <div id="timerBarContainer">
         <div id="timerBar" :style="{ width: percentage + '%' }"></div>
       </div>
-      <div>
+      <!--<div>
         <p>Tid:  sekunder, Liv kvar: </p>
-      </div>
+      </div>-->
       
 
       <div class="answeralternatives" v-if="questionActive || seeAlternatives">
@@ -18,8 +18,6 @@
           v-bind:showCorrectAnswer="showCorrectAnswer"
           v-on:answer="submitAnswer($event)"/>
       </div>
-      <span>{{submittedAnswers}}</span>
-      Checked answer {{ checkedAnswer }}
     </div>
   </div>
 </template>
@@ -208,7 +206,7 @@ export default {
 
 #timerBar {
   height: 100%;
-  background-color: yellow;
+  background-color: #FF851B;
   transition: width 0.1s linear;
 }
 </style>

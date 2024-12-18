@@ -1,7 +1,7 @@
 <template>
     <div id="sliderBox">
         <div id="slider" @mousedown="pressedDown" @touchstart="pressedDown">
-            Slide to lock
+            <p>Slide to lock</p>
         </div>
     </div>
 </template>
@@ -115,11 +115,12 @@ export default {
 
 <style scoped>
 #sliderBox {
-    width: 80%;
+    width: 80vw;
     height: 5vh;
     margin: auto;
-    background-color: aqua;
+    background-color: #39A2DB;
     position: relative;
+    border-radius: 0.5em;
 }
 
 #slider {
@@ -128,5 +129,12 @@ export default {
     background-color: orange;
     position: absolute;
     left: 0; /* Startar vid vänsterkanten */
+    user-select: none;
+    border-radius: 0.5em;
+    display: flex;
+}
+#slider p {
+    margin: auto;
+    flex-direction: column;
 }
 </style>

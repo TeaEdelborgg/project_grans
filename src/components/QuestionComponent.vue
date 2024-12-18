@@ -1,12 +1,12 @@
 <template>
   <div class="playerview">
-    <p>{{question.q}}</p> <!-- ta bort sen i slutet -->
+    <!--<p>{{question.q}}</p>  ta bort sen i slutet -->
     <button class="answeralternative" 
       :class="{ 
         selected: a === selectedAnswer, 
         sended: a === selectedAnswer && sent, 
-        showCorrect: a === selectedAnswer && showCorrectAnswer && a === question.correct,
-        showIncorrect: a === selectedAnswer && showCorrectAnswer && a !== question.correct}" 
+        showCorrect: a === selectedAnswer && showCorrectAnswer && a === question.correct && answerChecked,
+        showIncorrect: a === selectedAnswer && showCorrectAnswer && a !== question.correct && answerChecked}" 
       v-for="a in question.a" 
       v-on:click="selectAnswer(a)" 
       v-bind:key="a">
@@ -37,6 +37,7 @@ export default {
     questionActive: Boolean,
     showCorrectAnswer: Boolean,
     checkedAnswer: Boolean,
+    answerChecked: Boolean,
   },
   data: function(){
     return{
@@ -107,8 +108,5 @@ export default {
   .submitbutton {
     width: 80vw;
   }
-  #slidercontainer{
-  background-color: greenyellow;
-}
 
 </style>
