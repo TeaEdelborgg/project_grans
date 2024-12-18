@@ -214,41 +214,55 @@ Data.prototype.getSubmittedAnswers = function(pollId) {
   return {}
 }
 
-Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){
+Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){ //dela upp funktionen, borde inte behöva skicka qId, finns redan
+  console.log("---------------------------------------------")
   if(this.pollExists(pollId)){
-    console.log("i data, tittar om svaret är rätt")
     const poll = this.polls[pollId];
-    const users = poll.participants;
+    console.log("inkommande userId: ",userId)
+    const user = poll.participants.find(user=> user.userId ==userId);
+    console.log("användare: ",user)
+    console.log("svar: ",user.information.answers)
     if(qId !=null){
-      for (const user of users){
+      if(user){
+        console.log("spelare: ",user.information.name)
+        console.log("question number: ",qId)
         if(user.information.answers[qId]==null){
-          user.information.answers.push(["-",0])
+            user.information.answers[qId]=["-",0]
+            console.log("användare utan svar: ", user.information.name," ", user.information.answers)
         }
-        console.log("svar: ",user.information.answers)
-        if(user.userId == userId){
+        if (user.information.correctedAnswers[qId]==null){
           if(user.information.answers[qId][0]==poll.questions[qId].a.correct){ //ta bort -1 sen, är bara för att de inte skickar randomOrder på första
-            //lägg till tiden för användaren
-            user.information.correctedAnswers.push(true)
-            user.information.time += user.information.answers[qId][1];
-            console.log("totala tiden: ",user.information.time)
-            console.log("corrected answers i checkuseranswer: ",user.information.correctedAnswers)
-            return true;
+              //lägg till tiden för användaren
+              user.information.correctedAnswers[qId] =true
+              user.information.time += user.information.answers[qId][1];
+              return true;
           }
           else{
             if(user.information.lives>0){
-              console.log('Kollar svaren: pollId ', pollId, 'qId ', qId, 'userId', userId);
-              user.information.lives--;
-              console.log(user.information.lives)
+                console.log('Kollar svaren: pollId ', pollId, 'qId ', qId, 'userId', userId);
+                user.information.lives--;
+                console.log(user.information.lives)
             }
-            user.information.correctedAnswers.push(false)
-            console.log("corrected answers i checkuseranswer: ",user.information.correctedAnswers)
-            return false;
+              user.information.correctedAnswers[qId] = false
+              console.log("corrected answers i checkuseranswer: ",user.information.correctedAnswers)
+              return false;
           }
-        }
+        }   
       }
     }
   }
   return null
+}
+Data.prototype.testCheckAnswers = function(pollId,qId=null){
+    console.log("i testCheckAnswers")
+    if(this.pollExists(pollId)){
+      const users = this.polls[pollId].participants
+      console.log("users: ",users)
+      for(let user of users){
+        console.log("i for loopen")
+        let ans = this.checkUserAnswer(pollId,qId,user.userId)
+      }
+    }
 }
 
 Data.prototype.submitAnswer = function(pollId, answer, userId, timeLeft) { // och ta emot userId, måste skicka svaret till individuell lista & ha med correctAnswer
@@ -258,7 +272,7 @@ Data.prototype.submitAnswer = function(pollId, answer, userId, timeLeft) { // oc
     for (const key in users) {
       const user = users[key]
       if (userId==user.userId) {
-        user.information.answers.push([answer, timeLeft])
+        user.information.answers[poll.currentQuestion]= [answer, timeLeft]
         console.log(user.information.answers, 'lyckades')
       }
     }
@@ -329,18 +343,33 @@ Data.prototype.createBoxes = function(pollId){
     console.log("money levlar: ",poll.moneyBoxes)
   }
 }
+Data.prototype.setAnswersFalse = function(pollId){
+  if(this.pollExists(pollId)){
+    const users = this.polls[pollId].participants
+    for(let user of users){
+      user.information.answers = new Array(this.amountOfQuestions(pollId)).fill(null)
+      console.log("setFalse: ", user.information.answers)
+    }
+  }
+}
 
 Data.prototype.updateColoredBoxes = function(pollId){
   if(this.pollExists(pollId)){
     const poll = this.polls[pollId]
     for(let player of poll.participants){
       if(player.information.in){
-        console.log("svar: ",player.information.answers)
-        console.log("corrected Answeres: ",player.information.correctedAnswers)
-        console.log("coloredBoxes: ",player.information.coloredBoxes)
+        console.log(player.information.name, " svar: ",player.information.answers)
+        console.log(player.information.name, " corrected Answeres: ",player.information.correctedAnswers)
+        console.log(player.information.name, " coloredBoxes: ",player.information.coloredBoxes)
+        
         let answers = player.information.correctedAnswers
-        for (let i=0;  i<Object.keys(answers).length;i++){
-          player.information.coloredBoxes[i]=true
+        
+        for (let i=0;  i<answers.length;i++){
+            player.information.coloredBoxes[i]=true
+          
+          /*else{
+            player.information.coloredBoxes[i]=false
+          }*/
         }
         console.log("uppdaterar coloredBoxes: ",player.userId, " ", player.information.coloredBoxes)
         if(player.information.lives==0){

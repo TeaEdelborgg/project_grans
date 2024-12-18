@@ -96,8 +96,6 @@ export default {
     socket.on('startCountdownResults', data =>{ 
       this.question=data.q;
       this.questionNumber=data.questionNumber
-      console.log("mottaget questionNumber: ", data.questionNumber)
-      //ha current Question?
       this.countdownResult();
     });
     socket.on('getStats', d => { //fixa den här, döp om, (typ loadStats)
@@ -131,7 +129,6 @@ export default {
       let timerAnswer = 10000;
       
       let interval = setInterval(() =>{
-        //behöver skicka tiden till komponenterna
         let elapsedTime = Date.now() - startTime;
         let timeLeftTest = timerDuration - elapsedTime;
 
@@ -144,10 +141,11 @@ export default {
           this.percentage = Math.floor(timeLeftTest / 100);
         } else {
           clearInterval(interval)
+          //emit för att alla ska skicka upp sina svar
+          socket.emit("testUserAnswers", {pollId:this.pollId,questionNumber:this.questionNumber}) //döp om
           setTimeout(()=>{
-            socket.emit("getAllAnswers", this.pollId)
-            //socket.emit("getAllAnswersTest", this.pollId)
-            this.questionActive=false, //här vill man även ändra färgen på alla pedestaler tillbaka till grå
+            socket.emit("getAllAnswers", this.pollId) //den ska både hämta svaren och skicka allas svar till sig själva
+            this.questionActive=false, 
             this.percentage =100
           },2000)
         }
@@ -173,7 +171,6 @@ export default {
   max-width: 10%;
   height:60%;
   margin:auto;
-  
 }
 #playersFrame{
   width:80%;
@@ -202,12 +199,11 @@ export default {
   top:20%
 }
 #moneyframe{
-  /*float: left;*/
   background-color: #39A2DB;
   height: 100%;
   width: 20%;
   display: flex;
-  justify-content: space-evenly; /* occupy the space evenly */
+  justify-content: space-evenly;
   flex-direction: column-reverse;
 }
 

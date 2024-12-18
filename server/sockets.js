@@ -45,6 +45,7 @@ function sockets(io, socket, data) {
   });
   socket.on('startPoll', function(pollId) {
     data.createBoxes(pollId)
+    data.setAnswersFalse(pollId)
     /*data.polls[pollId].started = true;*/
     io.to(pollId).emit('startPoll');
   })
@@ -61,8 +62,8 @@ function sockets(io, socket, data) {
     data.submitAnswer(d.pollId, d.answer, d.userId, d.time); // ta bort correctAnswer
     //skicka till resultat med pollId och userId
     io.to(d.pollId).emit('updatePedestalPlayer', d.userId)
-    io.to(d.pollId).emit('submittedAnswersUpdate', data.getSubmittedAnswers(d.pollId));
-    io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
+    //io.to(d.pollId).emit('submittedAnswersUpdate', data.getSubmittedAnswers(d.pollId));
+    io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId)); //borde kunna ta bort
   }); 
   socket.on('checkUserAnswer', function(d){
     console.log("i socket, ska titta om svaret är rätt")
@@ -70,9 +71,14 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('checkedUserAnswer', checkedUserAnswer);
     //io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   });
+  socket.on("testUserAnswers", function(d){
+    console.log("testUserAnswer i socket")
+    data.testCheckAnswers(d.pollId,d.questionNumber)
+  })
+
   socket.on('getAllAnswers', function(pollId){
     let participantsWithNewAnswersTest = data.updateColoredBoxes(pollId)
-    let levelBoxes = data.updateLevelBoxes(pollId) //den här!
+    let levelBoxes = data.updateLevelBoxes(pollId) 
     io.to(pollId).emit("sendAllAnswers", {participants:participantsWithNewAnswersTest,levelBoxes:levelBoxes})
   })
   socket.on('getTimer', function(pollId){

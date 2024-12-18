@@ -134,12 +134,12 @@ export default {
 
     runQuestion: function () {
       //socket.emit("startTime",{pollId:this.pollId, time:10})
-      socket.emit("startTimeBeforeQuestion",{pollId:this.pollId, time:3}) //alla ska starta deras egna, samtiidgt som vi har en på servern
+      //socket.emit("startTimeBeforeQuestion",{pollId:this.pollId, time:3}) //alla ska starta deras egna, samtiidgt som vi har en på servern
 
       //ny socket
       socket.emit('runCountdown', {pollId: this.pollId, questionNumber: this.questionNumber})
 
-      this.timerBeforeQUestion()
+      //this.timerBeforeQUestion()
       this.testCountdown()
       //här måste timer köras för 
     },

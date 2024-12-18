@@ -28,7 +28,7 @@ export default {
 #player{
   height: 100%;
   flex:1;
-  max-width: 95%;
+  max-width: 100%;
   margin-left: 5%;
   margin-right: 5%;
   display: flex;

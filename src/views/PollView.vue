@@ -114,7 +114,7 @@ export default {
       console.log('svaret skickas')
     },
     timeUp: function(){
-      socket.emit("checkUserAnswer", {pollId:this.pollId, questionNumber:this.questionNumber,userId:this.userId}) //den ska sedan vara när timern går ut
+      //socket.emit("checkUserAnswer", {pollId:this.pollId, questionNumber:this.questionNumber,userId:this.userId}) //verkar inte behöva den, fungerar avkommenterad
       console.log('timeUp körs')
     }, 
     countdownPlayer: function() {
