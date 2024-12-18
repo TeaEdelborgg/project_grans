@@ -1,6 +1,6 @@
 <template>
     <div id="sliderBox">
-        <div id="slider" @mousedown="pressedDown">
+        <div id="slider" @mousedown="pressedDown" @touchstart="pressedDown">
             Slide to lock
         </div>
     </div>
@@ -17,7 +17,8 @@ export default {
             minPosition: 0, // Minimal position för slidern
             leftPosition: 0, 
             rightPosition: 0,
-            sent:false 
+            sent:false ,
+            currentPlace:0,
         };
     },
     mounted() {
@@ -40,21 +41,35 @@ export default {
         pressedDown: function(e){
             if(!this.sent){
                 //console.log(e.clientX)
-                this.placePressed = e.clientX;
+                if(e.type=="touchstart"){
+                    e.preventDefault();
+                    this.placePressed = e.touches[0].clientX
+                }
+                else{
+                    this.placePressed = e.clientX;
+                }
                 this.pressed = true;
                 window.addEventListener("mousemove",this.move) //inte this.move() för då kallar den inte konstant
                 window.addEventListener("mouseup", this.mouseReleased)
+                window.addEventListener("touchmove",this.move)
+                window.addEventListener("touchend", this.mouseReleased)
             }
         },
         move: function(e){
+            let slider = document.getElementById("slider")
+            if(e.type =="touchmove"){
+                this.currentPlace = e.touches[0].clientX;
+            }
+            else{
+                this.currentPlace = e.clientX
+            }
             const sliderRect = slider.getBoundingClientRect();
             this.leftPosition = sliderRect.left;
             this.rightPosition = sliderRect.right;
             //console.log("gräns höger: ", this.rightPosition)
 
             if(this.pressed){
-                let slider = document.getElementById("slider")
-                let movedPlaced = e.clientX-this.placePressed
+                let movedPlaced = this.currentPlace-this.placePressed
                 if (movedPlaced < 0){
                     slider.style.left=0+'px';
                 }
@@ -62,7 +77,7 @@ export default {
                     slider.style.right = (this.maxPosition - (this.rightPosition-this.leftPosition))+'px';
                 }
                 else{
-                    slider.style.left = (e.clientX-this.placePressed)+'px'; //-this.placePressed då vi vill ha den i sliderBox och inte på hela sidan
+                    slider.style.left = (this.currentPlace-this.placePressed)+'px'; //-this.placePressed då vi vill ha den i sliderBox och inte på hela sidan
                 }    
             }
             else{
@@ -83,6 +98,8 @@ export default {
             }
             document.removeEventListener("mousemove",this.move)
             document.removeEventListener("mouseup", this.mouseReleased)
+            document.removeEventListener("touchmove",this.move)
+            document.removeEventListener("touchend", this.mouseReleased)
         },
         //gör funktion som skriver hej, ska köras när den släpps på 100%
         //slidern ska också då fastna på 100% och man kan inte längre flytta den

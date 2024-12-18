@@ -43,6 +43,11 @@ export default {
     mounted(){
         socket.emit('getScoreBoardUser', this.pollId) //byt ut till den andra
         console.log("skickar efter scoreBoard")
+        this.windowHeight = document.documentElement.clientHeight
+        this.windowWidth = document.documentElement.clientWidth;
+        const backgroundPlayer = document.getElementById('background');
+        backgroundPlayer.style.width=this.windowWidth +"px";
+        backgroundPlayer.style.height=this.windowHeight + "px";
     },
     methods:{
         //gör metod för att räkna ut platsen
