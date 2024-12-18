@@ -18,7 +18,7 @@
         "a": { "correct": "1477", "wrong": [ "1632", "1523", "1120" ] }}
         ],
         "answers": [],   
-        "currentQuestion": 0,
+        "currentQuestion": -1,
         "participants": [],
         "timer":{"timeLeft":10,"interval":null}, 
         "timerBeforeQuestion":{"timeLeft":3, "interval":null},    
@@ -35,7 +35,7 @@
         "a": { "correct": "Nej", "wrong": [ "Ja", "Kanske", "Tja" ] }}
         ],
         "answers": [],   
-        "currentQuestion": 0,
+        "currentQuestion": -1,
         "participants": []
     }
 }
