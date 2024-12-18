@@ -2,9 +2,9 @@
       <div class="playerpedestal" :style="{ '--pedestal-color': player.information.color }">
         {{player.information.name}} <br>
         <hr>
-        Lives left:{{ player.information.lives }} <br> <!--Byt ut mot hjärtan-->
-        Total time:{{ player.information.time }} <br>
-        <p v-if="answered==true">Answered</p>
+        {{uiLabels.livesLeft}}:{{ player.information.lives }} <br> <!--Byt ut mot hjärtan-->
+        {{uiLabels.timeTotal}}:{{ player.information.time }} <br>
+        <p v-if="answered==true">{{uiLabels.answered}}</p>
       </div>
 
     <!--<div v-if="questionActive==true">
@@ -24,7 +24,8 @@ export default {
   name: 'PlayerPedestal',
   props: {
     player: Object,
-    questionActive:Boolean
+    questionActive:Boolean,
+    uiLabels: Object
   },
   data: function(){
     return{

@@ -11,6 +11,10 @@
 	"createQuiz": "Create your own quiz",
 	"joinQuiz": "Join a quiz",
 	"makeQuiz": "Make your own questions",
-	"selectQuiz": "Use premade questions"
-
+	"selectQuiz": "Use premade questions",
+	"heading": "Who Wants to Be a Millionaire",
+	"livesLeft": "Lives left",
+	"timeTotal": "Total time",
+	"answered": "Answered",
+	"readyBeforeQuestion": "Get ready for the next question"
 }

@@ -2,7 +2,7 @@
     <div id="backgroundFrame"></div>
     <!-- Ha class med margin auto?-->
         <div id="questionFrame">
-            <h1 :style="{color:'white'}">Gör er redo inför nästa fråga</h1>
+            <h1 :style="{color:'white'}">{{uiLabels.readyBeforeQuestion}}</h1>
             <h2 :style="{color:'white'}">
               {{ timeLeft }}
             </h2>
@@ -16,7 +16,8 @@
       name: 'QuestionComponentResult',
       emits:['timeUp'],
       props: {
-        timeLeft:Number
+        timeLeft:Number,
+        uiLabels: Object
       },
       data: function(){
         return{

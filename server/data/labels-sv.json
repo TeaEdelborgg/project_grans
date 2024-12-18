@@ -11,5 +11,10 @@
 	"createQuiz": "Skapa din egna quiz",
 	"joinQuiz": "Gå med i en quiz",
 	"makeQuiz": "Skapa egna frågor",
-	"selectQuiz": "Använd färdiga frågor"
+	"selectQuiz": "Använd färdiga frågor",
+	"heading": "Vem Vill Bli En Miljonär",
+	"livesLeft": "Liv kvar",
+	"timeTotal": "Tid totalt",
+	"answered": "Svarat",
+	"readyBeforeQuestion": "Gör er redo inför nästa fråga"
 }

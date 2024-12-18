@@ -3,10 +3,10 @@
     <div> <!--Fixa lang saken, syns inte atm-->
       lang: {{ lang }}
     </div>
-    <h1 :style="{color:'white'}">Who Wants to Be an Millionaire</h1>
+    <h1 :style="{color:'white'}">{{ uiLabels.heading}}</h1>
     <!--<BarsComponent v-bind:labels="question.a" v-bind:data="submittedAnswers"/>-->
     <QuestionComponentResult v-if="questionActive" v-bind:progress="percentage" v-bind:question="question"  ></QuestionComponentResult> <!--Lägg till questionId senare-->
-    <BeforeQuestionComponent v-if="beforeQuestion" v-bind:timeLeft="timeLeftBeforeQuestion" ></BeforeQuestionComponent>
+    <BeforeQuestionComponent v-if="beforeQuestion" v-bind:uiLabels="uiLabels" v-bind:timeLeft="timeLeftBeforeQuestion" ></BeforeQuestionComponent>
       <div id="frame">
         <div id="moneyframe">
             <div id="switchout">
@@ -24,7 +24,7 @@
       </div>
     <br>
     <div id="pedestaler">
-          <PlayerPedestal v-if="participants.length>0" v-for="player in participants" :ref="'pedestal-'+player.userId" v-bind:player="player" v-bind:questionActive="questionActive":key="player.id" class="pedestal"/>
+          <PlayerPedestal v-if="participants.length>0" v-for="player in participants" :ref="'pedestal-'+player.userId" v-bind:uiLabels="uiLabels" v-bind:player="player" v-bind:questionActive="questionActive":key="player.id" class="pedestal"/>
     </div>
   </div>
 </template>
@@ -57,6 +57,7 @@ export default {
   },
   data: function () {
     return {
+      uiLabels: {},
       lang: localStorage.getItem("lang") || "en",
       pollId: "",
       //question: {q: " ", answers: []}, //ändra så att question bara är tomt
