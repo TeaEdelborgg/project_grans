@@ -24,7 +24,7 @@
       </div>
     <br>
     <div id="pedestaler">
-          <PlayerPedestal v-if="participants.length>0" v-for="player in participants" :ref="'pedestal-'+player.userId" v-bind:uiLabels="uiLabels" v-bind:player="player" v-bind:questionActive="questionActive":key="player.id" class="pedestal"/>
+          <PlayerPedestal v-if="participants.length>0" v-for="player in participants" v-bind:questionNumber="questionNumber" v-bind:uiLabels="uiLabels" v-bind:player="player" v-bind:questionActive="questionActive":key="player.id" class="pedestal"/>
     </div>
   </div>
 </template>
@@ -75,7 +75,8 @@ export default {
       amountOfQuestions:0,
       userId:'',
       moneyBoxes:[],
-      moneyValues:[]
+      moneyValues:[],
+      questionNumber:0
     }
   },
   created: function () {
@@ -90,32 +91,29 @@ export default {
     this.pollId = this.$route.params.id
     socket.on( "uiLabels", labels => this.uiLabels = labels );
 
-    socket.on( "participantsUpdate", p => {
+
+    socket.on( "participantsUpdate", p => { //den här uppdateras när man har svarat, sedan tittas i pedestalerna om antal svar= currentQuestion
       this.participants = p;
     })
 
     socket.on("sendAllAnswers", d=>{ //updateAfterQuestion
-      this.participants = d.participants
+      this.participants = d.participants //behövs inte om alla svar tittas på direkt när man svarat och skickas tillbaka, eller skickar 
+      //participant update när svaren har rättats
       this.moneyBoxes = d.levelBoxes
     })
-
-    socket.on('updatePedestalPlayer', user=>{
-      this.$nextTick(()=>{
-        const Player = this.$refs['pedestal-'+user][0]
-        if(Player){
-          Player.updateColor(true)
-        }
-      })
-    })
-
-    socket.on('startCountdownResults', question =>{ 
-      this.question=question;
+ 
+    socket.on('startCountdownResults', data =>{ 
+      this.question=data.q;
+      this.questionNumber=data.questionNumber
+      console.log("mottaget questionNumber: ", data.questionNumber)
+      //ha current Question?
       this.countdownResult();
     });
-    socket.on('sendAmountQuestions', d => { //fixa den här, döp om 
+    socket.on('getStats', d => { //fixa den här, döp om, (typ loadStats)
       this.amountOfQuestions=d.amountOfQuestions
       this.moneyValues = d.levelValues
       this.moneyBoxes = d.levelColors
+      this.participants= d.participants
     })
 
     socket.on('gameFinished', ()=>

@@ -4,17 +4,8 @@
         <hr>
         {{uiLabels.livesLeft}}:{{ player.information.lives }} <br> <!--Byt ut mot hjärtan-->
         {{uiLabels.timeTotal}}:{{ player.information.time }} <br>
-        <p v-if="answered==true">{{uiLabels.answered}}</p>
+        <p v-if="player.information.answers.length==questionNumber+1 && questionActive">{{uiLabels.answered}}</p> 
       </div>
-
-    <!--<div v-if="questionActive==true">
-      <div class="playerpedestal" :style="{'--pedestal-color': playColor}">
-      {{player.information.name}} <br>
-      {{ player.information.lives }} <br>
-      {{ player.information.time }} <br>
-    </div>
-    </div>-->
-    
 </template>
 
 <script>
@@ -25,6 +16,7 @@ export default {
   props: {
     player: Object,
     questionActive:Boolean,
+    questionNumber:Number,
     uiLabels: Object
   },
   data: function(){
@@ -34,28 +26,6 @@ export default {
       answered:false,
     }
   },
-  //emits: ["answer"],
-  methods: {
-    updateColor: function(val){
-      console.log("uppdaterar färg")
-      if(val){
-        this.playColor='yellow'
-        this.answered=true;
-      }
-      else{
-        this.playColor='gray'
-      }
-    }
-    //från player ska vi kalla på en funktion i resultat som sedan kallar på en funktion i data som tittar om svaren är korrekt.
-  },
-  watch:{
-    questionActive(){ //kan möjligtvis göra det till en funktion istället, men måste hitta ett bra sätt att kalla på 
-      //this.playColor=player.information.color
-      this.answered=false
-    }
-  }
-
-  //ha watch för när värdet på answered är sann
 }
 </script>
 

@@ -62,7 +62,7 @@ function sockets(io, socket, data) {
     //skicka till resultat med pollId och userId
     io.to(d.pollId).emit('updatePedestalPlayer', d.userId)
     io.to(d.pollId).emit('submittedAnswersUpdate', data.getSubmittedAnswers(d.pollId));
-    io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId)); //verkar inte behövas, Tea (2024-12-15)
+    io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   }); 
   socket.on('checkUserAnswer', function(d){
     console.log("i socket, ska titta om svaret är rätt")
@@ -101,7 +101,7 @@ function sockets(io, socket, data) {
   socket.on('runCountdown', function(d){
     let randomOrder = data.getQuestionAnswerRandom(d.pollId, d.questionNumber);
     io.to(d.pollId).emit('startCountdownPlayer', {q:randomOrder, questionNumber:d.questionNumber});
-    io.to(d.pollId).emit('startCountdownResults',randomOrder.q);
+    io.to(d.pollId).emit('startCountdownResults',{q:randomOrder.q,questionNumber:d.questionNumber});
   })
 
   socket.on('updateResult', function(pollId){
@@ -118,8 +118,9 @@ function sockets(io, socket, data) {
     const amountOfQuestions = data.amountOfQuestions(pollId);
     const levelValues = data.getLevelValues(pollId)
     const levelColors = data.updateLevelBoxes(pollId)
+    const participants = data.getParticipants(pollId)
     console.log("försöker skicka levelCOlor")
-    io.to(pollId).emit('sendAmountQuestions', {amountOfQuestions:amountOfQuestions, levelValues:levelValues, levelColors:levelColors}) //skicka som object
+    io.to(pollId).emit('getStats', {amountOfQuestions:amountOfQuestions, levelValues:levelValues, levelColors:levelColors, participants:participants}) //skicka som object
   });
   socket.on('getStartColors', function(pollId){
     const levelBoxes = data.updateLevelBoxes(pollId)
