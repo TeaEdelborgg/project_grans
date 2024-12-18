@@ -17,9 +17,6 @@
                 borderStyle:"dashed", //lägg direkt i style
             }
         },
-        created(){
-            console.log("boxState: ",this.boxState," value: ",this.value)
-        },
         methods:{
             getBackgroundColor: function(){
                 if(this.boxState=="done"){
@@ -42,32 +39,17 @@
                 }
                 return "dashed"
             },
-            /*updateColor: function(col){
-                //om done, gul, om next, ljusare gul, om future, grå
-                console.log("uppdaterar box: ",col)
-                if(col=="done"){
-                    //backgroundCol.style.backgroundColor = "yellow"
-                    //this.boxColor=this.BoxColor
-                    console.log("yellow")
-                    this.moneyColor="#FF851B"
-                    this.borderStyle='solid'
-                }
-                else if(col == "next"){
-                    this.moneyColor="#FFAD66"
-                    this.borderColor='black'
-                }
-                /*else{
-                    //backgroundCol.style.backgroundColor = "red"
-                    this.boxColor="red"
-                }
-            },
-            updateValue: function(val){
-                console.log("uppdaterar värde: ",val)
-                this.value=val
-            }*/
         }
 }
 </script>
 <style scoped>
-
+.moneybox{
+  flex: 1; 
+  width: 100%;
+  margin:5px 0;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  border-radius:10px
+}
 </style>

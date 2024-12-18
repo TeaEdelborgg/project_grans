@@ -15,7 +15,6 @@
                 </div>
             </div>
         </div>
-
         <div id="players">
           <div class="contain">
             <Player v-if="participants.length>0"  v-for="player in participants" v-bind:player="player" v-bind:amountOfQuestions="amountOfQuestions":key="player.id" id="player"/>
@@ -61,7 +60,6 @@ export default {
       uiLabels: {},
       lang: localStorage.getItem("lang") || "en",
       pollId: "",
-      //question: {q: " ", answers: []}, //ändra så att question bara är tomt
       question:"",
       submittedAnswers: {},
       participants: [],
@@ -196,9 +194,6 @@ export default {
 #player{
   flex:1;
   max-width: 95%;
-  /*background-color: white;*/
-  /*height: 95%;*/
-  /*margin:5px;*/
 }
 .contain{
   width: 100%;
@@ -250,14 +245,6 @@ export default {
   width: 20%;
   margin:auto;
   flex-grow: 1;
-  /*float: left;
-  background-color: purple;
-  height: 400px;
-  width: 20%;
-  margin: auto;
-  display: flex; /* make the container a flexbox */
-  /*flex-direction: column; /* some it goes vertically, same logic the other way */
-  /*flex-wrap: wrap; /* allow child elements to wrap to the next line */
   justify-content: space-evenly; /* occupy the space evenly */
   align-content: center;
   overflow: hidden; /* prevent overflowing from container*/
@@ -269,18 +256,8 @@ export default {
   margin:auto;
   display: flex;
   justify-content: space-evenly;
-  /*background-color: white;*/
 }
-.moneybox{
-  flex: 1; 
-  width: 100%;
-  margin:5px 0;
-  background-color: gray;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  border-radius:10px
-}
+
 #containerBoxTest{
   width: 100%;
   display: flex;
@@ -289,18 +266,5 @@ export default {
   height: 100%;
   margin:auto
 }
-#boxesTest{
-  width:100%;
-  
-  height:300px;
-  margin: auto;
-  /*width:100%;
-  height: auto; /* so the height adjust accordingly, same the other way */
-  /*max-height: 400px;
-  background-color: black;
-  margin: auto;
-  flex-grow: 1; /* allow element to grow and fill the remaining space in parent container */
-}
-
 
 </style>
