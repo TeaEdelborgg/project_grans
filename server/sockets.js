@@ -73,7 +73,7 @@ function sockets(io, socket, data) {
   socket.on('getAllAnswers', function(pollId){
     let participantsWithNewAnswersTest = data.updateColoredBoxes(pollId)
     let levelBoxes = data.updateLevelBoxes(pollId) //den här!
-    io.to(pollId).emit("sendAllAnswers", [participantsWithNewAnswersTest,levelBoxes])
+    io.to(pollId).emit("sendAllAnswers", {participants:participantsWithNewAnswersTest,levelBoxes:levelBoxes})
   })
   socket.on('getTimer', function(pollId){
     let time = data.getTime(pollId)
@@ -115,9 +115,11 @@ function sockets(io, socket, data) {
   });*/
 
   socket.on('getAmountQuestions', function(pollId) {
-    const amountOfQuestion = data.amountOfQuestions(pollId);
+    const amountOfQuestions = data.amountOfQuestions(pollId);
     const levelValues = data.getLevelValues(pollId)
-    io.to(pollId).emit('sendAmountQuestions', [amountOfQuestion, levelValues])
+    const levelColors = data.updateLevelBoxes(pollId)
+    console.log("försöker skicka levelCOlor")
+    io.to(pollId).emit('sendAmountQuestions', {amountOfQuestions:amountOfQuestions, levelValues:levelValues, levelColors:levelColors}) //skicka som object
   });
   socket.on('getStartColors', function(pollId){
     const levelBoxes = data.updateLevelBoxes(pollId)

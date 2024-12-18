@@ -88,7 +88,7 @@ export default {
             let slider = document.getElementById("slider")
             this.pressed = false;
             console.log("mouse släppt")
-            
+            //fick massa fel när jag hade removeeventlistener här, och frågetecknen
             if (this.rightPosition >= this.maxPosition) {
                 slider.style.right = (this.maxPosition - (this.rightPosition-this.leftPosition))+'px';
                 this.sent = true;

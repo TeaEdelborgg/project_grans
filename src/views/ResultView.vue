@@ -11,14 +11,14 @@
         <div id="moneyframe">
             <div id="switchout">
                 <div id="containerBoxTest">
-                  <Moneybox v-for="level in amountOfQuestions" :ref="'level-'+level" :id="level"/>
+                  <Moneybox v-for="index in amountOfQuestions" v-bind:boxState="moneyBoxes[index-1]" v-bind:value="moneyValues[index-1]" :id="index"/>
                 </div>
             </div>
         </div>
 
         <div id="players">
           <div class="contain">
-            <Player v-if="participants.length>0"  v-for="player in participants" :ref="player.userId" v-bind:player="player" v-bind:amountOfQuestions="amountOfQuestions":key="player.id" id="player"/>
+            <Player v-if="participants.length>0"  v-for="player in participants" v-bind:player="player" v-bind:amountOfQuestions="amountOfQuestions":key="player.id" id="player"/>
           </div>
         </div>
       </div>
@@ -42,6 +42,7 @@ import io from 'socket.io-client';
 import QuestionComponentResult from '@/components/QuestionComponentResult.vue';
 import BeforeQuestionComponent from '@/components/BeforeQuestionComponent.vue';
 import Moneybox from '@/components/Moneybox.vue';
+import { nextTick } from 'vue';
 //const socket = io("localhost:3000");
 const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
 
@@ -73,9 +74,19 @@ export default {
       percentage:100,
       amountOfQuestions:0,
       userId:'',
+      moneyBoxes:[],
+      moneyValues:[]
     }
   },
   created: function () {
+    //inga refs, skicka istället all data till komponenterna så får beräkningarna göras där
+    //gör v-if när man bindar data
+    //dra ner på sockets så gott det går
+    //se till att alla inte frågar requests osv
+    //rensa onödiga variabler
+    //döp om + gör det tydligt, 
+    //fixa vart css ligger + ta bort onödiga rader
+    
     this.pollId = this.$route.params.id
     socket.on( "uiLabels", labels => this.uiLabels = labels );
 
@@ -83,24 +94,9 @@ export default {
       this.participants = p;
     })
 
-    socket.on("sendAllAnswers", p=>{ //ändra till d
-      this.participants = p[0]
-      let moneyBox = p[1]
-      this.$nextTick(()=>{
-        this.participants.forEach(play=>{
-          const playerArray = this.$refs[play.userId]
-          const player = playerArray?.[0]
-          if(player){
-            player.updatesBoxes()
-          }
-        })
-        for(let i=0; i<Object.keys(moneyBox).length;i++){ //gör till en funktion
-          const box = this.$refs[`level-${i+1}`][0]
-          if(box){
-            box.updateColor(moneyBox[i])
-          }
-        }
-      })
+    socket.on("sendAllAnswers", d=>{ //updateAfterQuestion
+      this.participants = d.participants
+      this.moneyBoxes = d.levelBoxes
     })
 
     socket.on('updatePedestalPlayer', user=>{
@@ -116,46 +112,22 @@ export default {
       this.question=question;
       this.countdownResult();
     });
-    socket.on('sendAmountQuestions', value => { //fixa den här
-      this.amountOfQuestions=value[0]
-      let moneyLevels = value[1]
-      this.$nextTick(()=>{
-        for (let i =0; i<Object.keys(moneyLevels).length;i++){
-        
-        console.log("Alla refs:", this.$refs);
-        console.log("Försöker hitta:", `level-${i+1}`);
-        console.log("Hittad ref:", this.$refs[`level-${i+1}`]);
-        const box = this.$refs[`level-${i+1}`][0]
-        if(box){
-          box.updateValue(moneyLevels[i])
-        }
-      }
-      })
-      console.log("antal frågor: ",value)
+    socket.on('sendAmountQuestions', d => { //fixa den här, döp om 
+      this.amountOfQuestions=d.amountOfQuestions
+      this.moneyValues = d.levelValues
+      this.moneyBoxes = d.levelColors
     })
 
-    socket.on('sendStartColors', moneyBox=>{ //få ihop till en ny funktion
-      for(let i=0; i<Object.keys(moneyBox).length;i++){ //gör till en funktion
-          const box = this.$refs[`level-${i+1}`][0]
-          if(box){
-            box.updateColor(moneyBox[i])
-          }
-        }
-    })
     socket.on('gameFinished', ()=>
       this.$router.push('/finalResult/'+this.pollId)
     )
-    
 
     socket.emit( "getUILabels", this.lang );
     socket.emit( "joinPoll", this.pollId );
-    socket.emit("updateResult", this.pollId);
-    
+    socket.emit('getAmountQuestions', this.pollId);
 
   },
   mounted (){
-    socket.emit('getAmountQuestions', this.pollId);
-    socket.emit('getStartColors', this.pollId)
 
     this.windowHeight = document.documentElement.clientHeight
     this.windowWidth = document.documentElement.clientWidth;

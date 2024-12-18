@@ -1,8 +1,7 @@
 <template>
   <div id="boxes">
     <div id="containerBox">
-      <Levelbox v-for="n in amountOfQuestions" :ref="'box-'+n" v-bind:BoxColor="color" v-bind:BorderColor="color":id="n"></Levelbox>
-      <!--namn: {{player.information.name}} svar: {{ player.information.answers }} corrected Answers: {{ player.information.correctedAnswers }}-->
+      <Levelbox v-for="n in amountOfQuestions" :ref="'box-'+n" v-bind:boxColor="player.information.color" v-bind:borderColorChange="player.information.coloredBoxes[n-1]" v-bind:borderColor="color":id="n"></Levelbox>
     </div>
   </div>
 </template>
@@ -24,28 +23,7 @@ export default {
       color:"gray",
     }
   },
-  mounted(){
-    this.color=this.player.information.color
-    console.log("färg i watch: ",this.color)
-  },
-  /*watch:{
-    amountOfQuestions(){
-      for (let n=0; n< this.amountOfQuestions; n++){
-        this.coloredBoxes.push(false)
-      }
-    }
-  },*/
-  //emits: ["answer"],
-  methods: {
-    updatesBoxes(){
-      for(let i=0; i<Object.keys(this.player.information.coloredBoxes).length;i++){
-        const box = this.$refs[`box-${i+1}`][0]
-        if(box){
-          box.updateColor(this.player.information.coloredBoxes[i])
-        }
-      }
-    }
-  }  //från player ska vi kalla på en funktion i resultat som sedan kallar på en funktion i data som tittar om svaren är korrekt.
+  
 }
 </script>
 <style>
@@ -77,6 +55,5 @@ export default {
   display: flex;
   border-radius:10px;
   border-style:dashed;
-  /*border-color:#FF851B;*/
 }
 </style>
