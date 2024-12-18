@@ -44,12 +44,14 @@
 </script>
 <style scoped>
 .moneybox{
-  flex: 1; 
-  width: 100%;
-  margin:5px 0;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  border-radius:10px
+    flex:1;
+    width: 80%;
+    margin: auto;
+    margin-top:5%;
+    margin-bottom: 5%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-radius:10px ;
 }
 </style>

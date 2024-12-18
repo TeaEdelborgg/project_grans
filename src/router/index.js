@@ -58,7 +58,7 @@ const router = createRouter({
       path:'/finalResultPlayer/:id/:userId',
       name:'FinalResultPlayerView',
       component: () => import('../views/FinalResultPlayer.vue')
-    } 
+    }
 
   ]
 })

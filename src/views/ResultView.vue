@@ -4,26 +4,19 @@
       lang: {{ lang }}
     </div>
     <h1 :style="{color:'white'}">{{ uiLabels.heading}}</h1>
-    <!--<BarsComponent v-bind:labels="question.a" v-bind:data="submittedAnswers"/>-->
-    <QuestionComponentResult v-if="questionActive" v-bind:progress="percentage" v-bind:question="question"  ></QuestionComponentResult> <!--Lägg till questionId senare-->
     <BeforeQuestionComponent v-if="beforeQuestion" v-bind:uiLabels="uiLabels" v-bind:timeLeft="timeLeftBeforeQuestion" ></BeforeQuestionComponent>
+    <QuestionComponentResult v-if="questionActive" v-bind:progress="percentage" v-bind:question="question"  ></QuestionComponentResult> <!--Lägg till questionId senare-->
       <div id="frame">
         <div id="moneyframe">
-            <div id="switchout">
-                <div id="containerBoxTest">
-                  <Moneybox v-for="index in amountOfQuestions" v-bind:boxState="moneyBoxes[index-1]" v-bind:value="moneyValues[index-1]" :id="index"/>
-                </div>
-            </div>
+          <Moneybox v-for="index in amountOfQuestions" v-bind:boxState="moneyBoxes[index-1]" v-bind:value="moneyValues[index-1]" :id="index"/>
         </div>
-        <div id="players">
-          <div class="contain">
-            <Player v-if="participants.length>0"  v-for="player in participants" v-bind:player="player" v-bind:amountOfQuestions="amountOfQuestions":key="player.id" id="player"/>
-          </div>
+        <div id="playersFrame">
+          <Player v-if="participants.length>0"  v-for="player in participants" v-bind:player="player" v-bind:amountOfQuestions="amountOfQuestions":key="player.id" />
         </div>
       </div>
     <br>
     <div id="pedestaler">
-          <PlayerPedestal v-if="participants.length>0" v-for="player in participants" v-bind:questionNumber="questionNumber" v-bind:uiLabels="uiLabels" v-bind:player="player" v-bind:questionActive="questionActive":key="player.id" class="pedestal"/>
+      <PlayerPedestal v-if="participants.length>0" v-for="player in participants" v-bind:questionNumber="questionNumber" v-bind:uiLabels="uiLabels" v-bind:player="player" v-bind:questionActive="questionActive":key="player.id" class="pedestal"/>
     </div>
   </div>
 </template>
@@ -124,7 +117,6 @@ export default {
 
   },
   mounted (){
-
     this.windowHeight = document.documentElement.clientHeight
     this.windowWidth = document.documentElement.clientWidth;
     const backgroundResult = document.getElementById('background');
@@ -183,7 +175,7 @@ export default {
   margin:auto;
   
 }
-#players{
+#playersFrame{
   width:80%;
   display: flex;
   justify-content: space-evenly;
@@ -191,44 +183,13 @@ export default {
   background-color: #4b6ab8;
   margin: auto;
 }
-#player{
-  flex:1;
-  max-width: 95%;
-}
-.contain{
-  width: 100%;
-  height:90%;
-  display: flex;
-  margin:auto;
-}
+
 #background{
   background-color: #001F3F;
   position: fixed;
   z-index: 1;
   display:flex;
   flex-direction:column;
-}
-#questionFrame{ 
-    height: 75%;
-    width: 100%;
-    margin:auto;
-    background-color: #001F3F;
-    z-index: 3;
-    position: absolute;
-
-}
-#backgroundFrame{
-    height: 75%;
-    width: 100%;
-    opacity: 0.5;
-    position: absolute;
-    z-index: 2;
-    background-color: black;
-}
-#windowContainer{
-    height: 100%;
-    width: 100%;
-    position: relative;
 }
 #frame{
   height:55%; /*osäker på hur stor den ska va*/
@@ -237,34 +198,16 @@ export default {
   border-style:solid;
   border-color:#FF851B;
   border-width:5px;
+  display:flex
 }
 #moneyframe{
-  float: left;
+  /*float: left;*/
   background-color: #39A2DB;
   height: 100%;
   width: 20%;
-  margin:auto;
-  flex-grow: 1;
+  display: flex;
   justify-content: space-evenly; /* occupy the space evenly */
-  align-content: center;
-  overflow: hidden; /* prevent overflowing from container*/
-}
-
-#switchout{
-  width:70%;
-  height:90%;
-  margin:auto;
-  display: flex;
-  justify-content: space-evenly;
-}
-
-#containerBoxTest{
-  width: 100%;
-  display: flex;
   flex-direction: column-reverse;
-  justify-content: space-evenly;
-  height: 100%;
-  margin:auto
 }
 
 </style>

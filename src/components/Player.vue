@@ -1,8 +1,6 @@
 <template>
-  <div id="boxes">
-    <div id="containerBox">
-      <Levelbox v-for="n in amountOfQuestions" v-bind:boxColor="player.information.color" v-bind:boxColorChange="player.information.coloredBoxes[n-1]" :id="n"></Levelbox>
-    </div>
+  <div id="player">
+    <Levelbox v-for="n in amountOfQuestions" v-bind:boxColor="player.information.color" v-bind:boxColorChange="player.information.coloredBoxes[n-1]" :id="n"></Levelbox>
   </div>
 </template>
 
@@ -27,20 +25,15 @@ export default {
 }
 </script>
 <style>
-#containerBox{
-  width: 100%;
+#player{
+  height: 100%;
+  flex:1;
+  max-width: 95%;
+  margin-left: 5%;
+  margin-right: 5%;
   display: flex;
   flex-direction: column-reverse;
   justify-content: space-evenly;
-  height: 100%;
-  margin:auto
-}
-#boxes{
-  width:100%;
-  display: flex;
-  justify-content: space-evenly;
-  height:100%;
-  margin: auto;
 }
 
 </style>
