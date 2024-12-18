@@ -32,7 +32,6 @@ export default {
         return {
             uiLabels: {},
             pollId:"",
-            scoreBoard:[],
             winner:"",
             losers:[],
             answeresSentIn:false
@@ -43,11 +42,8 @@ export default {
 
         //this.pollId = this.$route.params.id;
         socket.on("sendScoreBoard", val=>{
-            this.scoreBoard=val
             this.winner = val[0]
-            console.log(this.winner)
-            this.losers = val.slice(1,this.scoreBoard.length)
-            console.log(this.losers)
+            this.losers = val.slice(1,val.length)
             this.answeresSentIn=true
         })
         socket.on( "uiLabels", labels => this.uiLabels = labels );
@@ -78,7 +74,6 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     flex-grow: 1;
-
 }
 #homeButtom{
     width: 100%;

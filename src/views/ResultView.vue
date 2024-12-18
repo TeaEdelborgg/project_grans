@@ -198,7 +198,8 @@ export default {
   border-style:solid;
   border-color:#FF851B;
   border-width:5px;
-  display:flex
+  display:flex;
+  top:20%
 }
 #moneyframe{
   /*float: left;*/

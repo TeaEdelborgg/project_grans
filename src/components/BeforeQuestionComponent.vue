@@ -6,7 +6,6 @@
             <h2 :style="{color:'white'}">
               {{ timeLeft }}
             </h2>
-            
             <img src="/img/test.png" style="width:100px">
         </div>
 </template>
@@ -23,15 +22,25 @@
         return{
           }
       },
-      methods: {
-        
-    
-      },
-      mounted (){
-        /*if(this.$props.beforeQuestion){
-            this.timerBeforeQUestion();
-        }*/
-        //jag vill att när v-show blir sann så ska jag här göra att funktionen för tiden körs
-    },
     }
 </script>
+<style>
+#backgroundFrame{
+  position:absolute;
+  opacity: 0.5;
+  background-color: black;
+  z-index: 10;
+  height:75%;
+  width: 100%;
+}
+#questionFrame{
+  width: 85%;
+  height: 65%;
+  margin: auto;
+  left:50%;
+  top:40%;
+  transform: translate(-50%,-50%);
+  z-index: 11;
+  background-color: #001F3F;
+  position: absolute;
+}</style>
