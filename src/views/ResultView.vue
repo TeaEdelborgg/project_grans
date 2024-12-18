@@ -10,16 +10,13 @@
       <div id="frame">
         <div id="moneyframe">
             <div id="switchout">
-              <!--<div id="boxesTest">-->
                 <div id="containerBoxTest">
                   <Moneybox v-for="level in amountOfQuestions" :ref="'level-'+level" :id="level"/>
                 </div>
-              <!--</div>-->
             </div>
         </div>
 
         <div id="players">
-        <!-- Lägg in componenter för varje steg för priset -->
           <div class="contain">
             <Player v-if="participants.length>0"  v-for="player in participants" :ref="player.userId" v-bind:player="player" v-bind:amountOfQuestions="amountOfQuestions":key="player.id" id="player"/>
           </div>
@@ -29,7 +26,6 @@
     <div id="pedestaler">
           <PlayerPedestal v-if="participants.length>0" v-for="player in participants" :ref="'pedestal-'+player.userId" v-bind:player="player" v-bind:questionActive="questionActive":key="player.id" class="pedestal"/>
     </div>
-    
   </div>
 </template>
 
@@ -46,7 +42,8 @@ import io from 'socket.io-client';
 import QuestionComponentResult from '@/components/QuestionComponentResult.vue';
 import BeforeQuestionComponent from '@/components/BeforeQuestionComponent.vue';
 import Moneybox from '@/components/Moneybox.vue';
-const socket = io("localhost:3000");
+//const socket = io("localhost:3000");
+const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
 
 export default {
   name: 'ResultView',
@@ -80,11 +77,11 @@ export default {
   created: function () {
     this.pollId = this.$route.params.id
     socket.on( "uiLabels", labels => this.uiLabels = labels );
-    //socket.on("submittedAnswersUpdate", update => this.submittedAnswers = update);
-   //behlver inte tror jag socket.on("questionUpdateResult", update => this.question = update );
+
     socket.on( "participantsUpdate", p => {
       this.participants = p;
     })
+
     socket.on("sendAllAnswers", p=>{ //ändra till d
       this.participants = p[0]
       let moneyBox = p[1]
@@ -104,6 +101,7 @@ export default {
         }
       })
     })
+
     socket.on('updatePedestalPlayer', user=>{
       this.$nextTick(()=>{
         const Player = this.$refs['pedestal-'+user][0]
@@ -194,9 +192,6 @@ export default {
         }
       }, 100);  
     },
-    
-
-
   }
 }
 </script>
