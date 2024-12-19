@@ -4,8 +4,7 @@
       lang: {{ lang }}
     </div>
     <h1 :style="{color:'white'}">{{ uiLabels.heading}}</h1>
-    <BeforeQuestionComponent v-if="beforeQuestion" v-bind:uiLabels="uiLabels" v-bind:timeLeft="timeLeftBeforeQuestion" ></BeforeQuestionComponent>
-    <QuestionComponentResult v-if="questionActive" v-bind:progress="percentage" v-bind:question="question"  ></QuestionComponentResult> <!--Lägg till questionId senare-->
+    <QuestionComponentResult v-if="questionActive" v-bind:uiLabels="uiLabels" v-bind:question="question" v-on:countDownOver="countDownOver" ></QuestionComponentResult> <!--Lägg till questionId senare-->
       <div id="frame">
         <div id="moneyframe">
           <Moneybox v-for="index in amountOfQuestions" v-bind:boxState="moneyBoxes[index-1]" v-bind:value="moneyValues[index-1]" :id="index"/>
@@ -32,9 +31,7 @@ import Player from '@/components/Player.vue';
 import PlayerPedestal from '@/components/PlayerPedestal.vue';
 import io from 'socket.io-client';
 import QuestionComponentResult from '@/components/QuestionComponentResult.vue';
-import BeforeQuestionComponent from '@/components/BeforeQuestionComponent.vue';
 import Moneybox from '@/components/Moneybox.vue';
-import { nextTick } from 'vue';
 //const socket = io("localhost:3000");
 const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
 
@@ -45,7 +42,6 @@ export default {
     Player,
     PlayerPedestal,
     QuestionComponentResult,
-    BeforeQuestionComponent,
     Moneybox
   },
   data: function () {
@@ -96,7 +92,7 @@ export default {
     socket.on('startCountdownResults', data =>{ 
       this.question=data.q;
       this.questionNumber=data.questionNumber
-      this.countdownResult();
+      this.questionActive=true
     });
     socket.on('getStats', d => { //fixa den här, döp om, (typ loadStats)
       this.amountOfQuestions=d.amountOfQuestions
@@ -122,35 +118,13 @@ export default {
     backgroundResult.style.height=this.windowHeight + "px";
   },
   methods:{
-    countdownResult: function(){
-      let startTime = Date.now();
-
-      let timerDuration = 13000;
-      let timerAnswer = 10000;
-      
-      let interval = setInterval(() =>{
-        let elapsedTime = Date.now() - startTime;
-        let timeLeftTest = timerDuration - elapsedTime;
-
-        if (timeLeftTest > timerAnswer) {
-          this.beforeQuestion = true
-          this.timeLeftBeforeQuestion = Math.floor((3000 - elapsedTime)/1000);
-        } else if (timeLeftTest > 0) {
-          this.beforeQuestion = false
-          this.questionActive = true;
-          this.percentage = Math.floor(timeLeftTest / 100);
-        } else {
-          clearInterval(interval)
-          //emit för att alla ska skicka upp sina svar
-          socket.emit("testUserAnswers", {pollId:this.pollId,questionNumber:this.questionNumber}) //döp om
+    countDownOver: function(){
+      socket.emit("testUserAnswers", {pollId:this.pollId,questionNumber:this.questionNumber}) //döp om
           setTimeout(()=>{
             socket.emit("getAllAnswers", this.pollId) //den ska både hämta svaren och skicka allas svar till sig själva
-            this.questionActive=false, 
-            this.percentage =100
+            this.questionActive=false 
           },2000)
-        }
-      }, 100);  
-    },
+    }
   }
 }
 </script>

@@ -1,26 +1,66 @@
 <template>
-    <div id="backgroundFrame"></div>
-    <!-- Ha class med margin auto?-->
-        <div id="questionFrame">
+    <div id="backgroundFrame"></div> 
+    <!-- denna visas bara om countdown är aktiv-->
+        <div id="questionFrame"> <!--container?-->
+          <div v-if="questionActive">
             <div id="progressbar">
-                <div id="progress" :style="{width:progress+'%'}"></div>
+                <div id="progress" :style="{width:percentage+'%'}"></div>
             </div>
-            <h1 :style="{color:'white'}">{{question}}</h1>
+            <h1>{{question}}</h1>
+          </div>
+          <div v-if="!questionActive">
+            <h1>{{uiLabels.readyBeforeQuestion}}</h1> <!--alla color borde kunna finnas under questionframe-->
+            <h2>
+              {{ timeLeftBeforeQuestion }}
+            </h2>
+          </div>
+          <!--v-if inte aktiv-->
         </div>
 </template>
     
 <script>
     export default {
       name: 'QuestionComponentResult',
-      emits:['timeUp'],
+      emits:['countDownOver'],
       props: {
         question: String,
-        progress: Number,
+        uiLabels: Object
       },
       data: function(){
         return{
+          questionActive:false,
+          timeLeftBeforeQuestion:0,
+          percentage:100,
           }
       },
+      mounted(){
+        this.countdownResult()
+      },
+      methods:{
+        //ha countdown här, när den är färdig skickas metod till vanliga som skickar socket.emit + gör denna osynlig
+        countdownResult: function(){
+          let startTime = Date.now();
+
+          let timerDuration = 13000;
+          let timerAnswer = 10000;
+          
+          let interval = setInterval(() =>{
+            let elapsedTime = Date.now() - startTime;
+            let timeLeftTest = timerDuration - elapsedTime;
+
+            if (timeLeftTest > timerAnswer) {
+              this.timeLeftBeforeQuestion = Math.floor((3000 - elapsedTime)/1000);
+            } else if (timeLeftTest > 0) {
+              this.questionActive = true;
+              this.percentage = Math.floor(timeLeftTest / 100);
+            } else {
+              clearInterval(interval)
+              //skicka till resultatview att köra funktionen
+              this.$emit("countDownOver")
+            }
+          }, 100);  
+        },
+      }
     }
 </script>
 <style>
@@ -42,6 +82,9 @@
   z-index: 11;
   background-color: #001F3F;
   position: absolute;
+}
+#questionFrame h1,h2{
+  color:white;
 }
 #progressbar{
   width:100%;
