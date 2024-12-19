@@ -57,44 +57,48 @@ export default {
         },
         move: function(e){
             let slider = document.getElementById("slider")
-            if(e.type =="touchmove"){
+            if(slider){
+                if(e.type =="touchmove"){
                 this.currentPlace = e.touches[0].clientX;
-            }
-            else{
-                this.currentPlace = e.clientX
-            }
-            const sliderRect = slider.getBoundingClientRect();
-            this.leftPosition = sliderRect.left;
-            this.rightPosition = sliderRect.right;
-            //console.log("gräns höger: ", this.rightPosition)
-
-            if(this.pressed){
-                let movedPlaced = this.currentPlace-this.placePressed
-                if (movedPlaced < 0){
-                    slider.style.left=0+'px';
-                }
-                else if (this.rightPosition > this.maxPosition){
-                    slider.style.right = (this.maxPosition - (this.rightPosition-this.leftPosition))+'px';
                 }
                 else{
-                    slider.style.left = (this.currentPlace-this.placePressed)+'px'; //-this.placePressed då vi vill ha den i sliderBox och inte på hela sidan
-                }    
-            }
-            else{
-                return 0
-            }
+                    this.currentPlace = e.clientX
+                }
+                const sliderRect = slider.getBoundingClientRect();
+                this.leftPosition = sliderRect.left;
+                this.rightPosition = sliderRect.right;
+                //console.log("gräns höger: ", this.rightPosition)
+
+                if(this.pressed){
+                    let movedPlaced = this.currentPlace-this.placePressed
+                    if (movedPlaced < 0){
+                        slider.style.left=0+'px';
+                    }
+                    else if (this.rightPosition > this.maxPosition){
+                        slider.style.right = (this.maxPosition - (this.rightPosition-this.leftPosition))+'px';
+                    }
+                    else{
+                        slider.style.left = (this.currentPlace-this.placePressed)+'px'; //-this.placePressed då vi vill ha den i sliderBox och inte på hela sidan
+                    }    
+                }
+                else{
+                    return 0
+                }
+            }  
         },
         mouseReleased: function(e){
             let slider = document.getElementById("slider")
             this.pressed = false;
-            console.log("mouse släppt")
-            //fick massa fel när jag hade removeeventlistener här, och frågetecknen
-            if (this.rightPosition >= this.maxPosition) {
-                slider.style.right = (this.maxPosition - (this.rightPosition-this.leftPosition))+'px';
-                this.sent = true;
-                this.sendAnswer(e);
-            } else {
-                slider.style.left = 0+'px';
+            if(slider){
+                console.log("mouse släppt")
+                //fick massa fel när jag hade removeeventlistener här, och frågetecknen
+                if (this.rightPosition >= this.maxPosition) {
+                    slider.style.right = (this.maxPosition - (this.rightPosition-this.leftPosition))+'px';
+                    this.sent = true;
+                    this.sendAnswer(e);
+                } else {
+                    slider.style.left = 0+'px';
+                }
             }
             document.removeEventListener("mousemove",this.move)
             document.removeEventListener("mouseup", this.mouseReleased)
@@ -110,6 +114,12 @@ export default {
 
         }
     },
+    unmounted(){
+        document.removeEventListener("mousemove",this.move)
+        document.removeEventListener("mouseup", this.mouseReleased)
+        document.removeEventListener("touchmove",this.move)
+        document.removeEventListener("touchend", this.mouseReleased)
+    }
 };
 </script>
 

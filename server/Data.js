@@ -218,17 +218,11 @@ Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){ //dela upp 
   console.log("---------------------------------------------")
   if(this.pollExists(pollId)){
     const poll = this.polls[pollId];
-    console.log("inkommande userId: ",userId)
     const user = poll.participants.find(user=> user.userId ==userId);
-    console.log("användare: ",user)
-    console.log("svar: ",user.information.answers)
     if(qId !=null){
       if(user){
-        console.log("spelare: ",user.information.name)
-        console.log("question number: ",qId)
         if(user.information.answers[qId]==null){
             user.information.answers[qId]=["-",0]
-            console.log("användare utan svar: ", user.information.name," ", user.information.answers)
         }
         if (user.information.correctedAnswers[qId]==null){
           if(user.information.answers[qId][0]==poll.questions[qId].a.correct){ //ta bort -1 sen, är bara för att de inte skickar randomOrder på första
@@ -239,12 +233,10 @@ Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){ //dela upp 
           }
           else{
             if(user.information.lives>0){
-                console.log('Kollar svaren: pollId ', pollId, 'qId ', qId, 'userId', userId);
                 user.information.lives--;
                 console.log(user.information.lives)
             }
               user.information.correctedAnswers[qId] = false
-              console.log("corrected answers i checkuseranswer: ",user.information.correctedAnswers)
               return false;
           }
         }   
@@ -254,12 +246,9 @@ Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){ //dela upp 
   return null
 }
 Data.prototype.testCheckAnswers = function(pollId,qId=null){
-    console.log("i testCheckAnswers")
     if(this.pollExists(pollId)){
       const users = this.polls[pollId].participants
-      console.log("users: ",users)
       for(let user of users){
-        console.log("i for loopen")
         let ans = this.checkUserAnswer(pollId,qId,user.userId)
       }
     }

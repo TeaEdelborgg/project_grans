@@ -25,6 +25,8 @@ function sockets(io, socket, data) {
 
   socket.on('joinPoll', function(pollId) {
     socket.join(pollId);
+    console.log("spelare dgick med: ",pollId)
+    console.log("rummen som spelaren är med i: ", socket.rooms)
     socket.emit('questionUpdate', data.getQuestion(pollId))
     socket.emit('submittedAnswersUpdate', data.getSubmittedAnswers(pollId));
     /*
@@ -72,7 +74,6 @@ function sockets(io, socket, data) {
     //io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   });
   socket.on("testUserAnswers", function(d){
-    console.log("testUserAnswer i socket")
     data.testCheckAnswers(d.pollId,d.questionNumber)
   })
 
@@ -139,9 +140,11 @@ function sockets(io, socket, data) {
     const scoreBoard = data.countScore(pollId)
     //socket.join(pollId);
     console.log("ska skicka scoreboard")
+    //skicka här direkt till användarna
+    //io.emit("scoreBoardUser", scoreBoard) //.to(pollId)
     socket.emit('sendScoreBoard',scoreBoard) //ändra till socket.io
   })
-  socket.on('getScoreBoardUser', function(pollId){ //använd den här till användaran på resultat sidan
+  socket.on('getScoreBoardUser', function(pollId){ //denna används inte just nu
     const scoreBoard = data.getScoreBoard(pollId)
     console.log("getScoreBoardUser")
     socket.emit("scoreBoardUser", scoreBoard) //ändra till socket.io

@@ -47,6 +47,7 @@ export default {
             this.answeresSentIn=true
         })
         socket.on( "uiLabels", labels => this.uiLabels = labels );
+        socket.emit( "joinPoll", this.pollId );
         socket.emit( "getUILabels", this.lang );
     },
     mounted(){
