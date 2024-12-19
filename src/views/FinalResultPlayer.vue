@@ -35,7 +35,7 @@ export default {
         this.pollId = this.$route.params.id
         this.userId = this.$route.params.userId;
 
-        socket.on('scoreBoardUser',scoreBoard=>{
+        socket.on('sendScoreBoard',scoreBoard=>{
             console.log("tog emot scoreBoard i player")
             this.findPlayerPlace(scoreBoard);  
         })
@@ -47,7 +47,7 @@ export default {
 
     },
     mounted(){
-        socket.emit('getScoreBoardUser', this.pollId) 
+        socket.emit('getScoreBoard', this.pollId) //måste kanske ha om sidorna inte hinner laddas in i tid, annars låt den andra sidan skicka till andra
         this.windowHeight = document.documentElement.clientHeight
         this.windowWidth = document.documentElement.clientWidth;
         const backgroundPlayer = document.getElementById('background');

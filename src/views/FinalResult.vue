@@ -1,6 +1,6 @@
 <template>
     <div id="background">
-        <div id="scoreBoard" v-if="answeresSentIn">
+        <div id="scoreBoard" v-if="answeresSentIn"> <!--Gör sedan att winner är namnet, och losers är endast listan av namnen-->
             <div>
                 <h1>{{uiLabels.winner}}</h1> <br>
                 <p>1. {{ winner.information.name }}</p> <br>
@@ -21,7 +21,7 @@
 
 import io from 'socket.io-client';
 //const socket = io("localhost:3000");
-const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
+const socket = io(sessionStorage.getItem("dataServer")) 
 
 export default {
     name: 'FinalResultView',
@@ -39,8 +39,6 @@ export default {
     },
     created: function () {
         this.pollId = this.$route.params.id
-
-        //this.pollId = this.$route.params.id;
         socket.on("sendScoreBoard", val=>{
             this.winner = val[0]
             this.losers = val.slice(1,val.length)
@@ -75,6 +73,9 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     flex-grow: 1;
+}
+#scoreBoard h1,h2,p{
+    color:black;
 }
 #homeButtom{
     width: 100%;

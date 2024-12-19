@@ -54,6 +54,9 @@ export default {
         console.log("tog emot tid")
     });
     socket.on('getTimeBeforeQuestion',timeTwo => this.timeLeftBeforeQuestion=timeTwo);
+    socket.on('scoreBoardCreated', ()=>{
+      socket.emit('finishGame', this.pollId)
+    })
     socket.emit("updateResult", this.pollId)
 
   },
@@ -144,7 +147,9 @@ export default {
       //här måste timer köras för 
     },
     finishGame: function(){
-      socket.emit('finishGame', this.pollId)
+      //här scoreboard skapas
+      socket.emit('createScoreBoard', this.pollId)
+      
     }
   }
 }

@@ -136,19 +136,23 @@ function sockets(io, socket, data) {
   socket.on('finishGame', function(pollId){
     io.to(pollId).emit('gameFinished')
   })
+  socket.on('createScoreBoard', function(pollId){
+    data.countScore(pollId)
+    socket.emit('scoreBoardCreated')
+  })
+
   socket.on('getScoreBoard', function(pollId){
-    const scoreBoard = data.countScore(pollId)
+    const scoreBoard = data.getScoreBoard(pollId)
     //socket.join(pollId);
-    console.log("ska skicka scoreboard")
     //skicka här direkt till användarna
     //io.emit("scoreBoardUser", scoreBoard) //.to(pollId)
     socket.emit('sendScoreBoard',scoreBoard) //ändra till socket.io
   })
-  socket.on('getScoreBoardUser', function(pollId){ //denna används inte just nu
+  /*socket.on('getScoreBoardUser', function(pollId){ //denna används inte just nu
     const scoreBoard = data.getScoreBoard(pollId)
     console.log("getScoreBoardUser")
     socket.emit("scoreBoardUser", scoreBoard) //ändra till socket.io
-  })
+  })*/
 }
 
 export { sockets };

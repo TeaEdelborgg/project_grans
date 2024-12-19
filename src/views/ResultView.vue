@@ -4,7 +4,7 @@
       lang: {{ lang }}
     </div>
     <h1 :style="{color:'white'}">{{ uiLabels.heading}}</h1>
-    <QuestionComponentResult v-if="questionActive" v-bind:uiLabels="uiLabels" v-bind:question="question" v-on:countDownOver="countDownOver" ></QuestionComponentResult> <!--Lägg till questionId senare-->
+    <QuestionComponentResult v-if="questionActive" v-bind:uiLabels="uiLabels" v-bind:question="question" v-on:countDownOver="countDownOver" ></QuestionComponentResult> <!--Sätta den i frame så som en TV?-->
       <div id="frame">
         <div id="moneyframe">
           <Moneybox v-for="index in amountOfQuestions" v-bind:boxState="moneyBoxes[index-1]" v-bind:value="moneyValues[index-1]" :id="index"/>
