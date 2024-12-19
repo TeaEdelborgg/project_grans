@@ -144,7 +144,7 @@ export default {
       /*const numberOfQuestions = this.pollData.questions.length;
       socket.emit("startPoll", this.pollId, numberOfQuestions)*/
     },
-    timerBeforeQUestion: function(){ //denna ska göra så att resultat också får count down
+    /*timerBeforeQUestion: function(){ //denna ska göra så att resultat också får count down
         let time={
           timeLeft:3,
           interval:null
@@ -161,8 +161,8 @@ export default {
             clearInterval(time.interval)
           }
         },1000);
-    },
-    timerQuestion: function (){ //resultat ska få denna också
+    },*/
+    /*timerQuestion: function (){ //resultat ska få denna också
         let time ={
           timeLeft:10,
           interval:null
@@ -179,8 +179,8 @@ export default {
             clearInterval(time.interval)
             //här vill man göra så att alla personer skickar deras svar för att checkas, annars kan man titta under spelets gång 
           }
-        },1000);
-    },
+        },1000);*/
+    
     addQuestion: function () {
       /*this.answers = [this.correctAnswer, this.wrongAnswers]
       socket.emit("addQuestion", {pollId: this.pollId, q: this.question, a: this.answers} )
@@ -210,12 +210,12 @@ export default {
       this.answers.push("");
     },*/
 
-    runQuestion: function () {
+    /*runQuestion: function () { //ta bort
       //socket.emit("startTime",{pollId:this.pollId, time:10})
       socket.emit("startTimeBeforeQuestion",{pollId:this.pollId, time:3})
       this.timerBeforeQUestion()
       //här måste timer köras för 
-    }
+    }*/
   }
 }
 </script>

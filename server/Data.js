@@ -31,12 +31,11 @@ function Data() {
         a: { "correct": "10 miljoner", wrong: ['9 miljoner', '5 miljoner', '15 miljoner']}
        },
     ],
-    answers: [], //behöver egentligen inte
-    currentQuestion: -1, //var innan 0
+    answers: [], 
+    currentQuestion: -1, 
     participants: []
   }
 }
-//timern, fungerar med intervall
 /***********************************************
 For performance reasons, methods are added to the
 prototype of the Data object/class
@@ -105,61 +104,6 @@ Data.prototype.getParticipants = function(pollId) {
   return [];
 }
 
-Data.prototype.startTimer = function(pollId, totalTime){
-  //console.log("i start timer")
-  if(this.pollExists(pollId)){
-    //console.log("pollId existerar")
-    const poll = this.polls[pollId];
-    poll.timer.timeLeft = totalTime;
-    poll.timer.interval = null;
-    poll.timer.interval = setInterval(()=>{
-      if( poll.timer.timeLeft > 0){
-        poll.timer.timeLeft--;
-        //console.log("tid kvar: ", poll.timer.timeLeft)
-      } else {
-        clearInterval(poll.timer.interval);
-        poll.timer.timeLeft=0;
-      }
-    },1000);
-  }
-}
-
-Data.prototype.startTimeBeforeQuestion = function (pollId, totalTime){
-  console.log("i time före fråga")
-  if(this.pollExists(pollId)){
-    const poll = this.polls[pollId];
-    poll.timerBeforeQuestion.timeLeft=totalTime;
-    poll.timerBeforeQuestion.interval=null;
-    poll.timerBeforeQuestion.interval = setInterval(()=>{
-      if(poll.timerBeforeQuestion.timeLeft > 0){
-        poll.timerBeforeQuestion.timeLeft--;
-        //console.log("tid kvar innan fråga: ",poll.timerBeforeQuestion.timeLeft)
-      } else{
-        clearInterval(poll.timerBeforeQuestion.interval);
-        poll.timerBeforeQuestion.timeLeft=0
-      }
-    },1000);
-  }
-}
-
-Data.prototype.getTime = function(pollId){
-  if(this.pollExists(pollId)){
-    let time = this.polls[pollId].timer.timeLeft
-    //console.log("tid i getTime: ",time)
-    return time
-  }
-  return 0
-}
-
-Data.prototype.getTimeBeforeQuestion = function(pollId){
-  if(this.pollExists(pollId)){
-    let time = this.polls[pollId].timerBeforeQuestion.timeLeft
-    //console.log("tiden i getTimeBeforeQuestion: ",time)
-    return time
-  }
-  return 0
-}
-
 Data.prototype.addQuestion = function(pollId, q) {
   if (this.pollExists(pollId)) {
     console.log("frågan: ",q);
@@ -167,7 +111,7 @@ Data.prototype.addQuestion = function(pollId, q) {
   }
 }
 
-Data.prototype.getQuestion = function(pollId, qId = null) {
+Data.prototype.getQuestion = function(pollId, qId = null) { //borde gå att göra om, vill ha den nedanför istället
   if (this.pollExists(pollId)) {
     const poll = this.polls[pollId];
     if (qId !== null) {
@@ -203,7 +147,7 @@ Data.prototype.getQuestionAnswerRandom = function(pollId, qId = null) {
   return {}
 }
 
-Data.prototype.getSubmittedAnswers = function(pollId) {
+Data.prototype.getSubmittedAnswers = function(pollId) { //behövs den här??? Vi borde kunna skriva om våra sockets mycket
   if (this.pollExists(pollId)) {
     const poll = this.polls[pollId];
     const answers = poll.answers[poll.currentQuestion];
@@ -281,34 +225,6 @@ Data.prototype.updateQuestion = function (pollId,question){
   }
   return null
 }
-
-/*
-Data.prototype.selectBox = function (info) {
-  const { pollId, boxIndex, userId, label } = info;
-  if(this.pollExists(pollId)){
-  const poll = this.getPoll(pollId);
-  if (!poll.participants||poll.participants.length === 0) {
-    console.error("Participants not found");
-    return null; // Returning null to indicate failure
-  }
-
-  const participant = poll.participants.find((p) => p.userId === userId);
-  if (participant) {
-    participant.selectedBox = boxIndex;
-    participant.information.boxLabel = label;
-  } else {
-    console.error("Participant not found");
-    return null;
-  }
-
-  const boxStates = poll.participants.map((p) => ({
-    boxIndex: p.selectedBox,
-    userId: p.userId,
-    label: p.information.boxLabel || `Player ${p.userId}`,
-  }));
-
-  return boxStates; // Returning the updated box states for use in the socket file
-}}*/
 
 Data.prototype.amountOfQuestions = function (pollId){
   if(this.pollExists(pollId)){
@@ -463,6 +379,89 @@ Data.prototype.getScoreBoard = function(pollId){
   }
   return []
 }
+/*------------------------Gammal kod---------------------------------------- */
+/*
+Data.prototype.selectBox = function (info) {
+  const { pollId, boxIndex, userId, label } = info;
+  if(this.pollExists(pollId)){
+  const poll = this.getPoll(pollId);
+  if (!poll.participants||poll.participants.length === 0) {
+    console.error("Participants not found");
+    return null; // Returning null to indicate failure
+  }
+
+  const participant = poll.participants.find((p) => p.userId === userId);
+  if (participant) {
+    participant.selectedBox = boxIndex;
+    participant.information.boxLabel = label;
+  } else {
+    console.error("Participant not found");
+    return null;
+  }
+
+  const boxStates = poll.participants.map((p) => ({
+    boxIndex: p.selectedBox,
+    userId: p.userId,
+    label: p.information.boxLabel || `Player ${p.userId}`,
+  }));
+
+  return boxStates; // Returning the updated box states for use in the socket file
+}}*/
+
+/*Data.prototype.startTimer = function(pollId, totalTime){
+  //console.log("i start timer")
+  if(this.pollExists(pollId)){
+    //console.log("pollId existerar")
+    const poll = this.polls[pollId];
+    poll.timer.timeLeft = totalTime;
+    poll.timer.interval = null;
+    poll.timer.interval = setInterval(()=>{
+      if( poll.timer.timeLeft > 0){
+        poll.timer.timeLeft--;
+        //console.log("tid kvar: ", poll.timer.timeLeft)
+      } else {
+        clearInterval(poll.timer.interval);
+        poll.timer.timeLeft=0;
+      }
+    },1000);
+  }
+}*/
+
+/*Data.prototype.startTimeBeforeQuestion = function (pollId, totalTime){
+  console.log("i time före fråga")
+  if(this.pollExists(pollId)){
+    const poll = this.polls[pollId];
+    poll.timerBeforeQuestion.timeLeft=totalTime;
+    poll.timerBeforeQuestion.interval=null;
+    poll.timerBeforeQuestion.interval = setInterval(()=>{
+      if(poll.timerBeforeQuestion.timeLeft > 0){
+        poll.timerBeforeQuestion.timeLeft--;
+        //console.log("tid kvar innan fråga: ",poll.timerBeforeQuestion.timeLeft)
+      } else{
+        clearInterval(poll.timerBeforeQuestion.interval);
+        poll.timerBeforeQuestion.timeLeft=0
+      }
+    },1000);
+  }
+}*/
+
+/*Data.prototype.getTime = function(pollId){
+  if(this.pollExists(pollId)){
+    let time = this.polls[pollId].timer.timeLeft
+    //console.log("tid i getTime: ",time)
+    return time
+  }
+  return 0
+}*/
+
+/*Data.prototype.getTimeBeforeQuestion = function(pollId){
+  if(this.pollExists(pollId)){
+    let time = this.polls[pollId].timerBeforeQuestion.timeLeft
+    //console.log("tiden i getTimeBeforeQuestion: ",time)
+    return time
+  }
+  return 0
+}*/
 
 export { Data };
 

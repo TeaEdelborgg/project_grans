@@ -77,33 +77,33 @@ function sockets(io, socket, data) {
     data.testCheckAnswers(d.pollId,d.questionNumber)
   })
 
-  socket.on('getAllAnswers', function(pollId){
+  socket.on('getAllAnswers', function(pollId){ //döp om
     let participantsWithNewAnswersTest = data.updateColoredBoxes(pollId)
     let levelBoxes = data.updateLevelBoxes(pollId) 
     io.to(pollId).emit("sendAllAnswers", {participants:participantsWithNewAnswersTest,levelBoxes:levelBoxes})
   })
-  socket.on('getTimer', function(pollId){
+  /*socket.on('getTimer', function(pollId){ //ta bort
     let time = data.getTime(pollId)
     io.to(pollId).emit('getTime',time)
-  })
-  socket.on('startTime', function(d){
+  })*/
+  /*socket.on('startTime', function(d){ //ta bort
     data.startTimer(d.pollId,d.time)
     io.to(d.pollId).emit('startTimer')
     //skicka till socket i resultat att timern startat
-  })
-  socket.on('startTimeBeforeQuestion', function(d){
+  })*/
+  /*socket.on('startTimeBeforeQuestion', function(d){ //ta bort
     data.startTimeBeforeQuestion(d.pollId,d.time)
     io.to(d.pollId).emit('startTimerBeforeQuest')
     //socket.emit("startFirstTimer")
     //skicka till socket i resultat att timern startat
-  })
-  socket.on('getTimerBeforeQuestion',function(pollId){
+  })*/
+  /*socket.on('getTimerBeforeQuestion',function(pollId){ //ta bort
     let time = data.getTimeBeforeQuestion(pollId)
     io.to(pollId).emit('getTimeBeforeQuestion',time)
-  })
-  socket.on('timesUp', function(pollId){
+  })*/
+  /*socket.on('timesUp', function(pollId){ //körs aldrig
     io.to(pollId).emit('timeUp',true)
-  })
+  })*/
 
   socket.on('runCountdown', function(d){
     let randomOrder = data.getQuestionAnswerRandom(d.pollId, d.questionNumber);

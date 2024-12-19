@@ -71,7 +71,7 @@ export default {
       //this.timerQuestion()
       socket.emit("startPoll", this.pollId)
     },
-    timerBeforeQUestion: function(){ //denna ska göra så att resultat också får count down
+    /*timerBeforeQUestion: function(){ //denna ska göra så att resultat också får count down
         let time={
           timeLeft:3,
           interval:null
@@ -88,8 +88,8 @@ export default {
             clearInterval(time.interval)
           }
         },1000);
-    },
-    timerQuestion: function (){ //resultat ska få denna också
+    },*/
+    /*timerQuestion: function (){ //resultat ska få denna också
         let time ={
           timeLeft:10,
           interval:null
@@ -107,7 +107,7 @@ export default {
             //här vill man göra så att alla personer skickar deras svar för att checkas, annars kan man titta under spelets gång 
           }
         },1000);
-    },
+    },*/
 
     testCountdown: function() {
       let startTime = Date.now();
