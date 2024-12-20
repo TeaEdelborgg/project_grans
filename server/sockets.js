@@ -25,8 +25,8 @@ function sockets(io, socket, data) {
 
   socket.on('joinPoll', function(pollId) {
     socket.join(pollId);
-    console.log("spelare dgick med: ",pollId)
-    console.log("rummen som spelaren är med i: ", socket.rooms)
+    // console.log("spelare dgick med: ",pollId)
+    // console.log("rummen som spelaren är med i: ", socket.rooms)
     socket.emit('questionUpdate', data.getQuestion(pollId))
     socket.emit('submittedAnswersUpdate', data.getSubmittedAnswers(pollId));
     /*
@@ -58,6 +58,7 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('questionUpdate', question);
     io.to(d.pollId).emit('questionUpdateResult',randomOrder.q)
     io.to(d.pollId).emit('submittedAnswersUpdate', data.getSubmittedAnswers(d.pollId)); 
+    console.log('ny fråga körs')
   });
 
   socket.on('submitAnswer', function(d) {
@@ -130,7 +131,7 @@ function sockets(io, socket, data) {
     const levelValues = data.getLevelValues(pollId)
     const levelColors = data.updateLevelBoxes(pollId)
     const participants = data.getParticipants(pollId)
-    console.log("försöker skicka levelCOlor")
+    // console.log("försöker skicka levelCOlor")
     io.to(pollId).emit('loadStats', {amountOfQuestions:amountOfQuestions, levelValues:levelValues, levelColors:levelColors, participants:participants}) //skicka som object
   });
   socket.on('getStartColors', function(pollId){
