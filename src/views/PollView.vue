@@ -14,7 +14,7 @@
           ref="questionComponent" 
           v-bind:question="question" 
           v-bind:questionActive="questionActive"
-          v-bind:checkedAnswer="checkedAnswer"
+          v-bind:isCorrectAnswer="isCorrectAnswer"
           v-bind:showCorrectAnswer="showCorrectAnswer"
           v-on:answer="submitAnswer($event)"/>
       </div>
@@ -48,11 +48,11 @@ export default {
         a:[]
       },
       questionNumber: null,
-      checkedAnswer: false, // kollar om svaret som skickats är korrekt eller inte
+      isCorrectAnswer: false, // kollar om svaret som skickats är korrekt eller inte
       questionActive: false, // om den fortfarande syns på stora tavlan
       seeAlternatives: false, // om man kan se sina svar när man inte kan svara på frågan, ska detta finnas hela tiden? kanske
-      answerChecked: false,  // om timeUp ska köras eller inte
-      timeLeft: 0, // 
+      answerChecked: false,  // om svaret har rättats eller ej
+      timeLeft: 0, 
       showCorrectAnswer: false, // rättar och gör knappen grön om korrekt, annars röd
       percentage: 100,
     }
@@ -87,8 +87,7 @@ export default {
     // socket.on( "submittedAnswersUpdate", answers => this.submittedAnswers = answers );
     
     socket.on("checkedUserAnswer", checkedAns => {
-      this.checkedAnswer = checkedAns;
-      //console.log("tagit emot checked Answer: ", checkedAns)
+      this.isCorrectAnswer = checkedAns;
     });
     socket.on("gameFinished", () =>
       this.$router.push("/finalResultPlayer/" + this.pollId + "/" + this.userId)
@@ -97,7 +96,6 @@ export default {
     socket.emit( "getUILabels", this.lang );
     socket.emit( "joinPoll", this.pollId );
 
-    //ny socket till countdown
     socket.on('startCountdownPlayer', question =>{
       this.question=question.q;
       this.questionNumber=question.questionNumber;
@@ -105,21 +103,17 @@ export default {
     })
   },
   methods: {
-    submitAnswer: function (answer) { //här måste correct answer också va med, inte bara answer ?????
-      //titta i servern hur tid och svar kopplas, du vill koppla tiden här direkt så att det stämmer med personens 
-      //timer och inte servern!!!!
-      // ska skickas som [svaret de valt, tid kvar], kolla i data
-      // kolla så att allt som varit koppat till serven fortfarande är det
+    submitAnswer: function (answer) { 
       socket.emit("submitAnswer", {pollId: this.pollId, answer: answer, userId: this.userId, time: Math.floor(this.timeLeft/1000)}) // ta bort correctAnswer
-      console.log('svaret skickas')
+      console.log('svaret skickas till servern')
     },
-    timeUp: function(){
+    /*timeUp: function(){ //används inte längre
       //socket.emit("checkUserAnswer", {pollId:this.pollId, questionNumber:this.questionNumber,userId:this.userId}) //verkar inte behöva den, fungerar avkommenterad
       console.log('timeUp körs')
-    }, 
+    }, */
     countdownPlayer: function() {
       this.answerChecked = false;
-      this.checkedAnswer = false;
+      this.isCorrectAnswer = false;
       this.seeAlternatives = false;
       this.showCorrectAnswer = false;
       this.percentage = 100;
@@ -135,20 +129,21 @@ export default {
         this.timeLeft = timerDuration - elapsedTime;
 
         if (this.timeLeft > timerAnswer + timerSeeAnswer) {
-          //console.log('PollView, tid innan frågan: ', this.timeLeft - timerAnswer - timerSeeAnswer)
         } else if (this.timeLeft > timerSeeAnswer) {
           this.percentage = Math.floor((this.timeLeft - timerSeeAnswer) / 100); //denna går inte ner till noll?
           this.questionActive = true;
-          //console.log('PollView, tid kvar för att svara: ', this.timeLeft - timerSeeAnswer)
-        } else if (this.timeLeft > 0) { // denna körs flera gånger? hur ska man göra så att den inte gör det?
+        } else if (this.timeLeft > 0) {
           this.questionActive = false
           this.seeAlternatives = true
-          //console.log('Pollview, kolla och se vad man svarat')
           if (!this.answerChecked) {
-            console.log('checked answer innan: ', this.checkedAnswer)
-            this.timeUp()
+
+            console.log('checked answer innan: ', this.answerChecked)
+            // en nya socket är som kollar om svaret är sant eller ej 
+            socket.emit("checkUserAnswer", {pollId: this.pollId, questionNumber: this.questionNumber,userId: this.userId,
+        
+            });
             this.answerChecked = true
-            console.log('checked answer efter: ', this.checkedAnswer)
+            console.log('checked answer efter: ', this.answerChecked)
           }
         } else {
           this.showCorrectAnswer = true;
@@ -157,7 +152,6 @@ export default {
       }, 100);  
     },
   },
-  // lägg till computed där vi hämtar userId
 
 
   computed: {

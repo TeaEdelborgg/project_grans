@@ -66,10 +66,12 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('updatePedestalPlayer', d.userId)
     //io.to(d.pollId).emit('submittedAnswersUpdate', data.getSubmittedAnswers(d.pollId));
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId)); //borde kunna ta bort
+    console.log('submitAnswer i socket körs')
   }); 
   socket.on('checkUserAnswer', function(d){
     console.log("i socket, ska titta om svaret är rätt")
-    let checkedUserAnswer = data.checkUserAnswer(d.pollId,d.questionNumber,d.userId);
+    let checkedUserAnswer = data.newCheckUserAnswer(d.pollId,d.questionNumber,d.userId);
+    console.log('i checkUserAnswer, checkeduseranswer är: ', checkedUserAnswer)
     io.to(d.pollId).emit('checkedUserAnswer', checkedUserAnswer);
     //io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   });

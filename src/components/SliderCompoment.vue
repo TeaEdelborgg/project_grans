@@ -35,7 +35,7 @@ export default {
         const sliderBoxRect = sliderBox.getBoundingClientRect();
         this.minPosition = sliderBoxRect.left; // Vänstra gränsen
         this.maxPosition = sliderBoxRect.right; // Högra gränsen
-        console.log('minPosition: ', this.minPosition, 'maxPosition: ', this.maxPosition);
+        //console.log('minPosition: ', this.minPosition, 'maxPosition: ', this.maxPosition);
     },
     methods: {
         pressedDown: function(e){
@@ -90,7 +90,7 @@ export default {
             let slider = document.getElementById("slider")
             this.pressed = false;
             if(slider){
-                console.log("mouse släppt")
+                //console.log("mouse släppt")
                 //fick massa fel när jag hade removeeventlistener här, och frågetecknen
                 if (this.rightPosition >= this.maxPosition) {
                     slider.style.right = (this.maxPosition - (this.rightPosition-this.leftPosition))+'px';

@@ -36,7 +36,7 @@ export default {
     question: Object,
     questionActive: Boolean,
     showCorrectAnswer: Boolean,
-    checkedAnswer: Boolean,
+    isCorrectAnswer: Boolean,
     answerChecked: Boolean,
   },
   data: function(){
@@ -55,9 +55,9 @@ export default {
         console.log('skickat ', this.sent)
       }
     },
-    updateSent: function() {
+    /*updateSent: function() {
       this.sent = false
-    },
+    },*/
     selectAnswer: function(answer){
       if (this.questionActive && !this.sent) {
         console.log('selectanswer: ', answer)
