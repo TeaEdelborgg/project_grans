@@ -90,11 +90,11 @@ export default {
     })
  
     socket.on('startCountdownResults', data =>{ 
-      this.question=data.q;
+      this.question=data.q; //vill också hämta answers
       this.questionNumber=data.questionNumber
       this.questionActive=true
     });
-    socket.on('getStats', d => { //fixa den här, döp om, (typ loadStats)
+    socket.on('loadStats', d => { //fixa den här, döp om, (typ loadStats)
       this.amountOfQuestions=d.amountOfQuestions
       this.moneyValues = d.levelValues
       this.moneyBoxes = d.levelColors
@@ -107,7 +107,7 @@ export default {
 
     socket.emit( "getUILabels", this.lang );
     socket.emit( "joinPoll", this.pollId );
-    socket.emit('getAmountQuestions', this.pollId);
+    socket.emit('getStats', this.pollId); //loadar stats
 
   },
   mounted (){

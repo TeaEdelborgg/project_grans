@@ -75,6 +75,8 @@ function sockets(io, socket, data) {
   });
   socket.on("testUserAnswers", function(d){
     data.testCheckAnswers(d.pollId,d.questionNumber)
+    
+    //här vill vi skicka tillbaka till resultat, som sedan där emitar till att hämta resultat
   })
 
   socket.on('getAllAnswers', function(pollId){ //döp om
@@ -121,13 +123,13 @@ function sockets(io, socket, data) {
       io.to(info.pollId).emit('boxStatesUpdate', boxStates);
   });*/
 
-  socket.on('getAmountQuestions', function(pollId) {
+  socket.on('getStats', function(pollId) {
     const amountOfQuestions = data.amountOfQuestions(pollId);
     const levelValues = data.getLevelValues(pollId)
     const levelColors = data.updateLevelBoxes(pollId)
     const participants = data.getParticipants(pollId)
     console.log("försöker skicka levelCOlor")
-    io.to(pollId).emit('getStats', {amountOfQuestions:amountOfQuestions, levelValues:levelValues, levelColors:levelColors, participants:participants}) //skicka som object
+    io.to(pollId).emit('loadStats', {amountOfQuestions:amountOfQuestions, levelValues:levelValues, levelColors:levelColors, participants:participants}) //skicka som object
   });
   socket.on('getStartColors', function(pollId){
     const levelBoxes = data.updateLevelBoxes(pollId)
