@@ -1,9 +1,7 @@
 <template>
   <div v-if = "!doneWithPoll">
     <p>Poll link: {{pollId}}</p>
-    <!--<button v-on:click="createPoll">
-      Create poll
-    </button>-->
+
     <div>
       {{ uiLabels.question +' '+newQuestionId }}:
       <input type="text" v-model="question" placeholder="Question"> 
@@ -22,53 +20,49 @@
     <button v-on:click="doneWithPoll=true">
       Done with poll!
     </button>
-    
-    <!--<router-link v-bind:to="'/admin/' +pollId" v-on:click="startPoll">
-      <button v-on:click="startPoll"> Start poll</button>
-    </router-link>-->
-    <!--<router-link v-bind:to="'/admin/' +pollId" v-on:click="startPoll">Start poll</router-link>-->
-    
-    <!--<router-link v-bind:to="'/result/' + pollId">Check result</router-link>-->
-    <!--<div v-if="pollData.questions && pollData.questions.length > 0">-->
+
     <div>
-      <h3>Added Questions:</h3>
-      <!--Fixa detta avsnitt, q är undefied i data när ni skickar det-->
-      <div v-for="(q, index) in pollData.questions" :key="q.id">
+      <h3>Added questions:</h3>
+      <div v-for="(q, index) in pollData.questions" :key="index">
         <div v-if="q.isEditing">
-          <p>Editing Question: {{ q.id }}</p>
+          <p>Editing Question: {{ index + 1 }}</p>
           <input type="text" v-model="q.q" placeholder="Edit question" />
           <input type="text" v-model="q.a.correct" placeholder="Edit correct answer" />
           <input 
-            v-for="(answer,i) in q.a.wrong"
-            :key="'editWrongAnswer' +q.id+i"
-            v-model="q.a.wrong"
-            placeholder="Edit wrong answer"
-          />
-          <button @click="saveEditedQuestion(q)">Save</button>
+            v-for="(_, i) in q.a.wrong"
+            :key="'editWrongAnswer' + index + i"
+            v-model="q.a.wrong[i]"
+            placeholder="Edit wrong answer"/>
+          <button v-on:click="saveEditedQuestion(q, index)">Save</button>
         </div>
         <div v-else>
-          <p>Question {{ q.id }}:{{ q.q }}</p>
+          <p>Question {{ index + 1 }}:{{ q.q }}</p>
           <p>Correct Answer: {{ q.a.correct }}</p>
-          <p>Wrong Answers: {{ q.a.wrong.join(', ') }}</p>
-          <button @click="editQuestion(q)">Edit</button>
+          <p>Wrong Answers: {{ q.a.wrong }}</p>
+          <button v-on:click="editQuestion(q)">Edit</button>
         </div>
       </div>
     </div>
     Data: {{ pollData }}
   </div>
+
   <div v-if="doneWithPoll">
     <div v-if="!continueToStart">
     Are you sure you are done?
     <button v-on:click="continueToStart = true">Yes, continue</button>
-    <button v-on:click="doneWithPoll = false"> nope </button> //lägg till tillbakaknapp
+    <button v-on:click="doneWithPoll = false"> No, go back </button> 
     </div>
   </div>
   <div v-if="continueToStart">
     Ditt quiz är skapat! Låt alla deltagare gå med innan du klickar vidare.
     Quizkod: {{ pollId }}
-    <router-link v-bind:to="'/admin/' +pollId"> <!-- v-on:click="startPoll"-->
+    <router-link v-bind:to="'/admin/' +pollId">
     <button v-on:click="startPoll"> Yes! Start poll</button>
     </router-link>
+    Deltagare:
+    <div v-for="(participant, index) in pollData.participants" :key="index">
+    {{ participant.information.name }}
+    </div>
   </div>
 </template>
 
@@ -87,14 +81,14 @@ export default {
       answers: {},
       correctAnswer: "",
       wrongAnswers: ["", "", ""],
-      questionNumber: 0,
+    /*  questionNumber: 0,*/
       newQuestionId: 1,
       editingQuestion: null,
       pollData: {
         questions: []
       },
       maxQuestions: 15,
-      numberOfQuestions:0,
+     /* numberOfQuestions:0,*/
       uiLabels: {},
       checkedAnswers: {},
       timeLeft:0,
@@ -107,7 +101,7 @@ export default {
     socket.on( "uiLabels", labels => this.uiLabels = labels );
     socket.on( "pollData", data => this.pollData = data );
     socket.on( "participantsUpdate", p => this.pollData.participants = p );
-    socket.on("questionUpdate", updatedQuestion => this.updateQuestionInPollData(updatedQuestion));
+    //socket.on("questionUpdate", updatedQuestion => this.updateQuestionInPollData(updatedQuestion));
     socket.emit( "getUILabels", this.lang );
     socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
     socket.on('getTime',time =>this.timeLeft=time);
@@ -126,18 +120,21 @@ export default {
       socket.emit("createPoll", {pollId: this.pollId, lang: this.lang })
       socket.emit("joinPoll", this.pollId);
     },
-    editQuestion(question){
-      question.isEditing=true;
+    editQuestion(q){
+      q.isEditing=true;
     },
-    saveEditedQuestion(question){
-      question.isEditing=false;
-      socket.emit("updateQuestion",{pollId:this.pollId,q:question})
-    },
-    updateQuestionInPollData(updatedQuestion){
-      const questionIndex = this.pollData.questions.findIndex(q =>q.id===updatedQuestion.id);
-      if(questionIndex !==-1){
-        this.pollData.questions[questionIndex] = updatedQuestion;
-      }
+    saveEditedQuestion: function (q, index) {
+      q.isEditing = false; 
+      const editedQuestion = {
+        id: index + 1, 
+        q: q.q, 
+        a: {
+          correct: q.a.correct,
+          wrong: q.a.wrong,
+        },
+      };
+      this.pollData.questions[index] = editedQuestion;
+      socket.emit("updateQuestion", { pollId: this.pollId, questionToUpdate: editedQuestion });
     },
     startPoll: function () { 
       socket.emit("startPoll", this.pollId)
@@ -194,10 +191,12 @@ export default {
           wrong: this.wrongAnswers,
         },
       };
-      this.pollData.questions.push(newQuestion);
+    /*  this.pollData.questions.push(newQuestion);
       this.answers = {correct: this.correctAnswer, wrong: this.wrongAnswers}
       //kolla över hur sockets fungerar och ändra sedan till newQuestion, var vaksam över hur variablerna skickas
-      socket.emit("addQuestion", {pollId: this.pollId, q: this.question, a: this.answers});
+      socket.emit("addQuestion", {pollId: this.pollId, q: this.question, a: this.answers});*/
+      this.pollData.questions.push(newQuestion);
+      socket.emit("addQuestion", {pollId: this.pollId, q: newQuestion});
 
       this.newQuestionId += 1;
       this.question = "";

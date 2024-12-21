@@ -111,6 +111,18 @@ Data.prototype.addQuestion = function(pollId, q) {
   }
 }
 
+Data.prototype.updateQuestion = function (pollId, questionToUpdate) {
+  if (this.pollExists(pollId)) {
+    const poll = this.polls[pollId];
+    console.log("frågan vi vill åt:", questionToUpdate );
+    const newQuestion=questionToUpdate;
+    const questionIndex = poll.questions.findIndex((q) => q.id === newQuestion.id); //hittar id för den fråga i poll som matchar den updaterade frågans id
+    if (questionIndex !== -1) {
+      poll.questions[questionIndex] = newQuestion; //om frågan hittas ersätts den av den updaterade frågan
+    }
+  }
+}
+
 Data.prototype.getQuestion = function(pollId, qId = null) { //borde gå att göra om, vill ha den nedanför istället
   if (this.pollExists(pollId)) {
     const poll = this.polls[pollId];
@@ -236,20 +248,6 @@ Data.prototype.submitAnswer = function(pollId, answer, userId, timeLeft) { // oc
       }
     }
   }
-}
-Data.prototype.updateQuestion = function (pollId,question){
-  if(this.pollExists(pollId)){
-    //i question borde question.id finnas, question är undefined
-    console.log(question)
-    const poll = this.polls[pollId]
-    const questionIndex = poll.questions.findIndex(q =>q.q ===question.q);
-    if(questionIndex ===-1){
-      return null
-    }
-    poll.questions[questionIndex] = question;
-    return question;
-  }
-  return null
 }
 
 Data.prototype.amountOfQuestions = function (pollId){
