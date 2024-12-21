@@ -104,8 +104,7 @@ export default {
   },
   methods: {
     submitAnswer: function (answer) { 
-      socket.emit("submitAnswer", {pollId: this.pollId, answer: answer, userId: this.userId, time: Math.floor(this.timeLeft/1000)}) // ta bort correctAnswer
-      console.log('svaret skickas till servern')
+      socket.emit("submitAnswer", {pollId: this.pollId, questionNumber: this.questionNumber, answer: answer, userId: this.userId, time: Math.floor(this.timeLeft/1000)}) 
     },
     /*timeUp: function(){ //används inte längre
       //socket.emit("checkUserAnswer", {pollId:this.pollId, questionNumber:this.questionNumber,userId:this.userId}) //verkar inte behöva den, fungerar avkommenterad
@@ -120,35 +119,36 @@ export default {
 
       let startTime = Date.now();
 
-      let timerDuration = 16000;
+      let timerDuration = 13000;
       let timerAnswer = 10000;
-      let timerSeeAnswer = 3000;
       
       let interval = setInterval(() =>{
         let elapsedTime = Date.now() - startTime;
         this.timeLeft = timerDuration - elapsedTime;
 
-        if (this.timeLeft > timerAnswer + timerSeeAnswer) {
-        } else if (this.timeLeft > timerSeeAnswer) {
-          this.percentage = Math.floor((this.timeLeft - timerSeeAnswer) / 100); //denna går inte ner till noll?
-          this.questionActive = true;
+        if (this.timeLeft > timerAnswer) {
+          //lägg in en countdown för att innan man ser svarsalternativ?
         } else if (this.timeLeft > 0) {
-          this.questionActive = false
+          this.percentage = Math.floor(this.timeLeft / 100);
+          this.questionActive = true;
+        } else {
           this.seeAlternatives = true
+          setTimeout(()=>{this.showCorrectAnswer = true}, 2000)
+          clearInterval(interval)
+        }
+          /*
           if (!this.answerChecked) {
-
-            console.log('checked answer innan: ', this.answerChecked)
+            console.log('hej')
+            //console.log('checked answer innan: ', this.answerChecked)
             // en nya socket är som kollar om svaret är sant eller ej 
-            socket.emit("checkUserAnswer", {pollId: this.pollId, questionNumber: this.questionNumber,userId: this.userId,
-        
-            });
+            //socket.emit("checkUserAnswer", {pollId: this.pollId, questionNumber: this.questionNumber,userId: this.userId});
             this.answerChecked = true
-            console.log('checked answer efter: ', this.answerChecked)
+            //console.log('checked answer efter: ', this.answerChecked)
           }
         } else {
           this.showCorrectAnswer = true;
           clearInterval(interval)
-        }
+        }*/
       }, 100);  
     },
   },
