@@ -51,10 +51,10 @@ export default {
       isCorrectAnswer: false, // kollar om svaret som skickats är korrekt eller inte
       questionActive: false, // om den fortfarande syns på stora tavlan
       seeAlternatives: false, // om man kan se sina svar när man inte kan svara på frågan, ska detta finnas hela tiden? kanske
-      answerChecked: false,  // om svaret har rättats eller ej
       timeLeft: 0, 
       showCorrectAnswer: false, // rättar och gör knappen grön om korrekt, annars röd
       percentage: 100,
+      isQuestionAnswered: false, 
     }
   },
   created: function () {
@@ -105,17 +105,19 @@ export default {
   methods: {
     submitAnswer: function (answer) { 
       socket.emit("submitAnswer", {pollId: this.pollId, questionNumber: this.questionNumber, answer: answer, userId: this.userId, time: Math.floor(this.timeLeft/1000)}) 
+      this.isQuestionAnswered = true;
+      console.log('frågan är besvarad')
     },
     /*timeUp: function(){ //används inte längre
       //socket.emit("checkUserAnswer", {pollId:this.pollId, questionNumber:this.questionNumber,userId:this.userId}) //verkar inte behöva den, fungerar avkommenterad
       console.log('timeUp körs')
     }, */
     countdownPlayer: function() {
-      this.answerChecked = false;
       this.isCorrectAnswer = false;
       this.seeAlternatives = false;
       this.showCorrectAnswer = false;
       this.percentage = 100;
+      this.isQuestionAnswered = false;
 
       let startTime = Date.now();
 
@@ -132,9 +134,17 @@ export default {
           this.percentage = Math.floor(this.timeLeft / 100);
           this.questionActive = true;
         } else {
+          if (!this.isQuestionAnswered) { // frågan är om detta ens behövs??
+            this.submitAnswer();
+          }
+          this.questionActive = false;
           this.seeAlternatives = true
-          setTimeout(()=>{this.showCorrectAnswer = true}, 2000)
+          setTimeout(()=>{
+            this.showCorrectAnswer = true
+            // socket on
+          }, 2000)
           clearInterval(interval)
+          // lägga in en socket on som lyssar om svaret är korrekt eller ej?
         }
           /*
           if (!this.answerChecked) {

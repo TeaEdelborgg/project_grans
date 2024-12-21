@@ -224,9 +224,9 @@ Data.prototype.newCheckUserAnswer = function(pollId, qId, userId) {
     console.log('i nya, user är: ', user)
     console.log('hela svaret, svar + tid: ', user.information.answers[qId])
     console.log('svaret som skickas är: ', user.information.answers[qId][0])
-    if(user.information.answers[qId]==null){ // måste man ha detta här? det funkar för det första svaret om man ej skickar något??
+    /*if(user.information.answers[qId]==null){ // måste man ha detta här? det funkar för det första svaret om man ej skickar något??
       user.information.answers[qId]=["-",0]
-    }
+    }*/
     if (user.information.answers[qId][0] == this.polls[pollId].questions[qId].a.correct) {
       console.log('svaret är korrekt')
       return true
