@@ -62,17 +62,24 @@ function sockets(io, socket, data) {
   });
 
   socket.on('submitAnswer', function(d) {
-    data.submitAnswer(d.pollId, d.answer, d.userId, d.time); // ta bort correctAnswer
+    console.log('i submitAnswer, socket')
+    data.submitAnswer(d.pollId, d.questionNumber, d.answer, d.userId, d.time);
     //skicka till resultat med pollId och userId
-    io.to(d.pollId).emit('updatePedestalPlayer', d.userId) //använd den här
+
+    let isUserAnswerCorrect = data.newCheckUserAnswer(d.pollId,d.questionNumber,d.userId);
+    console.log('spelaren svarat rätt: ', isUserAnswerCorrect)
+
+
+    
+    io.to(d.pollId).emit('updatePedestalPlayer', d.userId)
     //io.to(d.pollId).emit('submittedAnswersUpdate', data.getSubmittedAnswers(d.pollId));
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId)); //borde kunna ta bort
     console.log('submitAnswer i socket körs')
   }); 
   socket.on('checkUserAnswer', function(d){
-    console.log("i socket, ska titta om svaret är rätt")
+    //console.log("i socket, ska titta om svaret är rätt")
     let checkedUserAnswer = data.newCheckUserAnswer(d.pollId,d.questionNumber,d.userId);
-    console.log('i checkUserAnswer, checkeduseranswer är: ', checkedUserAnswer)
+    //console.log('i checkUserAnswer, checkeduseranswer är: ', checkedUserAnswer)
     io.to(d.pollId).emit('checkedUserAnswer', checkedUserAnswer);
     //io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   });

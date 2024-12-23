@@ -189,26 +189,6 @@ Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){ //dela upp 
   return null
 }
 
-Data.prototype.newCheckUserAnswer = function(pollId, qId, userId) {
-  console.log('i nya checkuseranswer')
-  if(this.pollExists(pollId)){
-    const user = this.polls[pollId].participants.find(user=> user.userId ==userId)
-    console.log('i nya, user är: ', user)
-    console.log('hela svaret, svar + tid: ', user.information.answers[qId])
-    console.log('svaret som skickas är: ', user.information.answers[qId][0])
-    if(user.information.answers[qId]==null){ // måste man ha detta här? det funkar för det första svaret om man ej skickar något??
-      user.information.answers[qId]=["-",0]
-    }
-    if (user.information.answers[qId][0] == this.polls[pollId].questions[qId].a.correct) {
-      console.log('svaret är korrekt')
-      return true
-    } else {
-      console.log('svaret är fel')
-      return false
-    }
-  }
-}
-
 
 Data.prototype.testCheckAnswers = function(pollId,qId=null){
     if(this.pollExists(pollId)){
@@ -219,24 +199,44 @@ Data.prototype.testCheckAnswers = function(pollId,qId=null){
     }
 }
 
-Data.prototype.submitAnswer = function(pollId, answer, userId, timeLeft) { // och ta emot userId, måste skicka svaret till individuell lista & ha med correctAnswer
-  if (this.pollExists(pollId)) { //vill lägga till tiden när svaret togs emot
-    const poll = this.polls[pollId];
+Data.prototype.submitAnswer = function(pollId, questionNumber, answer, userId, timeLeft) {
+  if (this.pollExists(pollId)) {
+    const user = this.polls[pollId].participants.find(user => user.userId == userId)
+    user.information.answers[questionNumber]= [answer, timeLeft]
+    console.log(user.information.answers, 'lyckades i submit answer')
+    
+    /*const poll = this.polls[pollId];
     const users = poll.participants;
-    console.log('i submitanswer')
-    //console.log('participants är: ', poll.participants)
-    //console.log('poll är: ', this.polls[pollId])
     for (const key in users) {
       const user = users[key]
-      console.log('user är: ', user)
-      //console.log('users är: ', users)
       if (userId==user.userId) {
-        user.information.answers[poll.currentQuestion]= [answer, timeLeft]
+        user.information.answers[questionNumber]= [answer, timeLeft]
         console.log(user.information.answers, 'lyckades i submit answer')
       }
+    }*/
+  }
+}
+
+Data.prototype.newCheckUserAnswer = function(pollId, qId, userId) {
+  console.log('i nya checkuseranswer')
+  if(this.pollExists(pollId)){
+    const user = this.polls[pollId].participants.find(user=> user.userId ==userId)
+    console.log('i nya, user är: ', user)
+    console.log('hela svaret, svar + tid: ', user.information.answers[qId])
+    console.log('svaret som skickas är: ', user.information.answers[qId][0])
+    /*if(user.information.answers[qId]==null){ // måste man ha detta här? det funkar för det första svaret om man ej skickar något??
+      user.information.answers[qId]=["-",0]
+    }*/
+    if (user.information.answers[qId][0] == this.polls[pollId].questions[qId].a.correct) {
+      console.log('svaret är korrekt')
+      return true
+    } else {
+      console.log('svaret är fel')
+      return false
     }
   }
 }
+
 Data.prototype.updateQuestion = function (pollId,question){
   if(this.pollExists(pollId)){
     //i question borde question.id finnas, question är undefined
