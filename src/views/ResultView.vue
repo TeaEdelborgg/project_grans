@@ -82,6 +82,7 @@ export default {
     socket.on( "participantsUpdate", p => { //den här uppdateras när man har svarat, sedan tittas i pedestalerna om antal svar= currentQuestion
       this.participants = p;
     })
+    //^byt ut till updatePedestalPlayer, borde kanske endast behöva vara true eller false och inte hela participants
 
     socket.on("sendAllAnswers", d=>{ //updateAfterQuestion
       this.participants = d.participants //behövs inte om alla svar tittas på direkt när man svarat och skickas tillbaka, eller skickar 
