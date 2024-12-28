@@ -79,7 +79,7 @@ export default {
     socket.on( "uiLabels", labels => this.uiLabels = labels );
 
 
-    socket.on( "participantsUpdate", p => { //den här uppdateras när man har svarat, sedan tittas i pedestalerna om antal svar= currentQuestion
+    socket.on( "updatePedestalPlayer", p => { //den här uppdateras när man har svarat, sedan tittas i pedestalerna om antal svar= currentQuestion
       this.participants = p;
     })
     //^byt ut till updatePedestalPlayer, borde kanske endast behöva vara true eller false och inte hela participants
@@ -119,12 +119,16 @@ export default {
     backgroundResult.style.height=this.windowHeight + "px";
   },
   methods:{
-    countDownOver: function(){
-      socket.emit("testUserAnswers", {pollId:this.pollId,questionNumber:this.questionNumber}) //döp om
+    countDownOver: function(){ // finnas i admin?
+    setTimeout(()=>{
+          socket.emit("getAllAnswers", this.pollId) //den ska både hämta svaren och skicka allas svar till sig själva
+          this.questionActive=false 
+        },2000)
+      /*socket.emit("testUserAnswers", {pollId:this.pollId,questionNumber:this.questionNumber}) //döp om
           setTimeout(()=>{
             socket.emit("getAllAnswers", this.pollId) //den ska både hämta svaren och skicka allas svar till sig själva
             this.questionActive=false 
-          },2000)
+          },2000)*/
     }
   }
 }
