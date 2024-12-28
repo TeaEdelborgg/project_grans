@@ -3,11 +3,26 @@
     {{ pollId }}
     <div v-if="!joined">
       <input type="text" v-model="userName" placeholder="Enter your name" />
-      <input type="color" v-model="selectedColor" />
-      <button v-on:click="participateInPoll">
+
+      <div>
+        <ul class="colorPicker">
+          <li v-for="color in colors" :key="color.hex">
+            <a
+              href="#"
+              :style="{ background: color.hex }"
+              v-on:click="setColor(color.hex)"
+              :class="{ selected: selectedColor === color.hex, disabled: isColorDisabled(color.hex) }">
+            </a>
+          </li>
+        </ul>
+        <input type="hidden" v-model="selectedColor" />
+      </div>
+
+      <button v-on:click="participateInPoll" :disabled="!userName || isColorDisabled(selectedColor) || selectedColor ==='#ff0000'">
         {{ uiLabels.participateInPoll || "Join Poll" }}
       </button>
     </div>
+
     <div v-if="joined">
       <p>Waiting for host to start poll</p>
       <p>Current Participants:</p>
@@ -37,6 +52,14 @@ export default {
       lang: localStorage.getItem("lang") || "en",
       selectedColor: "#ff0000",
       participants: [],
+      colors: [
+        {hex: "#FFA07A"},
+        {hex: "#CD5C5C"},
+        {hex: "#DC143C"},
+        {hex: "#20B2AA"},
+        {hex: "#008B8B"},
+        {hex: "#4682B4"},
+      ],
     };
   },
   created() {
@@ -48,6 +71,9 @@ export default {
     socket.on("startPoll", () =>
       this.$router.push("/poll/" + this.pollId + "/" + this.userID)
     );
+    socket.on("colorSelectionUpdate", (updatedParticipants) => {
+      this.participants=updatedParticipants;
+    })
     socket.emit("joinPoll", this.pollId);
     socket.emit("getUILabels", this.lang);
   },
@@ -62,26 +88,44 @@ export default {
       });
       this.joined = true;
     },
+    setColor(color) {
+      if (this.isColorDisabled(color)) return;
+      this.selectedColor = color;
+      socket.emit("selectColor", {
+        pollId:this.pollId,
+        color,
+        userId: this.userID,
+      });
+    },
+    isColorDisabled(color) {
+      return this.participants.some(
+        (participant) => participant.information.color === color
+      );
+    },
 }};
 </script>
 
 <style scoped>
-/*
-.boxes {
+.colorPicker {
+  list-style: none;
   display: flex;
-  gap: 10px;
+  gap: 5px;
 }
-.box {
-  width: 100px;
-  height: 100px;
-  border: 1px solid #000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+.colorPicker li a {
+  display: block;
+  height: 30px;
+  width: 30px;
+  border: 2px solid transparent;
   cursor: pointer;
 }
-.box.taken {
-  background-color: #ccc;
-  cursor: not-allowed;
-}*/
+
+.colorPicker li a.selected {
+  border-color: #000;
+}
+
+.colorPicker li a.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
 </style>

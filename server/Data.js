@@ -94,6 +94,18 @@ Data.prototype.participateInPoll = function(pollId, name, userId, color) {
     this.polls[pollId].participants.push({userId: userId, information: {name: name, color: color, answers: [], correctedAnswers:[], in:true, coloredBoxes:[], time:0, lives:2}}) //lägg till liv, tid ect alltså allt som är samma till en början
   }
 }
+Data.prototype.updateColorSelection = function (info) {
+  const {pollId, color, userId} = info;
+  if (this.pollExists(pollId)) {
+    const poll = this.getPoll(pollId);
+    const participant = poll.participants.find((p) => p.userId === userId);
+    if (participant) {
+      participant.information.color = color;
+    }
+    return poll.participants;
+  }
+  return [];
+}
 
 Data.prototype.getParticipants = function(pollId) {
   const poll = this.polls[pollId];

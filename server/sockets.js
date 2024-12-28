@@ -45,6 +45,10 @@ function sockets(io, socket, data) {
     data.participateInPoll(d.pollId, d.name, d.userId, d.color); //allt ska läggas in här när vi skapat det i LobbyView, id, namn och färg (det som skiljer varje spelare)
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   });
+  socket.on("selectColor", function (info) {
+    const updatedParticipants = data.updateColorSelection(info);
+    io.to(info.pollId).emit("colorSelectionUpdate", updatedParticipants);
+  });
   socket.on('startPoll', function(pollId) {
     data.createBoxes(pollId)
     data.setAnswersFalse(pollId)
