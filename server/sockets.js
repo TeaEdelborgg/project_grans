@@ -6,6 +6,7 @@ function sockets(io, socket, data) {
 
   socket.on('createPoll', function(d) {
     data.createPoll(d.pollId, d.lang)
+    data.getQuestionAmount(d.pollId);
     socket.emit('pollData', data.getPoll(d.pollId));
   });
 

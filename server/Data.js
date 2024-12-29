@@ -60,6 +60,7 @@ Data.prototype.createPoll = function(pollId, lang="en") {
     poll.lang = lang;  
     poll.questions = [];
     poll.answers = [];
+    poll.questionAmount = 0;
     poll.participants = [];
     poll.currentQuestion = -1; //var innan 0
     poll.timer = {timeLeft:10,interval:null} 
@@ -280,6 +281,12 @@ Data.prototype.updateQuestion = function (pollId,question){
     return question;
   }
   return null
+}
+
+Data.prototype.getQuestionAmount = function (pollId) {
+  if(this.pollExists(pollId)){
+    this.questionAmount = this.polls[pollId].questions.length;
+  }
 }
 
 Data.prototype.amountOfQuestions = function (pollId){
