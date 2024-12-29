@@ -86,9 +86,10 @@ export default {
     
     // socket.on( "submittedAnswersUpdate", answers => this.submittedAnswers = answers );
     
-    socket.on("checkedUserAnswer", checkedAns => {
+    /*socket.on("checkedUserAnswer", checkedAns => {
       this.isCorrectAnswer = checkedAns;
-    });
+    });*/
+
     socket.on("gameFinished", () =>
       this.$router.push("/finalResultPlayer/" + this.pollId + "/" + this.userId)
     );
@@ -143,8 +144,11 @@ export default {
             this.showCorrectAnswer = true
             // socket on
           }, 2000)
-          clearInterval(interval)
-          // lägga in en socket on som lyssar om svaret är korrekt eller ej?
+          clearInterval(interval);
+          socket.emit('getCorrectedUserAnswer', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId})
+          socket.on('sendCorrectedUserAnswer', checkedUserAnswer => {
+            this.isCorrectAnswer = checkedUserAnswer
+          });
         }
           /*
           if (!this.answerChecked) {
