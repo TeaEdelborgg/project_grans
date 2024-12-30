@@ -37,6 +37,20 @@
           {{ participant.information.name }} - Color:{{ participant.information.color }}
         </li>
       </ul>
+      <button v-if="!gameRules" v-on:click="gameRules = true" class="rulebutton">Rules</button>
+      <div :class="['overlay', {show:gameRules}]" v-on:click="closeGameRules"></div>
+      <div :class="['RulesPopup', {show:gameRules}]">
+        <h2>Game Rules</h2>
+        <p>
+          <li>You enter the game with a total of 2 lives</li>
+          <li>If you get an answer wrong you lose one life</li>
+          <li>You lose the game when you have lost both lives</li>
+          <li>Pick an answer and slide in to lock your final answer within the time limit</li>
+          <li>The player with most right answers win, if there are multiple winners the one with fastest last answer wins</li>
+          
+        </p>
+        <button @click="closeGameRules">X</button>
+      </div>
     </div>
   </div>
 </template>
@@ -68,6 +82,7 @@ export default {
       ],
       showPopup: false,
       popupShown: false,
+      gameRules: false,
     };
   },
   created() {
@@ -97,6 +112,7 @@ export default {
         color: this.selectedColor, //skickar färg t admin
       });
       this.joined = true;
+      this.gameRules = true
     },
     setColor(color) {
       if (this.isColorDisabled(color)) return;
@@ -121,6 +137,12 @@ export default {
     closePopup() {
       this.showPopup = false;
     },
+    toggleGameRules() {
+      this.gameRules = !this.gameRules;
+    },
+    closeGameRules() {
+      this.gameRules = false;
+    }
   },
 };
 </script>
@@ -249,7 +271,75 @@ h1 {
   font-size: 20px;
 }
 
+.rulebutton {
+  margin: 20px auto;
+  padding: 12px 25px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff; 
+  background-color: #ff9100; 
+  border: none;
+  border-radius: 8px; 
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
+  transition: background-color 0.3s ease, transform 0.2s ease; 
+}
+.rulebutton:hover {
+  background-color: #cf6e00; 
+  transform: scale(1.05); 
+}
 
+.RulesPopup {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0); 
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+  width: 80%;
+  max-width: 400px;
+  border-radius: 10px;
+  opacity: 0; 
+  transition: transform 0.4s ease, opacity 0.4s ease; 
+}
+
+.RulesPopup.show {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1; 
+}
+
+.RulesPopup button {
+  background: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.842);
+  opacity: 0;
+  transition: opacity 0.4s ease; 
+  pointer-events: none; 
+}
+
+.overlay.show {
+  opacity: 1;
+}
+
+.RulesPopup li {
+  text-align: left;
+}
 /*
 .colorPicker li a.selected {
   border-color: #000;
