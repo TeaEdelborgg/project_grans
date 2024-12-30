@@ -5,8 +5,8 @@
       :class="{ 
         selected: a === selectedAnswer, 
         sended: a === selectedAnswer && sent, 
-        showCorrect: a === selectedAnswer && showCorrectAnswer && a === question.correct, 
-        showIncorrect: a === selectedAnswer && showCorrectAnswer && a !== question.correct}" 
+        showCorrect: a === selectedAnswer && showCorrectAnswer && isCorrectAnswer, 
+        showIncorrect: a === selectedAnswer && showCorrectAnswer && !isCorrectAnswer}" 
       v-for="a in question.a" 
       v-on:click="selectAnswer(a)" 
       v-bind:key="a">

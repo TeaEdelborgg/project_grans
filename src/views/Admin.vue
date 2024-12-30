@@ -7,10 +7,26 @@
     <button v-on:click="finishGame()">Finish Game</button>
     <!--<router-link v-bind:to="'/finalResult/' +pollId">Finish Game</router-link> ska skicka resultatview till finalResult-->
     <br>
-    Data: {{ pollData }}
-    CheckedAnswers: {{ checkedAnswers }} <br>
-    Time Left:{{ timeLeft }}, Time Left Test: {{ timeLeftTest }}<br>
-    Time before Question:{{ timeLeftBeforeQuestion }}
+
+    <br><br>
+    <button v-on:click='testFunktion'>
+      Testknapp
+    </button><br><br>
+
+    Data: {{ pollData }} <br><br>
+    Antal frågor: {{ pollData.questionAmount }} <br><br>
+    Frågor: {{ pollData.questions }} <br><br>
+    Time Left Test: {{ timeLeftTest }} <br><br>
+
+    <div class='frågor'>
+      Frågor:
+      <ul>
+        <!-- Loopar genom frågorna och visar dem -->
+        <li v-for="(question, index) in questionList" :key="index">
+          {{ question }}
+        </li>
+      </ul>
+    </div>
 </template>
 
 <script>
@@ -24,18 +40,13 @@ export default {
     return {
       lang: localStorage.getItem("lang") || "en",
       pollId: "",
-      question: "",
-      answers: {},
-      correctAnswer: "",
-      wrongAnswers: ["", "", ""],
       questionNumber: 0,
-      pollData: {
-        questions: []
-      },
+      pollData: {},
       uiLabels: {},
-      checkedAnswers: {},
-      timeLeft:0,
-      timeLeftBeforeQuestion:0,
+
+      questionList: [],
+      //timeLeft:0,
+      //timeLeftBeforeQuestion:0,
 
 
       timeLeftTest:0,
@@ -46,14 +57,23 @@ export default {
 
 
     socket.on( "uiLabels", labels => this.uiLabels = labels );
-    socket.on( "pollData", data => this.pollData = data );
-    socket.on( "participantsUpdate", p => this.pollData.participants = p );
-    socket.emit( "getUILabels", this.lang );
-    socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
-    socket.on('getTime',time => {this.timeLeft=time
-        console.log("tog emot tid")
+    socket.on( "pollData", data => {
+      this.pollData = data; 
+      this.getQuestions();
+      console.log('hämtar frågorna')
     });
-    socket.on('getTimeBeforeQuestion',timeTwo => this.timeLeftBeforeQuestion=timeTwo);
+    socket.on( "participantsUpdate", p => {
+      this.pollData.participants = p 
+      // lägga in här som med frågorna fast för spelarna?
+    });
+    socket.emit( "getUILabels", this.lang );
+
+
+    //socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
+    /*socket.on('getTime',time => {this.timeLeft=time
+      console.log("tog emot tid")
+    });*/
+    //socket.on('getTimeBeforeQuestion',timeTwo => this.timeLeftBeforeQuestion=timeTwo);
     socket.on('scoreBoardCreated', ()=>{
       socket.emit('finishGame', this.pollId)
     })
@@ -61,19 +81,29 @@ export default {
 
   },
   methods: {
-    generatePollId: function(){
-      return Math.random().toString(36).substring(2,10).toUpperCase();
-      /*id ska tas bort om det genererats tidigare?*/
+    testFunktion: function() {
+      console.log('hej')
     },
-    createPoll: function () {
+    getQuestions: function() {
+      const amountOfQuestions = this.pollData.questionAmount;
+      for (let i = 0; i < amountOfQuestions; i++) {
+        this.questionList[i] = this.pollData.questions[i].q
+      }
+    },
+    /*generatePollId: function(){
+      return Math.random().toString(36).substring(2,10).toUpperCase();
+      //id ska tas bort om det genererats tidigare?
+    },*/
+
+    /*createPoll: function () {
       this.pollId=this.generatePollId();
       socket.emit("createPoll", {pollId: this.pollId, lang: this.lang })
       socket.emit("joinPoll", this.pollId);
-    },
-    startPoll: function () { 
+    },*/
+    /*startPoll: function () { // används inte nu men kanske ska göra det??
       //this.timerQuestion()
       socket.emit("startPoll", this.pollId)
-    },
+    },*/
     /*timerBeforeQUestion: function(){ //denna ska göra så att resultat också får count down
         let time={
           timeLeft:3,
