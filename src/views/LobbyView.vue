@@ -37,13 +37,20 @@
     </div>
 
     <div v-if="joined">
-      <p>Waiting for host to start poll</p>
-      <p>Current Participants:</p>
-      <ul>
-        <li v-for="participant in participants" :key="participant.userId">
-          {{ participant.information.name }} - Color:{{ participant.information.color }}
+      <p class="waiting-message">Waiting for host to start poll<span class="dots"></span></p>
+      <div class="waitingLobby">
+        <p>Current Participants:</p>
+      
+      <ul class="lobbyParticipants">
+        <li v-for="participant in participants" 
+        :key="participant.userId" 
+        :style="{ color: participant.information.color, borderColor: participant.information.color }"
+        class="participantColor">
+          {{ participant.information.name }}
         </li>
       </ul>
+      </div>
+
       <button v-if="!gameRules" v-on:click="gameRules = true" class="rulebutton">Rules</button>
       <div :class="['overlay', {show:gameRules}]" v-on:click="closeGameRules"></div>
       <div :class="['RulesPopup', {show:gameRules}]">
@@ -279,8 +286,7 @@ h1 {
 }
 
 .rulebutton {
-  margin: 20px auto;
-  padding: 12px 25px;
+  padding: 10px 20px;
   font-size: 18px;
   font-weight: bold;
   color: #ffffff; 
@@ -363,6 +369,71 @@ h1 {
 h3 {
   color: #fff;
   font-size: 200%;
+}
+
+.lobbyParticipants {
+  list-style: none;
+  padding: 0;
+}
+
+.participantColor {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 25px;
+  border: 2px solid;
+  border-radius: 20px; /* Optional: makes the border rounded */
+  font-weight: bold;
+  text-align: center;
+  font-size: 25px;
+  box-shadow: 0 0 5px currentColor, 0 0 5px currentColor, 0 0 20px currentColor;
+
+}
+
+.waitingLobby {
+  text-align: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  width: 80%;
+  height: 200px;
+  margin: 60px auto;
+  margin-top: 60px;
+  margin-bottom: 35px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.waitingLobby p {
+  font-size: 1rem;
+  color: #333;
+  font-family: Verdana, Tahoma, sans-serif;
+}
+
+.waiting-message {
+  font-size: 1.2rem;
+  color: #333;
+  margin-top: 50px;
+  font-family: Verdana, Tahoma, sans-serif;
+}
+
+.dots::after {
+  content: "";
+  display: inline-block;
+  animation: dots 2s steps(3, end) infinite;
+}
+
+@keyframes dots {
+  0% {
+    content: "";
+  }
+  33% {
+    content: ".";
+  }
+  66% {
+    content: "..";
+  }
+  100% {
+    content: "...";
+  }
 }
 
 /*
