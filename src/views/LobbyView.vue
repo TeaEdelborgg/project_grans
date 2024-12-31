@@ -27,6 +27,13 @@
         <p>Some colors are already taken. Hurry up and pick you favourite!</p>
         <button @click="closePopup">X</button>
       </div>
+      <!--<div v-if="isLobbyFull()">
+        <h3>lobby is full please try again later</h3>
+        <button @click="closeLobbyFullPopup">X</button>
+      </div>-->
+      <div v-if="isLobbyFull()" class="lobbyFullPopup">
+        <h3>Lobby is full please try again later 😔</h3>
+      </div>
     </div>
 
     <div v-if="joined">
@@ -41,14 +48,11 @@
       <div :class="['overlay', {show:gameRules}]" v-on:click="closeGameRules"></div>
       <div :class="['RulesPopup', {show:gameRules}]">
         <h2>Game Rules</h2>
-        <p>
           <li>You enter the game with a total of 2 lives</li>
           <li>If you get an answer wrong you lose one life</li>
           <li>You lose the game when you have lost both lives</li>
           <li>Pick an answer and slide in to lock your final answer within the time limit</li>
           <li>The player with most right answers win, if there are multiple winners the one with fastest last answer wins</li>
-          
-        </p>
         <button @click="closeGameRules">X</button>
       </div>
     </div>
@@ -142,6 +146,9 @@ export default {
     },
     closeGameRules() {
       this.gameRules = false;
+    },
+    isLobbyFull() {
+    return this.participants.length === 6
     }
   },
 };
@@ -340,6 +347,24 @@ h1 {
 .RulesPopup li {
   text-align: left;
 }
+
+.lobbyFullPopup {
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; 
+  background-color: #000000d5; 
+  z-index: 10; 
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+}
+h3 {
+  color: #fff;
+  font-size: 200%;
+}
+
 /*
 .colorPicker li a.selected {
   border-color: #000;
