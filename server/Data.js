@@ -104,10 +104,10 @@ Data.prototype.getParticipants = function(pollId) {
   return [];
 }
 
-Data.prototype.addQuestion = function(pollId, q) {
+Data.prototype.addQuestion = function(pollId, newQ) {
   if (this.pollExists(pollId)) {
-    console.log("frågan: ",q);
-    this.polls[pollId].questions.push(q);
+    console.log("frågan: ",newQ);
+    this.polls[pollId].questions.push(newQ);
   }
 }
 

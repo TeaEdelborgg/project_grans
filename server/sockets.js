@@ -10,7 +10,7 @@ function sockets(io, socket, data) {
   });
 
   socket.on('addQuestion', function(d) {
-    data.addQuestion(d.pollId, d.q);
+    data.addQuestion(d.pollId, d.newQ);
     socket.emit('questionUpdate', data.getQuestion(d.pollId));
   });
 
