@@ -6,6 +6,7 @@ function sockets(io, socket, data) {
 
   socket.on('createPoll', function(d) {
     data.createPoll(d.pollId, d.lang)
+    data.getQuestionAmount(d.pollId);
     socket.emit('pollData', data.getPoll(d.pollId));
   });
 
@@ -42,12 +43,19 @@ function sockets(io, socket, data) {
     data.participateInPoll(d.pollId, d.name, d.userId, d.color); //allt ska läggas in här när vi skapat det i LobbyView, id, namn och färg (det som skiljer varje spelare)
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   });
+
+  socket.on("selectColor", function (info) {
+    const updatedParticipants = data.updateColorSelection(info);
+    io.to(info.pollId).emit("colorSelectionUpdate", updatedParticipants);
+  });
+
   socket.on('startPoll', function(pollId) {
     data.createBoxes(pollId)
     data.setAnswersFalse(pollId)
     /*data.polls[pollId].started = true;*/
     io.to(pollId).emit('startPoll');
-  })
+  });
+
   socket.on('runQuestion', function(d) {
     let question = data.getQuestion(d.pollId, d.questionNumber);
     let randomOrder = data.getQuestionAnswerRandom(d.pollId, d.questionNumber);
@@ -58,32 +66,44 @@ function sockets(io, socket, data) {
     console.log('ny fråga körs')
   });
 
-  socket.on('submitAnswer', function(d) {
-    data.submitAnswer(d.pollId, d.answer, d.userId, d.time); // ta bort correctAnswer
-    //skicka till resultat med pollId och userId
-    io.to(d.pollId).emit('updatePedestalPlayer', d.userId)
-    //io.to(d.pollId).emit('submittedAnswersUpdate', data.getSubmittedAnswers(d.pollId));
-    io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId)); //borde kunna ta bort
-    console.log('submitAnswer i socket körs')
+  socket.on('submitAnswer', function(d) { // körs när man skickar in sitt svar
+    data.submitAnswer(d.pollId, d.questionNumber, d.answer, d.userId, d.time);
+    io.to(d.pollId).emit('updatePedestalPlayer', data.getParticipants(d.pollId))
+
+    data.newCheckUserAnswer(d.pollId,d.questionNumber,d.userId); // uppdaterar data med det nya svaret
+    console.log('submitAnswer i socket har kört')
   }); 
-  socket.on('checkUserAnswer', function(d){
-    console.log("i socket, ska titta om svaret är rätt")
-    let checkedUserAnswer = data.newCheckUserAnswer(d.pollId,d.questionNumber,d.userId);
-    console.log('i checkUserAnswer, checkeduseranswer är: ', checkedUserAnswer)
+
+  socket.on("getCorrectedUserAnswer", function(d){ // körs när timern hos spelaren är slut
+    let checkedUserAnswer = data.getCorrectedAnswer(d.pollId,d.questionNumber,d.userId);
+    socket.emit('sendCorrectedUserAnswer', checkedUserAnswer)
+    console.log('getCorrectedUserAnswer i socket har kört')
+  });
+
+  /*socket.on('checkUserAnswer', function(d){ // denna borde uppdateras med getCorrectedUserAnswer, ta bort sen?
+    //console.log("i socket, ska titta om svaret är rätt")
+    // kolla i corrected answers för detta qId och skicka till pollview
+
+    let checkedUserAnswer = data.getCorrectedAnswer(d.pollId,d.questionNumber,d.userId);
+
+    //console.log('i checkUserAnswer, checkeduseranswer är: ', checkedUserAnswer)
     io.to(d.pollId).emit('checkedUserAnswer', checkedUserAnswer);
     //io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
-  });
-  socket.on("testUserAnswers", function(d){
+    console.log('checkUserAnswer i socket har kört')
+  });*/
+
+  /*socket.on("testUserAnswers", function(d){
     data.testCheckAnswers(d.pollId,d.questionNumber)
     
     //här vill vi skicka tillbaka till resultat, som sedan där emitar till att hämta resultat
-  })
+  });*/
 
   socket.on('getAllAnswers', function(pollId){ //döp om
     let participantsWithNewAnswersTest = data.updateColoredBoxes(pollId)
     let levelBoxes = data.updateLevelBoxes(pollId) 
     io.to(pollId).emit("sendAllAnswers", {participants:participantsWithNewAnswersTest,levelBoxes:levelBoxes})
-  })
+  }); 
+
   /*socket.on('getTimer', function(pollId){ //ta bort
     let time = data.getTime(pollId)
     io.to(pollId).emit('getTime',time)
@@ -111,14 +131,14 @@ function sockets(io, socket, data) {
     let randomOrder = data.getQuestionAnswerRandom(d.pollId, d.questionNumber);
     io.to(d.pollId).emit('startCountdownPlayer', {q:randomOrder, questionNumber:d.questionNumber});
     io.to(d.pollId).emit('startCountdownResults',{q:randomOrder.q,questionNumber:d.questionNumber});
-  })
+  });
 
   socket.on('updateResult', function(pollId){
-    io.to(pollId).emit('participantsUpdate', data.getParticipants(pollId));
+    //io.to(pollId).emit('participantsUpdate', data.getParticipants(pollId));
     socket.emit('pollData', data.getPoll(pollId));
-  })
-/*
-  socket.on('selectBox', function(info) {
+  });
+
+/*socket.on('selectBox', function(info) {
     const boxStates = data.selectBox(info);
       io.to(info.pollId).emit('boxStatesUpdate', boxStates);
   });*/
@@ -131,25 +151,29 @@ function sockets(io, socket, data) {
     // console.log("försöker skicka levelCOlor")
     io.to(pollId).emit('loadStats', {amountOfQuestions:amountOfQuestions, levelValues:levelValues, levelColors:levelColors, participants:participants}) //skicka som object
   });
+
   socket.on('getStartColors', function(pollId){
     const levelBoxes = data.updateLevelBoxes(pollId)
     io.to(pollId).emit('sendStartColors',levelBoxes)
-  })
+  });
+
   socket.on('finishGame', function(pollId){
     io.to(pollId).emit('gameFinished')
-  })
+  });
+
   socket.on('createScoreBoard', function(pollId){
     data.countScore(pollId)
     socket.emit('scoreBoardCreated')
-  })
-
+  });
+  
   socket.on('getScoreBoard', function(pollId){
     const scoreBoard = data.getScoreBoard(pollId)
     //socket.join(pollId);
     //skicka här direkt till användarna
     //io.emit("scoreBoardUser", scoreBoard) //.to(pollId)
     socket.emit('sendScoreBoard',scoreBoard) //ändra till socket.io
-  })
+  });
+
   /*socket.on('getScoreBoardUser', function(pollId){ //denna används inte just nu
     const scoreBoard = data.getScoreBoard(pollId)
     console.log("getScoreBoardUser")

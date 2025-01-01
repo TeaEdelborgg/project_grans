@@ -3,36 +3,22 @@
     <!--<div v-bind:class="['hamburger', {'close': !hideNav}]" 
          v-on:click="toggleNav">
     </div>-->
-     <button v-on:click="switchLanguage">
-      {{ uiLabels.changeLanguage }}
+    <button v-on:click="switchLanguage" class="langbutton">
+      <img v-if="lang === 'en'" 
+        src="/img/Flag_of_Sweden.svg.png" alt="sweflag"/>
+      <img v-else 
+        src="/img/United_Kingdom.png" alt="engflag"/>
     </button>
- 
   </header>
-  
-   
 
-    <!--Ta bort att man går med, utan lägg in en knapp som tar en till join sidan
-    När man skapar så tas man till en sida där man
-    <router-link to="/create/">
-      {{ uiLabels.createPoll }}
-    </router-link>
-
-    <a href="">
-      {{ uiLabels.about }}
-    </a>
-
-    <a href="">FAQ</a>
-    -->
-
-
-  <h1>{{ uiLabels["sales-pitch"] }}</h1>
+  <h1>{{ uiLabels["sales-pitch"] }} <span class="questionMark">?</span></h1>
   <!--Gå med-->
-  <router-link to="/create/">
-    <button>{{ uiLabels.createQuiz }}</button>
+  <router-link to="/create/" >
+    <button class="createButton">{{ uiLabels.createQuiz }}</button>
   </router-link>
   <!--Gå med i quiz-->
   <router-link to="/join/">
-    <button>{{ uiLabels.joinQuiz }}</button>
+    <button class="enterButton">{{ uiLabels.joinQuiz }}</button>
   </router-link>
   
 </template>
@@ -41,7 +27,7 @@
 import ResponsiveNav from '@/components/ResponsiveNav.vue';
 import io from 'socket.io-client';
 //const socket = io("localhost:3000");
-//sessionStorage.setItem("dataServer", "192.168.0.114:3000")
+//sessionStorage.setItem("dataServer", "192.168.68.75:3000")
 sessionStorage.setItem("dataServer", "localhost:3000")
 const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
 
@@ -81,6 +67,71 @@ export default {
 </script>
 
 <style scoped>
+.langbutton {
+  border: none; 
+  background: none; 
+  padding: 0; 
+  cursor: pointer;
+}
+.langbutton img {
+  width: 48px; 
+  height: 32px; 
+  margin-left: 530px; 
+  margin-top: 10px; 
+  position: absolute;
+  box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4); 
+}
+.langbutton img:hover {
+  transform: scale(1.2);
+
+}
+h1 {
+  font-family: 'Copperplate Gothic', 'Copperplate', serif;
+  font-size: 57px;
+  margin-top: 150px;
+  color: #cfcfcf;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 5px 0 #0000003b;
+}
+
+.questionMark {
+  display: inline-block;
+  font-size: 80px; 
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0); 
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.enterButton, .createButton{
+  border: none;
+  cursor: pointer;
+  margin-left: 100px; 
+  margin-right:100px;
+  font-size: 20px; 
+  background-color: rgb(255, 136, 0);
+  color: #fff; 
+  border-radius: 10px; 
+  cursor: pointer;
+  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1); 
+  transition: background-color 0.3s ease; 
+  width: 220px;
+  height:50px;
+  text-decoration: none;
+}
+
+.enterButton:hover, 
+.createButton:hover {
+  background-color: rgb(227, 122, 1);
+  box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4); 
+}
+
+
 /*
   header {
     background-color: gray;
@@ -112,11 +163,8 @@ export default {
     height: 2rem;
     cursor: pointer;
     font-size: 1.5rem;
-  }*/
-  button:hover {
-    background-color: rgb(152, 135, 135);
-    cursor: pointer; 
   }
+
 
 @media screen and (max-width:50em) {
   .logo {
@@ -126,13 +174,13 @@ export default {
     justify-content: center;
   }
   .hamburger::before {
-    content: "☰"; /* toggle menu */
+    content: "☰"; 
   }
   .close::before {
-    content: "✕";  /* close menu */
+    content: "✕";  
   }
   .hide {
     left:-12em;
   }
-}
+}*/
 </style>

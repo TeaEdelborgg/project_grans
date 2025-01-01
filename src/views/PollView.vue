@@ -51,10 +51,10 @@ export default {
       isCorrectAnswer: false, // kollar om svaret som skickats är korrekt eller inte
       questionActive: false, // om den fortfarande syns på stora tavlan
       seeAlternatives: false, // om man kan se sina svar när man inte kan svara på frågan, ska detta finnas hela tiden? kanske
-      answerChecked: false,  // om svaret har rättats eller ej
       timeLeft: 0, 
       showCorrectAnswer: false, // rättar och gör knappen grön om korrekt, annars röd
       percentage: 100,
+      isQuestionAnswered: false, 
     }
   },
   created: function () {
@@ -86,9 +86,10 @@ export default {
     
     // socket.on( "submittedAnswersUpdate", answers => this.submittedAnswers = answers );
     
-    socket.on("checkedUserAnswer", checkedAns => {
+    /*socket.on("checkedUserAnswer", checkedAns => {
       this.isCorrectAnswer = checkedAns;
-    });
+    });*/
+
     socket.on("gameFinished", () =>
       this.$router.push("/finalResultPlayer/" + this.pollId + "/" + this.userId)
     );
@@ -104,51 +105,64 @@ export default {
   },
   methods: {
     submitAnswer: function (answer) { 
-      socket.emit("submitAnswer", {pollId: this.pollId, answer: answer, userId: this.userId, time: Math.floor(this.timeLeft/1000)}) // ta bort correctAnswer
-      console.log('svaret skickas till servern')
+      socket.emit("submitAnswer", {pollId: this.pollId, questionNumber: this.questionNumber, answer: answer, userId: this.userId, time: Math.floor(this.timeLeft/1000)}) 
+      this.isQuestionAnswered = true;
+      console.log('frågan är besvarad')
     },
     /*timeUp: function(){ //används inte längre
       //socket.emit("checkUserAnswer", {pollId:this.pollId, questionNumber:this.questionNumber,userId:this.userId}) //verkar inte behöva den, fungerar avkommenterad
       console.log('timeUp körs')
     }, */
     countdownPlayer: function() {
-      this.answerChecked = false;
       this.isCorrectAnswer = false;
       this.seeAlternatives = false;
       this.showCorrectAnswer = false;
       this.percentage = 100;
+      this.isQuestionAnswered = false;
 
       let startTime = Date.now();
 
-      let timerDuration = 16000;
+      let timerDuration = 13000;
       let timerAnswer = 10000;
-      let timerSeeAnswer = 3000;
       
       let interval = setInterval(() =>{
         let elapsedTime = Date.now() - startTime;
         this.timeLeft = timerDuration - elapsedTime;
 
-        if (this.timeLeft > timerAnswer + timerSeeAnswer) {
-        } else if (this.timeLeft > timerSeeAnswer) {
-          this.percentage = Math.floor((this.timeLeft - timerSeeAnswer) / 100); //denna går inte ner till noll?
-          this.questionActive = true;
+        if (this.timeLeft > timerAnswer) {
+          //lägg in en countdown för att innan man ser svarsalternativ?
         } else if (this.timeLeft > 0) {
-          this.questionActive = false
+          this.percentage = Math.floor(this.timeLeft / 100);
+          this.questionActive = true;
+        } else {
+          if (!this.isQuestionAnswered) { // frågan är om detta ens behövs??
+            this.submitAnswer();
+          }
+          this.questionActive = false;
           this.seeAlternatives = true
+          setTimeout(()=>{
+            this.showCorrectAnswer = true
+            // socket on
+          }, 2000)
+          clearInterval(interval);
+          socket.emit('getCorrectedUserAnswer', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId})
+          socket.on('sendCorrectedUserAnswer', checkedUserAnswer => {
+            this.isCorrectAnswer = checkedUserAnswer
+          });
+        }
+          /*
           if (!this.answerChecked) {
-
-            console.log('checked answer innan: ', this.answerChecked)
+            console.log('hej')
+            //console.log('checked answer innan: ', this.answerChecked)
             // en nya socket är som kollar om svaret är sant eller ej 
-            socket.emit("checkUserAnswer", {pollId: this.pollId, questionNumber: this.questionNumber,userId: this.userId,
-        
-            });
+            //socket.emit("checkUserAnswer", {pollId: this.pollId, questionNumber: this.questionNumber,userId: this.userId});
             this.answerChecked = true
-            console.log('checked answer efter: ', this.answerChecked)
+            //console.log('checked answer efter: ', this.answerChecked)
           }
         } else {
           this.showCorrectAnswer = true;
           clearInterval(interval)
-        }
+        }*/
       }, 100);  
     },
   },
