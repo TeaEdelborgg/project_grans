@@ -9,19 +9,22 @@
             <h1>{{question}}</h1>
           </div>
           <div v-if="!questionActive">
-            <h1>{{uiLabels.readyBeforeQuestion}}</h1> <!--alla color borde kunna finnas under questionframe-->
-            <h2>
-              {{ timeLeftBeforeQuestion }}
-            </h2>
+            <SpeakBubble v-bind:uiLabels="uiLabels" v-bind:timeLeftBeforeQuestion="timeLeftBeforeQuestion"></SpeakBubble>
           </div>
           <!--v-if inte aktiv-->
         </div>
 </template>
     
 <script>
+import SpeakBubble from '@/components/SpeakBubble.vue';
+
+
     export default {
       name: 'QuestionComponentResult',
-      emits:['countDownOver'],
+      emits:['countDownOverSend'],
+      components:{
+        SpeakBubble
+      },
       props: {
         question: String,
         uiLabels: Object
@@ -34,11 +37,13 @@
           }
       },
       mounted(){
+        console.log("fråga borde visas i mounted")
         this.countdownResult()
       },
       methods:{
         //ha countdown här, när den är färdig skickas metod till vanliga som skickar socket.emit + gör denna osynlig
         countdownResult: function(){
+          console.log("fråga borde visas")
           let startTime = Date.now();
 
           let timerDuration = 13000;
@@ -56,7 +61,7 @@
             } else {
               clearInterval(interval)
               //skicka till resultatview att köra funktionen
-              this.$emit("countDownOver")
+              this.$emit("countDownOverSend")
             }
           }, 100);  
         },
@@ -65,26 +70,28 @@
 </script>
 <style>
 #backgroundFrame{
-  position:absolute;
+  position:fixed;
   opacity: 0.5;
   background-color: black;
-  z-index: 10;
-  height:75%;
+  top:0;
+  left:0;
+  z-index: 2;
+  height:100%;
   width: 100%;
 }
 #questionFrame{
-  width: 85%;
-  height: 65%;
+  width: 100%;
+  height: 100%;
   margin: auto;
-  left:50%;
-  top:40%;
-  transform: translate(-50%,-50%);
-  z-index: 11;
+  z-index: 3;
+  /*left:50%;
+  top:40%;*/
+  /*transform: translate(-50%,-50%);*/
   background-color: #001F3F;
   position: absolute;
 }
 #questionFrame h1,h2{
-  color:white;
+  color:White;
 }
 #progressbar{
   width:100%;
