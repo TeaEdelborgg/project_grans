@@ -125,6 +125,18 @@ Data.prototype.addQuestion = function(pollId, q) {
   }
 }
 
+Data.prototype.updateQuestion = function (pollId, questionToUpdate) {
+  if (this.pollExists(pollId)) {
+    const poll = this.polls[pollId];
+    console.log("frågan vi vill åt:", questionToUpdate );
+    const newQuestion=questionToUpdate;
+    const questionIndex = poll.questions.findIndex((q) => q.id === newQuestion.id); //hittar id för den fråga i poll som matchar den updaterade frågans id
+    if (questionIndex !== -1) {
+      poll.questions[questionIndex] = newQuestion; //om frågan hittas ersätts den av den updaterade frågan
+    }
+  }
+}
+
 Data.prototype.getQuestion = function(pollId, qId = null) { //borde gå att göra om, vill ha den nedanför istället
   if (this.pollExists(pollId)) {
     const poll = this.polls[pollId];
@@ -231,7 +243,7 @@ Data.prototype.getCorrectedAnswer = function (pollId, qId, userId) {
   return null;
 };
 
-Data.prototype.updateQuestion = function (pollId,question){
+/*Data.prototype.updateQuestion = function (pollId,question){
   if(this.pollExists(pollId)){
     //i question borde question.id finnas, question är undefined
     console.log(question)
@@ -244,7 +256,7 @@ Data.prototype.updateQuestion = function (pollId,question){
     return question;
   }
   return null
-}
+}*/
 
 Data.prototype.getQuestionAmount = function (pollId) { // behövs denna nu då? lagt in detta i polldatat istället
   if(this.pollExists(pollId)){
@@ -520,7 +532,3 @@ Data.prototype.selectBox = function (info) {
 }*/
 
 export { Data };
-
-
-
-

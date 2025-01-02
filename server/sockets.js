@@ -11,16 +11,13 @@ function sockets(io, socket, data) {
   });
 
   socket.on('addQuestion', function(d) {
-    data.addQuestion(d.pollId, {q: d.q, a: d.a});
+    data.addQuestion(d.pollId, d.q);
     socket.emit('questionUpdate', data.getQuestion(d.pollId));
   });
 
-  socket.on("updateQuestion", ({ pollId, question }) => {
-    const updatedQuestion = data.updateQuestion(pollId, question);
-    if (updatedQuestion) {
-      io.to(pollId).emit('questionUpdate', updatedQuestion); 
-    } else {
-      socket.emit('error', 'Question update failed');
+  socket.on("updateQuestion", function({ pollId, questionToUpdate }) {
+    if (questionToUpdate) {
+      data.updateQuestion(pollId, questionToUpdate);
     }
   });
 

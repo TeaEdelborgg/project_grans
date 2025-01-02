@@ -1,4 +1,5 @@
 <template>
+  <div class="container">
   <header>
     <!--<div v-bind:class="['hamburger', {'close': !hideNav}]" 
          v-on:click="toggleNav">
@@ -20,7 +21,7 @@
   <router-link to="/join/">
     <button class="enterButton">{{ uiLabels.joinQuiz }}</button>
   </router-link>
-  
+</div>
 </template>
 
 <script>
@@ -67,6 +68,21 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  display:block; 
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  width: 100vw; 
+  background: linear-gradient(135deg, #0a0347, #3c298f); 
+  background-attachment: fixed; 
+  background-size: cover; 
+  margin: 0; 
+  padding: 0; 
+  text-align: center;
+  box-sizing: border-box; 
+}
 .langbutton {
   border: none; 
   background: none; 
@@ -128,7 +144,8 @@ h1 {
 .enterButton:hover, 
 .createButton:hover {
   background-color: rgb(227, 122, 1);
-  box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4); 
+  box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
+  transform: scale(1.2); 
 }
 
 
