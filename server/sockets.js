@@ -11,16 +11,13 @@ function sockets(io, socket, data) {
   });
 
   socket.on('addQuestion', function(d) {
-    data.addQuestion(d.pollId, {q: d.q, a: d.a});
+    data.addQuestion(d.pollId, d.q);
     socket.emit('questionUpdate', data.getQuestion(d.pollId));
   });
 
-  socket.on("updateQuestion", ({ pollId, question }) => {
-    const updatedQuestion = data.updateQuestion(pollId, question);
-    if (updatedQuestion) {
-      io.to(pollId).emit('questionUpdate', updatedQuestion); 
-    } else {
-      socket.emit('error', 'Question update failed');
+  socket.on("updateQuestion", function({ pollId, questionToUpdate }) {
+    if (questionToUpdate) {
+      data.updateQuestion(pollId, questionToUpdate);
     }
   });
 
@@ -59,7 +56,7 @@ function sockets(io, socket, data) {
     io.to(pollId).emit('startPoll');
   });
 
-  socket.on('runQuestion', function(d) {
+  socket.on('runQuestion', function(d) {  // verkar inte användas
     let question = data.getQuestion(d.pollId, d.questionNumber);
     let randomOrder = data.getQuestionAnswerRandom(d.pollId, d.questionNumber);
     io.to(d.pollId).emit('randomOrderUpdate', {q:randomOrder, questionNumber:d.questionNumber});
@@ -71,7 +68,8 @@ function sockets(io, socket, data) {
 
   socket.on('submitAnswer', function(d) { // körs när man skickar in sitt svar
     data.submitAnswer(d.pollId, d.questionNumber, d.answer, d.userId, d.time);
-    io.to(d.pollId).emit('updatePedestalPlayer', data.getParticipants(d.pollId))
+    io.to(d.pollId).emit('updatePedestalPlayer', data.getParticipants(d.pollId));
+    io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
 
     data.newCheckUserAnswer(d.pollId,d.questionNumber,d.userId); // uppdaterar data med det nya svaret
     console.log('submitAnswer i socket har kört')
@@ -134,6 +132,7 @@ function sockets(io, socket, data) {
     let randomOrder = data.getQuestionAnswerRandom(d.pollId, d.questionNumber);
     io.to(d.pollId).emit('startCountdownPlayer', {q:randomOrder, questionNumber:d.questionNumber});
     io.to(d.pollId).emit('startCountdownResults',{q:randomOrder.q,questionNumber:d.questionNumber});
+    io.to(d.pollId).emit('currentQuestionUpdate', d.questionNumber);
   });
 
   socket.on('updateResult', function(pollId){

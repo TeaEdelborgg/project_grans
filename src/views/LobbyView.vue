@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <div v-if="!joined">
       <input type="text" v-model="userName" placeholder="Enter your name" />
       <h1>Pick a color:</h1>
@@ -27,16 +27,41 @@
         <p>Some colors are already taken. Hurry up and pick you favourite!</p>
         <button @click="closePopup">X</button>
       </div>
+      <!--<div v-if="isLobbyFull()">
+        <h3>lobby is full please try again later</h3>
+        <button @click="closeLobbyFullPopup">X</button>
+      </div>-->
+      <div v-if="isLobbyFull()" class="lobbyFullPopup">
+        <h3>Lobby is full please try again later 😔</h3>
+      </div>
     </div>
 
     <div v-if="joined">
-      <p>Waiting for host to start poll</p>
-      <p>Current Participants:</p>
-      <ul>
-        <li v-for="participant in participants" :key="participant.userId">
-          {{ participant.information.name }} - Color:{{ participant.information.color }}
+      <p class="waiting-message">Waiting for host to start poll<span class="dots"></span></p>
+      <div class="waitingLobby">
+        <p>Current Participants:</p>
+      
+      <ul class="lobbyParticipants">
+        <li v-for="participant in participants" 
+        :key="participant.userId" 
+        :style="{ color: participant.information.color, borderColor: participant.information.color }"
+        class="participantColor">
+          {{ participant.information.name }}
         </li>
       </ul>
+      </div>
+
+      <button v-if="!gameRules" v-on:click="gameRules = true" class="rulebutton">Rules</button>
+      <div :class="['overlay', {show:gameRules}]" v-on:click="closeGameRules"></div>
+      <div :class="['RulesPopup', {show:gameRules}]">
+        <h2>Game Rules</h2>
+          <li>You enter the game with a total of 2 lives</li>
+          <li>If you get an answer wrong you lose one life</li>
+          <li>You lose the game when you have lost both lives</li>
+          <li>Pick an answer and slide in to lock your final answer within the time limit</li>
+          <li>The player with most right answers win, if there are multiple winners the one with fastest last answer wins</li>
+        <button @click="closeGameRules">X</button>
+      </div>
     </div>
   </div>
 </template>
@@ -68,6 +93,7 @@ export default {
       ],
       showPopup: false,
       popupShown: false,
+      gameRules: false,
     };
   },
   created() {
@@ -97,6 +123,7 @@ export default {
         color: this.selectedColor, //skickar färg t admin
       });
       this.joined = true;
+      this.gameRules = true
     },
     setColor(color) {
       if (this.isColorDisabled(color)) return;
@@ -121,11 +148,35 @@ export default {
     closePopup() {
       this.showPopup = false;
     },
+    toggleGameRules() {
+      this.gameRules = !this.gameRules;
+    },
+    closeGameRules() {
+      this.gameRules = false;
+    },
+    isLobbyFull() {
+    return this.participants.length === 6
+    }
   },
 };
 </script>
 
 <style scoped>
+.container {
+  display:block; 
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  width: 100vw; 
+  background: linear-gradient(135deg, #0a0347, #3c298f); 
+  background-attachment: fixed; 
+  background-size: cover; 
+  margin: 0; 
+  padding: 0; 
+  text-align: center;
+  box-sizing: border-box; 
+}
 .colorPicker {
   list-style: none;
   display: flex;
@@ -247,8 +298,160 @@ input[type="text"]:hover {
 
 h1 {
   font-size: 20px;
+  color:#ddd;
 }
 
+.rulebutton {
+  padding: 10px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff; 
+  background-color: #ff9100; 
+  border: none;
+  border-radius: 8px; 
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
+  transition: background-color 0.3s ease, transform 0.2s ease; 
+}
+.rulebutton:hover {
+  background-color: #cf6e00; 
+  transform: scale(1.05); 
+}
+
+.RulesPopup {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0); 
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+  width: 80%;
+  max-width: 400px;
+  border-radius: 10px;
+  opacity: 0; 
+  transition: transform 0.4s ease, opacity 0.4s ease; 
+}
+
+.RulesPopup.show {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1; 
+}
+
+.RulesPopup button {
+  background: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.842);
+  opacity: 0;
+  transition: opacity 0.4s ease; 
+  pointer-events: none; 
+}
+
+.overlay.show {
+  opacity: 1;
+}
+
+.RulesPopup li {
+  text-align: left;
+}
+
+.lobbyFullPopup {
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; 
+  background-color: #000000d5; 
+  z-index: 10; 
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+}
+h3 {
+  color: #fff;
+  font-size: 200%;
+}
+
+.lobbyParticipants {
+  list-style: none;
+  padding: 0;
+}
+
+.participantColor {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 25px;
+  border: 2px solid;
+  border-radius: 20px; /* Optional: makes the border rounded */
+  font-weight: bold;
+  text-align: center;
+  font-size: 25px;
+  box-shadow: 0 0 5px currentColor, 0 0 5px currentColor, 0 0 20px currentColor;
+
+}
+
+.waitingLobby {
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #1e0880,  #06012e); 
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  width: 80%;
+  height: 200px;
+  margin: 60px auto;
+  margin-top: 60px;
+  margin-bottom: 35px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.waitingLobby p {
+  font-size: 1rem;
+  color: #edededec;
+  font-family: Verdana, Tahoma, sans-serif;
+}
+
+.waiting-message {
+  font-size: 1.2rem;
+  color: #e7e7e7ee;
+  margin-top: 0px;
+  padding-top:50px;
+  font-family: Verdana, Tahoma, sans-serif;
+}
+
+.dots::after {
+  content: "";
+  display: inline-block;
+  animation: dots 2s steps(3, end) infinite;
+}
+
+@keyframes dots {
+  0% {
+    content: "";
+  }
+  33% {
+    content: ".";
+  }
+  66% {
+    content: "..";
+  }
+  100% {
+    content: "...";
+  }
+}
 
 /*
 .colorPicker li a.selected {
