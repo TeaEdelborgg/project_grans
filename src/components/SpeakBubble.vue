@@ -36,6 +36,8 @@ export default{
 #speachBubble{
     width: 100%;
     height: auto;
+    /*transform:translateX(100%);
+    transition: transform 1s ease-in-out;*/
 }
 #textContainer{
     position:absolute;
@@ -44,6 +46,8 @@ export default{
     left: 50%;
     transform: translate(-50%, -50%); 
     text-align: center;  
+    /*transform:translateX(100%);
+    transition: transform 1s ease-in-out;*/
 }
 #textContainer h1, h2{
     color:black;

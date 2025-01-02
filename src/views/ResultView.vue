@@ -135,11 +135,12 @@ export default {
   margin-left:auto;
   margin-right:auto;
   bottom:0;
+  position: relative;
 }
 .pedestal{
   flex:1;
   max-width: 10%;
-  height:60%;
+  height:70%;
   margin:auto;
 }
 #rowContainer{
@@ -152,6 +153,8 @@ export default {
  /* background-color: #001F3F;*/
   background-image: url(/img/background_whowantstobeamillionare.webp);
   background-size:cover ;
+  height: 100vh;
+  width: 100vw;
   position: fixed;
   z-index: 1;
   display:flex;
