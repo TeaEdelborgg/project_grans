@@ -118,10 +118,10 @@ Data.prototype.getParticipants = function(pollId) {
   return [];
 }
 
-Data.prototype.addQuestion = function(pollId, newQ) {
+Data.prototype.addQuestion = function(pollId, q) {
   if (this.pollExists(pollId)) {
-    console.log("frågan: ",newQ);
-    this.polls[pollId].questions.push(newQ);
+    console.log("frågan: ",q);
+    this.polls[pollId].questions.push(q);
   }
 }
 
@@ -280,7 +280,7 @@ Data.prototype.getCorrectedAnswer = function (pollId, qId, userId) {
   return null;
 };
 
-Data.prototype.updateQuestion = function (pollId,question){
+/*Data.prototype.updateQuestion = function (pollId,question){
   if(this.pollExists(pollId)){
     //i question borde question.id finnas, question är undefined
     console.log(question)
@@ -293,7 +293,7 @@ Data.prototype.updateQuestion = function (pollId,question){
     return question;
   }
   return null
-}
+}*/
 
 Data.prototype.getQuestionAmount = function (pollId) {
   if(this.pollExists(pollId)){
@@ -527,7 +527,3 @@ Data.prototype.selectBox = function (info) {
 }*/
 
 export { Data };
-
-
-
-
