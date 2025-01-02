@@ -172,52 +172,15 @@ Data.prototype.getSubmittedAnswers = function(pollId) { //behövs den här??? Vi
   return {}
 }
 
-/*Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){ //dela upp funktionen, borde inte behöva skicka qId, finns redan
-  console.log("i data checkUserAnswer, vill plocka bort denna")
-  if(this.pollExists(pollId)){
-    const poll = this.polls[pollId];
-    const user = poll.participants.find(user=> user.userId ==userId);
-    if(qId !=null){
-      if(user){
-        if(user.information.answers[qId]==null){
-            user.information.answers[qId]=["-",0]
-        }
-        if (user.information.correctedAnswers[qId]==null){
-          if(user.information.answers[qId][0]==poll.questions[qId].a.correct){ //ta bort -1 sen, är bara för att de inte skickar randomOrder på första
-              //lägg till tiden för användaren
-              user.information.correctedAnswers[qId] =true
-              user.information.time += user.information.answers[qId][1];
-              return true;
-          }
-          else{
-            if(user.information.lives>0){
-                user.information.lives--;
-                //console.log(user.information.lives)
-            }
-              user.information.correctedAnswers[qId] = false
-              return false;
-          }
-        }   
-      }
-    }
-  }
-  return null
-}*/
-
-/*Data.prototype.testCheckAnswers = function(pollId,qId=null){
-    if(this.pollExists(pollId)){
-      const users = this.polls[pollId].participants
-      for(let user of users){
-        let ans = this.checkUserAnswer(pollId,qId,user.userId)
-        console.log('i testCheckAnswers, svaret är: ', ans)
-      }
-    }
-}*/
-
 Data.prototype.submitAnswer = function(pollId, questionNumber, answer, userId, timeLeft) {
   if (this.pollExists(pollId)) {
     const user = this.polls[pollId].participants.find(user => user.userId == userId)
-    user.information.answers[questionNumber]= [answer, timeLeft]
+    if (answer == null) {
+      user.information.answers[questionNumber] = ["-", 0]
+    } else {
+      user.information.answers[questionNumber] = [answer, timeLeft]
+    }
+    
     console.log(user.information.answers, 'lyckades i submit answer')
     
     /*const poll = this.polls[pollId];
@@ -239,9 +202,9 @@ Data.prototype.newCheckUserAnswer = function(pollId, qId, userId) {
     /*console.log('i nya, user är: ', user)
     console.log('hela svaret, svar + tid: ', user.information.answers[qId])
     console.log('svaret som skickas är: ', user.information.answers[qId][0])*/
-    /*if(user.information.answers[qId]==null){ // måste man ha detta här? det funkar för det första svaret om man ej skickar något??
+    if(user.information.answers[qId]==null){
       user.information.answers[qId]=["-",0]
-    }*/
+    }
     if (user.information.answers[qId][0] == this.polls[pollId].questions[qId].a.correct) {
       user.information.correctedAnswers[qId] = true
       user.information.time += user.information.answers[qId][1];
@@ -283,7 +246,7 @@ Data.prototype.updateQuestion = function (pollId,question){
   return null
 }
 
-Data.prototype.getQuestionAmount = function (pollId) {
+Data.prototype.getQuestionAmount = function (pollId) { // behövs denna nu då? lagt in detta i polldatat istället
   if(this.pollExists(pollId)){
     this.questionAmount = this.polls[pollId].questions.length;
   }
@@ -512,6 +475,48 @@ Data.prototype.selectBox = function (info) {
     return time
   }
   return 0
+}*/
+
+/*Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){ //dela upp funktionen, borde inte behöva skicka qId, finns redan
+  console.log("i data checkUserAnswer, vill plocka bort denna")
+  if(this.pollExists(pollId)){
+    const poll = this.polls[pollId];
+    const user = poll.participants.find(user=> user.userId ==userId);
+    if(qId !=null){
+      if(user){
+        if(user.information.answers[qId]==null){
+            user.information.answers[qId]=["-",0]
+        }
+        if (user.information.correctedAnswers[qId]==null){
+          if(user.information.answers[qId][0]==poll.questions[qId].a.correct){ //ta bort -1 sen, är bara för att de inte skickar randomOrder på första
+              //lägg till tiden för användaren
+              user.information.correctedAnswers[qId] =true
+              user.information.time += user.information.answers[qId][1];
+              return true;
+          }
+          else{
+            if(user.information.lives>0){
+                user.information.lives--;
+                //console.log(user.information.lives)
+            }
+              user.information.correctedAnswers[qId] = false
+              return false;
+          }
+        }   
+      }
+    }
+  }
+  return null
+}*/
+
+/*Data.prototype.testCheckAnswers = function(pollId,qId=null){
+    if(this.pollExists(pollId)){
+      const users = this.polls[pollId].participants
+      for(let user of users){
+        let ans = this.checkUserAnswer(pollId,qId,user.userId)
+        console.log('i testCheckAnswers, svaret är: ', ans)
+      }
+    }
 }*/
 
 export { Data };
