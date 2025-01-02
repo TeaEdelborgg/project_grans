@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <div v-if="!joined">
       <input type="text" v-model="userName" placeholder="Enter your name" />
       <h1>Pick a color:</h1>
@@ -162,6 +162,21 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  display:block; 
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  width: 100vw; 
+  background: linear-gradient(135deg, #0a0347, #3c298f); 
+  background-attachment: fixed; 
+  background-size: cover; 
+  margin: 0; 
+  padding: 0; 
+  text-align: center;
+  box-sizing: border-box; 
+}
 .colorPicker {
   list-style: none;
   display: flex;
@@ -283,6 +298,7 @@ input[type="text"]:hover {
 
 h1 {
   font-size: 20px;
+  color:#ddd;
 }
 
 .rulebutton {
@@ -392,7 +408,7 @@ h3 {
 .waitingLobby {
   text-align: center;
   padding: 20px;
-  background-color: #f9f9f9;
+  background: linear-gradient(135deg, #1e0880,  #06012e); 
   border: 1px solid #ddd;
   border-radius: 10px;
   width: 80%;
@@ -404,14 +420,15 @@ h3 {
 }
 .waitingLobby p {
   font-size: 1rem;
-  color: #333;
+  color: #edededec;
   font-family: Verdana, Tahoma, sans-serif;
 }
 
 .waiting-message {
   font-size: 1.2rem;
-  color: #333;
-  margin-top: 50px;
+  color: #e7e7e7ee;
+  margin-top: 0px;
+  padding-top:50px;
   font-family: Verdana, Tahoma, sans-serif;
 }
 
