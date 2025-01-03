@@ -13,7 +13,7 @@
           </div>
           <br>
           <!--{{uiLabels.timeTotal}}:{{ player.information.time }} <br>-->
-          <h1>{{ player.information.time }}</h1>
+          <h1>{{ player.information.time }}s</h1>
         </div>
         <!--<p v-if="player.information.answers[questionNumber]!=null && questionActive">{{uiLabels.answered}}</p> -->
       </div>
