@@ -81,52 +81,11 @@ function sockets(io, socket, data) {
     console.log('getCorrectedUserAnswer i socket har kört')
   });
 
-  /*socket.on('checkUserAnswer', function(d){ // denna borde uppdateras med getCorrectedUserAnswer, ta bort sen?
-    //console.log("i socket, ska titta om svaret är rätt")
-    // kolla i corrected answers för detta qId och skicka till pollview
-
-    let checkedUserAnswer = data.getCorrectedAnswer(d.pollId,d.questionNumber,d.userId);
-
-    //console.log('i checkUserAnswer, checkeduseranswer är: ', checkedUserAnswer)
-    io.to(d.pollId).emit('checkedUserAnswer', checkedUserAnswer);
-    //io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
-    console.log('checkUserAnswer i socket har kört')
-  });*/
-
-  /*socket.on("testUserAnswers", function(d){
-    data.testCheckAnswers(d.pollId,d.questionNumber)
-    
-    //här vill vi skicka tillbaka till resultat, som sedan där emitar till att hämta resultat
-  });*/
-
   socket.on('getAllAnswers', function(pollId){ //döp om
     let participantsWithNewAnswersTest = data.updateColoredBoxes(pollId)
     let levelBoxes = data.updateLevelBoxes(pollId) 
     io.to(pollId).emit("sendAllAnswers", {participants:participantsWithNewAnswersTest,levelBoxes:levelBoxes})
   }); 
-
-  /*socket.on('getTimer', function(pollId){ //ta bort
-    let time = data.getTime(pollId)
-    io.to(pollId).emit('getTime',time)
-  })*/
-  /*socket.on('startTime', function(d){ //ta bort
-    data.startTimer(d.pollId,d.time)
-    io.to(d.pollId).emit('startTimer')
-    //skicka till socket i resultat att timern startat
-  })*/
-  /*socket.on('startTimeBeforeQuestion', function(d){ //ta bort
-    data.startTimeBeforeQuestion(d.pollId,d.time)
-    io.to(d.pollId).emit('startTimerBeforeQuest')
-    //socket.emit("startFirstTimer")
-    //skicka till socket i resultat att timern startat
-  })*/
-  /*socket.on('getTimerBeforeQuestion',function(pollId){ //ta bort
-    let time = data.getTimeBeforeQuestion(pollId)
-    io.to(pollId).emit('getTimeBeforeQuestion',time)
-  })*/
-  /*socket.on('timesUp', function(pollId){ //körs aldrig
-    io.to(pollId).emit('timeUp',true)
-  })*/
 
   socket.on('runCountdown', function(d){
     let randomOrder = data.getQuestionAnswerRandom(d.pollId, d.questionNumber);
@@ -140,10 +99,10 @@ function sockets(io, socket, data) {
     socket.emit('pollData', data.getPoll(pollId));
   });
 
-/*socket.on('selectBox', function(info) {
-    const boxStates = data.selectBox(info);
-      io.to(info.pollId).emit('boxStatesUpdate', boxStates);
-  });*/
+  socket.on('startNextQuestion', function(pollId){ // se om jag kan få den till att funka den /Amanda
+    console.log('i socket, startNextQuestion')
+    io.to(pollId).emit('canStartNextQuestion')
+  });
 
   socket.on('getStats', function(pollId) {
     const amountOfQuestions = data.amountOfQuestions(pollId);
@@ -176,11 +135,60 @@ function sockets(io, socket, data) {
     socket.emit('sendScoreBoard',scoreBoard) //ändra till socket.io
   });
 
+  
+
+  // gamla sockets nedan 
+
+
   /*socket.on('getScoreBoardUser', function(pollId){ //denna används inte just nu
     const scoreBoard = data.getScoreBoard(pollId)
     console.log("getScoreBoardUser")
     socket.emit("scoreBoardUser", scoreBoard) //ändra till socket.io
   })*/
+  /*socket.on('selectBox', function(info) {
+    const boxStates = data.selectBox(info);
+      io.to(info.pollId).emit('boxStatesUpdate', boxStates);
+  });*/
+  /*socket.on('getTimer', function(pollId){ //ta bort
+    let time = data.getTime(pollId)
+    io.to(pollId).emit('getTime',time)
+  })*/
+  /*socket.on('startTime', function(d){ //ta bort
+    data.startTimer(d.pollId,d.time)
+    io.to(d.pollId).emit('startTimer')
+    //skicka till socket i resultat att timern startat
+  })*/
+  /*socket.on('startTimeBeforeQuestion', function(d){ //ta bort
+    data.startTimeBeforeQuestion(d.pollId,d.time)
+    io.to(d.pollId).emit('startTimerBeforeQuest')
+    //socket.emit("startFirstTimer")
+    //skicka till socket i resultat att timern startat
+  })*/
+  /*socket.on('getTimerBeforeQuestion',function(pollId){ //ta bort
+    let time = data.getTimeBeforeQuestion(pollId)
+    io.to(pollId).emit('getTimeBeforeQuestion',time)
+  })*/
+  /*socket.on('timesUp', function(pollId){ //körs aldrig
+    io.to(pollId).emit('timeUp',true)
+  })*/
+  /*socket.on('checkUserAnswer', function(d){ // denna borde uppdateras med getCorrectedUserAnswer, ta bort sen?
+    //console.log("i socket, ska titta om svaret är rätt")
+    // kolla i corrected answers för detta qId och skicka till pollview
+
+    let checkedUserAnswer = data.getCorrectedAnswer(d.pollId,d.questionNumber,d.userId);
+
+    //console.log('i checkUserAnswer, checkeduseranswer är: ', checkedUserAnswer)
+    io.to(d.pollId).emit('checkedUserAnswer', checkedUserAnswer);
+    //io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
+    console.log('checkUserAnswer i socket har kört')
+  });*/
+  /*socket.on("testUserAnswers", function(d){
+    data.testCheckAnswers(d.pollId,d.questionNumber)
+    
+    //här vill vi skicka tillbaka till resultat, som sedan där emitar till att hämta resultat
+  });*/
+
+
 }
 
 export { sockets };

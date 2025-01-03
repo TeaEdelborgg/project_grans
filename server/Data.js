@@ -63,9 +63,9 @@ Data.prototype.createPoll = function(pollId, lang="en") {
     poll.questionAmount = 0;
     poll.participants = [];
     poll.currentQuestion = -1; //var innan 0
-    poll.timer = {timeLeft:10,interval:null} 
-    poll.timerBeforeQuestion = {timeLeft:3, interval:null}    
-    poll.allCorrectedAnswers = {}   
+    poll.timer = {timeLeft:10,interval:null} // tror ej detta används
+    poll.timerBeforeQuestion = {timeLeft:3, interval:null} // inte detta heller
+    poll.allCorrectedAnswers = {} // eller detta
     poll.moneyBoxes = []; 
     poll.started = false;  
     poll.scoreBoard = []; 
