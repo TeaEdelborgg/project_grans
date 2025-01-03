@@ -1,5 +1,6 @@
 <template>
-    <button v-on:click="runQuestion">
+    <button v-on:click="runQuestion" :disabled=!canStartNextQuestion> 
+      <!-- lägga in om sista frågan så kan man ej klicka på denna utan den byts ut till finish game?-->
       Run question
     </button> <br><br>
     <router-link v-bind:to="'/result/' + pollId">Check result</router-link>
@@ -12,45 +13,48 @@
       Testknapp
     </button><br><br>
 
-    Data: <br> 
-    {{ pollData }} <br><br>
-    Time Left Test: {{ timeLeftTest }} <br><br>
+    <!-- Data: <br> 
+    {{ pollData }} <br><br>-->
 
-    <!--test
-    <ul class="adminParticipants">
-        <li v-for="participant in participants">
-          {{ participant.information.name }}
-        </li>
-      </ul>-->
+    Antal svar inkommna: {{ numberPlayersAnswered }}/{{ numberPlayers }}
+
+    <br>
+    nuvarande fråga: 
+    {{ this.pollData.currentQuestion }} <br><br>
+
+    <div class='participantAnswers'>
+      spelares svar: 
+      <li v-for="(participant, index) in pollData.participants" :key="index">
+        {{ participant.information.name }} svarade: {{ participant.information.answers[this.pollData.currentQuestion] }}
+      </li>
+    </div>
+
+    <br><br>
 
     <div class='questions'>
       Frågor:
-      <ul>
-        <!-- Loopar genom frågorna och visar dem -->
-        <li v-for="(question, index) in questionList" :key="index">
-          {{ question }}
-        </li>
-      </ul>
+      <li v-for="(question, index) in questionList" :key="index">
+        {{ question }}
+      </li>
     </div>
     <div class='correctanswers'>
       Korrekta svar: 
-      <ul>
-        <li v-for="(answer, index) in answerList" :key="index">
-          {{ answer }}
-        </li>
-      </ul>
+      <li v-for="(answer, index) in answerList" :key="index">
+        {{ answer }}
+      </li>
     </div>
 
-    nuvarande fråga: 
-    {{ this.pollData.currentQuestion }}
+    <br><br>
 
-    <div class='participants'>
-      Spelare: 
-      <ul>
-        <li v-for="(answer, index) in pollData.participants" :key="index">
-          {{ answer }}
-        </li>
-      </ul>
+    <div>
+      <!-- vilket är bäst? som ovan att göra nya listor som man sparar eller som nedan där man endast hämtar dem? -->
+      <li v-for="(answer, index) in pollData.questions" :key="index">
+        fråga: {{ answer.q }} <br>
+        rätt svar: {{ answer.a.correct }}, fel svar:
+        <ul v-for="(wrongAnswer, index) in answer.a.wrong" :key="index">
+          {{ wrongAnswer }}
+        </ul>
+      </li>
     </div>
 </template>
 
@@ -65,18 +69,18 @@ export default {
     return {
       lang: localStorage.getItem("lang") || "en",
       pollId: "",
-      questionNumber: "", // ta bort? fixa i html först
       pollData: {},
       uiLabels: {},
-
-      participants: [],
       questionList: [],
       answerList: [],
+      numberPlayers: 0,
+      numberPlayersAnswered: 0, 
+      canStartNextQuestion: true,
       //timeLeft:0,
       //timeLeftBeforeQuestion:0,
 
 
-      timeLeftTest:0, // ta bort sen?
+      //timeLeftTest:0, // ta bort sen?
     }
   },
   created: function () {
@@ -89,10 +93,12 @@ export default {
       this.pollData = data; 
       this.getQuestions();
       this.getCorrectAnswers();
+      this.getNumberPlayers();
     });
     socket.on("participantsUpdate", (p) => {
       //console.log('participantsUpdate socketen körs i admin')
       this.pollData.participants = p 
+      this.getnumberPlayersAnswered();
     });
     socket.emit("joinPoll", this.pollId);
     socket.emit( "getUILabels", this.lang );
@@ -110,28 +116,63 @@ export default {
       socket.emit('finishGame', this.pollId)
     })
     socket.emit("updateResult", this.pollId)
+    /*socket.on('canStartNextQuestion', ()=> { // denna funkar inte riktigt...
+      console.log('kör socketen i admin')
+      this.canStartNextQuestion = true
+    })*/
 
   },
   methods: {
     testFunktion: function() {
       console.log('testfunktion')
-      console.log(this.pollData.participants[0].information.answers)
     },
-    getQuestions: function() {
+    getQuestions: function() { // om detta behövs eller ej
       const amountOfQuestions = this.pollData.questionAmount;
       for (let i = 0; i < amountOfQuestions; i++) {
         this.questionList[i] = this.pollData.questions[i].q
       }
     },
-    getCorrectAnswers: function() {
+    getCorrectAnswers: function() { // // om detta behövs eller ej
       const amountOfQuestions = this.pollData.questionAmount; 
       for (let i = 0; i < amountOfQuestions; i++) {
         this.answerList[i] = this.pollData.questions[i].a.correct
       }
     },
-    numberPlayersAnswered: function() {
-      console.log('kör numberPlayersAnswered')
-      console.log('nuvarade fråga: ', this.pollData.currentQuestion)
+    getNumberPlayers: function() {
+      this.numberPlayers = this.pollData.participants.length
+    },
+    getnumberPlayersAnswered: function() {
+      this.numberPlayersAnswered = 0
+      const qId = this.pollData.currentQuestion
+      for (let i=0; i < this.numberPlayers; i++){
+        if (this.pollData.participants[i].information.answers[qId] !== null) {
+          this.numberPlayersAnswered++
+          if (this.numberPlayersAnswered == this.numberPlayers) {
+            this.canStartNextQuestion = true // måste tas bort sen när jag löst så detta ställs om med socketen
+            // sätta timern till noll här också? så att den inte körs över till nästa fråga??
+          }
+        }
+      }
+    },
+    runQuestion: function () {
+      this.canStartNextQuestion = false
+      const currentQuestion = this.pollData.currentQuestion + 1;
+      this.numberPlayersAnswered = 0
+      //console.log('i run question, nuvarande fråga: ', currentQuestion)
+      //socket.emit("startTime",{pollId:this.pollId, time:10})
+      //socket.emit("startTimeBeforeQuestion",{pollId:this.pollId, time:3}) //alla ska starta deras egna, samtiidgt som vi har en på servern
+
+      //ny socket
+      socket.emit('runCountdown', {pollId: this.pollId, questionNumber: currentQuestion})
+
+      //this.timerBeforeQUestion()
+      //this.testCountdown()
+      //här måste timer köras för 
+    },
+    finishGame: function(){
+      //här scoreboard skapas
+      socket.emit('createScoreBoard', this.pollId)
+      // hur kan jag göra så att alla spelare ect försvinner? måste läggas in här så man kan köra om spelet här
     },
     /*generatePollId: function(){
       return Math.random().toString(36).substring(2,10).toUpperCase();
@@ -185,7 +226,7 @@ export default {
         },1000);
     },*/
 
-    testCountdown: function() { // ta bort denna och lägg in en socket som lyssnar när timern är slut på resultatsidan
+    /*testCountdown: function() { // ta bort denna och lägg in en socket som lyssnar när timern är slut på resultatsidan
       let startTime = Date.now();
 
       let timerDuration = 13000;
@@ -205,27 +246,7 @@ export default {
           console.log('test, interval clear')
         }
       }, 1000);  
-    },
- 
-
-    runQuestion: function () {
-      const currentQuestion = this.pollData.currentQuestion + 1;
-      console.log('i run question, nuvarande fråga: ', currentQuestion)
-      //socket.emit("startTime",{pollId:this.pollId, time:10})
-      //socket.emit("startTimeBeforeQuestion",{pollId:this.pollId, time:3}) //alla ska starta deras egna, samtiidgt som vi har en på servern
-
-      //ny socket
-      socket.emit('runCountdown', {pollId: this.pollId, questionNumber: currentQuestion})
-
-      //this.timerBeforeQUestion()
-      this.testCountdown()
-      //här måste timer köras för 
-    },
-    finishGame: function(){
-      //här scoreboard skapas
-      socket.emit('createScoreBoard', this.pollId)
-      
-    }
+    }, */
   }
 }
 </script>
