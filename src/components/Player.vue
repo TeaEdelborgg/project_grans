@@ -48,6 +48,7 @@ export default {
   position:absolute;
   bottom: 0;
   border-radius: 5% 5% 0 0;
+  transition: height 2s ease-out
 }
 #player{
   height: 100%;
