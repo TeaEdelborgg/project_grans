@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div v-if="!joined">
-      <input type="text" v-model="userName" placeholder="Enter your name" />
-      <h1>Pick a color:</h1>
+      <input type="text" v-model="userName" :placeholder="uiLabels.enterName" />
+      <h1>{{uiLabels.pickColor}}</h1>
       <div>
         <ul class="colorPicker">
           <li v-for="color in colors" :key="color.hex">
@@ -24,7 +24,7 @@
       </div>
 
       <div v-if="showPopup" class="popup">
-        <p>Some colors are already taken. Hurry up and pick you favourite!</p>
+        <p>{{ uiLabels.colorPopup }}</p>
         <button @click="closePopup">X</button>
       </div>
       <!--<div v-if="isLobbyFull()">
@@ -32,14 +32,14 @@
         <button @click="closeLobbyFullPopup">X</button>
       </div>-->
       <div v-if="isLobbyFull()" class="lobbyFullPopup">
-        <h3>Lobby is full please try again later 😔</h3>
+        <h3>{{ uiLabels.lobbyfull }}</h3>
       </div>
     </div>
 
     <div v-if="joined">
-      <p class="waiting-message">Waiting for host to start poll<span class="dots"></span></p>
+      <p class="waiting-message">{{uiLabels.waitingMessage}}<span class="dots"></span></p>
       <div class="waitingLobby">
-        <p>Current Participants:</p>
+        <p>{{uiLabels.currentParticipants}}</p>
       
       <ul class="lobbyParticipants">
         <li v-for="participant in participants" 
@@ -51,15 +51,15 @@
       </ul>
       </div>
 
-      <button v-if="!gameRules" v-on:click="gameRules = true" class="rulebutton">Rules</button>
+      <button v-if="!gameRules" v-on:click="gameRules = true" class="rulebutton">{{ uiLabels.rules }}</button>
       <div :class="['overlay', {show:gameRules}]" v-on:click="closeGameRules"></div>
       <div :class="['RulesPopup', {show:gameRules}]">
-        <h2>Game Rules</h2>
-          <li>You enter the game with a total of 2 lives</li>
-          <li>If you get an answer wrong you lose one life</li>
-          <li>You lose the game when you have lost both lives</li>
-          <li>Pick an answer and slide in to lock your final answer within the time limit</li>
-          <li>The player with most right answers win, if there are multiple winners the one with fastest last answer wins</li>
+        <h2>{{uiLabels.rulesTitle}}</h2>
+          <li>{{uiLabels.rulesli1}}</li>
+          <li>{{uiLabels.rulesli2}}</li>
+          <li>{{uiLabels.rulesli3}}</li>
+          <li>{{uiLabels.rulesli4}}</li>
+          <li>{{ uiLabels.rulesli5 }}</li>
         <button @click="closeGameRules">X</button>
       </div>
     </div>
@@ -202,7 +202,7 @@ export default {
 }
 
 .colorPicker li a.selected {
-  border-color: #000;
+  border-color: #ffffff;
 }
 
 .colorPicker li a.disabled {

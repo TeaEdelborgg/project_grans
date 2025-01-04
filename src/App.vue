@@ -6,7 +6,7 @@ import { RouterView } from 'vue-router'
   <div>
   <header>
   <button v-if="$route.name !== 'Start'" @click="$router.push('/')">
-    <img src="/img/HomeButton.png"/>
+    <img src="/img/HomeButton.png" alt="home"/>
   </button>
   </header>
  <RouterView />
