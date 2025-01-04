@@ -282,6 +282,7 @@ Data.prototype.createBoxes = function(pollId){
   if(this.pollExists(pollId)){
     const poll = this.polls[pollId]
     const numberOfQuestions = poll.questionAmount
+    console.log('i createBoxes: ', numberOfQuestions)
     for (let player of poll.participants){
       for (let n=0; n<numberOfQuestions;n++){
         player.information.coloredBoxes.push(false)
