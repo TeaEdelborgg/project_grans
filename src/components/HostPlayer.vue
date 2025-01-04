@@ -1,6 +1,6 @@
 <template>
     <div v-if="!questionActive" class="test">
-        <img src="/img/gubbe2.png" alt="">
+            <img src="/img/gubbe2.png" alt="">
     </div>
     <div v-if="questionActive" class="test">
         <img src="/img/gubbe1.png" alt="" >
@@ -21,14 +21,6 @@ export default{
 }
 </script>
 <style>
-#normalHost{
-    width: auto;
-    height: 70%;
-    object-fit: contain;
-}
-#activeHost{
-    position: relative;
-}
 .test{
   position: relative;
   width: 10%;
@@ -45,5 +37,14 @@ export default{
     height: 70%;
     object-fit: contain;
     z-index: 3;
+    
+
+}
+#shadow{
+    display: inline-block;
+    position: relative;
+    border-radius: 50%;
+    padding: 5%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);;
 }
 </style>
