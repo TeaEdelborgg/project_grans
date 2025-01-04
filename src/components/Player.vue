@@ -1,8 +1,11 @@
 <template>
   <div id="player">
     <!--<Levelbox v-for="n in amountOfQuestions" v-bind:boxColor="player.information.color" v-bind:boxColorChange="player.information.coloredBoxes[n-1]" :id="n"></Levelbox>-->
-    <div id="pile" :style="{background: 'linear-gradient(to right, '+player.information.color+', #c0c0c0, '+player.information.color+')', height: calculateHeight()}">
-
+    <div id="pile" :style="{
+      background: 'linear-gradient(to right, '+player.information.color+', #c0c0c0, '+player.information.color+')', 
+      height: calculateHeight(),
+      border: player.information.in==false ? '2px solid black':'0'
+      }">
     </div>
   </div>
 </template>
@@ -43,19 +46,18 @@ export default {
 </script>
 <style>
 #pile{
-  width: 95%;
+  width: 90%;
   height: 2%;
   position:absolute;
   bottom: 0;
   border-radius: 5% 5% 0 0;
-  transition: height 2s ease-out
+  transition: height 2s ease-out;
+  border-bottom: none;
 }
 #player{
   height: 100%;
   flex:1;
-  max-width: 100%;
-  margin-left: 5%;
-  margin-right: 5%;
+  max-width: 85%;
   display: flex;
   flex-direction: column-reverse;
   justify-content: space-evenly;
