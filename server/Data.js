@@ -267,13 +267,13 @@ Data.prototype.getCorrectedAnswer = function (pollId, qId, userId) {
   return null
 }*/
 
-Data.prototype.getQuestionAmount = function (pollId) { // behövs denna nu då? lagt in detta i polldatat istället
+Data.prototype.getQuestionAmount = function (pollId) {
   if(this.pollExists(pollId)){
-    this.questionAmount = this.polls[pollId].questions.length;
+    this.polls[pollId].questionAmount = this.polls[pollId].questions.length;
   }
 }
 
-Data.prototype.amountOfQuestions = function (pollId){
+Data.prototype.amountOfQuestions = function (pollId){ // behövs denna? nu finns antalet frågor i pollData när man klickat på startPoll
   if(this.pollExists(pollId)){
     return this.polls[pollId].questions.length;
   }

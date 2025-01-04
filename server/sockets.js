@@ -8,7 +8,6 @@ function sockets(io, socket, data) {
 
   socket.on('createPoll', function(d) {
     data.createPoll(d.pollId, d.lang)
-    data.getQuestionAmount(d.pollId);
     socket.emit('pollData', data.getPoll(d.pollId));
   });
 
@@ -54,6 +53,7 @@ function sockets(io, socket, data) {
   socket.on('startPoll', function(pollId) {
     data.createBoxes(pollId)
     data.setAnswersFalse(pollId)
+    data.getQuestionAmount(pollId);
     /*data.polls[pollId].started = true;*/
     io.to(pollId).emit('startPoll');
   });
