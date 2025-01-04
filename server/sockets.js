@@ -51,9 +51,9 @@ function sockets(io, socket, data) {
   });
 
   socket.on('startPoll', function(pollId) {
-    data.createBoxes(pollId)
     data.setAnswersFalse(pollId)
     data.getQuestionAmount(pollId);
+    data.createBoxes(pollId)
     /*data.polls[pollId].started = true;*/
     io.to(pollId).emit('startPoll');
   });
@@ -62,7 +62,7 @@ function sockets(io, socket, data) {
     let user = data.getOneParticipant(d.pollId, d.userId);
     //console.log('i socket, user är: ', user)
     io.to(d.pollId).emit('sendPlayerStats', user);
-  });
+  }); 
 
   socket.on('runQuestion', function(d) {  // verkar inte användas
     let question = data.getQuestion(d.pollId, d.questionNumber);
@@ -110,11 +110,6 @@ function sockets(io, socket, data) {
   socket.on('updateResult', function(pollId){
     //io.to(pollId).emit('participantsUpdate', data.getParticipants(pollId));
     socket.emit('pollData', data.getPoll(pollId));
-  });
-
-  socket.on('startNextQuestion', function(pollId){ // se om jag kan få den till att funka den /Amanda
-    console.log('i socket, startNextQuestion')
-    io.to(pollId).emit('canStartNextQuestion')
   });
 
   socket.on('getStats', function(pollId) {

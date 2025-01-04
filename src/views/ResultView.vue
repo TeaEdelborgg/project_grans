@@ -110,9 +110,7 @@ export default {
     backgroundResult.style.height=this.windowHeight + "px";
   },
   methods:{
-    countDownOver: function(){ // finnas i admin?
-      // socketen nedan är min, får inte den till att funka nu så ska sitta med den sen /Amanda
-      //socket.emit('startNextQuestion', this.pollId) // så att timers inte överlappar med varandra
+    countDownOver: function(){
       setTimeout(()=>{
           socket.emit("getAllAnswers", this.pollId) //den ska både hämta svaren och skicka allas svar till sig själva
           this.questionActive=false 

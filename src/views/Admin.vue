@@ -1,6 +1,5 @@
 <template>
-  <button v-if="pollData.currentQuestion + 1 != pollData.questionAmount" v-on:click="runQuestion" :disabled=!canStartNextQuestion> <!--lägga in en v if: v-if="pollData.currentQuestion == pollData.questionAmount"-->
-    <!-- lägga in om sista frågan så kan man ej klicka på denna utan den byts ut till finish game?-->
+  <button v-if="pollData.currentQuestion + 1 != pollData.questionAmount" v-on:click="runQuestion" :disabled=!canStartNextQuestion>
     Run question {{ pollData.currentQuestion + 2 }}
   </button> 
   <button v-else v-on:click="finishGame()"> View final scoreboard </button> <br><br>
@@ -11,8 +10,9 @@
 
   <router-link v-bind:to="'/result/' + pollId">Check result</router-link>
   <button v-on:click="finishGame()">Avsluta spelet</button>
-  <!--<router-link v-bind:to="'/finalResult/' +pollId">Finish Game</router-link> ska skicka resultatview till finalResult-->
   <br><br>
+
+  {{ pollData }}
 
   <!--<br><br>
   <button v-on:click='testFunktion'>
@@ -66,8 +66,7 @@
 
 <script>
 import io from 'socket.io-client';
-//const socket = io("localhost:3000");
-const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
+const socket = io(sessionStorage.getItem("dataServer"))
 
 export default {
   name: 'AdminView',
@@ -82,50 +81,32 @@ export default {
       numberPlayers: 0,
       numberPlayersAnswered: 0, 
       canStartNextQuestion: true,
-      //timeLeft:0,
-      //timeLeftBeforeQuestion:0,
-
-
-      //timeLeftTest:0, // ta bort sen?
     }
   },
   created: function () {
     this.pollId = this.$route.params.id;
 
-
     socket.on( "uiLabels", labels => this.uiLabels = labels );
     socket.on( "pollData", data => {
-      //console.log('polldata socketen körs i admin')
       this.pollData = data; 
       this.getQuestions();
       this.getCorrectAnswers();
       this.getNumberPlayers();
     });
     socket.on("participantsUpdate", (p) => {
-      //console.log('participantsUpdate socketen körs i admin')
       this.pollData.participants = p 
       this.getnumberPlayersAnswered();
     });
-    socket.emit("joinPoll", this.pollId);
-    socket.emit( "getUILabels", this.lang );
     socket.on('currentQuestionUpdate', (questionNumber) => {
       this.pollData.currentQuestion = questionNumber
-    })
-
-
-    //socket.on("checkedAnswer", answers => this.checkedAnswers = answers);
-    /*socket.on('getTime',time => {this.timeLeft=time
-      console.log("tog emot tid")
-    });*/
-    //socket.on('getTimeBeforeQuestion',timeTwo => this.timeLeftBeforeQuestion=timeTwo);
+    });
     socket.on('scoreBoardCreated', ()=>{
       socket.emit('finishGame', this.pollId)
-    })
-    socket.emit("updateResult", this.pollId)
-    /*socket.on('canStartNextQuestion', ()=> { // denna funkar inte riktigt...
-      console.log('kör socketen i admin')
-      this.canStartNextQuestion = true
-    })*/
+    });
+
+    socket.emit("joinPoll", this.pollId);
+    socket.emit( "getUILabels", this.lang );
+    socket.emit("updateResult", this.pollId);
 
   },
   methods: {
@@ -157,10 +138,7 @@ export default {
             this.endQuestion()
             setTimeout(()=>{
             this.canStartNextQuestion = true
-            // socket on
           }, 2000)
-            // måste tas bort sen när jag löst så detta ställs om med socketen
-            // sätta timern till noll här också? så att den inte körs över till nästa fråga??
           }
         }
       }
@@ -169,25 +147,15 @@ export default {
       this.canStartNextQuestion = false
       const currentQuestion = this.pollData.currentQuestion + 1;
       this.numberPlayersAnswered = 0
-      //console.log('i run question, nuvarande fråga: ', currentQuestion)
-      //socket.emit("startTime",{pollId:this.pollId, time:10})
-      //socket.emit("startTimeBeforeQuestion",{pollId:this.pollId, time:3}) //alla ska starta deras egna, samtiidgt som vi har en på servern
-
-      //ny socket
       socket.emit('runCountdown', {pollId: this.pollId, questionNumber: currentQuestion})
-
-      //this.timerBeforeQUestion()
-      //this.testCountdown()
-      //här måste timer köras för 
     },
     endQuestion() {
       console.log('i admin, kör endquestion precis innan socket endtimer skickas')
       socket.emit('endTimer', this.pollId)
     },
     finishGame: function(){
-      //här scoreboard skapas
       socket.emit('createScoreBoard', this.pollId)
-      // hur kan jag göra så att alla spelare ect försvinner? måste läggas in här så man kan köra om spelet här
+      // hur kan jag göra så att alla spelare ect försvinner när man kört detta? måste läggas in här så man kan köra om spelet här
     },
     /*generatePollId: function(){
       return Math.random().toString(36).substring(2,10).toUpperCase();
