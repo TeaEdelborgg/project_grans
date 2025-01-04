@@ -34,7 +34,7 @@ export default{
             moneyValues:Array,
             participants:Object,
             questionActive:Boolean,
-            question: String, //detta ska sedan även innehålla alla svar
+            question: Object, //detta ska sedan även innehålla alla svar
             uiLabels: Object
 
         },

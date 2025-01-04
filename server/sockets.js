@@ -98,7 +98,7 @@ function sockets(io, socket, data) {
   socket.on('runCountdown', function(d){
     let randomOrder = data.getQuestionAnswerRandom(d.pollId, d.questionNumber);
     io.to(d.pollId).emit('startCountdownPlayer', {q:randomOrder, questionNumber:d.questionNumber});
-    io.to(d.pollId).emit('startCountdownResults',{q:randomOrder.q,questionNumber:d.questionNumber});
+    io.to(d.pollId).emit('startCountdownResults',{q:randomOrder,questionNumber:d.questionNumber});
     io.to(d.pollId).emit('currentQuestionUpdate', d.questionNumber);
   });
 

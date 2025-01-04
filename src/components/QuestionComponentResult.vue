@@ -6,7 +6,20 @@
             <div id="progressbar">
                 <div id="progress" :style="{width:percentage+'%'}"></div>
             </div>
-            <h1>{{question}}</h1>
+            <h1>{{question.q}}</h1>
+            <br>
+            <div id="rectangleContainer">
+              <div v-for="(a,index) in question.a" class="testRect" :style="{
+                borderLeft: index==0 ||index==2 ? '2px solid #7bb0f3':0,
+                borderRight: index==1 || index==3? '2px solid #7bb0f3':0,
+                borderBottom: index==2 || index==3 ? '2px solid #7bb0f3':0
+                }">
+                <div class="line"></div>
+                <div class="rectangle">
+                  <h3>{{ a }}</h3>
+                </div> 
+              </div>
+            </div>  
           </div>
           <div v-if="!questionActive">
             <SpeakBubble v-bind:uiLabels="uiLabels" v-bind:timeLeftBeforeQuestion="timeLeftBeforeQuestion"></SpeakBubble>
@@ -28,7 +41,7 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
         SpeakBubble
       },
       props: {
-        question: String,
+        question: Object,
         uiLabels: Object
       },
       data: function(){
@@ -91,6 +104,51 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
     }
 </script>
 <style>
+.rectangle{
+  position: absolute;
+  width: 80%;
+  height: 40%;
+  background: linear-gradient(#393a93, #7bb0f3, #393a93); 
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  align-content: center;
+  justify-content: center;
+  top: 50%;  /* Placera boxen i mitten vertikalt */
+  left: 50%;  /* Placera boxen i mitten horisontellt */
+  transform: translate(-50%, -50%);  /* Justera för att exakt centrera boxen */
+  box-shadow: 0 0 5px #7bb0f3;
+}
+.testRect{
+  flex:1;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  position: relative;
+}
+.line{
+  height: 2px;
+  width: 100%;
+  background-color: #7bb0f3;
+  box-shadow: 0 0 5px #7bb0f3;
+}
+.rectangle h3{
+  align-content: center;
+  justify-content: center;
+}
+
+#rectangleContainer{
+  margin-top:15%;
+  width: 100%;
+  height: 60%;
+  display: grid;
+  grid-template-columns: 45% 45%;
+  grid-row: auto auto;
+  justify-content: center;
+  position:absolute;
+  margin: auto;
+  border-top:2px solid #7bb0f3;
+  box-shadow: 0 0 5px #7bb0f3;
+}
 #backgroundFrame{
   position:fixed;
   opacity: 0.5;

@@ -128,6 +128,30 @@ export default {
 </script>
 
 <style>
+#container-test{
+  height: 100px;
+  width: 100px;
+  background-color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+#box-test{
+  height: 100%;
+  width: 80%;
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  background-color: black;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
+#line-test{
+  width: 100%;
+  height: 5%;
+  background-color: white;
+}
+
 #pedestaler{
   width:100%;
   display: flex;

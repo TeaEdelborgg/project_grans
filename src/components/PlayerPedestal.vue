@@ -108,8 +108,12 @@ export default {
   height:100%;
   margin:auto;
   position: relative;
+  /*box-sizing: border-box;*/
+  box-sizing: content-box;
+
 }
   .playerpedestal {
+    box-sizing: border-box;
     color: white;
     background-color: var(--pedestal-color);
     padding: 10px;
