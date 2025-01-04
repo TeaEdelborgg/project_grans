@@ -80,13 +80,13 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
 
     data.newCheckUserAnswer(d.pollId,d.questionNumber,d.userId); // uppdaterar data med det nya svaret
-    console.log('submitAnswer i socket har kört')
+    //console.log('submitAnswer i socket har kört')
   }); 
 
   socket.on("getCorrectedUserAnswer", function(d){ // körs när timern hos spelaren är slut
     let checkedUserAnswer = data.getCorrectedAnswer(d.pollId,d.questionNumber,d.userId);
     socket.emit('sendCorrectedUserAnswer', checkedUserAnswer)
-    console.log('getCorrectedUserAnswer i socket har kört')
+    //console.log('getCorrectedUserAnswer i socket har kört')
   });
 
   socket.on('getAllAnswers', function(pollId){ //döp om
@@ -100,6 +100,11 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('startCountdownPlayer', {q:randomOrder, questionNumber:d.questionNumber});
     io.to(d.pollId).emit('startCountdownResults',{q:randomOrder.q,questionNumber:d.questionNumber});
     io.to(d.pollId).emit('currentQuestionUpdate', d.questionNumber);
+  });
+
+  socket.on('endTimer', function(pollId){
+    console.log('i socket, lyssnar på endTimer')
+    io.to(pollId).emit('resetTime')
   });
 
   socket.on('updateResult', function(pollId){
