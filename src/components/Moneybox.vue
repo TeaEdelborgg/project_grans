@@ -71,6 +71,7 @@
     border-style: solid;
     background-color: #14144d;
     box-shadow:0 0 20px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.5);
+    padding:0.5%;
 }
 .moneybox p{
     color:#FF851B;
@@ -80,8 +81,10 @@
     margin:0;
 }
 .moneybox div{
-    width: 20%;
-    height: 20%;
+    width: 50%;
+    height: 50%;
+    max-width: 20px;
+    max-height: 20px;
     border-radius: 50%;
     border-width: 10%;
     border-style: solid;
