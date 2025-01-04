@@ -1,66 +1,67 @@
 <template>
-    <button v-on:click="runQuestion" :disabled=!canStartNextQuestion> 
-      <!-- lägga in om sista frågan så kan man ej klicka på denna utan den byts ut till finish game?-->
-      Run question
-    </button> <br><br>
+  <button v-if="pollData.currentQuestion + 1 != pollData.questionAmount" v-on:click="runQuestion" :disabled=!canStartNextQuestion> <!--lägga in en v if: v-if="pollData.currentQuestion == pollData.questionAmount"-->
+    <!-- lägga in om sista frågan så kan man ej klicka på denna utan den byts ut till finish game?-->
+    Run question {{ pollData.currentQuestion + 2 }}
+  </button> 
+  <button v-else v-on:click="finishGame()"> View final scoreboard </button> <br><br>
 
-    <button v-on:click="endQuestion()">
-      Avsluta fråga
-    </button> <br><br>
+  <button v-on:click="endQuestion()">
+    Avsluta fråga
+  </button> <br><br>
 
-    <router-link v-bind:to="'/result/' + pollId">Check result</router-link>
-    <button v-on:click="finishGame()">Finish Game</button>
-    <!--<router-link v-bind:to="'/finalResult/' +pollId">Finish Game</router-link> ska skicka resultatview till finalResult-->
-    <br><br>
+  <router-link v-bind:to="'/result/' + pollId">Check result</router-link>
+  <button v-on:click="finishGame()">Avsluta spelet</button>
+  <!--<router-link v-bind:to="'/finalResult/' +pollId">Finish Game</router-link> ska skicka resultatview till finalResult-->
+  <br><br>
 
-    <!--<br><br>
-    <button v-on:click='testFunktion'>
-      Testknapp
-    </button><br><br>-->
+  <!--<br><br>
+  <button v-on:click='testFunktion'>
+    Testknapp
+  </button><br><br>-->
 
-    <!-- Data: <br> 
-    {{ pollData }} <br><br>-->
+  <!-- Data: <br> 
+  {{ pollData }} <br><br>-->
 
-    Antal svar inkommna: {{ numberPlayersAnswered }}/{{ numberPlayers }}
+  Antal svar inkommna: {{ numberPlayersAnswered }}/{{ numberPlayers }}
 
-    <br>
-    nuvarande fråga: 
-    {{ this.pollData.currentQuestion }} <br><br>
+  <br>
+  nuvarande fråga: 
+  {{ this.pollData.currentQuestion + 1 }} <br><br>
 
-    <div class='participantAnswers'>
-      spelares svar: 
-      <li v-for="(participant, index) in pollData.participants" :key="index">
-        {{ participant.information.name }} svarade: {{ participant.information.answers[this.pollData.currentQuestion] }}
-      </li>
-    </div>
+  <div class='participantAnswers'>
+    spelares svar: 
+    <li v-for="(participant, index) in pollData.participants" :key="index">
+      {{ participant.information.name }} svarade: {{ participant.information.answers[this.pollData.currentQuestion] }}
+    </li>
+  </div>
 
-    <!--
-    <div class='questions'>
-      Frågor:
-      <li v-for="(question, index) in questionList" :key="index">
-        {{ question }}
-      </li>
-    </div>
-    <div class='correctanswers'>
-      Korrekta svar: 
-      <li v-for="(answer, index) in answerList" :key="index">
-        {{ answer }}
-      </li>
-    </div>
-    -->
+  <!--
+  <div class='questions'>
+    Frågor:
+    <li v-for="(question, index) in questionList" :key="index">
+      {{ question }}
+    </li>
+  </div>
+  <div class='correctanswers'>
+    Korrekta svar: 
+    <li v-for="(answer, index) in answerList" :key="index">
+      {{ answer }}
+    </li>
+  </div>
+  -->
 
-    <br><br>
+  <br><br>
 
-    <div>
-      <!-- vilket är bäst? som ovan att göra nya listor som man sparar eller som nedan där man endast hämtar dem? -->
-      <li v-for="(answer, index) in pollData.questions" :key="index">
-        fråga: {{ answer.q }} <br>
-        rätt svar: {{ answer.a.correct }}, fel svar:
-        <ul v-for="(wrongAnswer, index) in answer.a.wrong" :key="index">
-          {{ wrongAnswer }}
-        </ul>
-      </li>
-    </div>
+  <div>
+    <!-- vilket är bäst? som ovan att göra nya listor som man sparar eller som nedan där man endast hämtar dem? -->
+    <li v-for="(answer, index) in pollData.questions" :key="index">
+      fråga: {{ answer.q }} <br>
+      rätt svar: {{ answer.a.correct }}, fel svar:
+      <ul v-for="(wrongAnswer, index) in answer.a.wrong" :key="index">
+        {{ wrongAnswer }}
+      </ul>
+    </li>
+  </div>
 </template>
 
 <script>
@@ -153,7 +154,12 @@ export default {
         if (this.pollData.participants[i].information.answers[qId] !== null) {
           this.numberPlayersAnswered++
           if (this.numberPlayersAnswered == this.numberPlayers) {
-            this.canStartNextQuestion = true // måste tas bort sen när jag löst så detta ställs om med socketen
+            this.endQuestion()
+            setTimeout(()=>{
+            this.canStartNextQuestion = true
+            // socket on
+          }, 2000)
+            // måste tas bort sen när jag löst så detta ställs om med socketen
             // sätta timern till noll här också? så att den inte körs över till nästa fråga??
           }
         }

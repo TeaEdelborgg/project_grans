@@ -166,8 +166,8 @@ export default {
             // socket on
           }, 2000)
           clearInterval(interval);
-          console.log('ska köra socketen efter')
-          console.log('userId: ', this.userId, 'pollId: ', this.pollId)
+          //console.log('ska köra socketen efter')
+          //console.log('userId: ', this.userId, 'pollId: ', this.pollId)
           socket.emit('getPlayer', {pollId: this.pollId, userId: this.userId})
           socket.emit('getCorrectedUserAnswer', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId})
           socket.on('sendCorrectedUserAnswer', checkedUserAnswer => {
