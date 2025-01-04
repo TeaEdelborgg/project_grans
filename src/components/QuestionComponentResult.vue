@@ -111,9 +111,9 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
   clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
   align-content: center;
   justify-content: center;
-  top: 50%;  /* Placera boxen i mitten vertikalt */
-  left: 50%;  /* Placera boxen i mitten horisontellt */
-  transform: translate(-50%, -50%);  /* Justera för att exakt centrera boxen */
+  top: 50%;  
+  left: 50%; 
+  transform: translate(-50%, -50%); 
   box-shadow: 0 0 5px #7bb0f3;
 }
 .testRect{
