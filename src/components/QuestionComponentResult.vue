@@ -4,7 +4,7 @@
         <div id="questionFrame"> <!--container?-->
           <div v-if="questionActive">
             <div id="progressbar">
-                <div id="progress" :style="{width:percentage+'%'}"></div>
+                <div id="progress" :style="{width:percentage+'%', animation: percentage<=50 ? 'shake 0.5s infinite':'none'}"></div>
             </div>
             <h1>{{question.q}}</h1>
             <br>
@@ -80,7 +80,6 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
               this.timeLeftTest = 0
               this.percentage = 0
               endQuestion = true
-
               // fattar ej varför detta behövs här? för i pollview funkar det utan så man hamnar i den sista else satsen automatiskt???
               console.log('kör clearInterval i socket')
               clearInterval(interval)
@@ -184,5 +183,19 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
   width:100%;
   height:100%;
   background-color: #FF851B;
+}
+@keyframes shake {
+  0%{
+    transform: translateY(0);
+  }
+  50%{
+    transform: translateY(-10%);
+    background-color: red;
+    box-shadow: 0 0 20px red;
+    /**blinka rött */
+  }
+  100%{
+    transform: translateY(0);
+  }
 }
 </style>
