@@ -118,7 +118,8 @@ function sockets(io, socket, data) {
   });
 
   socket.on('getStats', function(pollId) {
-    const amountOfQuestions = data.amountOfQuestions(pollId);
+    //const amountOfQuestions = data.amountOfQuestions(pollId); // vilket av dessa är snyggast? antingen så har vi en extra i data eller hämtar vi allt?
+    const amountOfQuestions = data.getPoll(pollId).questionAmount
     const levelValues = data.getLevelValues(pollId)
     const levelColors = data.updateLevelBoxes(pollId)
     const participants = data.getParticipants(pollId)

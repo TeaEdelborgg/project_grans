@@ -273,15 +273,15 @@ Data.prototype.getQuestionAmount = function (pollId) {
   }
 }
 
-Data.prototype.amountOfQuestions = function (pollId){ // behövs denna? nu finns antalet frågor i pollData när man klickat på startPoll
+/*Data.prototype.amountOfQuestions = function (pollId){ // behövs denna? nu finns antalet frågor i pollData när man klickat på startPoll
   if(this.pollExists(pollId)){
     return this.polls[pollId].questions.length;
   }
-}
+}*/
 Data.prototype.createBoxes = function(pollId){
   if(this.pollExists(pollId)){
     const poll = this.polls[pollId]
-    const numberOfQuestions = this.amountOfQuestions(pollId)
+    const numberOfQuestions = poll.questionAmount
     for (let player of poll.participants){
       for (let n=0; n<numberOfQuestions;n++){
         player.information.coloredBoxes.push(false)
@@ -299,8 +299,8 @@ Data.prototype.setAnswersFalse = function(pollId){
   if(this.pollExists(pollId)){
     const users = this.polls[pollId].participants
     for(let user of users){
-      user.information.answers = new Array(this.amountOfQuestions(pollId)).fill(null)
-      console.log("setFalse: ", user.information.answers)
+      user.information.answers = new Array(this.polls[pollId].questionAmount).fill(null)
+      //console.log("setFalse: ", user.information.answers)
     }
   }
 }
@@ -338,7 +338,7 @@ Data.prototype.updateLevelBoxes = function(pollId){
   if(this.pollExists(pollId)){
     const poll = this.polls[pollId]
     let current = poll.currentQuestion
-    let amountQuestions = this.amountOfQuestions(pollId)
+    let amountQuestions = poll.questionAmount
     let boxes =[]
     for(let i =0; i<amountQuestions; i++){
       if(i <=current){
