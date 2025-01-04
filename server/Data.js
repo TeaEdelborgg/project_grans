@@ -118,6 +118,15 @@ Data.prototype.getParticipants = function(pollId) {
   return [];
 }
 
+Data.prototype.getOneParticipant = function(pollId, userId) {
+  if (this.pollExists(pollId)) {
+    const user = this.polls[pollId].participants.find(user => user.userId == userId)
+    return user
+  }
+  return {}
+
+}
+
 Data.prototype.addQuestion = function(pollId, q) {
   if (this.pollExists(pollId)) {
     console.log("frågan: ",q);

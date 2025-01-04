@@ -6,12 +6,12 @@
     <router-link v-bind:to="'/result/' + pollId">Check result</router-link>
     <button v-on:click="finishGame()">Finish Game</button>
     <!--<router-link v-bind:to="'/finalResult/' +pollId">Finish Game</router-link> ska skicka resultatview till finalResult-->
-    <br>
-
     <br><br>
+
+    <!--<br><br>
     <button v-on:click='testFunktion'>
       Testknapp
-    </button><br><br>
+    </button><br><br>-->
 
     <!-- Data: <br> 
     {{ pollData }} <br><br>-->
@@ -29,8 +29,7 @@
       </li>
     </div>
 
-    <br><br>
-
+    <!--
     <div class='questions'>
       Frågor:
       <li v-for="(question, index) in questionList" :key="index">
@@ -43,6 +42,7 @@
         {{ answer }}
       </li>
     </div>
+    -->
 
     <br><br>
 

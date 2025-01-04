@@ -1,3 +1,5 @@
+import { useId } from "vue";
+
 function sockets(io, socket, data) {
   
   socket.on('getUILabels', function(lang) {
@@ -54,6 +56,12 @@ function sockets(io, socket, data) {
     data.setAnswersFalse(pollId)
     /*data.polls[pollId].started = true;*/
     io.to(pollId).emit('startPoll');
+  });
+
+  socket.on('getPlayer', function(d) {
+    let user = data.getOneParticipant(d.pollId, d.userId);
+    //console.log('i socket, user är: ', user)
+    io.to(d.pollId).emit('sendPlayerStats', user);
   });
 
   socket.on('runQuestion', function(d) {  // verkar inte användas
