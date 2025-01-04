@@ -69,6 +69,9 @@ export default{
     background-image: linear-gradient(45deg, #f6860c, #ffe9d1);
     animation: gradientMove 3s linear infinite;
     background-size: 200% 200%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     /*margin-top:4%;*/
 }
 @keyframes gradientMove {

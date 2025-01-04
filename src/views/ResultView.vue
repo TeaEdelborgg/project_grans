@@ -145,7 +145,8 @@ export default {
 }
 #background{
  /* background-color: #001F3F;*/
-  background-image: url(/img/background_whowantstobeamillionare.webp);
+  /*background-image: url(/img/background_whowantstobeamillionare.webp);*/
+  background: linear-gradient(135deg, #0a0347, #3c298f); 
   background-size:cover ;
   height: 100vh;
   width: 100vw;
