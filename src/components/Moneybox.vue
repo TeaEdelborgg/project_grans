@@ -66,7 +66,7 @@
     align-items: center;
     flex-direction: row;
     display:flex;
-    border-radius:10% ;
+    border-radius:10%;
     border-color:black;
     border-style: solid;
     background-color: #14144d;
