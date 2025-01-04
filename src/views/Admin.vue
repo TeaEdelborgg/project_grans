@@ -3,6 +3,11 @@
       <!-- lägga in om sista frågan så kan man ej klicka på denna utan den byts ut till finish game?-->
       Run question
     </button> <br><br>
+
+    <button v-on:click="endQuestion()">
+      Avsluta fråga
+    </button> <br><br>
+
     <router-link v-bind:to="'/result/' + pollId">Check result</router-link>
     <button v-on:click="finishGame()">Finish Game</button>
     <!--<router-link v-bind:to="'/finalResult/' +pollId">Finish Game</router-link> ska skicka resultatview till finalResult-->
@@ -168,6 +173,10 @@ export default {
       //this.timerBeforeQUestion()
       //this.testCountdown()
       //här måste timer köras för 
+    },
+    endQuestion() {
+      console.log('i admin, kör endquestion precis innan socket endtimer skickas')
+      socket.emit('endTimer', this.pollId)
     },
     finishGame: function(){
       //här scoreboard skapas

@@ -108,9 +108,9 @@ export default {
       const stats = user
       if (stats.userId == this.userId) {
         this.userStats = user // alla spelare får allas stats??
-        console.log('i pollview, userId: ', stats.userId)
-        console.log('i pollView user, liv: ', user.information.lives, 'tid: ', user.information.time)
-        console.log('i pollView userStats, liv: ', this.userStats.information.lives, 'tid: ', this.userStats.information.time)
+        //console.log('i pollview, userId: ', stats.userId)
+        //console.log('i pollView user, liv: ', user.information.lives, 'tid: ', user.information.time)
+        //console.log('i pollView userStats, liv: ', this.userStats.information.lives, 'tid: ', this.userStats.information.time)
       }
       
     })
@@ -136,10 +136,19 @@ export default {
 
       let timerDuration = 13000;
       let timerAnswer = 10000;
+      let endQuestion = false;
       
       let interval = setInterval(() =>{
         let elapsedTime = Date.now() - startTime;
-        this.timeLeft = timerDuration - elapsedTime;
+
+        if (!endQuestion) {
+          this.timeLeft = timerDuration - elapsedTime;
+        }
+        socket.on('resetTime', () => {
+            this.timeLeft = 0
+            this.percentage = 0
+            endQuestion = true
+          })
 
         if (this.timeLeft > timerAnswer) {
           //lägg in en countdown för att innan man ser svarsalternativ?

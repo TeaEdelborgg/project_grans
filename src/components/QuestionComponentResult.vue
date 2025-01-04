@@ -16,6 +16,8 @@
 </template>
     
 <script>
+import io from 'socket.io-client';
+const socket = io(sessionStorage.getItem("dataServer")) 
 import SpeakBubble from '@/components/SpeakBubble.vue';
 
 
@@ -31,10 +33,15 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
       },
       data: function(){
         return{
+          pollId: "",
           questionActive:false,
           timeLeftBeforeQuestion:0,
           percentage:100,
           }
+      },
+      created: function (){
+        this.pollId = this.$route.params.id;
+        socket.emit( "joinPoll", this.pollId );
       },
       mounted(){
         console.log("fråga borde visas i mounted")
@@ -45,13 +52,27 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
         countdownResult: function(){
           console.log("fråga borde visas")
           let startTime = Date.now();
+          let timeLeftTest;
+          let endQuestion = false;
 
           let timerDuration = 13000;
           let timerAnswer = 10000;
           
           let interval = setInterval(() =>{
             let elapsedTime = Date.now() - startTime;
-            let timeLeftTest = timerDuration - elapsedTime;
+            if (!endQuestion) {
+              timeLeftTest = timerDuration - elapsedTime;
+            }
+            socket.on('resetTime', () => {
+              this.timeLeftTest = 0
+              this.percentage = 0
+              endQuestion = true
+
+              // fattar ej varför detta behövs här? för i pollview funkar det utan så man hamnar i den sista else satsen automatiskt???
+              console.log('kör clearInterval i socket')
+              clearInterval(interval)
+              this.$emit("countDownOverSend")
+            })
 
             if (timeLeftTest > timerAnswer) {
               this.timeLeftBeforeQuestion = Math.floor((3000 - elapsedTime)/1000);
@@ -59,6 +80,7 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
               this.questionActive = true;
               this.percentage = Math.floor(timeLeftTest / 100);
             } else {
+              console.log('kör clearInterval orginal')
               clearInterval(interval)
               //skicka till resultatview att köra funktionen
               this.$emit("countDownOverSend")
