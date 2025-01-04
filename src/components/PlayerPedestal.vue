@@ -1,6 +1,11 @@
 <template> <!--När jag lägger v-if här så blir pedestalen väldigt smal, får massa vue varningar ocskå-->
-      <div id="circle" :style="{backgroundColor: player.information.answers[questionNumber]!=null && questionActive ? 'yellow' : 'gray'}"></div>
-      <div class="playerpedestal" :style="{ '--pedestal-color': player.information.color }">
+      <div class="pedestal">
+        <div id="circle" :style="{
+          backgroundColor: player.information.answers[questionNumber]!=null && questionActive ? 'lightyellow' : 'gray', 
+          boxShadow: player.information.answers[questionNumber]!=null && questionActive ? '0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.5)': '0',
+          borderColor: player.information.answers[questionNumber]!=null && questionActive ? 'lightyellow':'black'
+          }"></div>
+          <div class="playerpedestalTest" :style="{ '--pedestal-color': player.information.color }">
         <div id="nameBox">
           {{player.information.name}} 
         </div>
@@ -16,6 +21,7 @@
           <h1>{{ player.information.time }}s</h1>
         </div>
         <!--<p v-if="player.information.answers[questionNumber]!=null && questionActive">{{uiLabels.answered}}</p> -->
+      </div>
       </div>
 </template>
 
@@ -63,6 +69,7 @@ export default {
     text-align: center;
     font-family:Georgia, 'Times New Roman', Times, serif;
     border-radius: 10%;
+    margin-top:3%;
   }
   #infoBox{
     height:70%;
@@ -74,24 +81,34 @@ export default {
     text-align: center;
     font-family:Georgia, 'Times New Roman', Times, serif;
     font-size: larger;
-    border-width: 100%;
     position: relative;
+    margin:1%;
   }
   #infoBox h1{
     position:absolute;
-    bottom: 3%;
+    bottom: 5%;
     text-align: center;
     width: 100%;
   }
   #circle{
-    height:40%;
-    width: 5%;
+    height:10%;
+    width: 50%;
+    margin: auto;
     background-color: gray;
-    border-radius: 50%;
+    border-radius: 50% 50% 0 0;
+    position: relative;
     z-index:4;
-    border-color: black;
-    border-style: solid;
+    border-top: 2px solid black;  /* Definiera en top border */
+    border-left: 2px solid black;  /* Definiera vänster border */
+    border-right: 2px solid black;  /* Definiera höger border */
   }
+  .pedestal{
+  flex:1;
+  max-width: 12%;
+  height:100%;
+  margin:auto;
+  position: relative;
+}
   .playerpedestal {
     color: white;
     background-color: var(--pedestal-color);
@@ -107,6 +124,21 @@ export default {
     z-index: 4;
     position:absolute;
     bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .playerpedestalTest{
+    background-color: var(--pedestal-color);
+    position: absolute;
+    box-shadow: 5% 5% 10% rgb(0, 0, 0.3);
+    height: 100%;
+    width: 100%;
+    z-index:4;
+    border-left: 3px solid black;
+    border-right: 3px solid black;
+    border-top: 3px solid black;
     display: flex;
     flex-direction: column;
     justify-content: center;

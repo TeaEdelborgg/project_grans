@@ -10,7 +10,7 @@
     </div> 
     <br>
     <div id="pedestaler">
-      <PlayerPedestal v-if="participants.length>0" v-for="player in participants" v-bind:questionNumber="questionNumber" v-bind:uiLabels="uiLabels" v-bind:player="player" v-bind:questionActive="questionActive":key="player.id" class="pedestal"/>
+      <PlayerPedestal v-if="participants.length>0" v-for="player in participants" v-bind:questionNumber="questionNumber" v-bind:uiLabels="uiLabels" v-bind:player="player" v-bind:questionActive="questionActive":key="player.id" />
     </div>
   </div>
 </template>
@@ -138,12 +138,6 @@ export default {
   margin-right:auto;
   bottom:0;
   position: relative;
-}
-.pedestal{
-  flex:1;
-  max-width: 10%;
-  height:70%;
-  margin:auto;
 }
 #rowContainer{
   display: flex;
