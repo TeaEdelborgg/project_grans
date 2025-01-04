@@ -8,7 +8,6 @@ function sockets(io, socket, data) {
 
   socket.on('createPoll', function(d) {
     data.createPoll(d.pollId, d.lang)
-    data.getQuestionAmount(d.pollId);
     socket.emit('pollData', data.getPoll(d.pollId));
   });
 
@@ -54,6 +53,7 @@ function sockets(io, socket, data) {
   socket.on('startPoll', function(pollId) {
     data.createBoxes(pollId)
     data.setAnswersFalse(pollId)
+    data.getQuestionAmount(pollId);
     /*data.polls[pollId].started = true;*/
     io.to(pollId).emit('startPoll');
   });
@@ -118,7 +118,8 @@ function sockets(io, socket, data) {
   });
 
   socket.on('getStats', function(pollId) {
-    const amountOfQuestions = data.amountOfQuestions(pollId);
+    //const amountOfQuestions = data.amountOfQuestions(pollId); // vilket av dessa är snyggast? antingen så har vi en extra i data eller hämtar vi allt?
+    const amountOfQuestions = data.getPoll(pollId).questionAmount
     const levelValues = data.getLevelValues(pollId)
     const levelColors = data.updateLevelBoxes(pollId)
     const participants = data.getParticipants(pollId)
