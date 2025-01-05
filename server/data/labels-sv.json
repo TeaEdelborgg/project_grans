@@ -19,6 +19,8 @@
     "readyMessage": "Ditt quiz är skapat! Låt alla deltagare gå med innan du klickar vidare.",
     "pollId": "Quizkod: ",
     "startPoll": "Starta quizet",
+	"choosePollText":"Välj ett av quizen",
+	"choosePoll": "Välj quiz",
     "participants": "Deltagare: ",
 	"changeLanguage": "Change to English",
 	"about": "Om oss",
