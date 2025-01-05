@@ -6,17 +6,18 @@
             <div id="progressbar">
                 <div id="progress" :style="{width:percentage+'%', animation: percentage<=50 ? 'shake 0.5s infinite':'none'}"></div>
             </div>
-            <h1>{{question.q}}</h1>
+            <div id="question">
+              <div class="line"></div>
+              <div class="rectangle" :style="{width:'30%', height:'50%', top:'0',background: 'linear-gradient(#ffbb43, #ffd467, #ffbb43)'}">summa</div>
+              <h1>{{question.q}}</h1>
+              <div class="line"></div>
+            </div>
             <br>
             <div id="rectangleContainer">
-              <div v-for="(a,index) in question.a" class="testRect" :style="{
-                borderLeft: index==0 ||index==2 ? '2px solid #7bb0f3':0,
-                borderRight: index==1 || index==3? '2px solid #7bb0f3':0,
-                borderBottom: index==2 || index==3 ? '2px solid #7bb0f3':0
-                }">
+              <div v-for="(a,index) in question.a" class="testRect">
                 <div class="line"></div>
                 <div class="rectangle">
-                  <h3>{{ a }}</h3>
+                  <h3><span>{{questionLetters[index]}}: </span>{{ a }}</h3>
                 </div> 
               </div>
             </div>  
@@ -50,6 +51,7 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
           questionActive:false,
           timeLeftBeforeQuestion:0,
           percentage:100,
+          questionLetters:['A','B','C','D']
           }
       },
       created: function (){
@@ -105,7 +107,7 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
 <style>
 .rectangle{
   position: absolute;
-  width: 80%;
+  width: 70%;
   height: 40%;
   background: linear-gradient(#393a93, #7bb0f3, #393a93); 
   clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
@@ -140,13 +142,12 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
   width: 100%;
   height: 60%;
   display: grid;
-  grid-template-columns: 45% 45%;
+  grid-template-columns: 50% 50%;
   grid-row: auto auto;
   justify-content: center;
   position:absolute;
   margin: auto;
-  border-top:2px solid #7bb0f3;
-  box-shadow: 0 0 5px #7bb0f3;
+  
 }
 #backgroundFrame{
   position:fixed;
@@ -171,6 +172,9 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
 }
 #questionFrame h1,h2{
   color:White;
+}
+.rectangle span{
+  color: #FF851B;
 }
 #progressbar{
   width:100%;
@@ -197,5 +201,11 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
   100%{
     transform: translateY(0);
   }
+}
+#question{
+  width: 100%;
+  height: 40%;
+  position: relative;
+  margin-top:5%;
 }
 </style>
