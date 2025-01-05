@@ -89,8 +89,8 @@ export default {
     socket.on( "uiLabels", labels => this.uiLabels = labels );
     socket.on( "pollData", data => {
       this.pollData = data; 
-      this.getQuestions();
-      this.getCorrectAnswers();
+      //this.getQuestions();
+      //this.getCorrectAnswers();
       this.getNumberPlayers();
     });
     socket.on("participantsUpdate", (p) => {
