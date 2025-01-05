@@ -110,7 +110,7 @@ export default {
 
   },
   methods: {
-    testFunktion: function() {
+    /*testFunktion: function() {
       console.log('testfunktion')
     },
     getQuestions: function() { // om detta behövs eller ej
@@ -124,7 +124,7 @@ export default {
       for (let i = 0; i < amountOfQuestions; i++) {
         this.answerList[i] = this.pollData.questions[i].a.correct
       }
-    },
+    },*/
     getNumberPlayers: function() {
       this.numberPlayers = this.pollData.participants.length
     },
@@ -150,86 +150,12 @@ export default {
       socket.emit('runCountdown', {pollId: this.pollId, questionNumber: currentQuestion})
     },
     endQuestion() {
-      console.log('i admin, kör endquestion precis innan socket endtimer skickas')
       socket.emit('endTimer', this.pollId)
     },
     finishGame: function(){
       socket.emit('createScoreBoard', this.pollId)
       // hur kan jag göra så att alla spelare ect försvinner när man kört detta? måste läggas in här så man kan köra om spelet här
     },
-    /*generatePollId: function(){
-      return Math.random().toString(36).substring(2,10).toUpperCase();
-      //id ska tas bort om det genererats tidigare?
-    },*/
-
-    /*createPoll: function () {
-      this.pollId=this.generatePollId();
-      socket.emit("createPoll", {pollId: this.pollId, lang: this.lang })
-      socket.emit("joinPoll", this.pollId);
-    },*/
-    /*startPoll: function () { // används inte nu men kanske ska göra det??
-      //this.timerQuestion()
-      socket.emit("startPoll", this.pollId)
-    },*/
-    /*timerBeforeQUestion: function(){ //denna ska göra så att resultat också får count down
-        let time={
-          timeLeft:3,
-          interval:null
-        }
-        time.interval = setInterval(()=>{
-          if (time.timeLeft>0){
-            time.timeLeft--;
-            console.log("tiden innan fråga, ", time.timeLeft)
-            socket.emit("getTimerBeforeQuestion",this.pollId)
-          } else {
-            socket.emit("startTime",{pollId:this.pollId, time:10})
-            socket.emit("runQuestion", {pollId: this.pollId, questionNumber: this.questionNumber})
-            this.timerQuestion();
-            clearInterval(time.interval)
-          }
-        },1000);
-    },*/
-    /*timerQuestion: function (){ //resultat ska få denna också
-        let time ={
-          timeLeft:10,
-          interval:null
-        }
-        time.interval = setInterval(()=>{
-          if (time.timeLeft>0){
-            time.timeLeft--;
-            console.log("tiden i create ",time.timeLeft)
-            socket.emit("getTimer",this.pollId)
-          } else{
-            console.log("tiden uppe i timerQuestion")
-            socket.emit("timesUp",this.pollId)
-            this.timeLeft=0
-            clearInterval(time.interval)
-            //här vill man göra så att alla personer skickar deras svar för att checkas, annars kan man titta under spelets gång 
-          }
-        },1000);
-    },*/
-
-    /*testCountdown: function() { // ta bort denna och lägg in en socket som lyssnar när timern är slut på resultatsidan
-      let startTime = Date.now();
-
-      let timerDuration = 13000;
-      let timerAnswer = 10000;
-      
-      let interval = setInterval(() =>{
-        let elapsedTime = Date.now() - startTime;
-        let timeLeftTest = timerDuration - elapsedTime;
-
-        if (timeLeftTest > timerAnswer) {
-          console.log('test, tid innan frågan: ', timeLeftTest - timerAnswer)
-        } else if (timeLeftTest > 0) {
-          // console.log('test, tid kvar för att svara: ', timeLeftTest)
-        } else {
-          clearInterval(interval)
-
-          console.log('test, interval clear')
-        }
-      }, 1000);  
-    }, */
   }
 }
 </script>
