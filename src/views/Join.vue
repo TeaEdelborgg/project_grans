@@ -4,7 +4,7 @@
       <!--enklare att kanske endast ha lobbyView, kommer annars behöva skicka data emellan?-->
 
   <label>
-      <input type="text" v-model="newPollId" placeholder="Enter Poll ID">
+      <input type="text" v-model="newPollId" :placeholder= "uiLabels.joinquizPlaceholder">
     </label>
   <!-- <router-link v-bind:to="'/lobby/' + newPollId">
       {{ uiLabels.participatePoll }}
@@ -14,7 +14,7 @@
     <transition name="fade">
     <router-link v-if="newPollId" v-bind:to="'/lobby/' + newPollId" class="joinButton">
       <button>
-        {{ uiLabels.participatePoll }} Join
+        {{ uiLabels.joinquiz }}
       </button>
     </router-link>
     </transition>
@@ -36,6 +36,10 @@ export default {
       lang: localStorage.getItem( "lang") || "en",
       hideNav: true
     };
+  },
+  created: function () {
+    socket.on( "uiLabels", labels => this.uiLabels = labels );
+    socket.emit( "getUILabels", this.lang );
   },
   methods: {
     checkPollStatus() {

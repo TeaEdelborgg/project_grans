@@ -4,9 +4,9 @@
       <div id="timerBarContainer">
         <div id="timerBar" :style="{ width: percentage + '%' }"></div>
       </div>
-      <!--<div>
-        <p>Tid:  sekunder, Liv kvar: </p>
-      </div>-->
+      <div>
+        <p>Tid: {{ this.userStats.information.time }} sekunder, Liv kvar: {{ this.userStats.information.lives }} </p>
+      </div>
       
 
       <div class="answeralternatives" v-if="questionActive || seeAlternatives">
@@ -37,13 +37,14 @@ export default {
   data: function () {
     return {
       userId:'',
+      userStats: {information: {time: 0, lives: 2}},
       question: {
         q: "",
         a: []
       },
       pollId: "inactive poll",
-      submittedAnswers: {},
-      questionRandom:{
+      submittedAnswers: {}, // används ej
+      questionRandom:{ // används ej
         q:"",
         a:[]
       },
@@ -102,6 +103,17 @@ export default {
       this.questionNumber=question.questionNumber;
       this.countdownPlayer();
     })
+
+    socket.on('sendPlayerStats', user => {
+      const stats = user
+      if (stats.userId == this.userId) {
+        this.userStats = user // alla spelare får allas stats??
+        //console.log('i pollview, userId: ', stats.userId)
+        //console.log('i pollView user, liv: ', user.information.lives, 'tid: ', user.information.time)
+        //console.log('i pollView userStats, liv: ', this.userStats.information.lives, 'tid: ', this.userStats.information.time)
+      }
+      
+    })
   },
   methods: {
     submitAnswer: function (answer) { 
@@ -124,10 +136,19 @@ export default {
 
       let timerDuration = 13000;
       let timerAnswer = 10000;
+      let endQuestion = false;
       
       let interval = setInterval(() =>{
         let elapsedTime = Date.now() - startTime;
-        this.timeLeft = timerDuration - elapsedTime;
+
+        if (!endQuestion) {
+          this.timeLeft = timerDuration - elapsedTime;
+        }
+        socket.on('resetTime', () => {
+            this.timeLeft = 0
+            this.percentage = 0
+            endQuestion = true
+          })
 
         if (this.timeLeft > timerAnswer) {
           //lägg in en countdown för att innan man ser svarsalternativ?
@@ -145,6 +166,9 @@ export default {
             // socket on
           }, 2000)
           clearInterval(interval);
+          //console.log('ska köra socketen efter')
+          //console.log('userId: ', this.userId, 'pollId: ', this.pollId)
+          socket.emit('getPlayer', {pollId: this.pollId, userId: this.userId})
           socket.emit('getCorrectedUserAnswer', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId})
           socket.on('sendCorrectedUserAnswer', checkedUserAnswer => {
             this.isCorrectAnswer = checkedUserAnswer

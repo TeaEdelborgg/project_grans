@@ -1,37 +1,28 @@
 <template>
   <div id="background">
-    <div> <!--Fixa lang saken, syns inte atm-->
+    <!--<div> Fixa lang saken, syns inte atm
       lang: {{ lang }}
-    </div>
-    <h1 :style="{color:'white'}">{{ uiLabels.heading}}</h1>
-    <QuestionComponentResult v-if="questionActive" v-bind:uiLabels="uiLabels" v-bind:question="question" v-on:countDownOver="countDownOver" ></QuestionComponentResult> <!--Sätta den i frame så som en TV?-->
-      <div id="frame">
-        <div id="moneyframe">
-          <Moneybox v-for="index in amountOfQuestions" v-bind:boxState="moneyBoxes[index-1]" v-bind:value="moneyValues[index-1]" :id="index"/>
-        </div>
-        <div id="playersFrame">
-          <Player v-if="participants.length>0"  v-for="player in participants" v-bind:player="player" v-bind:amountOfQuestions="amountOfQuestions":key="player.id" />
-        </div>
-      </div>
+    </div>-->
+    <!--<h1 :style="{color:'white'}">{{ uiLabels.heading}}</h1>-->
+    <div id="rowContainer">
+      <Frame v-bind:amountOfQuestions="amountOfQuestions" v-on:countDownOver="countDownOver" v-bind:question="question" v-bind:uiLabels="uiLabels" v-bind:questionActive="questionActive" v-bind:moneyBoxes="moneyBoxes" v-bind:moneyValues="moneyValues" v-bind:participants="participants"></Frame>
+      <HostPlayer v-bind:questionActive="questionActive"></HostPlayer>
+    </div> 
     <br>
     <div id="pedestaler">
-      <PlayerPedestal v-if="participants.length>0" v-for="player in participants" v-bind:questionNumber="questionNumber" v-bind:uiLabels="uiLabels" v-bind:player="player" v-bind:questionActive="questionActive":key="player.id" class="pedestal"/>
+      <PlayerPedestal v-if="participants.length>0" v-for="player in participants" v-bind:questionNumber="questionNumber" v-bind:uiLabels="uiLabels" v-bind:player="player" v-bind:questionActive="questionActive":key="player.id" />
     </div>
   </div>
 </template>
 
 <script>
-//att göra
-//fixa så att pedestalerna hamnar längst ner på sidan, täcker 100% width
-//att när frågan körs, så syns pedestalerna
 
 // @ is an alias to /src
 import BarsComponent from '@/components/BarsComponent.vue';
-import Player from '@/components/Player.vue';
 import PlayerPedestal from '@/components/PlayerPedestal.vue';
 import io from 'socket.io-client';
-import QuestionComponentResult from '@/components/QuestionComponentResult.vue';
-import Moneybox from '@/components/Moneybox.vue';
+import HostPlayer from '@/components/hostPlayer.vue';
+import Frame from '@/components/Frame.vue';
 //const socket = io("localhost:3000");
 const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
 
@@ -39,10 +30,9 @@ export default {
   name: 'ResultView',
   components: {
     BarsComponent,
-    Player,
     PlayerPedestal,
-    QuestionComponentResult,
-    Moneybox
+    HostPlayer,
+    Frame
   },
   data: function () {
     return {
@@ -94,6 +84,7 @@ export default {
       this.question=data.q; //vill också hämta answers
       this.questionNumber=data.questionNumber
       this.questionActive=true
+      console.log("question true: ", this.questionActive)
     });
     socket.on('loadStats', d => { //fixa den här, döp om, (typ loadStats)
       this.amountOfQuestions=d.amountOfQuestions
@@ -119,8 +110,8 @@ export default {
     backgroundResult.style.height=this.windowHeight + "px";
   },
   methods:{
-    countDownOver: function(){ // finnas i admin?
-    setTimeout(()=>{
+    countDownOver: function(){
+      setTimeout(()=>{
           socket.emit("getAllAnswers", this.pollId) //den ska både hämta svaren och skicka allas svar till sig själva
           this.questionActive=false 
         },2000)
@@ -135,55 +126,59 @@ export default {
 </script>
 
 <style>
+#container-test{
+  height: 100px;
+  width: 100px;
+  background-color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+#box-test{
+  height: 100%;
+  width: 80%;
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  background-color: black;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
+#line-test{
+  width: 100%;
+  height: 5%;
+  background-color: white;
+}
+
 #pedestaler{
   width:100%;
   display: flex;
   justify-content: space-evenly;
   height:25%;
-  background-color: #FF851B;
+  /*background-color: #FF851B;*/
   margin-left:auto;
   margin-right:auto;
   bottom:0;
+  position: relative;
 }
-.pedestal{
-  flex:1;
-  max-width: 10%;
-  height:60%;
-  margin:auto;
-}
-#playersFrame{
-  width:80%;
+#rowContainer{
   display: flex;
-  justify-content: space-evenly;
-  height:100%;
-  background-color: #4b6ab8;
-  margin: auto;
+  flex-direction: row;
+  height: 75%;
+  position: relative;
 }
-
 #background{
-  background-color: #001F3F;
+ /* background-color: #001F3F;*/
+  /*background-image: url(/img/background_whowantstobeamillionare.webp);*/
+  background: linear-gradient(135deg, #0a0347, #3c298f); 
+  background-size:cover ;
+  height: 100vh;
+  width: 100vw;
   position: fixed;
   z-index: 1;
   display:flex;
   flex-direction:column;
 }
-#frame{
-  height:55%; /*osäker på hur stor den ska va*/
-  width: 80%;
-  margin: auto;
-  border-style:solid;
-  border-color:#FF851B;
-  border-width:5px;
-  display:flex;
-  top:20%
-}
-#moneyframe{
-  background-color: #39A2DB;
-  height: 100%;
-  width: 20%;
-  display: flex;
-  justify-content: space-evenly;
-  flex-direction: column-reverse;
-}
+
 
 </style>
