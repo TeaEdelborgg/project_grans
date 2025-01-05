@@ -51,9 +51,9 @@ function sockets(io, socket, data) {
   });
 
   socket.on('startPoll', function(pollId) {
-    data.setAnswersFalse(pollId)
     data.getQuestionAmount(pollId);
-    data.createBoxes(pollId)
+    data.setAnswersFalse(pollId);
+    data.createBoxes(pollId);
     /*data.polls[pollId].started = true;*/
     io.to(pollId).emit('startPoll');
   });
