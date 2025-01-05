@@ -1,66 +1,43 @@
 <template>
-  <button v-if="pollData.currentQuestion + 1 != pollData.questionAmount" v-on:click="runQuestion" :disabled=!canStartNextQuestion>
-    Run question {{ pollData.currentQuestion + 2 }}
-  </button> 
-  <button v-else v-on:click="finishGame()"> View final scoreboard </button> <br><br>
+  <div class="admin">
+    <section class="game-status">
+      <h2>Spelstatus</h2>
+      <p>Antal svar inkommna: {{ numberPlayersAnswered }}/{{ numberPlayers }}</p>
+      <p>Nuvarande fråga: {{ pollData.currentQuestion + 1 }}</p>
+    </section>
 
-  <button v-on:click="endQuestion()">
-    Avsluta fråga
-  </button> <br><br>
+    <section class="game-controls">
+      <h2>Frågor</h2>
+      <button v-if="pollData.currentQuestion + 1 != pollData.questionAmount" @click="runQuestion" :disabled="!canStartNextQuestion">
+        Nästa fråga
+      </button>
+      <button v-else @click="finishGame">Visa slutresultat</button>
+      <button @click="endQuestion" :disabled="canStartNextQuestion">Avsluta aktuell fråga</button> <br>
+      <button v-on:click="finishGame()">Avsluta spelet</button>
+      <router-link v-bind:to="'/result/' + pollId">Check result</router-link>
+    </section>
 
-  <router-link v-bind:to="'/result/' + pollId">Check result</router-link>
-  <button v-on:click="finishGame()">Avsluta spelet</button>
-  <br><br>
-
-  {{ pollData }}
-
-  <!--<br><br>
-  <button v-on:click='testFunktion'>
-    Testknapp
-  </button><br><br>-->
-
-  <!-- Data: <br> 
-  {{ pollData }} <br><br>-->
-
-  Antal svar inkommna: {{ numberPlayersAnswered }}/{{ numberPlayers }}
-
-  <br>
-  nuvarande fråga: 
-  {{ this.pollData.currentQuestion + 1 }} <br><br>
-
-  <div class='participantAnswers'>
-    spelares svar: 
-    <li v-for="(participant, index) in pollData.participants" :key="index">
-      {{ participant.information.name }} svarade: {{ participant.information.answers[this.pollData.currentQuestion] }}
-    </li>
-  </div>
-
-  <!--
-  <div class='questions'>
-    Frågor:
-    <li v-for="(question, index) in questionList" :key="index">
-      {{ question }}
-    </li>
-  </div>
-  <div class='correctanswers'>
-    Korrekta svar: 
-    <li v-for="(answer, index) in answerList" :key="index">
-      {{ answer }}
-    </li>
-  </div>
-  -->
-
-  <br><br>
-
-  <div>
-    <!-- vilket är bäst? som ovan att göra nya listor som man sparar eller som nedan där man endast hämtar dem? -->
-    <li v-for="(answer, index) in pollData.questions" :key="index">
-      fråga: {{ answer.q }} <br>
-      rätt svar: {{ answer.a.correct }}, fel svar:
-      <ul v-for="(wrongAnswer, index) in answer.a.wrong" :key="index">
-        {{ wrongAnswer }}
+    <section class="participants">
+      <h2>Spelarnas svar</h2>
+      <ul>
+        <li v-for="(participant, index) in pollData.participants" :key="index">
+          {{ participant.information.name }} svarade: 
+          {{ participant.information.answers[pollData.currentQuestion] || "Har inte svarat ännu" }}
+        </li>
       </ul>
-    </li>
+    </section>
+
+    <section class="questions">
+      <h2>Frågor och svar</h2>
+      <button @click="toggleQuestions">Visa/Dölj frågor och svar</button>
+      <ul v-show="showQuestions">
+        <li v-for="(question, index) in pollData.questions" :key="index">
+          <strong>Fråga {{ index + 1 }}:</strong> {{ question.q }}<br>
+          <strong>Rätt svar:</strong> {{ question.a.correct }}<br>
+          <strong>Fel svar:</strong> {{ question.a.wrong.join(', ') }}<br><br>
+        </li>
+      </ul>
+    </section>
   </div>
 </template>
 
@@ -81,6 +58,7 @@ export default {
       numberPlayers: 0,
       numberPlayersAnswered: 0, 
       canStartNextQuestion: true,
+      showQuestions: false,
     }
   },
   created: function () {
@@ -89,8 +67,6 @@ export default {
     socket.on( "uiLabels", labels => this.uiLabels = labels );
     socket.on( "pollData", data => {
       this.pollData = data; 
-      //this.getQuestions();
-      //this.getCorrectAnswers();
       this.getNumberPlayers();
     });
     socket.on("participantsUpdate", (p) => {
@@ -110,21 +86,6 @@ export default {
 
   },
   methods: {
-    /*testFunktion: function() {
-      console.log('testfunktion')
-    },
-    getQuestions: function() { // om detta behövs eller ej
-      const amountOfQuestions = this.pollData.questionAmount;
-      for (let i = 0; i < amountOfQuestions; i++) {
-        this.questionList[i] = this.pollData.questions[i].q
-      }
-    },
-    getCorrectAnswers: function() { // // om detta behövs eller ej
-      const amountOfQuestions = this.pollData.questionAmount; 
-      for (let i = 0; i < amountOfQuestions; i++) {
-        this.answerList[i] = this.pollData.questions[i].a.correct
-      }
-    },*/
     getNumberPlayers: function() {
       this.numberPlayers = this.pollData.participants.length
     },
@@ -155,6 +116,9 @@ export default {
     finishGame: function(){
       socket.emit('createScoreBoard', this.pollId)
       // hur kan jag göra så att alla spelare ect försvinner när man kört detta? måste läggas in här så man kan köra om spelet här
+    },
+    toggleQuestions() {
+      this.showQuestions = !this.showQuestions;
     },
   }
 }
