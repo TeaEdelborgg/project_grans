@@ -2,11 +2,6 @@
   <div class="container">
     <div v-if="!continueToStart">
 
-   <!-- <button v-on:click="choosePoll('test')">
-      Create Poll with Test ID
-    </button>-->
-
-    <!--Lägg till extra poll-->
     <h1>{{ uiLabels.choosePollText }}</h1>
     <div class="pollButtons">
       <button v-on:click="choosePoll('quiz1')">
@@ -14,7 +9,6 @@
         <img src="/public/img/history_icon.png" alt="icon1"/>
       </button>
 
-      <!-- Lägg till extra poll -->
       <button v-on:click="choosePoll('poll2')">
         Geography
         <img src="/public/img/geography_icon.png" alt="icon2"/>
@@ -183,7 +177,7 @@ h1{
 .continue:hover:not(:disabled) {
   background-color: rgb(16, 115, 20); 
   box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4); 
-  transform: scale(1.2); /* Slight scaling for hover effect */
+  transform: scale(1.2);
 }
 
 
