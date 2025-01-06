@@ -8,7 +8,9 @@
             </div>
             <div id="question">
               <div class="line"></div>
-              <div class="rectangle" :style="{width:'30%', height:'50%', top:'0',background: 'linear-gradient(#ffbb43, #ffd467, #ffbb43)'}">summa</div>
+              <div class="borderRect" :style="{width:'30%', height:'30%', top:'0'}">
+                <div class="rectangle" :style="{background: 'linear-gradient(#ffbb43, #ffd467, #ffbb43)'}">summa</div>
+              </div>
               <h1>{{question.q}}</h1>
               <div class="line"></div>
             </div>
@@ -16,9 +18,11 @@
             <div id="rectangleContainer">
               <div v-for="(a,index) in question.a" class="testRect">
                 <div class="line"></div>
-                <div class="rectangle">
-                  <h3><span>{{questionLetters[index]}}: </span>{{ a }}</h3>
-                </div> 
+                <div class="borderRect">
+                  <div class="rectangle">
+                    <h3><span>{{questionLetters[index]}}: </span>{{ a }}</h3>
+                  </div> 
+                </div>
               </div>
             </div>  
           </div>
@@ -106,17 +110,15 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
 </script>
 <style>
 .rectangle{
-  position: absolute;
-  width: 70%;
-  height: 40%;
-  background: linear-gradient(#393a93, #7bb0f3, #393a93); 
-  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  width: 100%;
+  height: 100%;
+  /*background: linear-gradient(#393a93, #7bb0f3, #393a93); */
+  background-color: #101c3e;
+  clip-path: polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%);
   align-content: center;
   justify-content: center;
-  top: 50%;  
-  left: 50%; 
-  transform: translate(-50%, -50%); 
-  box-shadow: 0 0 5px #7bb0f3;
+  position: relative;
+  
 }
 .testRect{
   flex:1;
@@ -129,18 +131,19 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
 .line{
   height: 2px;
   width: 100%;
-  background-color: #7bb0f3;
-  box-shadow: 0 0 5px #7bb0f3;
+  background-color: lightyellow;
+  box-shadow: 0 0 5px lightyellow;
 }
 .rectangle h3{
   align-content: center;
   justify-content: center;
+  color: white;
 }
 
 #rectangleContainer{
-  margin-top:15%;
+  bottom:5%;
   width: 100%;
-  height: 60%;
+  height: 40%;
   display: grid;
   grid-template-columns: 50% 50%;
   grid-row: auto auto;
@@ -167,7 +170,7 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
   /*left:50%;
   top:40%;*/
   /*transform: translate(-50%,-50%);*/
-  background-color: #001F3F;
+  background: linear-gradient(45deg,#0f131f, #3a3790, #0f131f);
   position: absolute;
 }
 #questionFrame h1,h2{
@@ -175,6 +178,8 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
 }
 .rectangle span{
   color: #FF851B;
+  left:15%;
+  position: absolute;
 }
 #progressbar{
   width:100%;
@@ -204,8 +209,21 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
 }
 #question{
   width: 100%;
-  height: 40%;
+  height: 100%;
   position: relative;
-  margin-top:5%;
+  margin-top:10%;
+  background-color: #101c3e;
+}
+.borderRect{
+  clip-path: polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%);
+  border: 2px solid lightyellow;
+  position: absolute;
+  width: 70%;
+  height: 50%;
+  background-color: lightyellow;
+  top: 50%;  
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  box-shadow: 0 0 5px lightyellow;
 }
 </style>
