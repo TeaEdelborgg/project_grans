@@ -22,7 +22,7 @@
       <ul>
         <li v-for="(participant, index) in pollData.participants" :key="index">
           {{ participant.information.name }} svarade: 
-          {{ participant.information.answers[pollData.currentQuestion] || "Har inte svarat ännu" }}
+          {{ participant.information.answers[pollData.currentQuestion][0] || "Har inte svarat ännu" }}
         </li>
       </ul>
     </section>

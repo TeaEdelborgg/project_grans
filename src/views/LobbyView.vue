@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div v-if="!joined">
-      <input type="text" v-model="userName" :placeholder="uiLabels.enterName" />
+      <input type="text" v-model="userName" :placeholder="uiLabels.enterName" maxlength="10"/>
       <h1>{{uiLabels.pickColor}}</h1>
       <div>
         <ul class="colorPicker">
@@ -243,8 +243,8 @@ input[type="text"]:hover {
   margin: 30px auto; 
   padding: 15px 40px; 
   font-size: 18px; 
-  background-color: rgb(18, 150, 22);
-  color: #fff; 
+  background-color: rgb(255, 136, 0);
+  color: #1e084f; 
   border: none;
   border-radius: 5px; 
   cursor: pointer;
@@ -254,7 +254,7 @@ input[type="text"]:hover {
 }
 
 .participateButton button:hover:not(:disabled) {
-  background-color: rgb(16, 115, 20); 
+  background-color: rgb(227, 122, 1);
   box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4); 
 }
 .participateButton button:disabled {
@@ -306,7 +306,7 @@ h1 {
   padding: 10px 20px;
   font-size: 18px;
   font-weight: bold;
-  color: #ffffff; 
+  color: #1e084f; 
   background-color: #ff9100; 
   border: none;
   border-radius: 8px; 
@@ -331,6 +331,7 @@ h1 {
   width: 80%;
   max-width: 400px;
   border-radius: 10px;
+  z-index: 100;
   opacity: 0; 
   transition: transform 0.4s ease, opacity 0.4s ease; 
 }
@@ -361,6 +362,7 @@ h1 {
   opacity: 0;
   transition: opacity 0.4s ease; 
   pointer-events: none; 
+  z-index: 100;
 }
 
 .overlay.show {
@@ -378,7 +380,7 @@ h1 {
   width: 100%;
   height: 100%; 
   background-color: #000000d5; 
-  z-index: 10; 
+  z-index: 100; 
   display: flex; 
   justify-content: center;
   align-items: center;
@@ -396,14 +398,13 @@ h3 {
 .participantColor {
   display: inline-block;
   padding: 10px 20px;
-  margin: 25px;
+  margin: 16px;
   border: 2px solid;
-  border-radius: 20px; /* Optional: makes the border rounded */
+  border-radius: 20px; 
   font-weight: bold;
   text-align: center;
   font-size: 25px;
   box-shadow: 0 0 5px currentColor, 0 0 5px currentColor, 0 0 20px currentColor;
-
 }
 
 .waitingLobby {
@@ -453,20 +454,57 @@ h3 {
     content: "...";
   }
 }
+@media (max-width: 480px) {
+  .colorPicker li a {
+    height: 5vh; 
+    width: 10vw;
+  }
+  .colorPicker {
+    gap: 4%;
+  }
+  input[type="text"] {
+    font-size: 16px; 
+    height: 20px;
+    width: 50%;
+    margin-top: 57%;
+    margin-bottom: 8%;
+  }
+  .participateButton button {
+    font-size: 14px; 
+    width: 140px;
+    padding: 8px 20px;
+    margin-top: 20%;
+  }
+  .waiting-message {
+    font-size: 80%;
+    margin-top: 0%;
+    padding-top:50%;
+    font-family: Verdana, Tahoma, sans-serif;
+  }
+  .waitingLobby {
+    margin-top: 0%;
+  }
+  .participantColor {
+    padding: 8px 16px;
+    margin: 1vw;
+    font-size: 70%;
+  }
+  .rulebutton {
+    font-size: 14px; 
+    width: 110px;
+    padding: 8px 20px;
+  }
+  .popup {
+    margin-top: 17%;
+    width: 85vw;
+    z-index: 100;
+  }
+  .popup button {
+    right: 1.5%;
+  }
+  .RulesPopup li {
+    font-size: 80%;
+  }
 
-/*
-.colorPicker li a.selected {
-  border-color: #000;
-  transform: scale(1.2);
 }
-.colorPicker li a.disabled::after {
-  opacity: 1; 
-  content: '✖'; 
-  position: absolute;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 35px; 
-  color: rgb(214, 15, 15); 
-}*/
 </style>

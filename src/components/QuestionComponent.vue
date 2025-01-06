@@ -11,7 +11,6 @@
       v-on:click="selectAnswer(a)" 
       v-bind:key="a">
       {{ a }}
-      rätt: {{ question.correct }}
     </button> <br/>
     
     <!--<button class="submitbutton" v-on:click="answer">
