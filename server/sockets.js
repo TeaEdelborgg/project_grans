@@ -106,8 +106,9 @@ function sockets(io, socket, data) {
 
   socket.on('runCountdown', function(d){
     let randomOrder = data.getQuestionAnswerRandom(d.pollId, d.questionNumber);
+    let correctAnswer = data.getCorrectAnswer(d.pollId, d.questionNumber)
     io.to(d.pollId).emit('startCountdownPlayer', {q:randomOrder, questionNumber:d.questionNumber});
-    io.to(d.pollId).emit('startCountdownResults',{q:randomOrder,questionNumber:d.questionNumber});
+    io.to(d.pollId).emit('startCountdownResults',{q:randomOrder,questionNumber:d.questionNumber, correctAnswer:correctAnswer}); //lägg till det rätta svaret också
     io.to(d.pollId).emit('currentQuestionUpdate', d.questionNumber);
   });
 

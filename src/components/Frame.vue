@@ -10,7 +10,7 @@
             </div>
         </div>
         <div v-if="questionActive" class="test2">
-            <QuestionComponentResult v-if="questionActive" v-bind:uiLabels="uiLabels" v-bind:question="question" v-on:countDownOverSend="countDownOverSend" ></QuestionComponentResult> <!--Sätta den i frame så som en TV?-->
+            <QuestionComponentResult v-if="questionActive" v-bind:currentValue="moneyValues[questionNumber]" v-bind:correctAnswer="correctAnswer" v-bind:uiLabels="uiLabels" v-bind:question="question" v-on:countDownOverSend="countDownOverSend" ></QuestionComponentResult> <!--Sätta den i frame så som en TV?-->
         </div>
     </div>
     </div>
@@ -34,9 +34,10 @@ export default{
             moneyValues:Array,
             participants:Object,
             questionActive:Boolean,
-            question: Object, //detta ska sedan även innehålla alla svar
-            uiLabels: Object
-
+            question: Object, 
+            uiLabels: Object,
+            questionNumber:Number,
+            correctAnswer:String
         },
         data: function(){
             return{
@@ -86,16 +87,16 @@ export default{
     }
 }
 #frame{
-  height:100%; /*osäker på hur stor den ska va*/
+  height:100%; 
   width: 100%;
   border-style:solid;
   border-color:#14144d;
-  border-radius: 5%;
   border-width:5px;
-  background: linear-gradient(to right, #393a93, #7bb0f3, #393a93); 
-  /*box-shadow:0 0 20px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.5);*/
+  border-radius: 3%;
+  background: radial-gradient( #7bb0f3,#393a93); 
   display:flex;
-  position: relative
+  position: relative;
+  overflow:hidden;
 }
 #moneyframe{
   /*background-color: #39A2DB;*/

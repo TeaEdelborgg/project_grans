@@ -5,7 +5,7 @@
     </div>-->
     <!--<h1 :style="{color:'white'}">{{ uiLabels.heading}}</h1>-->
     <div id="rowContainer">
-      <Frame v-bind:amountOfQuestions="amountOfQuestions" v-on:countDownOver="countDownOver" v-bind:question="question" v-bind:uiLabels="uiLabels" v-bind:questionActive="questionActive" v-bind:moneyBoxes="moneyBoxes" v-bind:moneyValues="moneyValues" v-bind:participants="participants"></Frame>
+      <Frame v-bind:amountOfQuestions="amountOfQuestions" v-on:countDownOver="countDownOver" v-bind:correctAnswer="correctAnswer" v-bind:questionNumber="questionNumber" v-bind:question="question" v-bind:uiLabels="uiLabels" v-bind:questionActive="questionActive" v-bind:moneyBoxes="moneyBoxes" v-bind:moneyValues="moneyValues" v-bind:participants="participants"></Frame>
       <HostPlayer v-bind:questionActive="questionActive"></HostPlayer>
     </div> 
     <br>
@@ -53,7 +53,8 @@ export default {
       userId:'',
       moneyBoxes:[],
       moneyValues:[],
-      questionNumber:0
+      questionNumber:0,
+      correctAnswer:''
     }
   },
   created: function () {
@@ -81,8 +82,9 @@ export default {
     })
  
     socket.on('startCountdownResults', data =>{ 
-      this.question=data.q; //vill också hämta answers
+      this.question=data.q; //lägg ihop dessa till en
       this.questionNumber=data.questionNumber
+      this.correctAnswer=data.correctAnswer
       this.questionActive=true
       console.log("question true: ", this.questionActive)
     });
@@ -103,11 +105,7 @@ export default {
 
   },
   mounted (){
-    this.windowHeight = document.documentElement.clientHeight
-    this.windowWidth = document.documentElement.clientWidth;
-    const backgroundResult = document.getElementById('background');
-    backgroundResult.style.width=this.windowWidth +"px";
-    backgroundResult.style.height=this.windowHeight + "px";
+    
   },
   methods:{
     countDownOver: function(){
@@ -177,7 +175,7 @@ export default {
 #background{
  /* background-color: #001F3F;*/
   /*background-image: url(/img/background_whowantstobeamillionare.webp);*/
-  background: linear-gradient(135deg, #0a0347, #3c298f); 
+  background: radial-gradient(#1a237e, #0d1137);
   background-size:cover ;
   height: 100vh;
   width: 100vw;

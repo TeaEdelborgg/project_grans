@@ -2,15 +2,15 @@
       <div class="pedestal">
         <div id="circle" :style="{
           backgroundColor: player.information.answers[questionNumber]!=null && questionActive ? 'lightyellow' : 'gray', 
-          boxShadow: player.information.answers[questionNumber]!=null && questionActive ? '0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.5)': '0',
+          boxShadow: player.information.answers[questionNumber]!=null && questionActive ? '0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.5)': 'none',
           borderColor: player.information.answers[questionNumber]!=null && questionActive ? 'lightyellow':'black'
           }"></div>
           <div class="playerpedestalTest" :style="{ '--pedestal-color': player.information.color }">
-        <div id="nameBox">
-          {{player.information.name}} 
+        <div id="nameBox" :style="{borderColor: player.information.in ? 'lightyellow' : 'gray', boxShadow: player.information.in ? '0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.5)': '0 0 0 0'}">
+          <h3>{{player.information.name}} </h3>
         </div>
         <br>
-        <div id="infoBox" :style="{borderColor: player.information.in ? 'yellow' : 'gray', boxShadow: player.information.in ? '0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.5)': '0 0 0 0'}">
+        <div id="infoBox" :style="{borderColor: player.information.in ? 'lightyellow' : 'gray', boxShadow: player.information.in ? '0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.5)': '0 0 0 0'}">
           <!--{{uiLabels.livesLeft}}:{{ player.information.lives }} <br> Byt ut mot hjärtan-->
           <div id="hjartan">
             <img :src="player.information.lives>=1 ? '/img/hjartaRod.png':'/img/hjartaGro.png'" class="hjarta">
@@ -62,14 +62,23 @@ export default {
   justify-items: center;
 }
   #nameBox{
-    height: 20%;
+    height: 15%;
     width: 90%;
     background-color: white;
     color: black;
     text-align: center;
+    border:10% solid;
     font-family:Georgia, 'Times New Roman', Times, serif;
     border-radius: 10%;
     margin-top:3%;
+    position: relative;
+  }
+  #nameBox h3{
+    position: absolute;
+    left: 50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+    margin: auto;
   }
   #infoBox{
     height:70%;
@@ -83,6 +92,7 @@ export default {
     font-size: larger;
     position: relative;
     margin:1%;
+    margin-top:0;
   }
   #infoBox h1{
     position:absolute;
