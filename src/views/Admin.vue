@@ -123,3 +123,47 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.admin {
+  margin: 3%;
+  color: #cfcfcf;
+  background: radial-gradient(#1a237e, #0d1137);;
+  /*background: linear-gradient(135deg, #0a0347, #3c298f);*/ /* känns som om denna bakgrunden inte är den bästa? */
+  padding: 2%;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+h2 {
+  font-size: 2em;
+  margin: 0.5em;
+  color: #ff6f00;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+button {
+  align-items: center;
+  background-image: linear-gradient(135deg, #fF6E00 40%, #FF8800);
+  border: 1%; 
+  border-radius: 10px;
+  border-color: #FF8800;
+  color: #eae9e9;
+  cursor: pointer;
+  font-size: 100%;
+  font-weight: 700;
+  padding: 2%;
+  text-transform: uppercase;
+}
+button:disabled {
+  cursor: not-allowed;
+  background-image: linear-gradient(135deg, #a9632d 40%, #bd782a); /* kanske ändra färg här? */
+  border-color: #bd782a;
+  color: #a38d7c
+  /* denna ska bli typ grå för att visa + ingen cursor */
+}
+button:hover:enabled {
+  background-image: linear-gradient(135deg, #fF6E00 40%, #FF8800);
+  border-color: #bd782a;
+  color: #d6b79f
+}
+</style>
