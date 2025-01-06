@@ -126,6 +126,13 @@ export default {
 </script>
 
 <style>
+#testR{
+  clip-path: polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%);
+  background-color: red;
+  height: 100%;
+  width: 100%;
+}
+
 #container-test{
   height: 100px;
   width: 100px;
