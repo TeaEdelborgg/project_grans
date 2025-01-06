@@ -45,6 +45,10 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
   });
 
+  socket.on('getParticipants', function(pollId){
+    io.to(pollId).emit('participantsUpdate', data.getParticipants(pollId));
+  });
+
   socket.on("selectColor", function (info) {
     const updatedParticipants = data.updateColorSelection(info);
     io.to(info.pollId).emit("colorSelectionUpdate", updatedParticipants);
