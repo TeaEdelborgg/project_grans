@@ -111,6 +111,7 @@ export default {
       this.checkForDisabledColors();
     });
     socket.emit("joinPoll", this.pollId);
+    socket.emit("getParticipants", this.pollId)
     socket.emit("getUILabels", this.lang);
   },
   methods: {

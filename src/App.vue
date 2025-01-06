@@ -20,6 +20,7 @@ button {
   cursor: pointer;
   padding: 0;
   position: absolute;
+  z-index: 100;
   left: 2px;
   top: 9px
 }
