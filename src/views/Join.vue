@@ -101,8 +101,8 @@ button {
   margin: 30px auto; 
   padding: 15px 40px; 
   font-size: 18px; 
-  background-color: rgb(18, 150, 22);
-  color: #fff; 
+  background-color: rgb(255, 136, 0);
+  color: #1e084f; 
   border: none;
   border-radius: 5px; 
   cursor: pointer;
@@ -113,7 +113,7 @@ button {
 }
 
 button:hover {
-  background-color: rgb(16, 115, 20); 
+  background-color: rgb(227, 122, 1);
   box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4); 
 }
 .joinButton {
@@ -126,5 +126,21 @@ button:hover {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+@media (max-width: 480px) {
+  input[type="text"] {
+    margin-top: 68%; 
+    font-size: 170%; 
+    width: 70%; 
+    height: 7%; 
+  }
+
+  button {
+    font-size: 110%; 
+    width: 40%; 
+    height: 8%;
+    text-align: center;
+    padding: 0%;
+  }
 }
 </style>

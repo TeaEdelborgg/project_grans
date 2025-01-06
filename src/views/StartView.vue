@@ -131,7 +131,7 @@ h1 {
   margin-right:100px;
   font-size: 20px; 
   background-color: rgb(255, 136, 0);
-  color: #fff; 
+  color: #1e084f; 
   border-radius: 10px; 
   cursor: pointer;
   box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1); 
@@ -148,7 +148,28 @@ h1 {
   transform: scale(1.2); 
 }
 
+@media (max-width: 480px) {
+  h1 {
+    font-size: 30px; 
+    margin-top: 130px;
+  }
 
+  .langbutton img {
+    margin-left: 30%; 
+  }
+
+  .enterButton, .createButton {
+    width: 35%; 
+    height: 8%;
+    margin: 2%;
+    font-size: 3.5vw;
+    white-space: nowrap;
+  }
+
+  .questionMark {
+    font-size: 50px; 
+  }
+}
 /*
   header {
     background-color: gray;
