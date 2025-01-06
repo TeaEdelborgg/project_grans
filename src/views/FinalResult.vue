@@ -3,9 +3,7 @@
         <div v-if="showNameWinners[1]" id="confetti">
             <img src="/img/confetti.png" alt="">
         </div>
-        <button v-if="$route.name !== 'Start'" @click="$router.push('/')">
-            <img src="/img/HomeButton.png" alt="home"/>
-        </button>
+        
         <div id="scoreBoard" v-if="answeresSentIn"> <!--Gör sedan att winner är namnet, och losers är endast listan av namnen-->
             <div class="headlight" :style="{left:'-5%',top:'-10%', transform:'rotate(45deg)', filter:'drop-shadow(260px 0 60px rgb(250, 245, 181))'}"></div>
             <div class="headlight" :style="{right:'-5%',top:'-10%',transform:'rotate(-45deg)',filter:'drop-shadow(-260px 0 60px rgb(250, 245, 181))'}"></div>

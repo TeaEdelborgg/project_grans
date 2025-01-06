@@ -28,14 +28,15 @@ export default{
 #speachBubbleContainer{
     position:fixed;
     z-index:3;
-    width:60%;
-    height: 60%;
+    width:40%;
+    height: 40%;
     right:10%;
     top:0;
 }
 #speachBubble{
     width: 100%;
     height: auto;
+    object-fit: contain;
     /*transform:translateX(100%);
     transition: transform 1s ease-in-out;*/
 }

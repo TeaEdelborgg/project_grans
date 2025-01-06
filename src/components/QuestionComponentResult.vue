@@ -2,31 +2,31 @@
     <div id="backgroundFrame"></div> 
     <!-- denna visas bara om countdown är aktiv-->
         <div id="questionFrame"> <!--container?-->
-          <div v-if="questionActive">
+          <div>
             <div id="progressbar">
-                <div id="progress" :style="{width:percentage+'%', animation: percentage<=50 ? 'shake 0.5s infinite':'none'}"></div>
+                <div id="progress" :style="{width:percentage+'%', animation: percentage<=30 ? 'shake 0.5s infinite':'none'}"></div>
             </div>
-            <div id="question">
+            <div v-if="showQuestion" id="question">
               <div class="line"></div>
               <div class="borderRect" :style="{width:'30%', height:'30%', top:'0'}">
-                <div class="rectangle" :style="{background: 'linear-gradient(#ffbb43, #ffd467, #ffbb43)'}">summa</div>
+                <div class="rectangle" :style="{background: 'radial-gradient(#ffd467, #be9611)'}"><p>{{currentValue}}</p></div>
               </div>
               <h1>{{question.q}}</h1>
               <div class="line"></div>
             </div>
             <br>
-            <div id="rectangleContainer">
-              <div v-for="(a,index) in question.a" class="testRect">
+            <div v-if="questionActive" id="rectangleContainer">
+              <div v-for="(a,index) in question.a" class="testRect" id="a">
                 <div class="line"></div>
                 <div class="borderRect">
-                  <div class="rectangle">
-                    <h3><span>{{questionLetters[index]}}: </span>{{ a }}</h3>
+                  <div class="rectangle" :style="{backgroundColor: a==correctAnswer && showCorrectAnswer ? '#FF851B':'none'}">
+                    <h3 :style="{color: a==correctAnswer && showCorrectAnswer ? 'black':'none'}"><span :style="{color: a==correctAnswer && showCorrectAnswer ? 'black':'none'}">{{questionLetters[index]}}: </span>{{ a }}</h3>
                   </div> 
                 </div>
               </div>
             </div>  
           </div>
-          <div v-if="!questionActive">
+          <div v-if="!showQuestion">
             <SpeakBubble v-bind:uiLabels="uiLabels" v-bind:timeLeftBeforeQuestion="timeLeftBeforeQuestion"></SpeakBubble>
           </div>
           <!--v-if inte aktiv-->
@@ -47,7 +47,9 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
       },
       props: {
         question: Object,
-        uiLabels: Object
+        uiLabels: Object,
+        currentValue: Number,
+        correctAnswer:String
       },
       data: function(){
         return{
@@ -55,7 +57,9 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
           questionActive:false,
           timeLeftBeforeQuestion:0,
           percentage:100,
-          questionLetters:['A','B','C','D']
+          questionLetters:['A','B','C','D'],
+          showQuestion:false,
+          showCorrectAnswer:false
           }
       },
       created: function (){
@@ -63,7 +67,7 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
         socket.emit( "joinPoll", this.pollId );
       },
       mounted(){
-        console.log("fråga borde visas i mounted")
+        console.log("correctAnswer i mounted: ",this.correctAnswer)
         this.countdownResult()
       },
       methods:{
@@ -74,8 +78,10 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
           let timeLeftTest;
           let endQuestion = false;
 
-          let timerDuration = 13000;
-          let timerAnswer = 10000;
+          let timerDuration = 19000;
+          let timerQuestion = 16000;
+          let timerAnswer = 11000;
+          let showAnswer = 1000;
           
           let interval = setInterval(() =>{
             let elapsedTime = Date.now() - startTime;
@@ -92,16 +98,23 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
               this.$emit("countDownOverSend")
             })
 
-            if (timeLeftTest > timerAnswer) {
+            if (timeLeftTest > timerQuestion) {
               this.timeLeftBeforeQuestion = Math.floor((3000 - elapsedTime)/1000);
-            } else if (timeLeftTest > 0) {
+            } else if (timeLeftTest>timerAnswer){
+              this.showQuestion = true
+            }
+             else if (timeLeftTest > showAnswer) {
               this.questionActive = true;
-              this.percentage = Math.floor(timeLeftTest / 100);
-            } else {
-              console.log('kör clearInterval orginal')
-              clearInterval(interval)
+              this.percentage = Math.floor((timeLeftTest-1000) / 100);
+            } else if (timeLeftTest>0){
+              this.percentage=0;
+              this.showCorrectAnswer=true
+            }
+            else {
+                console.log('kör clearInterval orginal')
+                clearInterval(interval)
+                this.$emit("countDownOverSend")
               //skicka till resultatview att köra funktionen
-              this.$emit("countDownOverSend")
             }
           }, 100);  
         },
@@ -139,6 +152,14 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
   justify-content: center;
   color: white;
 }
+.rectangle p{
+  position: absolute;
+  color:black;
+  margin:0;
+  left:50%;
+  transform: translate(-50%,-50%);
+  font-weight: bold;
+}
 
 #rectangleContainer{
   bottom:5%;
@@ -150,7 +171,15 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
   justify-content: center;
   position:absolute;
   margin: auto;
-  
+  animation: showAnswers 0.5s;
+}
+@keyframes showAnswers {
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
 }
 #backgroundFrame{
   position:fixed;
@@ -165,6 +194,7 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
 #questionFrame{
   width: 100%;
   height: 100%;
+  overflow:hidden;
   margin: auto;
   z-index: 3;
   /*left:50%;
@@ -183,6 +213,7 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
 }
 #progressbar{
   width:100%;
+  overflow:hidden;
   height:20px;
   background-color: lightgray;
   margin-left:auto;
@@ -192,13 +223,14 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
   width:100%;
   height:100%;
   background-color: #FF851B;
+  transition: width 0.1s;
 }
 @keyframes shake {
   0%{
     transform: translateY(0);
   }
   50%{
-    transform: translateY(-10%);
+    transform: translateY(10%);
     background-color: red;
     box-shadow: 0 0 20px red;
     /**blinka rött */
@@ -218,7 +250,7 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
   clip-path: polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%);
   border: 2px solid lightyellow;
   position: absolute;
-  width: 70%;
+  width: 90%;
   height: 50%;
   background-color: lightyellow;
   top: 50%;  

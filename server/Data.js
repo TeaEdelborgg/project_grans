@@ -291,6 +291,7 @@ Data.prototype.createBoxes = function(pollId){
     //fixa pengar levlar här
     for (let i=0; i<numberOfQuestions;i++){
       let value = Math.ceil((1000000/numberOfQuestions)*(i+1)/10000)*10000//Math.ceil((1000000/numberOfQuestions)*(i+1)) //här ska det endast vara två decimaler
+      if(value>1000000){value=1000000}
       poll.moneyBoxes.push(value)
     }
     console.log("money levlar: ",poll.moneyBoxes)
@@ -414,6 +415,13 @@ Data.prototype.getScoreBoard = function(pollId){
     return this.polls[pollId].scoreBoard
   }
   return []
+}
+
+Data.prototype.getCorrectAnswer = function(pollId, qId){
+  if(this.pollExists(pollId)){
+    return this.polls[pollId].questions[qId].a.correct
+  }
+  return ""
 }
 /*------------------------Gammal kod---------------------------------------- */
 /*

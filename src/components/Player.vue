@@ -4,7 +4,7 @@
     <div id="pile" :style="{
       background: 'linear-gradient(to right, '+player.information.color+', #c0c0c0, '+player.information.color+')', 
       height: calculateHeight(),
-      border: player.information.in==false ? '2px solid black':'0'
+      filter: player.information.in==false ? 'brightness(50%)':'none'
       }">
     </div>
   </div>
@@ -30,8 +30,6 @@ export default {
   methods:{
     calculateHeight: function(){
       const amountOfCorrect = this.player.information.coloredBoxes.filter(value => value===true).length;
-      console.log(this.player.information.coloredBoxes)
-      console.log(amountOfCorrect)
       if(amountOfCorrect==0){
         return 2+'%';
       }
