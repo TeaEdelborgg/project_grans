@@ -7,6 +7,18 @@
       <div>
         <p>Tid: {{ this.userStats.information.time }} sekunder, Liv kvar: {{ this.userStats.information.lives }} </p>
       </div>
+
+      <div class="helpButtons">
+        <button @click="fiftyFifty" :disabled="this.userStats.information.usedFiftyFifty">
+          50/50
+        </button>
+        <button @click="phoneAFriend">
+          Fråga en kompis
+        </button>
+        <button @click="askAudience">
+          Fråga publiken
+        </button>
+      </div>
       
 
       <div class="answeralternatives" v-if="questionActive || seeAlternatives">
@@ -63,7 +75,17 @@ export default {
     this.userId = this.$route.params.userId;
     socket.on( "uiLabels", labels => this.uiLabels = labels );
     //socket.emit("getParticipants", this.pollId);
-
+    
+    socket.on('sendPlayerStats', user => {
+      const stats = user
+      if (stats.userId == this.userId) {
+        this.userStats = user // alla spelare får allas stats??
+        //console.log('i pollview, userId: ', stats.userId)
+        //console.log('i pollView user, liv: ', user.information.lives, 'tid: ', user.information.time)
+        //console.log('i pollView userStats, liv: ', this.userStats.information.lives, 'tid: ', this.userStats.information.time)
+      }
+      
+    })
 
     /*socket.on( "questionUpdate", q => { 
       console.log("tog emot fråga, ", q)
@@ -104,20 +126,20 @@ export default {
       this.countdownPlayer();
     })
 
-    socket.on('sendPlayerStats', user => {
-      const stats = user
-      if (stats.userId == this.userId) {
-        this.userStats = user // alla spelare får allas stats??
-        //console.log('i pollview, userId: ', stats.userId)
-        //console.log('i pollView user, liv: ', user.information.lives, 'tid: ', user.information.time)
-        //console.log('i pollView userStats, liv: ', this.userStats.information.lives, 'tid: ', this.userStats.information.time)
-      }
-      
-    })
+    
   },
   methods: {
+    fiftyFifty: function() { // ska man köra samma socket kanske..? skicka med en till variabel som beror på vilken funktion man kört
+      socket.emit('fiftyFifty', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId})
+    },
+    phoneAFriend: function() {
+      console.log('phoneAFriend körs') // svara samma som den första personen som svarat
+    },
+    askAudience: function() {
+      console.log('askAudience körs') // randomiserat, 15% risk att det är fel
+    },
     submitAnswer: function (answer) { 
-      socket.emit("submitAnswer", {pollId: this.pollId, questionNumber: this.questionNumber, answer: answer, userId: this.userId, time: Math.floor(this.timeLeft/1000)}) 
+      socket.emit("submitAnswer", {pollId: this.pollId, questionNumber: this.questionNumber, answer: answer, userId: this.userId, time: Math.ceil(this.timeLeft/1000)}) 
       this.isQuestionAnswered = true;
       console.log('frågan är besvarad')
     },

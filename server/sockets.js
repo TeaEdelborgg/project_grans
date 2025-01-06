@@ -78,6 +78,11 @@ function sockets(io, socket, data) {
     console.log('ny fråga körs')
   });
 
+  socket.on('fiftyFifty', function(d) { // skickar in pollId och questionNumber
+    console.log('i fiftyFifty socket', d)
+    io.to(d.pollId).emit('sendIncorrects', data.getTwoIncorrect(d.pollId, d.questionNumber, d.userId))
+  });
+
   socket.on('submitAnswer', function(d) { // körs när man skickar in sitt svar
     data.submitAnswer(d.pollId, d.questionNumber, d.answer, d.userId, d.time);
     io.to(d.pollId).emit('updatePedestalPlayer', data.getParticipants(d.pollId));
