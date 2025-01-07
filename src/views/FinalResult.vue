@@ -5,35 +5,28 @@
         </div>
         
         <div id="scoreBoard" v-if="answeresSentIn"> <!--Gör sedan att winner är namnet, och losers är endast listan av namnen-->
-            <div class="headlight" :style="{left:'-5%',top:'-15%', transform:'rotate(45deg)',filter:'drop-shadow(270px 0 80px rgb(250, 245, 181)) drop-shadow(270px 0 100px rgb(250, 245, 181))'}"></div>
-            <!--<div class="lightParent">
-                <div class="light" :style="{left:'15%',top:'-1%', transform:'rotate(-225deg)'}"></div>
-            </div>-->
-            <div class="headlight" :style="{right:'-5%',top:'-15%',transform:'rotate(-45deg)',filter:'drop-shadow(-270px 0 80px rgb(250, 245, 181)) drop-shadow(-270px 0 120px rgb(250, 245, 181))'}"></div>
+            <div class="headlight" :style="{left:'-5%',top:'-15%', transform:'rotate(45deg)',filter:'drop-shadow(400px 0 80px rgb(250, 245, 181)) drop-shadow(270px 0 100px rgb(250, 245, 181))'}"></div>
+            <div class="headlight" :style="{right:'-5%',top:'-15%',transform:'rotate(-45deg)',filter:'drop-shadow(-400px 0 80px rgb(250, 245, 181)) drop-shadow(-270px 0 120px rgb(250, 245, 181))'}"></div>
            <div id="podiumContainer">
                 <div v-for="n in 3" class="podium" :style="{height: n==2 ? '50%':'30%'}">
                     <h3 v-if="showNameWinners[n-1] && winners[n-1]!=null" :style="{
-                    top: n==2 ? '-10%':'-15%'}" > {{ winners[n-1].information.name }}</h3>
-                    <h1 :style="{color: n==1 ?'#C0C0C0': n==2?'#FFD700':n==3?'#cd7f32':'none'}">{{ numberOrder[n-1] }}</h1>
+                    top: n==2 ? '-11%':'-18%'}" > 
+                    {{ winners[n-1].information.name }}</h3>
+                    <h1 :style="{
+                        color: n==1 ?'#C0C0C0': n==2?'#FFD700':n==3?'#cd7f32':'none', 
+                        fontSize: n==2 ? '6em':'4em'}">
+                        {{ numberOrder[n-1] }}</h1>
                 </div>
                 <div id="holder"></div>
-                <div id="holder" :style="{zIndex:'-2',background:'linear-gradient(to right, black, #858585, black)',bottom:'-15%',borderRadius:'25% 25% 50% 50%'}"></div>
-                 <!--<div v-for="(player,index) in winners">
-                    <h3 v-if="showNameWinners[index] && player!=null" :style="{
-                    bottom: index==0 || index==2 ? '-52%':'-30%'}">
-                    {{ player.information.name }}</h3></div> 
-                <img src="/img/goldPodium.png" alt="">-->
+                <div id="holder" :style="{
+                    zIndex:'-2',
+                    background:'linear-gradient(to right, black, #858585, black)',
+                    bottom:'-15%',
+                    borderRadius:'25% 25% 50% 50%'}"></div>
             </div>
-            <!--<div>
-                <h1>{{uiLabels.winner}}</h1> <br>
-                <p>1. {{ winner.information.name }}</p> <br>
-            </div>-->
             <div id="losercontainer">
                 <p v-for="(player, index) in losers" v-if="showNameLosers"> <span>{{ index + 4 }}.</span> {{ player.information.name }}</p> <br>   
             </div>
-            <!--<button id="homeButtom" @click="$router.push('/')">
-                <h3>{{uiLabels.returnHomeButton}}</h3>
-            </button> -->
         </div>
     </div>
 </template>
@@ -99,8 +92,8 @@ export default {
                 let time = (i+1)*2000
                 let index = this.order[i]
                 this.showNamesCountDown(index,time)
-        }
-        this.showNamesCountDown(this.totalWinners, (this.totalWinners+1)*2000)
+            }
+            this.showNamesCountDown(this.totalWinners, (this.totalWinners+1)*2000)
         },
         showNamesCountDown: function(index,time){
             setTimeout(()=>{
@@ -235,21 +228,22 @@ export default {
     border-top-right-radius: 0;
 }
 #podiumContainer h3{
-    color:white;
+    color:#FF851B;
+    font-size:1.5em;
     margin: 0;
     z-index:5;
     position: relative;
-    text-shadow: 0 0 5% white;
     animation: showsText 0.5s;
+    text-shadow: 0 0 10px #4a4646;
 }
 #podiumContainer h1{
     color:white;
     margin: 0;
     z-index:5;
-    position: relative;
+    position: absolute;
+    left:50%;
     top: 50%;
-    transform: translateY(-50%);
-    font-size: 4em;
+    transform: translate(-50%,-50%);
     text-shadow: 0 1px 0 #4a4646, 0 3px 0 #4a4646, 0 0 2px #4a4646;
 }
 @keyframes showsText {
