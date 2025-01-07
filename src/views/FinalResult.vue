@@ -10,12 +10,19 @@
                 <div class="light" :style="{left:'15%',top:'-1%', transform:'rotate(-225deg)'}"></div>
             </div>-->
             <div class="headlight" :style="{right:'-5%',top:'-15%',transform:'rotate(-45deg)',filter:'drop-shadow(-270px 0 80px rgb(250, 245, 181)) drop-shadow(-270px 0 120px rgb(250, 245, 181))'}"></div>
-            <div id="podiumContainer">
-                <div v-for="(player,index) in winners">
+           <div id="podiumContainer">
+                <div v-for="n in 3" class="podium" :style="{height: n==2 ? '50%':'30%'}">
+                    <h3 v-if="showNameWinners[n-1] && winners[n-1]!=null" :style="{
+                    top: n==2 ? '-10%':'-15%'}" > {{ winners[n-1].information.name }}</h3>
+                    <h1 :style="{color: n==1 ?'#C0C0C0': n==2?'#FFD700':n==3?'#cd7f32':'none'}">{{ numberOrder[n-1] }}</h1>
+                </div>
+                <div id="holder"></div>
+                <div id="holder" :style="{zIndex:'-2',background:'linear-gradient(to right, black, #858585, black)',bottom:'-15%',borderRadius:'25% 25% 50% 50%'}"></div>
+                 <!--<div v-for="(player,index) in winners">
                     <h3 v-if="showNameWinners[index] && player!=null" :style="{
                     bottom: index==0 || index==2 ? '-52%':'-30%'}">
                     {{ player.information.name }}</h3></div> 
-                <img src="/img/goldPodium.png" alt="">
+                <img src="/img/goldPodium.png" alt="">-->
             </div>
             <!--<div>
                 <h1>{{uiLabels.winner}}</h1> <br>
@@ -52,7 +59,9 @@ export default {
             answeresSentIn:false,
             showNameLosers:false,
             showNameWinners:[],
-            totalWinners:0
+            totalWinners:0,
+            order:[2,0,1],
+            numberOrder:[2,1,3]
         }
     },
     created: function () {
@@ -85,30 +94,15 @@ export default {
     methods:{
         showNames: function(){
             this.totalWinners = this.winners.filter(item => item!=null).length
-            console.log("antalet winners: ", this.totalWinners)
-            for(let i =this.totalWinners;i>0;i--){
-                console.log("i for loop")
-                let time = (this.totalWinners-i+1)*2000
-                let index = this.totalWinners-i
+            let newOrder = this.order.slice(0,this.totalWinners)
+            for(let i = 0; i <newOrder.length;i++){
+                let time = (i+1)*2000
+                let index = this.order[i]
                 this.showNamesCountDown(index,time)
-            //tar index*tiden som totala tiden, sen skicka index för vilken plats
         }
-        this.showNamesCountDown(this.totalWinners, this.totalWinners+2*2000)
+        this.showNamesCountDown(this.totalWinners, (this.totalWinners+1)*2000)
         },
         showNamesCountDown: function(index,time){
-            /*let time = 0;
-            if(index==0){
-                time = (index+2)*2000
-            }
-            else if(index==1){
-                time = (index+2)*2000
-            }
-            else if(index==2){
-                time= (index-1)*2000
-            }
-            else{
-                time = (index+1)*2000
-            }*/
             setTimeout(()=>{
                 console.log("tid uppe")
                 if(index<this.totalWinners){
@@ -216,9 +210,10 @@ export default {
     position: relative;
     margin-top:5%;
     display: grid;
-    grid-template-columns: 18% 28% 18%;
+    grid-template-columns: 20% 30% 20%;
     justify-content: center;
     text-align: center;
+    align-items: end;
 }
 #podiumContainer img{
     width: 80%;
@@ -231,11 +226,31 @@ export default {
     bottom: 0;
     z-index:2;
 }
+.podium{
+    background: linear-gradient(to right, rgb(41, 41, 41) 0%, #be9611 20%,#ffd467 45% 55%, #be9611 80%, rgb(41, 41, 41) 100%); 
+    position: relative;
+    margin-bottom:0%;
+    border-radius:50%/10%;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
 #podiumContainer h3{
     color:white;
+    margin: 0;
     z-index:5;
     position: relative;
+    text-shadow: 0 0 5% white;
     animation: showsText 0.5s;
+}
+#podiumContainer h1{
+    color:white;
+    margin: 0;
+    z-index:5;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 4em;
+    text-shadow: 0 1px 0 #4a4646, 0 3px 0 #4a4646, 0 0 2px #4a4646;
 }
 @keyframes showsText {
     0%{
@@ -244,6 +259,15 @@ export default {
     100%{
         opacity: 1;
     }
+}
+#holder{
+    position: absolute;
+    width: 100%;
+    height: 20%;
+    z-index: -1;
+    background-color: #323232;
+    bottom: -10%;
+    border-radius: 50%;
 }
 #scoreBoard p,h1,h2{
     color:white;
@@ -266,7 +290,7 @@ button img {
 #losercontainer{
     flex:1;
     width: 40%;
-    margin-top: 5%;
+    margin-top: 7%;
     display: flex;
     flex-direction: column;
     align-items: center;
