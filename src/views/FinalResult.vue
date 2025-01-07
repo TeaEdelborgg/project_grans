@@ -46,7 +46,7 @@ export default {
             showNameLosers:false,
             showNameWinners:[],
             totalWinners:0,
-            showingOrderAlternativs:{1:[null,0,null],2:[0,1,null],3:[1,2,0]},
+            showingOrderAlternativs:{1:[1],2:[0,1,null],3:[2,0,1]},
             showingOrder:[],
             numberOrder:[2,1,3]
         }
@@ -58,15 +58,10 @@ export default {
             this.winners = val.slice(0,3)
             this.showNameWinners= new Array(this.winners.length).fill(false)
             
-            if(this.winners.length>1){
-                let temp = this.winners[0]
-                this.winners[0] = this.winners[1]
-                this.winners[1] = temp
-            }
-            else if (this.winners.length==1){
-                this.winners[1]=this.winners[0]
-                this.winners[0]=null
-            }
+
+            let temp = this.winners[0]
+            this.winners[0] = this.winners[1]
+            this.winners[1] = temp
 
             this.losers = val.slice(3,val.length)
             this.showNames()
@@ -83,32 +78,14 @@ export default {
             this.totalWinners = this.winners.filter(item => item!=null).length
             this.showingOrder = this.showingOrderAlternativs[this.totalWinners]
 
-            console.log("current: ", this.showingOrder)
-            console.log("winners: ",this.winners, " totalwinners: ",this.totalWinners)
-
-            if(this.totalWinners==1){
-                console.log("skickar en vinnare")
-                this.showNamesCountDown(1,2000)
-            }
-            else if(this.totalWinners==2){
-                this.showNamesCountDown(0,2000)
-                this.showNamesCountDown(1,4000)
-            }
-            else{
-                this.showNamesCountDown(2,2000)
-                this.showNamesCountDown(0,4000)
-                this.showNamesCountDown(1,6000)
-            }
-
-            /*for(let i = 0; i <this.totalWinners;i++){
-                if(this.showingOrder[i]!=null){
+            for(let i = 0; i <this.showingOrder.length;i++){
                     console.log('i: ',i, 'plats: ',this.showingOrder[i])
                     let time = (i+1)*2000
                     let index = this.showingOrder[i]
                     this.showNamesCountDown(index,time)
-                } 
-            }*/
-            this.showNamesCountDown(5, (this.totalWinners+1)*2000)
+            }
+            
+            this.showNamesCountDown(4, (this.totalWinners+1)*2000)
         },
         showNamesCountDown: function(index,time){
             setTimeout(()=>{
