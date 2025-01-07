@@ -92,7 +92,7 @@ Data.prototype.hasPollStarted = function(pollId) {
 Data.prototype.participateInPoll = function(pollId, name, userId, color) {
   console.log("participant will be added to", pollId, name, userId, color);
   if (this.pollExists(pollId)) {
-    this.polls[pollId].participants.push({userId: userId, information: {name: name, color: color, answers: [], correctedAnswers:[], in:true, coloredBoxes:[], time:0, lives:2, usedFiftyFifty:false, usedPhoneAFriend:false, usedaskAudience:false}}) //lägg till liv, tid ect alltså allt som är samma till en början
+    this.polls[pollId].participants.push({userId: userId, information: {name: name, color: color, answers: [], correctedAnswers:[], in:true, coloredBoxes:[], time:0, lives:2, usedFiftyFifty:false, usedPhoneAFriend:false, usedAskAudience:false}}) //lägg till liv, tid ect alltså allt som är samma till en början
   }
 }
 
@@ -182,12 +182,32 @@ Data.prototype.getQuestionAnswerRandom = function(pollId, qId = null) {
   return {}
 }
 
-Data.prototype.getTwoIncorrect = function(pollId, questionNumber, userId) {
+Data.prototype.getFiftyFifty = function(pollId, questionNumber, userId) {
   if (this.pollExists(pollId)) {
     const user = this.polls[pollId].participants.find(user => user.userId == userId)
     user.information.usedFiftyFifty = true
     const twoIncorrect = this.polls[pollId].questions[questionNumber].a.wrong.slice(1,3)
-    return twoIncorrect
+    console.log({answers: twoIncorrect, user: userId})
+    return {answers: twoIncorrect, user: userId}
+  }
+}
+
+Data.prototype.getAudienceAnswer = function(pollId, questionNumber, userId, usedFiftyFifty) {
+  if (this.pollExists(pollId)) {
+    const user = this.polls[pollId].participants.find(user => user.userId == userId)
+    user.information.usedAskAudience = true
+    let answer
+    let random = Math.random()
+    console.log('i getAudienceAnswer', random)
+    if (random < 0.9) {
+      answer = this.polls[pollId].questions[questionNumber].a.correct
+    } else if (!usedFiftyFifty) {
+      random = Math.floor(Math.random()*3)
+      answer = this.polls[pollId].questions[questionNumber].a.wrong[random]
+    } else {
+      answer = this.polls[pollId].questions[questionNumber].a.wrong[0]
+    }
+    return {answer: answer, user: userId}
   }
 }
 

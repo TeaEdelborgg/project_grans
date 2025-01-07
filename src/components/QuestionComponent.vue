@@ -7,6 +7,7 @@
         sended: a === selectedAnswer && sent, 
         showCorrect: a === selectedAnswer && showCorrectAnswer && isCorrectAnswer, 
         showIncorrect: a === selectedAnswer && showCorrectAnswer && !isCorrectAnswer, 
+        showAudienceAnswer: a === audienceAnswer,
       }"        
       v-for="a in question.a" 
       v-on:click="selectAnswer(a)" 
@@ -46,7 +47,9 @@ export default {
     return{
       selectedAnswer:'',
       sent:false,
-      fiftyFify: []
+      fiftyFify: [],
+      audienceAnswer:'',
+      userId:'',
       }
   },
   created: function () {
@@ -56,9 +59,18 @@ export default {
     //socket.emit( "getUILabels", this.lang ); tror ej denna behövs
     socket.emit( "joinPoll", this.pollId );
 
-    socket.on('sendIncorrects', incorrects => {
-      this.fiftyFify = incorrects
-      console.log('läser in sendIncorrects', this.fiftyFify)
+    socket.on('sendFiftyFifty', incorrects => {
+      if (incorrects.user == this.userId) {
+        this.fiftyFify = incorrects.answers
+        console.log('läser in sendFiftyFifty', this.fiftyFify)
+      }
+    })
+
+    socket.on('sendAudienceAnswer', audienceAnswer => {
+      if (audienceAnswer.user == this.userId) {
+        this.audienceAnswer = audienceAnswer.answer
+        console.log('läser in publikens svar', this.audienceAnswer)
+      }
     })
   },
   emits: ["answer"],
@@ -131,6 +143,10 @@ export default {
   background-color: #FF4136; 
   border-color: #FF4136;
   color: white;
+}
+.showAudienceAnswer {
+  background-color: yellow;
+  color: black;
 }
 .submitbutton {
   width: 80vw;

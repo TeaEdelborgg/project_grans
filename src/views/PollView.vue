@@ -8,16 +8,18 @@
         <p>Tid: {{ this.userStats.information.time }} sekunder, Liv kvar: {{ this.userStats.information.lives }} </p>
       </div>
 
-      <div class="helpButtons">
+      <div class="helpButtons" v-if="questionActive"> <!-- fixa så att denna inte blir mindre/ större hela tiden, eller kanske snarare att man inte ska kunna klicka bara?-->
         <button @click="fiftyFifty" :disabled="this.userStats.information.usedFiftyFifty">
           50/50
         </button>
+        <button @click="askAudience" :disabled="this.userStats.information.usedAskAudience">
+          Fråga publiken
+        </button> <!-- frågan är om man vill ha denna som en popup eller ska den lysa upp en knapp som nu? -->
+        
+        <!-- se om vi ska ha denna, för basically samma sak som fråga publiken?
         <button @click="phoneAFriend">
           Fråga en kompis
-        </button>
-        <button @click="askAudience">
-          Fråga publiken
-        </button>
+        </button> -->
       </div>
       
 
@@ -68,6 +70,7 @@ export default {
       showCorrectAnswer: false, // rättar och gör knappen grön om korrekt, annars röd
       percentage: 100,
       isQuestionAnswered: false, 
+      usedFiftyFiftyThisRound: false,
     }
   },
   created: function () {
@@ -131,16 +134,18 @@ export default {
   methods: {
     fiftyFifty: function() { // ska man köra samma socket kanske..? skicka med en till variabel som beror på vilken funktion man kört
       socket.emit('fiftyFifty', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId})
+      this.usedFiftyFiftyThisRound = true
     },
     phoneAFriend: function() {
       console.log('phoneAFriend körs') // svara samma som den första personen som svarat
     },
     askAudience: function() {
-      console.log('askAudience körs') // randomiserat, 15% risk att det är fel
+      socket.emit('audienceAnswer', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId, usedFiftyFifty: this.usedFiftyFiftyThisRound})
     },
     submitAnswer: function (answer) { 
       socket.emit("submitAnswer", {pollId: this.pollId, questionNumber: this.questionNumber, answer: answer, userId: this.userId, time: Math.ceil(this.timeLeft/1000)}) 
       this.isQuestionAnswered = true;
+      this.usedFiftyFiftyThisRound = false;
       console.log('frågan är besvarad')
     },
     /*timeUp: function(){ //används inte längre
