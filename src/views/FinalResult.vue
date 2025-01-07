@@ -3,27 +3,20 @@
         <div v-if="showNameWinners[1]" id="confetti">
             <img src="/img/confetti2.png" alt="">
         </div>
-        
-        <div id="scoreBoard" v-if="answeresSentIn"> <!--Gör sedan att winner är namnet, och losers är endast listan av namnen-->
-            <div class="headlight" :style="{left:'-5%',top:'-15%', transform:'rotate(45deg)',filter:'drop-shadow(400px 0 80px rgb(250, 245, 181)) drop-shadow(270px 0 100px rgb(250, 245, 181))'}"></div>
-            <div class="headlight" :style="{right:'-5%',top:'-15%',transform:'rotate(-45deg)',filter:'drop-shadow(-400px 0 80px rgb(250, 245, 181)) drop-shadow(-270px 0 120px rgb(250, 245, 181))'}"></div>
-           <div id="podiumContainer">
-                <div v-for="n in 3" class="podium" :style="{height: n==2 ? '50%':'30%'}">
-                    <h3 v-if="showNameWinners[n-1] && winners[n-1]!=null" :style="{
-                    top: n==2 ? '-11%':'-18%'}" > 
-                    {{ winners[n-1].information.name }}</h3>
-                    <h1 :style="{
-                        color: n==1 ?'#C0C0C0': n==2?'#FFD700':n==3?'#cd7f32':'none', 
-                        fontSize: n==2 ? '6em':'4em'}">
-                        {{ numberOrder[n-1] }}</h1>
+        <div id="scoreBoard" v-if="winners.length>0"> <!--Gör sedan att winner är namnet, och losers är endast listan av namnen-->
+            <div class="headlight" :style="{
+                left:'-5%',
+                top:'-15%', 
+                transform:'rotate(45deg)',
+                filter:'drop-shadow(400px 0 80px rgb(250, 245, 181)) drop-shadow(270px 0 100px rgb(250, 245, 181))'}">
                 </div>
-                <div id="holder"></div>
-                <div id="holder" :style="{
-                    zIndex:'-2',
-                    background:'linear-gradient(to right, black, #858585, black)',
-                    bottom:'-15%',
-                    borderRadius:'25% 25% 50% 50%'}"></div>
-            </div>
+            <div class="headlight" :style="{
+                right:'-5%',
+                top:'-15%',
+                transform:'rotate(-45deg)',
+                filter:'drop-shadow(-400px 0 80px rgb(250, 245, 181)) drop-shadow(-270px 0 120px rgb(250, 245, 181))'}">
+                </div>
+            <Podium v-bind:numberOrder="numberOrder" v-bind:showNameWinners="showNameWinners" v-bind:winners="winners"></Podium>
             <div id="losercontainer">
                 <p v-for="(player, index) in losers" v-if="showNameLosers"> <span>{{ index + 4 }}.</span> {{ player.information.name }}</p> <br>   
             </div>
@@ -35,13 +28,14 @@
 // @ is an alias to /src
 
 import io from 'socket.io-client';
+import Podium from '../components/Podium.vue';
 //const socket = io("localhost:3000");
 const socket = io(sessionStorage.getItem("dataServer")) 
 
 export default {
     name: 'FinalResultView',
     components: {
-    
+    Podium
     },
     data: function () {
         return {
@@ -49,11 +43,10 @@ export default {
             pollId:"",
             winners:[],
             losers:[],
-            answeresSentIn:false,
             showNameLosers:false,
             showNameWinners:[],
             totalWinners:0,
-            order:[2,0,1],
+            showingOrder:[2,0,1],
             numberOrder:[2,1,3]
         }
     },
@@ -69,7 +62,6 @@ export default {
             this.winners[1] = temp
 
             this.losers = val.slice(3,val.length)
-            this.answeresSentIn=true
             this.showNames()
         })
         socket.on( "uiLabels", labels => this.uiLabels = labels );
@@ -78,19 +70,14 @@ export default {
     },
     mounted(){
         socket.emit('getScoreBoard', this.pollId)
-        
-        /*this.showNames(0)
-        this.showNames(1)
-        this.showNames(2)
-        this.showNames(3)*/
     },
     methods:{
         showNames: function(){
             this.totalWinners = this.winners.filter(item => item!=null).length
-            let newOrder = this.order.slice(0,this.totalWinners)
+            let newOrder = this.showingOrder.slice(0,this.totalWinners)
             for(let i = 0; i <newOrder.length;i++){
                 let time = (i+1)*2000
-                let index = this.order[i]
+                let index = this.showingOrder[i]
                 this.showNamesCountDown(index,time)
             }
             this.showNamesCountDown(this.totalWinners, (this.totalWinners+1)*2000)
@@ -112,6 +99,13 @@ export default {
 </script>
 
 <style>
+#background{
+    width: 100vw;
+    height: 100vh;
+    background-color: #001F3F;
+    background: linear-gradient(135deg, #0a0347, #3c298f); 
+    position: fixed;
+}
 #confetti{
     position: absolute;
     z-index:0;
@@ -135,38 +129,12 @@ export default {
         opacity: 0.5;
     }
 }
-#background{
-    width: 100vw;
-    height: 100vh;
-    background-color: #001F3F;
-    background: linear-gradient(135deg, #0a0347, #3c298f); 
-    position: fixed;
-}
 .headlight{
     width: 35%;
     height: 5%;
     background: linear-gradient(black,#545454,black);
     position: absolute;
     z-index:3;
-}
-.light{
-    clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
-    width: 80%;
-    /*background: linear-gradient(to right, transparent 0%, transparent 40%, lightyellow 40%, lightyellow 60%,transparent 60%, transparent 100%); /*rgb(250, 245, 181);*/
-    background: linear-gradient(to right, transparent 0, transparent 10%, lightyellow 40%, lightyellow 60%, transparent 90%, transparent 100%);
-    height: 95%;
-    z-index: 2;
-    opacity: 0.7;
-    /*mask-image: radial-gradient(circle,black 20%, transparent 100%);
-    mask-size: 100% 100%;
-    mask-repeat: no-repeat;*/
-}
-.lightParent{
-    /*filter: drop-shadow(10%,10%,10%,red);*/
-    filter: drop-shadow(0 0 60px rgb(250, 245, 181)) drop-shadow(0 0 80px rgb(250, 245, 181));
-    overflow: visible;
-    width: 40%;
-    height: 80%;
 }
 #scoreBoard{
     height: 100%;
@@ -180,23 +148,6 @@ export default {
     position: relative;
     z-index:2;
 }
-#homeButtom{
-    width: 30%;
-    cursor:pointer;
-    background-color: rgb(255, 136, 0);
-    border:none;
-    border-radius: 10px; 
-    color:black;
-    height: 10%;
-    box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1); 
-    transition: background-color 0.3s ease; 
-    
-}
-#homeButtom:hover{
-    background-color: rgb(227, 122, 1);
-    box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
-    transform: scale(1.2); 
-}
 #podiumContainer{
     height: 60%;
     width: 65%;
@@ -207,79 +158,6 @@ export default {
     justify-content: center;
     text-align: center;
     align-items: end;
-}
-#podiumContainer img{
-    width: 80%;
-    height: auto;
-    position: absolute;
-    z-index: 3;
-    object-fit: cover;
-    left: 50%; 
-    transform: translate(-50%); 
-    bottom: 0;
-    z-index:2;
-}
-.podium{
-    background: linear-gradient(to right, rgb(41, 41, 41) 0%, #be9611 20%,#ffd467 45% 55%, #be9611 80%, rgb(41, 41, 41) 100%); 
-    position: relative;
-    margin-bottom:0%;
-    border-radius:50%/10%;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-}
-#podiumContainer h3{
-    color:#FF851B;
-    font-size:1.5em;
-    margin: 0;
-    z-index:5;
-    position: relative;
-    animation: showsText 0.5s;
-    text-shadow: 0 0 10px #4a4646;
-}
-#podiumContainer h1{
-    color:white;
-    margin: 0;
-    z-index:5;
-    position: absolute;
-    left:50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    text-shadow: 0 1px 0 #4a4646, 0 3px 0 #4a4646, 0 0 2px #4a4646;
-}
-@keyframes showsText {
-    0%{
-        opacity: 0;
-    }
-    100%{
-        opacity: 1;
-    }
-}
-#holder{
-    position: absolute;
-    width: 100%;
-    height: 20%;
-    z-index: -1;
-    background-color: #323232;
-    bottom: -10%;
-    border-radius: 50%;
-}
-#scoreBoard p,h1,h2{
-    color:white;
-    animation: showsText 1s;
-}
-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  position: absolute;
-  left: 2px;
-  top: 9px
-}
-
-button img {
-  width: 140px; 
-  height: auto;
 }
 #losercontainer{
     flex:1;
@@ -292,6 +170,7 @@ button img {
     z-index: 2;
 }
 #losercontainer p{
+    color:#FF851B;
     box-shadow: 0 0 20px lightyellow;
     height: 20%;
     width: 100%;
@@ -301,10 +180,18 @@ button img {
     justify-content: center;
     position: relative;
     z-index: 2;
-
+    animation: showsText 1s;
 }
 #losercontainer span{
     position: absolute;
     left:5%;
+}
+@keyframes showsText {
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
 }
 </style>
