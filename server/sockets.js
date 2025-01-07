@@ -159,6 +159,10 @@ function sockets(io, socket, data) {
     socket.emit('sendScoreBoard',scoreBoard) //ändra till socket.io
   });
 
+  socket.on('clearParticipants', function(pollId){
+    data.clearParticipants(pollId)
+    io.to(pollId).emit('participantsUpdate', data.getParticipants(pollId));
+  });
   
 
   // gamla sockets nedan 

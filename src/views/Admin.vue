@@ -1,4 +1,7 @@
 <template>
+<button @click="test">
+  test
+</button>
   <div class="admin">
     <section class="game-status">
       <h2>Spelstatus</h2>
@@ -22,7 +25,7 @@
       <ul>
         <li v-for="(participant, index) in pollData.participants" :key="index">
           {{ participant.information.name }} svarade: 
-          {{ participant.information.answers[pollData.currentQuestion][0] || "Har inte svarat ännu" }}
+          {{ participant.information.answers[pollData.currentQuestion] || "Har inte svarat ännu" }}
         </li>
       </ul>
     </section>
@@ -67,10 +70,10 @@ export default {
     socket.on( "uiLabels", labels => this.uiLabels = labels );
     socket.on( "pollData", data => {
       this.pollData = data; 
-      this.getNumberPlayers();
     });
     socket.on("participantsUpdate", (p) => {
       this.pollData.participants = p 
+      this.getNumberPlayers();
       this.getnumberPlayersAnswered();
     });
     socket.on('currentQuestionUpdate', (questionNumber) => {
@@ -86,6 +89,9 @@ export default {
 
   },
   methods: {
+    test: function() {
+      console.log(this.pollData.participants)
+    },
     getNumberPlayers: function() {
       this.numberPlayers = this.pollData.participants.length
     },
@@ -115,7 +121,11 @@ export default {
     },
     finishGame: function(){
       socket.emit('createScoreBoard', this.pollId)
-      // hur kan jag göra så att alla spelare ect försvinner när man kört detta? måste läggas in här så man kan köra om spelet här
+      console.log(this.pollData.participants)
+      setTimeout(()=>{
+        socket.emit('clearParticipants', this.pollId)
+        console.log('participants cleared')
+      }, 2000)
     },
     toggleQuestions() {
       this.showQuestions = !this.showQuestions;

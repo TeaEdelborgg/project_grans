@@ -226,7 +226,7 @@ Data.prototype.submitAnswer = function(pollId, questionNumber, answer, userId, t
   if (this.pollExists(pollId)) {
     const user = this.polls[pollId].participants.find(user => user.userId == userId)
     if (answer == null) {
-      user.information.answers[questionNumber] = ["-", 0]
+      user.information.answers[questionNumber] = ["-", 0] // denna verkar crasha ibland?
     } else {
       user.information.answers[questionNumber] = [answer, timeLeft]
     }
@@ -451,6 +451,14 @@ Data.prototype.getCorrectAnswer = function(pollId, qId){
     return this.polls[pollId].questions[qId].a.correct
   }
   return ""
+}
+
+Data.prototype.clearParticipants = function(pollId){
+  if(this.pollExists(pollId)){
+    console.log('i data, participants är: ', this.polls[pollId].participants)
+    this.polls[pollId].participants = []
+    this.polls[pollId].currentQuestion = -1
+  }
 }
 /*------------------------Gammal kod---------------------------------------- */
 /*
