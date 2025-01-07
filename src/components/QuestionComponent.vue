@@ -6,10 +6,13 @@
         selected: a === selectedAnswer, 
         sended: a === selectedAnswer && sent, 
         showCorrect: a === selectedAnswer && showCorrectAnswer && isCorrectAnswer, 
-        showIncorrect: a === selectedAnswer && showCorrectAnswer && !isCorrectAnswer}" 
+        showIncorrect: a === selectedAnswer && showCorrectAnswer && !isCorrectAnswer, 
+        showAudienceAnswer: a === audienceAnswer,
+      }"        
       v-for="a in question.a" 
       v-on:click="selectAnswer(a)" 
-      v-bind:key="a">
+      v-bind:key="a"
+      :disabled="isDisabled(a)">
       {{ a }}
     </button> <br/>
     
@@ -26,6 +29,8 @@
 
 <script>
 import SliderCompoment from './SliderCompoment.vue';
+import io from 'socket.io-client';
+const socket = io(sessionStorage.getItem("dataServer"))
 
 export default {
   name: 'QuestionComponent',
@@ -41,8 +46,32 @@ export default {
   data: function(){
     return{
       selectedAnswer:'',
-      sent:false
+      sent:false,
+      fiftyFify: [],
+      audienceAnswer:'',
+      userId:'',
       }
+  },
+  created: function () {
+    this.pollId = this.$route.params.id;
+    this.userId = this.$route.params.userId;
+
+    //socket.emit( "getUILabels", this.lang ); tror ej denna behövs
+    socket.emit( "joinPoll", this.pollId );
+
+    socket.on('sendFiftyFifty', incorrects => {
+      if (incorrects.user == this.userId) {
+        this.fiftyFify = incorrects.answers
+        console.log('läser in sendFiftyFifty', this.fiftyFify)
+      }
+    })
+
+    socket.on('sendAudienceAnswer', audienceAnswer => {
+      if (audienceAnswer.user == this.userId) {
+        this.audienceAnswer = audienceAnswer.answer
+        console.log('läser in publikens svar', this.audienceAnswer)
+      }
+    })
   },
   emits: ["answer"],
   methods: {
@@ -62,8 +91,19 @@ export default {
         console.log('selectanswer: ', answer)
         this.selectedAnswer = answer
       }
+    },
+    isDisabled: function (a){
+      if (this.fiftyFify.length > 0) {
+        for (let i=0; i < 2; i++) {
+          if (a == this.fiftyFify[i]){
+            return true
+          }
+        } 
+        return false
+      }
+      
+      
     }
-
   },
   mounted(){
     this.sent=false
@@ -74,38 +114,44 @@ export default {
 
 <style scoped>
 
-  .answeralternative {
-    background-color: #f79743;
-    border-color: #FFAD66;
-    border-style: solid;
-    color: #FAF8F1;
-    border-radius: 1em;
-    margin: 2vh 2vw;
-    width: 35vw;
-    height: 20vh;
-  }
-  .selected {
-    background-color: #FF5700;
-    border-color: #FF5700;
-    color: white; 
-  }
-  .sended {
-    background-color: #FFAD66; 
-    border-color: #FFAD66;
-    color: white; 
-  }
-  .showCorrect {
-    background-color: #2ECC40; 
-    border-color: #2ECC40;
-    color: white;
-  }
-  .showIncorrect {
-    background-color: #FF4136; 
-    border-color: #FF4136;
-    color: white;
-  }
-  .submitbutton {
-    width: 80vw;
-  }
-
+.answeralternative {
+  background-color: #f79743;
+  border-color: #FFAD66;
+  border-style: solid;
+  color: #FAF8F1;
+  border-radius: 1em;
+  margin: 2vh 2vw;
+  width: 35vw;
+  height: 20vh;
+}
+.selected {
+  background-color: #FF5700;
+  border-color: #FF5700;
+  color: white; 
+}
+.sended {
+  background-color: #FFAD66; 
+  border-color: #FFAD66;
+  color: white; 
+}
+.showCorrect {
+  background-color: #2ECC40; 
+  border-color: #2ECC40;
+  color: white;
+}
+.showIncorrect {
+  background-color: #FF4136; 
+  border-color: #FF4136;
+  color: white;
+}
+.showAudienceAnswer {
+  background-color: yellow;
+  color: black;
+}
+.submitbutton {
+  width: 80vw;
+}
+button:disabled {
+  background-color: grey;
+}
 </style>
