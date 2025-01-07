@@ -1,16 +1,19 @@
 <template>
     <div id="background">
         <div v-if="showNameWinners[1]" id="confetti">
-            <img src="/img/confetti.png" alt="">
+            <img src="/img/confetti2.png" alt="">
         </div>
         
         <div id="scoreBoard" v-if="answeresSentIn"> <!--Gör sedan att winner är namnet, och losers är endast listan av namnen-->
-            <div class="headlight" :style="{left:'-5%',top:'-10%', transform:'rotate(45deg)', filter:'drop-shadow(260px 0 60px rgb(250, 245, 181))'}"></div>
-            <div class="headlight" :style="{right:'-5%',top:'-10%',transform:'rotate(-45deg)',filter:'drop-shadow(-260px 0 60px rgb(250, 245, 181))'}"></div>
+            <div class="headlight" :style="{left:'-5%',top:'-15%', transform:'rotate(45deg)',filter:'drop-shadow(270px 0 80px rgb(250, 245, 181)) drop-shadow(270px 0 100px rgb(250, 245, 181))'}"></div>
+            <!--<div class="lightParent">
+                <div class="light" :style="{left:'15%',top:'-1%', transform:'rotate(-225deg)'}"></div>
+            </div>-->
+            <div class="headlight" :style="{right:'-5%',top:'-15%',transform:'rotate(-45deg)',filter:'drop-shadow(-270px 0 80px rgb(250, 245, 181)) drop-shadow(-270px 0 120px rgb(250, 245, 181))'}"></div>
             <div id="podiumContainer">
                 <div v-for="(player,index) in winners">
-                    <h3 v-if="showNameWinners[index]" :style="{
-                    bottom: index==0 || index==2 ? '-50%':'-30%'}">
+                    <h3 v-if="showNameWinners[index] && player!=null" :style="{
+                    bottom: index==0 || index==2 ? '-52%':'-30%'}">
                     {{ player.information.name }}</h3></div> 
                 <img src="/img/goldPodium.png" alt="">
             </div>
@@ -49,6 +52,7 @@ export default {
             answeresSentIn:false,
             showNameLosers:false,
             showNameWinners:[],
+            totalWinners:0
         }
     },
     created: function () {
@@ -64,6 +68,7 @@ export default {
 
             this.losers = val.slice(3,val.length)
             this.answeresSentIn=true
+            this.showNames()
         })
         socket.on( "uiLabels", labels => this.uiLabels = labels );
         socket.emit( "joinPoll", this.pollId );
@@ -71,15 +76,27 @@ export default {
     },
     mounted(){
         socket.emit('getScoreBoard', this.pollId)
-        console.log("skickar efter scoreBoard")
-        this.showNames(0)
+        
+        /*this.showNames(0)
         this.showNames(1)
         this.showNames(2)
-        this.showNames(3)
+        this.showNames(3)*/
     },
     methods:{
-        showNames: function(index){
-            let time = 0;
+        showNames: function(){
+            this.totalWinners = this.winners.filter(item => item!=null).length
+            console.log("antalet winners: ", this.totalWinners)
+            for(let i =this.totalWinners;i>0;i--){
+                console.log("i for loop")
+                let time = (this.totalWinners-i+1)*2000
+                let index = this.totalWinners-i
+                this.showNamesCountDown(index,time)
+            //tar index*tiden som totala tiden, sen skicka index för vilken plats
+        }
+        this.showNamesCountDown(this.totalWinners, this.totalWinners+2*2000)
+        },
+        showNamesCountDown: function(index,time){
+            /*let time = 0;
             if(index==0){
                 time = (index+2)*2000
             }
@@ -91,10 +108,10 @@ export default {
             }
             else{
                 time = (index+1)*2000
-            }
+            }*/
             setTimeout(()=>{
                 console.log("tid uppe")
-                if(index<=2){
+                if(index<this.totalWinners){
                     this.showNameWinners[index]=true
                 }
                 else{
@@ -116,6 +133,12 @@ export default {
     animation: fallingconfetti 10s forwards;
     overflow: hidden;
 }
+#confetti img{
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    background-repeat: repeat-x;
+}
 @keyframes fallingconfetti {
     0%{
         top:-150%;
@@ -133,10 +156,30 @@ export default {
     position: fixed;
 }
 .headlight{
-    width: 25%;
+    width: 35%;
     height: 5%;
     background: linear-gradient(black,#545454,black);
     position: absolute;
+    z-index:3;
+}
+.light{
+    clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
+    width: 80%;
+    /*background: linear-gradient(to right, transparent 0%, transparent 40%, lightyellow 40%, lightyellow 60%,transparent 60%, transparent 100%); /*rgb(250, 245, 181);*/
+    background: linear-gradient(to right, transparent 0, transparent 10%, lightyellow 40%, lightyellow 60%, transparent 90%, transparent 100%);
+    height: 95%;
+    z-index: 2;
+    opacity: 0.7;
+    /*mask-image: radial-gradient(circle,black 20%, transparent 100%);
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;*/
+}
+.lightParent{
+    /*filter: drop-shadow(10%,10%,10%,red);*/
+    filter: drop-shadow(0 0 60px rgb(250, 245, 181)) drop-shadow(0 0 80px rgb(250, 245, 181));
+    overflow: visible;
+    width: 40%;
+    height: 80%;
 }
 #scoreBoard{
     height: 100%;
@@ -168,17 +211,18 @@ export default {
     transform: scale(1.2); 
 }
 #podiumContainer{
-    height: 50%;
+    height: 60%;
     width: 65%;
     position: relative;
-    margin-top:10%;
+    margin-top:5%;
     display: grid;
-    grid-template-columns: 10% 30% 10%;
+    grid-template-columns: 18% 28% 18%;
     justify-content: center;
+    text-align: center;
 }
 #podiumContainer img{
-    width: auto;
-    height: 60%;
+    width: 80%;
+    height: auto;
     position: absolute;
     z-index: 3;
     object-fit: cover;
@@ -221,7 +265,7 @@ button img {
 }
 #losercontainer{
     flex:1;
-    width: 60%;
+    width: 40%;
     margin-top: 5%;
     display: flex;
     flex-direction: column;
