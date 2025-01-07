@@ -46,20 +46,27 @@ export default {
             showNameLosers:false,
             showNameWinners:[],
             totalWinners:0,
-            showingOrder:[2,0,1],
+            showingOrderAlternativs:{1:[null,0,null],2:[0,1,null],3:[1,2,0]},
+            showingOrder:[],
             numberOrder:[2,1,3]
         }
     },
     created: function () {
         this.pollId = this.$route.params.id
         socket.on("sendScoreBoard", val=>{
+            console.log("val: ", val)
             this.winners = val.slice(0,3)
             this.showNameWinners= new Array(this.winners.length).fill(false)
-            console.log(this.showNameWinners)
-
-            let temp = this.winners[0]
-            this.winners[0] = this.winners[1]
-            this.winners[1] = temp
+            
+            if(this.winners.length>1){
+                let temp = this.winners[0]
+                this.winners[0] = this.winners[1]
+                this.winners[1] = temp
+            }
+            else if (this.winners.length==1){
+                this.winners[1]=this.winners[0]
+                this.winners[0]=null
+            }
 
             this.losers = val.slice(3,val.length)
             this.showNames()
@@ -74,18 +81,39 @@ export default {
     methods:{
         showNames: function(){
             this.totalWinners = this.winners.filter(item => item!=null).length
-            let newOrder = this.showingOrder.slice(0,this.totalWinners)
-            for(let i = 0; i <newOrder.length;i++){
-                let time = (i+1)*2000
-                let index = this.showingOrder[i]
-                this.showNamesCountDown(index,time)
+            this.showingOrder = this.showingOrderAlternativs[this.totalWinners]
+
+            console.log("current: ", this.showingOrder)
+            console.log("winners: ",this.winners, " totalwinners: ",this.totalWinners)
+
+            if(this.totalWinners==1){
+                console.log("skickar en vinnare")
+                this.showNamesCountDown(1,2000)
             }
-            this.showNamesCountDown(this.totalWinners, (this.totalWinners+1)*2000)
+            else if(this.totalWinners==2){
+                this.showNamesCountDown(0,2000)
+                this.showNamesCountDown(1,4000)
+            }
+            else{
+                this.showNamesCountDown(2,2000)
+                this.showNamesCountDown(0,4000)
+                this.showNamesCountDown(1,6000)
+            }
+
+            /*for(let i = 0; i <this.totalWinners;i++){
+                if(this.showingOrder[i]!=null){
+                    console.log('i: ',i, 'plats: ',this.showingOrder[i])
+                    let time = (i+1)*2000
+                    let index = this.showingOrder[i]
+                    this.showNamesCountDown(index,time)
+                } 
+            }*/
+            this.showNamesCountDown(5, (this.totalWinners+1)*2000)
         },
         showNamesCountDown: function(index,time){
             setTimeout(()=>{
                 console.log("tid uppe")
-                if(index<this.totalWinners){
+                if(index<=this.totalWinners){
                     this.showNameWinners[index]=true
                 }
                 else{

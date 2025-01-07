@@ -89,13 +89,10 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
               timeLeftTest = timerDuration - elapsedTime;
             }
             socket.on('resetTime', () => {
-              this.timeLeftTest = 0
+              //måste fixas, sätt ny date.now och startTime och beräkna så att det blir 2 sek kvar
+              this.timeLeftTest = 2000
               this.percentage = 0
               endQuestion = true
-              // fattar ej varför detta behövs här? för i pollview funkar det utan så man hamnar i den sista else satsen automatiskt???
-              console.log('kör clearInterval i socket')
-              clearInterval(interval)
-              this.$emit("countDownOverSend")
             })
 
             if (timeLeftTest > timerQuestion) {

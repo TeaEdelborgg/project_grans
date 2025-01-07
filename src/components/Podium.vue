@@ -60,7 +60,8 @@
     z-index:5;
     position: relative;
     animation: showsText 0.5s;
-    text-shadow: 0 0 10px #4a4646;
+    text-shadow: 0 1px 0 #4a4646, 0 2px 0 #4a4646, 0 0 2px #4a4646;
+
 }
 #podiumContainer h1{
     color:white;
