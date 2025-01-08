@@ -46,7 +46,7 @@ export default {
             showNameLosers:false,
             showNameWinners:[],
             totalWinners:0,
-            showingOrderAlternativs:{1:[1],2:[0,1,null],3:[2,0,1]},
+            showingOrderAlternativs:{1:[1],2:[0,1],3:[2,0,1]},
             showingOrder:[],
             numberOrder:[2,1,3]
         }
@@ -84,7 +84,7 @@ export default {
                     let index = this.showingOrder[i]
                     this.showNamesCountDown(index,time)
             }
-            
+
             this.showNamesCountDown(4, (this.totalWinners+1)*2000)
         },
         showNamesCountDown: function(index,time){
