@@ -174,8 +174,6 @@ Data.prototype.getQuestionAnswerRandom = function(pollId, qId = null) {
       answers[avalibleSlots[index]]=wrongAnsw;
       avalibleSlots.splice(index,1);
     };
-    //return poll.questions[poll.currentQuestion];
-    //var test={q:poll.questions[poll.currentQuestion].q, a:{correct:"",wrong:answers}}
     var test={q:poll.questions[poll.currentQuestion].q, a:answers, correct:currentQuest.a.correct}
     return(test)
   }
@@ -232,16 +230,6 @@ Data.prototype.submitAnswer = function(pollId, questionNumber, answer, userId, t
     }
     
     console.log(user.information.answers, 'lyckades i submit answer')
-    
-    /*const poll = this.polls[pollId];
-    const users = poll.participants;
-    for (const key in users) {
-      const user = users[key]
-      if (userId==user.userId) {
-        user.information.answers[questionNumber]= [answer, timeLeft]
-        console.log(user.information.answers, 'lyckades i submit answer')
-      }
-    }*/
   }
 }
 
@@ -249,9 +237,6 @@ Data.prototype.newCheckUserAnswer = function(pollId, qId, userId) {
   console.log('i nya checkuseranswer')
   if(this.pollExists(pollId)){
     const user = this.polls[pollId].participants.find(user=> user.userId ==userId)
-    /*console.log('i nya, user är: ', user)
-    console.log('hela svaret, svar + tid: ', user.information.answers[qId])
-    console.log('svaret som skickas är: ', user.information.answers[qId][0])*/
     if(user.information.answers[qId]==null){
       user.information.answers[qId]=["-",0]
     }
@@ -260,7 +245,7 @@ Data.prototype.newCheckUserAnswer = function(pollId, qId, userId) {
       user.information.time += user.information.answers[qId][1];
       console.log('svaret är korrekt')
     } else {
-      if(user.information.lives>0){ // måste fixa vad som händer om liven är 0
+      if(user.information.lives>0){ 
         user.information.lives--;
       }
       user.information.correctedAnswers[qId] = false
@@ -281,32 +266,13 @@ Data.prototype.getCorrectedAnswer = function (pollId, qId, userId) {
   return null;
 };
 
-/*Data.prototype.updateQuestion = function (pollId,question){
-  if(this.pollExists(pollId)){
-    //i question borde question.id finnas, question är undefined
-    console.log(question)
-    const poll = this.polls[pollId]
-    const questionIndex = poll.questions.findIndex(q =>q.q ===question.q);
-    if(questionIndex ===-1){
-      return null
-    }
-    poll.questions[questionIndex] = question;
-    return question;
-  }
-  return null
-}*/
-
 Data.prototype.getQuestionAmount = function (pollId) {
   if(this.pollExists(pollId)){
     this.polls[pollId].questionAmount = this.polls[pollId].questions.length;
   }
 }
 
-/*Data.prototype.amountOfQuestions = function (pollId){ // behövs denna? nu finns antalet frågor i pollData när man klickat på startPoll
-  if(this.pollExists(pollId)){
-    return this.polls[pollId].questions.length;
-  }
-}*/
+
 Data.prototype.createBoxes = function(pollId){
   if(this.pollExists(pollId)){
     const poll = this.polls[pollId]
@@ -317,9 +283,8 @@ Data.prototype.createBoxes = function(pollId){
         player.information.coloredBoxes.push(false)
       }
     }
-    //fixa pengar levlar här
     for (let i=0; i<numberOfQuestions;i++){
-      let value = Math.ceil((1000000/numberOfQuestions)*(i+1)/10000)*10000//Math.ceil((1000000/numberOfQuestions)*(i+1)) //här ska det endast vara två decimaler
+      let value = Math.ceil((1000000/numberOfQuestions)*(i+1)/10000)*10000
       if(value>1000000){value=1000000}
       poll.moneyBoxes.push(value)
     }
@@ -341,20 +306,12 @@ Data.prototype.updateColoredBoxes = function(pollId){
     const poll = this.polls[pollId]
     for(let player of poll.participants){
       if(player.information.in){
-        //console.log(player.information.name, " svar: ",player.information.answers)
-        //console.log(player.information.name, " corrected Answeres: ",player.information.correctedAnswers)
-        //console.log(player.information.name, " coloredBoxes: ",player.information.coloredBoxes)
         
         let answers = player.information.correctedAnswers
         
         for (let i=0;  i<answers.length;i++){
             player.information.coloredBoxes[i]=true
-          
-          /*else{
-            player.information.coloredBoxes[i]=false
-          }*/
         }
-        //console.log("uppdaterar coloredBoxes: ",player.userId, " ", player.information.coloredBoxes)
         if(player.information.lives==0){
           player.information.in = false
         }
@@ -384,7 +341,6 @@ Data.prototype.updateLevelBoxes = function(pollId){
         }
       }
     }
-    //console.log("boxes i data: ",boxes)
     return boxes
   }
   return []
@@ -408,7 +364,6 @@ Data.prototype.countScore = function(pollId){ //Selection sort
           smallest = n
         }
         else if(playerOnePoints==playerTwoPoints){ //kan sätta ihop vissa av villkoren
-          //titta liv o sen tid
           if(playerOne.information.lives<playerTwo.information.lives){
             smallest=n
           }
@@ -460,130 +415,5 @@ Data.prototype.clearParticipants = function(pollId){
     this.polls[pollId].currentQuestion = -1
   }
 }
-/*------------------------Gammal kod---------------------------------------- */
-/*
-Data.prototype.selectBox = function (info) {
-  const { pollId, boxIndex, userId, label } = info;
-  if(this.pollExists(pollId)){
-  const poll = this.getPoll(pollId);
-  if (!poll.participants||poll.participants.length === 0) {
-    console.error("Participants not found");
-    return null; // Returning null to indicate failure
-  }
-
-  const participant = poll.participants.find((p) => p.userId === userId);
-  if (participant) {
-    participant.selectedBox = boxIndex;
-    participant.information.boxLabel = label;
-  } else {
-    console.error("Participant not found");
-    return null;
-  }
-
-  const boxStates = poll.participants.map((p) => ({
-    boxIndex: p.selectedBox,
-    userId: p.userId,
-    label: p.information.boxLabel || `Player ${p.userId}`,
-  }));
-
-  return boxStates; // Returning the updated box states for use in the socket file
-}}*/
-
-/*Data.prototype.startTimer = function(pollId, totalTime){
-  //console.log("i start timer")
-  if(this.pollExists(pollId)){
-    //console.log("pollId existerar")
-    const poll = this.polls[pollId];
-    poll.timer.timeLeft = totalTime;
-    poll.timer.interval = null;
-    poll.timer.interval = setInterval(()=>{
-      if( poll.timer.timeLeft > 0){
-        poll.timer.timeLeft--;
-        //console.log("tid kvar: ", poll.timer.timeLeft)
-      } else {
-        clearInterval(poll.timer.interval);
-        poll.timer.timeLeft=0;
-      }
-    },1000);
-  }
-}*/
-
-/*Data.prototype.startTimeBeforeQuestion = function (pollId, totalTime){
-  console.log("i time före fråga")
-  if(this.pollExists(pollId)){
-    const poll = this.polls[pollId];
-    poll.timerBeforeQuestion.timeLeft=totalTime;
-    poll.timerBeforeQuestion.interval=null;
-    poll.timerBeforeQuestion.interval = setInterval(()=>{
-      if(poll.timerBeforeQuestion.timeLeft > 0){
-        poll.timerBeforeQuestion.timeLeft--;
-        //console.log("tid kvar innan fråga: ",poll.timerBeforeQuestion.timeLeft)
-      } else{
-        clearInterval(poll.timerBeforeQuestion.interval);
-        poll.timerBeforeQuestion.timeLeft=0
-      }
-    },1000);
-  }
-}*/
-
-/*Data.prototype.getTime = function(pollId){
-  if(this.pollExists(pollId)){
-    let time = this.polls[pollId].timer.timeLeft
-    //console.log("tid i getTime: ",time)
-    return time
-  }
-  return 0
-}*/
-
-/*Data.prototype.getTimeBeforeQuestion = function(pollId){
-  if(this.pollExists(pollId)){
-    let time = this.polls[pollId].timerBeforeQuestion.timeLeft
-    //console.log("tiden i getTimeBeforeQuestion: ",time)
-    return time
-  }
-  return 0
-}*/
-
-/*Data.prototype.checkUserAnswer = function(pollId, qId=null, userId){ //dela upp funktionen, borde inte behöva skicka qId, finns redan
-  console.log("i data checkUserAnswer, vill plocka bort denna")
-  if(this.pollExists(pollId)){
-    const poll = this.polls[pollId];
-    const user = poll.participants.find(user=> user.userId ==userId);
-    if(qId !=null){
-      if(user){
-        if(user.information.answers[qId]==null){
-            user.information.answers[qId]=["-",0]
-        }
-        if (user.information.correctedAnswers[qId]==null){
-          if(user.information.answers[qId][0]==poll.questions[qId].a.correct){ //ta bort -1 sen, är bara för att de inte skickar randomOrder på första
-              //lägg till tiden för användaren
-              user.information.correctedAnswers[qId] =true
-              user.information.time += user.information.answers[qId][1];
-              return true;
-          }
-          else{
-            if(user.information.lives>0){
-                user.information.lives--;
-                //console.log(user.information.lives)
-            }
-              user.information.correctedAnswers[qId] = false
-              return false;
-          }
-        }   
-      }
-    }
-  }
-  return null
-}*/
-
-/*Data.prototype.testCheckAnswers = function(pollId,qId=null){
-    if(this.pollExists(pollId)){
-      const users = this.polls[pollId].participants
-      for(let user of users){
-        let ans = this.checkUserAnswer(pollId,qId,user.userId)
-        console.log('i testCheckAnswers, svaret är: ', ans)
-      }
-    }
-}*/
 
 export { Data };

@@ -51,15 +51,8 @@ export default {
       lang: localStorage.getItem("lang") || "en",
       pollId: "",
       question:"",
-      submittedAnswers: {},
       participants: [],
-      timeLeft:0,
-      timeLeftBeforeQuestion:0,
       questionActive:false,
-      beforeQuestion:false,
-      windowHeight:0,
-      windowWidth:0,
-      percentage:100,
       amountOfQuestions:0,
       userId:'',
       moneyBoxes:[],
@@ -72,14 +65,12 @@ export default {
     this.pollId = this.$route.params.id
     socket.on( "uiLabels", labels => this.uiLabels = labels );
 
-    socket.on( "updatePedestalPlayer", p => { //den här uppdateras när man har svarat, sedan tittas i pedestalerna om antal svar= currentQuestion
+    socket.on( "updatePedestalPlayer", p => { 
       this.participants = p;
     })
-    //^byt ut till updatePedestalPlayer, borde kanske endast behöva vara true eller false och inte hela participants
 
-    socket.on("sendAllAnswers", d=>{ //updateAfterQuestion
-      this.participants = d.participants //behövs inte om alla svar tittas på direkt när man svarat och skickas tillbaka, eller skickar 
-      //participant update när svaren har rättats
+    socket.on("updateAfterQuestion", d=>{ 
+      this.participants = d.participants 
       this.moneyBoxes = d.levelBoxes
     })
  
@@ -112,7 +103,7 @@ export default {
   methods:{
     countDownOver: function(){
       setTimeout(()=>{
-          socket.emit("getAllAnswers", this.pollId) //den ska både hämta svaren och skicka allas svar till sig själva
+          socket.emit("getAllAnswers", this.pollId) 
           this.questionActive=false 
         },2000)
     }

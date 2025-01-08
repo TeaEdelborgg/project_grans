@@ -75,7 +75,7 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
         countdownResult: function(){
           console.log("fråga borde visas")
           let startTime = Date.now();
-          let timeLeftTest;
+          let timeLeftTest=0;
           let endQuestion = false;
 
           let timerDuration = 18000;
@@ -86,18 +86,17 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
             if (!endQuestion) {
               let elapsedTime = Date.now() - startTime;
               timeLeftTest = timerDuration - elapsedTime;
-            }
+            
             socket.on('resetTime', () => {
               timeLeftTest=0;
               endQuestion=true;
             })
-
             if (timeLeftTest > timerQuestion) {
-              this.timeLeftBeforeQuestion = Math.floor((3000 - elapsedTime)/1000);
+              this.timeLeftBeforeQuestion = Math.floor((3000 - elapsedTime)/1000); //uppdaterar inte?
             } else if (timeLeftTest>timerAnswer){
               this.showQuestion = true
             }
-             else if (timeLeftTest > 0) {
+            else if (timeLeftTest > 0) {
               this.questionActive = true;
               this.percentage = Math.floor((timeLeftTest) / 100);
             }
@@ -109,6 +108,7 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
                 clearInterval(interval)
                 this.$emit("countDownOverSend")
               },1000)
+            }
             }
           }, 100);  
         },
