@@ -5,7 +5,7 @@
       <h2>Spelstatus</h2>
       <div>
         <p>Antal svar inkommna: {{ numberPlayersAnswered }}/{{ numberPlayers }}</p>
-        <p>Nuvarande fråga: {{ currentQuestion + 1 }}/{{ questionAmount }}</p>
+        <p>Nuvarande fråga: {{ pollData.currentQuestion + 1 }}/{{ pollData.questionAmount }}</p>
       </div>
       <div class="questions">
         <button class="game-button" @click="toggleQuestions">Visa frågor och svar</button>
@@ -13,7 +13,7 @@
           <div class="popup-content">
             <button class="close-button" @click="toggleQuestions">x</button>
             <h3>Frågor och svar</h3>
-            <li v-for="(question, index) in questions" :key="index">
+            <li v-for="(question, index) in pollData.questions" :key="index">
               <strong>Fråga {{ index + 1 }}:</strong> {{ question.q }}<br>
               <strong>Rätt svar:</strong> {{ question.a.correct }}<br>
               <strong>Fel svar:</strong> {{ question.a.wrong.join(', ') }}<br><br>
@@ -25,7 +25,7 @@
 
     <section class="game-controls">
       <h2>Styr spelet</h2>
-      <button class="game-button" v-if="currentQuestion + 1 != questionAmount && canStartNextQuestion" 
+      <button class="game-button" v-if="pollData.currentQuestion + 1 != pollData.questionAmount && canStartNextQuestion" 
         @click="runQuestion">
         Nästa fråga
       </button>
@@ -42,14 +42,14 @@
     <section class="participant-controls"> <!-- lägga in för att kunna ta bort spelare här? -->
       <h2>Spelare</h2>
       <div class="participants"> 
-        <div v-for="(participant, index) in participants" :key="index">
+        <div v-for="(participant, index) in pollData.participants" :key="index">
           <div class="one-participant"> 
             <strong>{{ participant.information.name }}</strong> <!-- sätta som p ist? -->
-            <div v-if="participant.information.answers?.[currentQuestion]?.[0] == null">
+            <div v-if="participant.information.answers?.[pollData.currentQuestion]?.[0] == null">
               Svarade: <div class="animatedDots"></div><div class="animatedDots"></div><div class="animatedDots"></div>
             </div>
             <div v-else>
-              Svarade: {{ participant.information.answers[currentQuestion][0] || "Har inte svarat ännu" }}
+              Svarade: {{ participant.information.answers[pollData.currentQuestion][0] || "Har inte svarat ännu" }}
             </div>
           </div>
         </div>
@@ -76,16 +76,13 @@ export default {
       lang: localStorage.getItem("lang") || "en",
       pollId: "",
       uiLabels: {},
+      pollData:{},
       questionList: [],
       answerList: [],
       numberPlayers: 0,
       numberPlayersAnswered: 0, 
       canStartNextQuestion: true,
       showQuestions: false,
-      participants:{},
-      currentQuestion:0,
-      questionAmount:0,
-      questions:{}
     }
   },
   created: function () {
@@ -93,14 +90,11 @@ export default {
 
     socket.on( "uiLabels", labels => this.uiLabels = labels );
     socket.on( "pollData", data => {
-      this.participants=data.participants
-      this.currentQuestion=data.currentQuestion
-      this.questionAmount=data.questionAmount
-      this.questions=data.questions
+      this.pollData = data
       this.getNumberPlayers();
     });
     socket.on("participantsUpdate", (p) => {
-      this.pollData.participants = p 
+      this.pollData.participants=p
       this.getNumberPlayers();
       this.getnumberPlayersAnswered();
     });
@@ -118,16 +112,16 @@ export default {
   },
   methods: {
     test: function() {
-      console.log(this.participants)
+      console.log(this.pollData.participants)
     },
     getNumberPlayers: function() {
-      this.numberPlayers = this.participants.length
+      this.numberPlayers = this.pollData.participants.length
     },
     getnumberPlayersAnswered: function() {
       this.numberPlayersAnswered = 0
-      const qId = this.currentQuestion
+      const qId = this.pollData.currentQuestion
       for (let i=0; i < this.numberPlayers; i++){
-        if (this.participants[i].information.answers[qId][0] !== null) {
+        if (this.pollData.participants[i].information.answers[qId][0] !== null) {
           this.numberPlayersAnswered++
           if (this.numberPlayersAnswered == this.numberPlayers) {
             this.endQuestion()
@@ -140,7 +134,7 @@ export default {
     },
     runQuestion: function () {
       this.canStartNextQuestion = false
-      const currentQuestion = this.currentQuestion + 1;
+      const currentQuestion = this.pollData.currentQuestion + 1;
       this.numberPlayersAnswered = 0
       socket.emit('runCountdown', {pollId: this.pollId, questionNumber: currentQuestion})
     },
