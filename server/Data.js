@@ -226,6 +226,7 @@ Data.prototype.submitAnswer = function(pollId, questionNumber, answer, userId, t
   if (this.pollExists(pollId)) {
     const user = this.polls[pollId].participants.find(user => user.userId == userId)
     if (answer == null) {
+      console.log('i submitanswer, om det crashar', user.information.answers[questionNumber])
       user.information.answers[questionNumber] = ["-", 0] // denna verkar crasha ibland?
     } else {
       user.information.answers[questionNumber] = [answer, timeLeft]
@@ -252,7 +253,7 @@ Data.prototype.newCheckUserAnswer = function(pollId, qId, userId) {
     /*console.log('i nya, user är: ', user)
     console.log('hela svaret, svar + tid: ', user.information.answers[qId])
     console.log('svaret som skickas är: ', user.information.answers[qId][0])*/
-    if(user.information.answers[qId]==null){
+    if(user.information.answers[qId][0]==null){
       user.information.answers[qId]=["-",0]
     }
     if (user.information.answers[qId][0] == this.polls[pollId].questions[qId].a.correct) {
@@ -330,7 +331,7 @@ Data.prototype.setAnswersFalse = function(pollId){
   if(this.pollExists(pollId)){
     const users = this.polls[pollId].participants
     for(let user of users){
-      user.information.answers = new Array(this.polls[pollId].questionAmount).fill(null)
+      user.information.answers = new Array(this.polls[pollId].questionAmount).fill([null, 0])
       //console.log("setFalse: ", user.information.answers)
     }
   }
