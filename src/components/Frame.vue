@@ -60,14 +60,15 @@ export default{
     margin: auto;
     margin-left: 15%;
     margin-right: 5%;
-    background-color: red;
     border-radius: 5%;
     padding:1%;
-    border-style: solid;
-    border-width: 5px;
-    border-color: #14144d;
+    /*border-style: solid;
+    border-width: 2px;
+    border-color: #14144d;*/
     box-shadow:0 0 20px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.5);
-    background-image: linear-gradient(45deg, #f6860c, #ffe9d1);
+    /*background-image: linear-gradient(45deg, #ffd467, #be9611); /*#f6860c, #ffe9d1*/
+    /*background-image: linear-gradient(45deg, #5979ea, #e7ebff);*/
+    background-image: linear-gradient(45deg, #f79701, #fcd599);
     animation: gradientMove 3s linear infinite;
     background-size: 200% 200%;
     display: flex;
@@ -89,9 +90,9 @@ export default{
 #frame{
   height:100%; 
   width: 100%;
-  border-style:solid;
+  /*border-style:solid;
   border-color:#14144d;
-  border-width:5px;
+  border-width:2px;*/
   border-radius: 3%;
   background: radial-gradient( #7bb0f3,#393a93); 
   display:flex;

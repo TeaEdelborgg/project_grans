@@ -78,21 +78,18 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
           let timeLeftTest;
           let endQuestion = false;
 
-          let timerDuration = 19000;
-          let timerQuestion = 16000;
-          let timerAnswer = 11000;
-          let showAnswer = 1000;
+          let timerDuration = 18000;
+          let timerQuestion = 15000;
+          let timerAnswer = 10000;
           
           let interval = setInterval(() =>{
-            let elapsedTime = Date.now() - startTime;
             if (!endQuestion) {
+              let elapsedTime = Date.now() - startTime;
               timeLeftTest = timerDuration - elapsedTime;
             }
             socket.on('resetTime', () => {
-              //måste fixas, sätt ny date.now och startTime och beräkna så att det blir 2 sek kvar
-              this.timeLeftTest = 2000
-              this.percentage = 0
-              endQuestion = true
+              timeLeftTest=0;
+              endQuestion=true;
             })
 
             if (timeLeftTest > timerQuestion) {
@@ -100,18 +97,18 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
             } else if (timeLeftTest>timerAnswer){
               this.showQuestion = true
             }
-             else if (timeLeftTest > showAnswer) {
+             else if (timeLeftTest > 0) {
               this.questionActive = true;
-              this.percentage = Math.floor((timeLeftTest-1000) / 100);
-            } else if (timeLeftTest>0){
-              this.percentage=0;
-              this.showCorrectAnswer=true
+              this.percentage = Math.floor((timeLeftTest) / 100);
             }
             else {
+              this.showCorrectAnswer=true
+              this.percentage=0;
+              setTimeout(()=>{
                 console.log('kör clearInterval orginal')
                 clearInterval(interval)
                 this.$emit("countDownOverSend")
-              //skicka till resultatview att köra funktionen
+              },1000)
             }
           }, 100);  
         },

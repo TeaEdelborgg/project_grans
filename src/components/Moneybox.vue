@@ -70,14 +70,14 @@
     border-color:black;
     border-style: solid;
     background-color: #14144d;
-    box-shadow:0 0 15px #FF851B;
+    box-shadow:0 0 15px #f9ac33; /*#FF851B*/
     padding:0.5%;
 }
 .moneybox p{
-    color:#FF851B;
+    color:#f9ac33;
     font-weight: bold;
     font-size: 1.2em;
-    text-shadow: 0 0 20px #FF851B, 0 0 10px#FF851B;
+    /*text-shadow: 0 0 20px #f9ac33, 0 0 10px#f9ac33;*/
     margin:0;
 }
 .moneybox div{
