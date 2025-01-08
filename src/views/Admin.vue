@@ -45,7 +45,7 @@
         <div v-for="(participant, index) in pollData.participants" :key="index">
           <div class="one-participant"> 
             <strong>{{ participant.information.name }}</strong> <!-- sätta som p ist? -->
-            <div v-if="participant.information.answers[pollData.currentQuestion][0] == null">
+            <div v-if="participant.information.answers?.[pollData.currentQuestion]?.[0] == null">
               Svarade: <div class="animatedDots"></div><div class="animatedDots"></div><div class="animatedDots"></div>
             </div>
             <div v-else>
@@ -75,8 +75,8 @@ export default {
     return {
       lang: localStorage.getItem("lang") || "en",
       pollId: "",
-      pollData: {},
       uiLabels: {},
+      pollData:{},
       questionList: [],
       answerList: [],
       numberPlayers: 0,
@@ -90,10 +90,11 @@ export default {
 
     socket.on( "uiLabels", labels => this.uiLabels = labels );
     socket.on( "pollData", data => {
-      this.pollData = data; 
+      this.pollData = data
+      this.getNumberPlayers();
     });
     socket.on("participantsUpdate", (p) => {
-      this.pollData.participants = p 
+      this.pollData.participants=p
       this.getNumberPlayers();
       this.getnumberPlayersAnswered();
     });
