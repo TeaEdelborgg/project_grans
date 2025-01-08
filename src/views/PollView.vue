@@ -1,20 +1,28 @@
 <template>
-  <div id="background">
-    <div id="playerView">
-      <div id="timerBarContainer">
-        <div id="timerBar" :style="{ width: percentage + '%' }"></div>
+  <div class="player-background">
+    <div class="playerView">
+      <div class="timerBarContainer">
+        <div class="timerBar" :style="{ width: percentage + '%' }"></div>
       </div>
-      <div>
-        <p>Tid: {{ this.userStats.information.time }} sekunder, Liv kvar: {{ this.userStats.information.lives }} </p>
+      <div class="player-statistics">
+        <div class="player-hearts"> Liv:
+          <img :src="this.userStats.information.lives>=1 ? '/img/hjartaRod.png':'/img/hjartaGro.png'" class="heart">
+          <img :src="this.userStats.information.lives>=2 ? '/img/hjartaRod.png':'/img/hjartaGro.png'" class="heart">
+        </div>
+        <div class="player-time">Tid: {{ this.userStats.information.time }} sekunder </div>
       </div>
 
-      <div class="helpButtons" v-if="questionActive"> <!-- fixa så att denna inte blir mindre/ större hela tiden, eller kanske snarare att man inte ska kunna klicka bara?-->
-        <button @click="fiftyFifty" :disabled="this.userStats.information.usedFiftyFifty">
-          50/50
-        </button>
-        <button @click="askAudience" :disabled="this.userStats.information.usedAskAudience">
-          Fråga publiken
-        </button> <!-- frågan är om man vill ha denna som en popup eller ska den lysa upp en knapp som nu? -->
+      <div class="bars">
+
+      </div>
+
+
+      <div class="help-buttons" >  <!--v-if="questionActive || seeAlternatives"-->
+        <img src="/img/50-50.png" class="fifty-fifty" @click="fiftyFifty" v-if="!this.userStats.information.usedFiftyFifty || !usedFiftyFiftyThisRound">
+        <img src="/img/50-50-used.png" class="fifty-fifty-used" v-else />
+        <img src="/img/AskAudience.png" class="ask-audience" @click="askAudience" v-if="!this.userStats.information.usedAskAudience || !usedAskAudienceThisRound"/>
+        <img src="/img/AskedAudience.png" class="ask-audience-used" v-else/> <!-- varför funkar inte detta? -->
+        <!-- frågan är om man vill ha denna som en popup eller ska den lysa upp en knapp som nu? -->
         
         <!-- se om vi ska ha denna, för basically samma sak som fråga publiken?
         <button @click="phoneAFriend">
@@ -23,7 +31,7 @@
       </div>
       
 
-      <div class="answeralternatives" v-if="questionActive || seeAlternatives">
+      <div class="answeralternatives" > <!--v-if="questionActive || seeAlternatives"-->
         <QuestionComponent 
           ref="questionComponent" 
           v-bind:question="question" 
@@ -71,6 +79,7 @@ export default {
       percentage: 100,
       isQuestionAnswered: false, 
       usedFiftyFiftyThisRound: false,
+      usedAskAudienceThisRound: false,
     }
   },
   created: function () {
@@ -132,15 +141,22 @@ export default {
     
   },
   methods: {
-    fiftyFifty: function() { // ska man köra samma socket kanske..? skicka med en till variabel som beror på vilken funktion man kört
-      socket.emit('fiftyFifty', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId})
-      this.usedFiftyFiftyThisRound = true
+    fiftyFifty: function() { // lägg in så bara körs om questionActive
+      if (this.questionActive) {
+        socket.emit('fiftyFifty', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId})
+        this.usedFiftyFiftyThisRound = true
+      }
+      
     },
     phoneAFriend: function() {
       console.log('phoneAFriend körs') // svara samma som den första personen som svarat
     },
     askAudience: function() {
-      socket.emit('audienceAnswer', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId, usedFiftyFifty: this.usedFiftyFiftyThisRound})
+      if (this.questionActive) {
+        socket.emit('audienceAnswer', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId, usedFiftyFifty: this.usedFiftyFiftyThisRound})
+        this.usedAskAudienceThisRound = true
+      }
+      
     },
     submitAnswer: function (answer) { 
       socket.emit("submitAnswer", {pollId: this.pollId, questionNumber: this.questionNumber, answer: answer, userId: this.userId, time: Math.ceil(this.timeLeft/1000)}) 
@@ -203,7 +219,7 @@ export default {
           });
           this.showCorrectAnswer = true
           setTimeout(() => {
-            this.seeAlternatives = false;
+            this.seeAlternatives = true;
             clearInterval(interval);
           }, 2000)
         }
@@ -238,15 +254,16 @@ export default {
 }
 </script>
 
-<style>
-#background {
+<style scoped>
+.player-background {
   background-color: #001F3F;
   color: #FFFFFF;
   position: fixed;
   width: 100%;
   height: 100%;
 }
-#playerView {
+.playerView {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -258,7 +275,7 @@ export default {
   width: 95%;
 } 
 
-#timerBarContainer {
+.timerBarContainer {
   width: 95%; 
   height: 20px;
   background-color: white;
@@ -269,9 +286,59 @@ export default {
   position: relative;
 }
 
-#timerBar {
+.timerBar {
   height: 100%;
   background-color: #FF851B;
   transition: width 0.1s linear;
+}
+.player-statistics {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2%;
+  padding: 2%;
+}
+.player-hearts {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 5vw 0 5vw;
+}
+.heart {
+  height: 5vh;
+  margin: 5%;
+}
+.player-time {
+  border: 2px solid #cdcdcd;
+}
+.help-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.fifty-fifty {
+  height: 5vh;
+  margin: 5%;
+  border: 5px solid #cdcdcd;
+  border-radius: 50%;
+}
+.fifty-fifty-used {
+  height: 5vh;
+  margin: 5%;
+  border: 5px solid #555;
+  border-radius: 50%;
+}
+.ask-audience {
+  height: 5vh;
+  margin: 5%;
+  border: 5px solid #cdcdcd;
+  border-radius: 50%;
+}
+.ask-audience-used {
+  height: 5vh;
+  margin: 5%;
+  border: 5px solid #555;
+  border-radius: 50%;
 }
 </style>
