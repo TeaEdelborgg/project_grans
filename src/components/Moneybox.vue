@@ -1,6 +1,5 @@
 <template>
     <div class="moneybox">
-    <!--<div class="moneybox" :style="{backgroundColor: getBackgroundColor(), borderColor:getBorderColor(), borderStyle:getBorderStyle()}">-->
         <div :class="{
             lightBulb: boxState === 'done',
             darkLightBulb: boxState == 'future',
@@ -24,33 +23,11 @@
         },
         data: function(){
             return{
-                /*moneyColor: "#7FDBFF",
-                borderColor:"#FF851B",
-                borderStyle:"dashed", //lägg direkt i style*/
+
             }
         },
         methods:{
-            /*getBackgroundColor: function(){
-                if(this.boxState=="done"){
-                    return "#FF851B"
-                }
-                else if(this.boxState=="next"){
-                    return "#FFAD66"
-                }
-                return "#7FDBFF"
-            },
-            getBorderColor: function(){
-                if(this.boxState=="done" || this.boxState=="next"){
-                    return 'black'
-                }
-                return "#FF851B"
-            },
-            getBorderStyle: function(){
-                if(this.boxState=="done"){
-                    return "solid"
-                }
-                return "dashed"
-            },*/
+           
         }
 }
 </script>

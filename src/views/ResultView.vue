@@ -1,16 +1,27 @@
 <template>
   <div id="background">
-    <!--<div> Fixa lang saken, syns inte atm
-      lang: {{ lang }}
-    </div>-->
-    <!--<h1 :style="{color:'white'}">{{ uiLabels.heading}}</h1>-->
     <div id="rowContainer">
-      <Frame v-bind:amountOfQuestions="amountOfQuestions" v-on:countDownOver="countDownOver" v-bind:correctAnswer="correctAnswer" v-bind:questionNumber="questionNumber" v-bind:question="question" v-bind:uiLabels="uiLabels" v-bind:questionActive="questionActive" v-bind:moneyBoxes="moneyBoxes" v-bind:moneyValues="moneyValues" v-bind:participants="participants"></Frame>
+      <Frame 
+      v-on:countDownOver="countDownOver" 
+      v-bind:amountOfQuestions="amountOfQuestions"  
+      v-bind:correctAnswer="correctAnswer" 
+      v-bind:questionNumber="questionNumber" 
+      v-bind:question="question" 
+      v-bind:uiLabels="uiLabels" 
+      v-bind:questionActive="questionActive" 
+      v-bind:moneyBoxes="moneyBoxes" 
+      v-bind:moneyValues="moneyValues" 
+      v-bind:participants="participants"></Frame>
       <HostPlayer v-bind:questionActive="questionActive"></HostPlayer>
     </div> 
     <br>
     <div id="pedestaler">
-      <PlayerPedestal v-if="participants.length>0" v-for="player in participants" v-bind:questionNumber="questionNumber" v-bind:uiLabels="uiLabels" v-bind:player="player" v-bind:questionActive="questionActive":key="player.id" />
+      <PlayerPedestal v-if="participants.length>0" v-for="player in participants" 
+        v-bind:questionNumber="questionNumber" 
+        v-bind:uiLabels="uiLabels" 
+        v-bind:player="player" 
+        v-bind:questionActive="questionActive"
+        :key="player.id" />
     </div>
   </div>
 </template>
@@ -58,17 +69,8 @@ export default {
     }
   },
   created: function () {
-    //inga refs, skicka istället all data till komponenterna så får beräkningarna göras där
-    //gör v-if när man bindar data
-    //dra ner på sockets så gott det går
-    //se till att alla inte frågar requests osv
-    //rensa onödiga variabler
-    //döp om + gör det tydligt, 
-    //fixa vart css ligger + ta bort onödiga rader
-    
     this.pollId = this.$route.params.id
     socket.on( "uiLabels", labels => this.uiLabels = labels );
-
 
     socket.on( "updatePedestalPlayer", p => { //den här uppdateras när man har svarat, sedan tittas i pedestalerna om antal svar= currentQuestion
       this.participants = p;
@@ -88,7 +90,7 @@ export default {
       this.questionActive=true
       console.log("question true: ", this.questionActive)
     });
-    socket.on('loadStats', d => { //fixa den här, döp om, (typ loadStats)
+    socket.on('loadStats', d => {
       this.amountOfQuestions=d.amountOfQuestions
       this.moneyValues = d.levelValues
       this.moneyBoxes = d.levelColors
@@ -101,7 +103,7 @@ export default {
 
     socket.emit( "getUILabels", this.lang );
     socket.emit( "joinPoll", this.pollId );
-    socket.emit('getStats', this.pollId); //loadar stats
+    socket.emit('getStats', this.pollId); 
 
   },
   mounted (){
@@ -113,33 +115,12 @@ export default {
           socket.emit("getAllAnswers", this.pollId) //den ska både hämta svaren och skicka allas svar till sig själva
           this.questionActive=false 
         },2000)
-      /*socket.emit("testUserAnswers", {pollId:this.pollId,questionNumber:this.questionNumber}) //döp om
-          setTimeout(()=>{
-            socket.emit("getAllAnswers", this.pollId) //den ska både hämta svaren och skicka allas svar till sig själva
-            this.questionActive=false 
-          },2000)*/
     }
   }
 }
 </script>
 
 <style>
-#testR{
-  clip-path: polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%);
-  background-color: red;
-  height: 100%;
-  width: 100%;
-}
-
-#container-test{
-  height: 100px;
-  width: 100px;
-  background-color: red;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
 #box-test{
   height: 100%;
   width: 80%;
@@ -154,13 +135,11 @@ export default {
   height: 5%;
   background-color: white;
 }
-
 #pedestaler{
   width:100%;
   display: flex;
   justify-content: space-evenly;
   height:25%;
-  /*background-color: #FF851B;*/
   margin-left:auto;
   margin-right:auto;
   bottom:0;
@@ -173,8 +152,6 @@ export default {
   position: relative;
 }
 #background{
- /* background-color: #001F3F;*/
-  /*background-image: url(/img/background_whowantstobeamillionare.webp);*/
   background: radial-gradient(#1a237e, #0d1137);
   background-size:cover ;
   height: 100vh;
@@ -184,6 +161,4 @@ export default {
   display:flex;
   flex-direction:column;
 }
-
-
 </style>

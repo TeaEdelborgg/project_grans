@@ -68,7 +68,7 @@ export default{
     box-shadow:0 0 20px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.5);
     /*background-image: linear-gradient(45deg, #ffd467, #be9611); /*#f6860c, #ffe9d1*/
     /*background-image: linear-gradient(45deg, #5979ea, #e7ebff);*/
-    background-image: linear-gradient(45deg, #f79701, #fcd599);
+    background-image: linear-gradient(45deg, #f79701, #feeacc);
     animation: gradientMove 3s linear infinite;
     background-size: 200% 200%;
     display: flex;
