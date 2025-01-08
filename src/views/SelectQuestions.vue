@@ -102,7 +102,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh; 
-  width: 100vw; 
+  min-width: 100vw; 
   color:#cfcfcf;
   background: linear-gradient(135deg, #0a0347, #3c298f); 
   background-attachment: fixed; 
@@ -110,6 +110,7 @@
   text-align: center;
   box-sizing: border-box; 
   overflow: hidden;
+
 }
 
 button{
@@ -139,6 +140,7 @@ h1{
 .pollButtons {
   display: flex;
   justify-content: space-around;
+  margin:0vh 2vw;
 }
 
 .pollButtons button{
@@ -148,7 +150,7 @@ h1{
   width: auto;
   height:auto;
   padding: 2vh 3vw;
-  margin: 10vh auto;
+  margin: 5vh 5vw;
 }
 
 .pollButtons img{

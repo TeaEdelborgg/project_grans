@@ -119,8 +119,8 @@ export default {
   methods: {
 
     generatePollId: function(){
-      /*return Math.random().toString(36).substring(2,10).toUpperCase();*/
-      return Math.floor(100000 + Math.random() * 900000);
+      return Math.random().toString(36).substring(2,10).toUpperCase();
+      /*return Math.floor(100000 + Math.random() * 900000);*/
       /*id ska tas bort om det genererats tidigare?*/
     },
     createPoll: function () {
