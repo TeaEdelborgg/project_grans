@@ -103,13 +103,33 @@
   align-items: center;
   min-height: 100vh; 
   width: 100vw; 
-  color:#fff;
+  color:#cfcfcf;
   background: linear-gradient(135deg, #0a0347, #3c298f); 
   background-attachment: fixed; 
   background-size: cover;
   text-align: center;
   box-sizing: border-box; 
   overflow: hidden;
+}
+
+button{
+  cursor: pointer;
+  border: none;
+  border-radius: 10px; 
+  align-items: center;  
+  text-align: center;
+  font-size: 20px; 
+  background-color: rgb(255, 136, 0);
+  color: #1e084f; 
+  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1); 
+  transition: background-color 0.3s ease; 
+}
+
+
+button:hover {
+  background-color: rgb(227, 122, 1);
+  box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
+  transform: scale(1.2); 
 }
 
 h1{
@@ -119,81 +139,50 @@ h1{
 .pollButtons {
   display: flex;
   justify-content: space-around;
-  align-items: center;
 }
 
 .pollButtons button{
   display: flex;            
-  flex-direction: column;   
+  flex-direction: column;
   justify-content: center;  
-  align-items: center;  
-  text-align: center;
-  cursor: pointer;
-  width: 220px;
-  height:100px;
-  margin: 10vh 5vw; 
-  font-size: 20px; 
-  background-color: rgb(255, 136, 0);
-  color: #fff; 
-  border: none;
-  border-radius: 10px; 
-  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1); 
-  transition: background-color 0.3s ease; 
+  width: auto;
+  height:auto;
+  padding: 2vh 3vw;
+  margin: 10vh auto;
 }
 
 .pollButtons img{
-  width: 50px;  
-  height: 50px; 
-  margin-top:2px;
+  width: 70%;
+  height: 70%; 
+  margin-top:2vh;
 }
 
-.pollButtons button:hover {
-  background-color: rgb(227, 122, 1);
-  box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
-  transform: scale(1.2); 
-}
 
 .continue {
-  text-align: center;
-  border: none;
-  cursor: pointer;
-  width: 220px;
-  height: 50px;
-  margin: 5vh 5vw; 
-  font-size: 20px; 
-  background-color: rgb(18, 150, 22);
-  color: #fff; 
-  border-radius: 10px; 
-  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1); 
-  transition: background-color 0.3s ease; 
+  width: auto;
+  height:auto;
+  padding: 3vh 2vw;
+  margin: 5vh auto; /*5vw; */
 }
 
 .continue:disabled {
-  background-color: rgb(16, 115, 20);
+  background-color: rgb(227, 122, 1);;
   cursor: not-allowed;
   opacity: 0.5; 
+  transform:scale(1);
 }
-
-.continue:hover:not(:disabled) {
-  background-color: rgb(16, 115, 20); 
-  box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4); 
-  transform: scale(1.2);
-}
-
 
 .questionBoxes{
   display: block; 
   justify-content: center;
-  margin: 20px 500px 20px;
-  border: none;
-  cursor: pointer;
+  margin: 3vh 40vw 3vh;
   font-size: 15px; 
-  background-color: rgb(255, 136, 0);
-  color: #fff; 
+  background-color: rgb(255, 136, 0, 0.4);
+  color: #1e084f; 
   border-radius: 10px; 
   box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1); 
   transition: background-color 0.3s ease; 
-  padding: 10px 20px;
+  padding: 1vh 1.5vw;
   text-align: center;
   box-sizing: border-box;
 }
@@ -203,30 +192,12 @@ h1{
   justify-content:center;
   flex-direction:column;
   font-size: 20px;
-  color: #fff;
-
+  color: #cfcfcf;
   text-align: center;
 }
 .startPollButton button{
-  border: none;
-  cursor: pointer; 
   margin: 5% ;
-  font-size: 20px;
-  background-color: rgb(18, 150, 22);
-  color: #fff;
-  border-radius: 10px;
-  padding: 10px 20px;
-  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
-  text-align: center;
+  padding: 3vh 2vw;
 }
 
-.startPollButton button{
-  background-color: rgb(18, 150, 22);
-}
-.startPollButton button:hover {
-  background-color: rgb(16, 115, 20); 
-  box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
-  transform: scale(1.2); 
-}
 </style>

@@ -19,7 +19,7 @@
 	"rulesli3":"You lose the game when you have lost both lives",
 	"rulesli4":"Pick an answer and slide in to lock your final answer within the time limit",
 	"rulesli5":"The player with most right answers win, if there are multiple players with most right answers, the one with fastest last answer wins",
-	"question": "Question",
+	"question": "Question ",
 	"wrongAnswer": "Wrong answer",
     "correctAnswer":"Correct answer",
     "addQuestion": "Add question",
