@@ -6,13 +6,11 @@
         <div id="scoreBoard" v-if="winners.length>0"> <!--Gör sedan att winner är namnet, och losers är endast listan av namnen-->
             <div class="headlight" :style="{
                 left:'-5%',
-                top:'-15%', 
                 transform:'rotate(45deg)',
                 filter:'drop-shadow(400px 0 80px rgb(250, 245, 181)) drop-shadow(270px 0 100px rgb(250, 245, 181))'}">
                 </div>
             <div class="headlight" :style="{
                 right:'-5%',
-                top:'-15%',
                 transform:'rotate(-45deg)',
                 filter:'drop-shadow(-400px 0 80px rgb(250, 245, 181)) drop-shadow(-270px 0 120px rgb(250, 245, 181))'}">
                 </div>
@@ -46,7 +44,7 @@ export default {
             showNameLosers:false,
             showNameWinners:[],
             totalWinners:0,
-            showingOrderAlternativs:{1:[1],2:[0,1,null],3:[2,0,1]},
+            showingOrderAlternativs:{1:[1],2:[0,1],3:[2,0,1]},
             showingOrder:[],
             numberOrder:[2,1,3]
         }
@@ -84,7 +82,7 @@ export default {
                     let index = this.showingOrder[i]
                     this.showNamesCountDown(index,time)
             }
-            
+
             this.showNamesCountDown(4, (this.totalWinners+1)*2000)
         },
         showNamesCountDown: function(index,time){
@@ -140,6 +138,7 @@ export default {
     background: linear-gradient(black,#545454,black);
     position: absolute;
     z-index:3;
+    top:-15%;
 }
 #scoreBoard{
     height: 100%;

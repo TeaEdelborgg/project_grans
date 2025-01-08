@@ -8,6 +8,7 @@
         </button>
       </header>
     <div>
+      <h2>{{uiLabels.question + (pollData.questions.length+1)}}</h2>
       <input type="text" v-model="question" placeholder="Question "  class="questionBox"> 
       <div class="answerBoxes">
         <input v-model="correctAnswer" placeholder="Correct answer" />
@@ -30,7 +31,9 @@
         <div v-if="q.isEditing" class="questionBoxes">
           <p>{{ uiLabels.editingQuestion + ' ' + (index + 1) }}</p>
           <input type="text" v-model="q.q" placeholder="Edit question" />
-          <input type="text" v-model="q.a.correct" placeholder="Edit correct answer" />
+          edit correct answer
+          <input type="text" v-model="q.a.correct" placeholder="Edit correct answer"/>
+          edit wrong answer
           <input 
             v-for="(_,i) in q.a.wrong"
             :key="'editWrongAnswer' + index + i"
@@ -92,7 +95,7 @@ export default {
       pollData: {
         questions: []
       },
-      maxQuestions: 15,
+      maxQuestions: 9,
       //numberOfQuestions:0,
       uiLabels: {},
       checkedAnswers: {},
@@ -117,6 +120,7 @@ export default {
 
     generatePollId: function(){
       return Math.random().toString(36).substring(2,10).toUpperCase();
+      /*return Math.floor(100000 + Math.random() * 900000);*/
       /*id ska tas bort om det genererats tidigare?*/
     },
     createPoll: function () {
@@ -173,13 +177,17 @@ export default {
   align-items: center;
   min-height: 100vh;
   width: 100vw;
+  color:#cfcfcf;
   background: linear-gradient(135deg, #0a0347, #3c298f);
   /*background-attachment: fixed;*/
   background-size: cover;
-  margin: 0;
-  padding: 0;
   text-align: center;
   box-sizing: border-box;
+}
+
+::placeholder{
+  color:#1e084f;
+  opacity:80%;
 }
 
 .topSection {
@@ -194,8 +202,8 @@ export default {
   justify-content:center;
   font-size: 20px;
   font-weight: bold;
-  color: rgb(18, 150, 22);
-  background-color: #fff;
+  color:#000;
+  background-color: #cfcfcf;
   border-radius: 10px;
   padding: 10px 20px;
   position: absolute; /* Absolute positioning */
@@ -209,7 +217,7 @@ export default {
   border: none;
   cursor: pointer;
   font-size: 20px;
-  background-color: rgb(18, 150, 22);
+  background-color: rgb(255, 136, 0);
   color: #fff;
   border-radius: 10px;
   padding: 10px 20px;
@@ -221,7 +229,7 @@ export default {
   border: none;
   cursor: pointer;
   font-size: 20px;
-  background-color: rgb(18, 150, 22);
+  background-color: rgb(255, 136, 0);
   color: #fff;
   border-radius: 10px;
   padding: 10px 20px;
@@ -231,17 +239,20 @@ export default {
 
 .continueButton:hover,
 .addButton:hover {
-  background-color: rgb(16, 115, 20);
+  background-color: rgb(227, 122, 1);
   box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
   transform: scale(1.2);
 }
 
+h2{
+  margin-top:10vh;
+}
 .questionBox{
   cursor: pointer;
-  margin-top: 20vh; 
-  font-size: 20px; 
+   
+  font-size: 20px;   
   color: rgb(255, 136, 0);
-  background-color: #fff;
+  background-color: #cfcfcf;
   border-radius: 10px; 
   border: none;
   cursor: pointer;
@@ -252,12 +263,12 @@ export default {
   text-align: center;
 }
 .answerBoxes {
-  display: grid; /* Enable grid layout */
-  grid-template-columns: repeat(2, 1fr); /* Create two equal-width columns */
-  gap: 20px; /* Add spacing between grid items */
-  margin: 20px auto; /* Center the answer boxes horizontally */
-  width: 50vw; /* Set a reasonable width */
-  padding: 10px; /* Add spacing inside the container */
+  display: grid; 
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 20px; 
+  margin: 20px auto; 
+  width: 50vw; 
+  padding: 10px; 
   border: none;
   font-size: 15px;
 
@@ -268,12 +279,12 @@ export default {
 }
 
 .answerBoxes input {
-  width: 100%; /* Ensure inputs take the full width of their grid cell */
+  width: 100%; 
   padding: 30px;
   font-size: 20px;
   border: none;
-  background-color: rgb(255, 136, 0);
-  color: #fff;
+  background-color: #cfcfcf;
+  color: rgb(255, 136, 0);
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -283,22 +294,22 @@ export default {
 .questionBoxes{
   display: block;
   flex-direction:column;
-  align-items: center; /* Center elements horizontally */
-  gap: 20px; /* Add spacing between items */
-  margin: 20px auto; /* Center the questionBoxes horizontally */
-  width: 20vw; /* Set a fixed width */
+  align-items: center; 
+  gap: 20px; 
+  margin: 20px auto; 
+  width: 20vw; 
   padding: 10px;
   cursor: pointer;
   font-size: 15px;
-  background-color: rgb(255, 136, 0);
+  background-color: rgb(255, 136, 0, 0.5);
   color: #fff;
   border-radius: 10px;
   text-align: center;
   box-sizing: border-box;
 }
 .questionBoxes input,
-.questionBoxes button {
-  width: 100%; /* Full width of the parent container */
+.questionBoxes button{
+  width: 100%;
   font-size: 15px;
   padding: 10px;
   margin-top: 5px;
@@ -309,6 +320,7 @@ export default {
   text-align: center;
   box-sizing: border-box;
 }
+
 
 .pollDone{
   display: flex;
@@ -327,7 +339,7 @@ export default {
   margin-right: 5vw;
   margin-top: 10vh;
   font-size: 20px;
-  background-color: rgb(18, 150, 22);
+  background-color: rgb(255, 136, 0);
   color: #fff;
   border-radius: 10px;
   padding: 10px 20px;
@@ -336,12 +348,12 @@ export default {
   text-align: center;
 }
 .pollDoneButtons #goBack{
-  background-color: #fff;
+  background-color: #cfcfcf;
   color: #000;
 }
 
 .pollDone button:hover {
-  background-color: rgb(16, 115, 20);
+  background-color: rgb(227, 122, 1);
   box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
   transform: scale(1.2);
 }
@@ -359,7 +371,7 @@ export default {
   cursor: pointer; 
   margin: 20% ;
   font-size: 20px;
-  background-color: rgb(18, 150, 22);
+  background-color: rgb(255, 136, 0);
   color: #fff;
   border-radius: 10px;
   padding: 10px 20px;
@@ -368,9 +380,10 @@ export default {
   text-align: center;
 }
 .startPollButton button:hover{
-  background-color: rgb(16, 115, 20);
+  background-color: rgb(227, 122, 1);
   box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
   transform: scale(1.2);
 }
+
 
 </style>

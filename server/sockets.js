@@ -106,7 +106,7 @@ function sockets(io, socket, data) {
   socket.on('getAllAnswers', function(pollId){ //döp om
     let participantsWithNewAnswersTest = data.updateColoredBoxes(pollId)
     let levelBoxes = data.updateLevelBoxes(pollId) 
-    io.to(pollId).emit("sendAllAnswers", {participants:participantsWithNewAnswersTest,levelBoxes:levelBoxes})
+    io.to(pollId).emit("updateAfterQuestion", {participants:participantsWithNewAnswersTest,levelBoxes:levelBoxes})
   }); 
 
   socket.on('runCountdown', function(d){

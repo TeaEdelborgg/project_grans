@@ -49,36 +49,26 @@ export default {
   background: linear-gradient(135deg, #0a0347, #3c298f); 
   background-attachment: fixed; 
   background-size: cover; 
-  margin: 0; 
-  padding: 0; 
   text-align: center;
   box-sizing: border-box; 
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0); 
-  }
-  50% {
-    transform: translateY(-10px);
-  }
 }
 
 .makeQuizButton, .selectQuizButton{
   border: none;
   cursor: pointer;
-  margin-left: 100px; 
-  margin-right:100px;
-  margin-top:250px;
+  margin-left: 10%; 
+  margin-right:10%;
+  margin-top:20%;
   font-size: 20px; 
   background-color: rgb(255, 136, 0);
-  color: #fff; 
+  color: #1e084f; 
   border-radius: 10px; 
   cursor: pointer;
   box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1); 
   transition: background-color 0.3s ease; 
-  width: 220px;
-  height:70px;
+  width: auto;
+  height:auto;
+  padding: 3vh 2vw;
   text-decoration: none;
 }
 
