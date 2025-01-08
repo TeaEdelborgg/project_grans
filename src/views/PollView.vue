@@ -161,7 +161,8 @@ export default {
 
       let startTime = Date.now();
 
-      let timerDuration = 13000;
+      let timerDuration = 18000;
+      let timerQuestion = 15000;
       let timerAnswer = 10000;
       let endQuestion = false;
       
@@ -177,29 +178,34 @@ export default {
             endQuestion = true
           })
 
-        if (this.timeLeft > timerAnswer) {
-          //lägg in en countdown för att innan man ser svarsalternativ?
+        if (this.timeLeft > timerQuestion) {
+          console.log('gör dig redo för nästa fråga')
+          // lägg in en countdown för innan frågan
+        } else if (this.timeLeft > timerAnswer) {
+          console.log('läs frågan på skärmen')
+          // läs frågan på skärmen
         } else if (this.timeLeft > 0) {
+          console.log('kan svara på frågan')
+          this.seeAlternatives = true
           this.percentage = Math.floor(this.timeLeft / 100);
           this.questionActive = true;
         } else {
           if (!this.isQuestionAnswered) { // frågan är om detta ens behövs??
             this.submitAnswer();
           }
+          this.percentage = 0
           this.questionActive = false;
-          this.seeAlternatives = true
-          setTimeout(()=>{
-            this.showCorrectAnswer = true
-            // socket on
-          }, 2000)
-          clearInterval(interval);
-          //console.log('ska köra socketen efter')
-          //console.log('userId: ', this.userId, 'pollId: ', this.pollId)
+
           socket.emit('getPlayer', {pollId: this.pollId, userId: this.userId})
           socket.emit('getCorrectedUserAnswer', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId})
           socket.on('sendCorrectedUserAnswer', checkedUserAnswer => {
             this.isCorrectAnswer = checkedUserAnswer
           });
+          this.showCorrectAnswer = true
+          setTimeout(() => {
+            this.seeAlternatives = false;
+            clearInterval(interval);
+          }, 2000)
         }
           /*
           if (!this.answerChecked) {
