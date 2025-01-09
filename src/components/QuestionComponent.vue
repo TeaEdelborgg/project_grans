@@ -240,7 +240,7 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: url('/img/bars.png');
+  background-image: url('/img/bars2.png');
   background-size: cover;
   background-position: center;
   top:-90%;

@@ -30,11 +30,6 @@
         <img src="/img/AskAudience.png" class="ask-audience" @click="askAudience" v-if="!this.userStats.information.usedAskAudience || !usedAskAudienceThisRound"/>
         <img src="/img/AskedAudience.png" class="ask-audience-used" v-else/> <!-- varför funkar inte detta? -->
         <!-- frågan är om man vill ha denna som en popup eller ska den lysa upp en knapp som nu? -->
-        
-        <!-- se om vi ska ha denna, för basically samma sak som fråga publiken?
-        <button @click="phoneAFriend">
-          Fråga en kompis
-        </button> -->
       </div>
       </div>
     </div>
@@ -44,8 +39,7 @@
 // @ is an alias to /src
 import QuestionComponent from '@/components/QuestionComponent.vue';
 import io from 'socket.io-client';
-//const socket = io("localhost:3000");
-const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
+const socket = io(sessionStorage.getItem("dataServer"))
 
 export default {
   name: 'PollView',
@@ -61,11 +55,6 @@ export default {
         a: []
       },
       pollId: "inactive poll",
-      submittedAnswers: {}, // används ej
-      questionRandom:{ // används ej
-        q:"",
-        a:[]
-      },
       questionNumber: null,
       isCorrectAnswer: false, // kollar om svaret som skickats är korrekt eller inte
       questionActive: false, // om den fortfarande syns på stora tavlan
@@ -82,44 +71,14 @@ export default {
     this.pollId = this.$route.params.id;
     this.userId = this.$route.params.userId;
     socket.on( "uiLabels", labels => this.uiLabels = labels );
-    //socket.emit("getParticipants", this.pollId);
     
     socket.on('sendPlayerStats', user => {
       const stats = user
       if (stats.userId == this.userId) {
-        this.userStats = user // alla spelare får allas stats??
-        //console.log('i pollview, userId: ', stats.userId)
-        //console.log('i pollView user, liv: ', user.information.lives, 'tid: ', user.information.time)
-        //console.log('i pollView userStats, liv: ', this.userStats.information.lives, 'tid: ', this.userStats.information.time)
+        this.userStats = user 
       }
       
     })
-
-    /*socket.on( "questionUpdate", q => { 
-      console.log("tog emot fråga, ", q)
-      this.question = q; 
-      this.$refs.questionComponent.updateSent();              
-     }); */
-    /*socket.on("randomOrderUpdate", q =>{
-      console.log("tog emot ranodm fråga, ",q.q);
-      this.question=q.q;
-      this.questionNumber=q.questionNumber;
-      console.log("tog emot random fråga, ",q.questionNumber)
-      //this.$refs.questionComponent.updateSent(); 
-    })*/
-    
-    /*socket.on("timeUp",up =>{
-      console.log("tittar om timeUp")
-      if(up==true){
-        this.timeUp();
-      }
-    });*/ 
-    
-    // socket.on( "submittedAnswersUpdate", answers => this.submittedAnswers = answers );
-    
-    /*socket.on("checkedUserAnswer", checkedAns => {
-      this.isCorrectAnswer = checkedAns;
-    });*/
 
     socket.on("gameFinished", () =>
       this.$router.push("/finalResultPlayer/" + this.pollId + "/" + this.userId)
@@ -144,15 +103,11 @@ export default {
       }
       
     },
-    phoneAFriend: function() {
-      console.log('phoneAFriend körs') // svara samma som den första personen som svarat
-    },
     askAudience: function() {
       if (this.questionActive) {
         socket.emit('audienceAnswer', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId, usedFiftyFifty: this.usedFiftyFiftyThisRound})
         this.usedAskAudienceThisRound = true
       }
-      
     },
     submitAnswer: function (answer) { 
       socket.emit("submitAnswer", {pollId: this.pollId, questionNumber: this.questionNumber, answer: answer, userId: this.userId, time: Math.ceil(this.timeLeft/1000)}) 
@@ -160,10 +115,6 @@ export default {
       this.usedFiftyFiftyThisRound = false;
       console.log('frågan är besvarad')
     },
-    /*timeUp: function(){ //används inte längre
-      //socket.emit("checkUserAnswer", {pollId:this.pollId, questionNumber:this.questionNumber,userId:this.userId}) //verkar inte behöva den, fungerar avkommenterad
-      console.log('timeUp körs')
-    }, */
     countdownPlayer: function() {
       this.isCorrectAnswer = false;
       this.seeAlternatives = false;
@@ -273,13 +224,6 @@ export default {
   width: 100%;
   height: 100%;
 }
-
-
-/*.answeralternatives {
-  top:20%;
-  width: 100%;
-  height:60%;
-} */
 .player-statistics {
   width: 100%;
   display: flex;
