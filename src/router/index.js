@@ -38,7 +38,12 @@ const router = createRouter({
       path: '/selectQuiz/',
       name: 'SelectQuestions',
       component: () => import('../views/SelectQuestions.vue')
-      },
+    },
+    {
+        path: '/adminLobby/:id',
+        name: 'AdminLobbyView',
+        component: ()=> import('../views/AdminLobbyView.vue')
+    },
     {
       path: '/result/:id',
       name: 'ResultView',

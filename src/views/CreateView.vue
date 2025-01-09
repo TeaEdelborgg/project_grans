@@ -35,21 +35,15 @@
       {{ uiLabels.doneQuestion }}
       <div class="pollDoneButtons">
         <button id="goBack" v-on:click="doneWithPoll = false">{{ uiLabels.goBack }} </button>
-        <button v-on:click="continueToStart = true">{{ uiLabels.continue }} </button>
+          <router-link v-bind:to="'/adminLobby/' +pollId">
+            <button> {{ uiLabels.startPoll }}</button>
+          <!--<button v-on:click="startPoll">{{uiLabels.startPoll}}</button>-->
+          </router-link>
       </div>
     </div>
   </div>
-  <div v-if="continueToStart" class="startPollButton">
-    <h3> {{ uiLabels.readyMessage }}</h3>
-    <h1>{{ uiLabels.pollId }} {{ pollId }}</h1>
-    <router-link v-bind:to="'/admin/' +pollId">
-    <button v-on:click="startPoll">{{uiLabels.startPoll}}</button>
-    </router-link>
-    <p>{{ uiLabels.participants }}</p>
-    <div v-for="(participant, index) in pollData.participants" :key="index">
-      {{ participant.information.name }}
-    </div>
-  </div>
+
+  
 </div>
 </template>
 
@@ -124,9 +118,9 @@ export default {
         questionToUpdate: updatedQuestion,
       });
     },
-    startPoll() {
+    /*startPoll() {
       socket.emit("startPoll", this.pollId);
-    },
+    },*/
   },
 };
 </script>
