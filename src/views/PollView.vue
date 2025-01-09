@@ -1,23 +1,30 @@
 <template>
   <div class="player-background">
     <div class="playerView">
-      <div class="timerBarContainer">
-        <div class="timerBar" :style="{ width: percentage + '%' }"></div>
-      </div>
-      <div class="player-statistics">
+      <div id="upperHalf">
+        <div class="player-statistics">
         <div class="player-hearts"> Liv:
           <img :src="this.userStats.information.lives>=1 ? '/img/hjartaRod.png':'/img/hjartaGro.png'" class="heart">
           <img :src="this.userStats.information.lives>=2 ? '/img/hjartaRod.png':'/img/hjartaGro.png'" class="heart">
         </div>
         <div class="player-time">Tid: {{ this.userStats.information.time }} sekunder </div>
       </div>
-
-      <div class="bars">
-
       </div>
 
-
-      <div class="help-buttons" >  <!--v-if="questionActive || seeAlternatives"-->
+      </div>
+      <div  > <!--v-if="questionActive || seeAlternatives", class="answeralternatives"-->
+        <QuestionComponent 
+          ref="questionComponent" 
+          v-bind:question="question" 
+          v-bind:questionActive="questionActive"
+          v-bind:isCorrectAnswer="isCorrectAnswer"
+          v-bind:showCorrectAnswer="showCorrectAnswer"
+          v-bind:percentage="percentage"
+          v-bind:seeAlternatives="seeAlternatives"
+          v-on:answer="submitAnswer($event)"/>
+      </div>
+      <div id="bottomHalf">
+        <div class="help-buttons" >  <!--v-if="questionActive || seeAlternatives"-->
         <img src="/img/50-50.png" class="fifty-fifty" @click="fiftyFifty" v-if="!this.userStats.information.usedFiftyFifty || !usedFiftyFiftyThisRound">
         <img src="/img/50-50-used.png" class="fifty-fifty-used" v-else />
         <img src="/img/AskAudience.png" class="ask-audience" @click="askAudience" v-if="!this.userStats.information.usedAskAudience || !usedAskAudienceThisRound"/>
@@ -29,19 +36,8 @@
           Fråga en kompis
         </button> -->
       </div>
-      
-
-      <div class="answeralternatives" > <!--v-if="questionActive || seeAlternatives"-->
-        <QuestionComponent 
-          ref="questionComponent" 
-          v-bind:question="question" 
-          v-bind:questionActive="questionActive"
-          v-bind:isCorrectAnswer="isCorrectAnswer"
-          v-bind:showCorrectAnswer="showCorrectAnswer"
-          v-on:answer="submitAnswer($event)"/>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -255,6 +251,21 @@ export default {
 </script>
 
 <style scoped>
+#bottomHalf{
+  width: 100%;
+  background-color: black;
+  height: 20%;
+  position: absolute;
+  bottom: 0;
+}
+#upperHalf{
+  width: 100%;
+  background-color: black;
+  height: 20%;
+  position: absolute;
+  top: 0;
+  z-index: 3;
+}
 .player-background {
   background-color: #001F3F;
   color: #FFFFFF;
@@ -262,42 +273,22 @@ export default {
   width: 100%;
   height: 100%;
 }
-.playerView {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
+
+/*.answeralternatives {
+  top:20%;
   width: 100%;
-
-}
-
-.answeralternatives {
-  width: 95%;
-} 
-
-.timerBarContainer {
-  width: 95%; 
-  height: 20px;
-  background-color: white;
-  border-radius: 10px;
-  overflow: hidden;
-  margin: 3vh 0;
-  padding: 0; 
-  position: relative;
-}
-
-.timerBar {
-  height: 100%;
-  background-color: #FF851B;
-  transition: width 0.1s linear;
-}
+  height:60%;
+} */
 .player-statistics {
-  width: 90%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 2%;
   padding: 2%;
+  height: 50%;
+  background-color: black;
 }
 .player-hearts {
   display: flex;
