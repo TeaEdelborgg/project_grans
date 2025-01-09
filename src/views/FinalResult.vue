@@ -55,7 +55,6 @@ export default {
             console.log("val: ", val)
             this.winners = val.slice(0,3)
             this.showNameWinners= new Array(this.winners.length).fill(false)
-            
 
             let temp = this.winners[0]
             this.winners[0] = this.winners[1]
@@ -112,24 +111,28 @@ export default {
 #confetti{
     position: absolute;
     z-index:0;
-    height: auto;
+    height: 100%;
     width: 100%;
-    animation: fallingconfetti 10s forwards;
+    animation: fallingconfetti 5s ease-out;
     overflow: hidden;
+    opacity: 0;
 }
 #confetti img{
     width: 100%;
     height: auto;
     object-fit: contain;
-    background-repeat: repeat-x;
 }
 @keyframes fallingconfetti {
     0%{
-        top:-150%;
+        transform: translateY(-200%);
+        opacity: 1;
+    }
+    90%{
+        opacity: 1;
     }
     100%{
-        top:200%;
-        opacity: 0.5;
+        transform: translateY(200%);
+        opacity: 0;
     }
 }
 .headlight{

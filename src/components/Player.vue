@@ -1,6 +1,5 @@
 <template>
   <div id="player">
-    <!--<Levelbox v-for="n in amountOfQuestions" v-bind:boxColor="player.information.color" v-bind:boxColorChange="player.information.coloredBoxes[n-1]" :id="n"></Levelbox>-->
     <div id="pile" :style="{
       background: 'linear-gradient(to right, '+player.information.color+', #c0c0c0, '+player.information.color+')', 
       height: calculateHeight(),
@@ -11,7 +10,6 @@
 </template>
 
 <script>
-import Levelbox from './Levelbox.vue';
 
 export default {
   name: 'Player',
@@ -20,7 +18,7 @@ export default {
     amountOfQuestions: Number
   },
   components:{
-    Levelbox
+    
   },
   data: function(){
     return{

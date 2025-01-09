@@ -15,6 +15,9 @@
               <div class="line"></div>
             </div>
             <br>
+            <div v-if="showQuestion && questionActive==false">
+              <h1>{{timeLeftBeforeAnswers}}</h1>
+            </div>
             <div v-if="questionActive" id="rectangleContainer">
               <div v-for="(a,index) in question.a" class="testRect" id="a">
                 <div class="line"></div>
@@ -56,6 +59,7 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
           pollId: "",
           questionActive:false,
           timeLeftBeforeQuestion:0,
+          timeLeftBeforeAnswers:0,
           percentage:100,
           questionLetters:['A','B','C','D'],
           showQuestion:false,
@@ -92,9 +96,10 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
               endQuestion=true;
             })
             if (timeLeftTest > timerQuestion) {
-              this.timeLeftBeforeQuestion = Math.floor((3000 - elapsedTime)/1000); //uppdaterar inte?
+              this.timeLeftBeforeQuestion = Math.floor((4000 - elapsedTime)/1000); //uppdaterar inte?
             } else if (timeLeftTest>timerAnswer){
               this.showQuestion = true
+              this.timeLeftBeforeAnswers = Math.floor((9000-elapsedTime)/1000)
             }
             else if (timeLeftTest > 0) {
               this.questionActive = true;
