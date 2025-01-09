@@ -55,7 +55,6 @@ export default {
             console.log("val: ", val)
             this.winners = val.slice(0,3)
             this.showNameWinners= new Array(this.winners.length).fill(false)
-            
 
             let temp = this.winners[0]
             this.winners[0] = this.winners[1]
