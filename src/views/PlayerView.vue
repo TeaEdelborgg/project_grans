@@ -36,7 +36,7 @@ import io from 'socket.io-client';
 const socket = io(sessionStorage.getItem("dataServer"))
 
 export default {
-  name: 'PollView',
+  name: 'PlayerView',
   components: {
     AnswerOptions,
   },

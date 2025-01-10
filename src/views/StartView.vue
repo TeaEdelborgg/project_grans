@@ -1,9 +1,7 @@
 <template>
   <div class="container">
   <header>
-    <!--<div v-bind:class="['hamburger', {'close': !hideNav}]" 
-         v-on:click="toggleNav">
-    </div>-->
+
     <button v-on:click="switchLanguage" class="langbutton">
       <img v-if="lang === 'en'" 
         src="/img/Flag_of_Sweden.svg.png" alt="sweflag"/>
@@ -130,6 +128,7 @@ h1 {
   margin-left: 100px; 
   margin-right:100px;
   font-size: 20px; 
+  font-weight:bold;
   background-color: rgb(255, 136, 0);
   color: #1e084f; 
   border-radius: 10px; 
