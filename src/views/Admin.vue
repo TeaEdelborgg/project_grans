@@ -10,8 +10,8 @@
       <div class="questions">
         <button class="game-button" @click="toggleQuestions">{{uiLabels.viewQuestionsAnswers}}</button>
         <div class="popup" v-if="showQuestions" @click.self="close">
-          <PopupQuestions :showQuestions="showQuestions" :questions="pollData.questions"
-            @close="toggleQuestions" />
+          <PopupQuestions :showQuestions="showQuestions" :questions="pollData.questions" :uiLabels="uiLabels"
+            @close="toggleQuestions"/>
         </div>
       </div>
     </section>
@@ -35,13 +35,13 @@
 
     <section class="participant-controls"> <!-- lägga in för att kunna ta bort spelare här? -->
       <h2>{{uiLabels.players}}</h2>
-      <PlayersAdmin :pollData="pollData" />
+      <PlayersAdmin :pollData="pollData" :uiLabels="uiLabels"/>
     </section>
 
     <section class="end-game">
       <button class="game-button" @click="toggleEndGame">{{uiLabels.finishEarly}}</button>
       <div class="popup" v-if="showEndGame" @click.self="toggleEndGame">
-        <PopupEndGame :showEndGame="showEndGame" @close="toggleEndGame" @end="finishGame" />
+        <PopupEndGame :showEndGame="showEndGame" :uiLabels="uiLabels" @close="toggleEndGame" @end="finishGame" />
       </div>
     </section>
 

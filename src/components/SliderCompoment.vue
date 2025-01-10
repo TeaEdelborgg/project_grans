@@ -103,7 +103,6 @@ export default {
                     bar.style.top = '-90%';
                 }
             }
-            
         },
         sendAnswer: function(e){
             this.$emit("sendAnswer")
