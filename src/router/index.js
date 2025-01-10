@@ -45,6 +45,11 @@ const router = createRouter({
         component: ()=> import('../views/AdminLobbyView.vue')
     },
     {
+      path: '/resultLobby/:id',
+      name: 'ResultLobbyView',
+      component: ()=> import('../views/ResultLobbyView.vue')
+  },
+    {
       path: '/result/:id',
       name: 'ResultView',
       component: () => import('../views/ResultView.vue')
