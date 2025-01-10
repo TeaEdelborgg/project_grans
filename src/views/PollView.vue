@@ -13,8 +13,8 @@
 
     </div>
     <div>
-      <QuestionComponent 
-        ref="questionComponent" 
+      <AnswerOptions 
+        ref="AnswerOptions" 
         v-bind:userId="userId" 
         v-bind:pollId="pollId"
         @updateQuestionActive="handleQuestionActive"/>
@@ -31,14 +31,14 @@
 
 <script>
 // @ is an alias to /src
-import QuestionComponent from '@/components/QuestionComponent.vue';
+import AnswerOptions from '@/components/AnswerOptions.vue';
 import io from 'socket.io-client';
 const socket = io(sessionStorage.getItem("dataServer"))
 
 export default {
   name: 'PollView',
   components: {
-    QuestionComponent,
+    AnswerOptions,
   },
   data: function () {
     return {
