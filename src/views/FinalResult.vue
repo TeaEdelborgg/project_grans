@@ -141,7 +141,7 @@ export default {
     background: linear-gradient(black,#545454,black);
     position: absolute;
     z-index:3;
-    top:-15%;
+    top:-19%;
 }
 #scoreBoard{
     height: 100%;

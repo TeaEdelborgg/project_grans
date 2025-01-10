@@ -16,7 +16,7 @@
             <img :src="player.information.lives>=2 ? '/img/hjartaRod.png':'/img/hjartaGro.png'" class="hjarta">
           </div>
           <br>
-          <h1>{{ player.information.time }}s</h1>
+          <h1><span :style="{fontSize:'1.5em'}">{{ player.information.time }}</span>s</h1>
         </div>
       </div>
       </div>
