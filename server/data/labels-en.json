@@ -35,7 +35,7 @@
     "goBack": "No, go back",
     "readyMessage": "Your quiz is created! Let all participants join before continuing.",
     "pollId": "Poll ID: ",
-    "startPoll": "Start poll",
+    "startPoll": "Start quiz",
 	"choosePollText":"Choose the quiz you want to use",
 	"choosePoll": "Choose poll",
     "participants": "Participants: ",

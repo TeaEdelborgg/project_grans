@@ -10,7 +10,7 @@
 
     <div class="adminButtons">
       <router-link v-bind:to="'/admin/' +pollId" >
-        <button :disabled="!openResult" v-on:click="startPoll">{{ uiLabels.adminView }}
+        <button :disabled="!openResult" v-on:click="startPoll">{{ uiLabels.startPoll }}
         </button>
       </router-link>
       <router-link
