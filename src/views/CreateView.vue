@@ -1,11 +1,11 @@
 <template>
   <div class="container">
-    <div v-if = "!doneWithPoll">
+
       <header class="topSection">
         <div class="showId">{{ uiLabels.pollId }} {{pollId}}</div>
-        <button v-on:click="doneWithPoll=true" class="continueButton">
-          {{ uiLabels.doneWithQuiz }}
-        </button>
+        <button v-on:click="doneWithPoll" class="continueButton">
+        {{ uiLabels.doneWithQuiz }}
+      </button>
       </header>
     <div>
       <h2>{{uiLabels.question + (pollData.questions.length+1)}}</h2>
@@ -30,20 +30,19 @@
     </div>
   </div>
 
-  <div v-if="doneWithPoll" >
-    <div v-if="!continueToStart"  class="pollDone">
-      {{ uiLabels.doneQuestion }}
-      <div class="pollDoneButtons">
-        <button id="goBack" v-on:click="doneWithPoll = false">{{ uiLabels.goBack }} </button>
-          <router-link v-bind:to="'/adminLobby/' +pollId">
-            <button> {{ uiLabels.continue }}</button>
+  <div v-if="donePopup" class="overlay" v-on:click="closePopup">
+      <div class="popup" v-on:click.stop>
+        <h2>{{ uiLabels.doneQuestion }}</h2>
+        <div class="pollDoneButtons">
+          <button id="goBack" v-on:click="closePopup">
+            {{ uiLabels.goBack }}
+          </button>
+          <router-link v-bind:to="'/adminLobby/' + pollId">
+            <button>{{ uiLabels.startPoll }}</button>
           </router-link>
+        </div>
       </div>
     </div>
-  </div>
-
-  
-</div>
 </template>
 
 <script>
@@ -75,7 +74,7 @@ export default {
       checkedAnswers: {},
       timeLeft: 0,
       timeLeftBeforeQuestion: 0,
-      doneWithPoll: false,
+      donePopup: false, 
       continueToStart: false,
     };
   },
@@ -117,6 +116,12 @@ export default {
         questionToUpdate: updatedQuestion,
       });
     },
+    doneWithPoll() {
+      this.donePopup = true;
+    },
+    closePopup() {
+      this.donePopup = false; 
+    }
   },
 };
 </script>
@@ -129,122 +134,104 @@ export default {
   align-items: center;
   min-height: 100vh;
   max-width: 100vw;
-  color:#cfcfcf;
+  color: #cfcfcf;
   background: linear-gradient(135deg, #0a0347, #3c298f);
   background-size: cover;
   text-align: center;
   box-sizing: border-box;
-  overflow-x:hidden;
+  overflow-x: hidden;
 }
 
 .topSection {
-  display: flex; 
-  flex-wrap: wrap; 
-  justify-content: center; 
+  display: flex;
+  justify-content: center;
   align-items: center;
   position: relative;
   margin-top: 20vh;
-  margin-bottom: 0vh;
-  gap: 1vh; 
+  gap: 1vh;
 }
 
 .showId {
   font-size: 20px;
   font-weight: bold;
-  color:#000;
+  color: #000;
   background-color: #cfcfcf;
   border-radius: 10px;
   padding: 10px 20px;
-  align-items: middle;
-  align-self:left;
-  margin-right:10vw;
+  margin-right: 10vw;
 }
 
 .continueButton {
-  margin-left:10vw;
-  align-self: right;
+  margin-left: 10vw;
   border: none;
   cursor: pointer;
   font-size: 20px;
-  font-weight:bold;
+  font-weight: bold;
   background-color: rgb(255, 136, 0);
   color: #1e084f;
   border-radius: 10px;
   padding: 10px 20px;
   box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, transform 0.3s ease;
-
 }
 
-
-.continueButton:hover{
+.continueButton:hover {
   background-color: rgb(227, 122, 1);
   box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
   transform: scale(1.2);
 }
 
-h1{margin:1vh}
-h3{
-  margin-top:2vh;
+h3 {
+  margin-top: 2vh;
 }
 
-
-.pollDone{
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  font-size:30px;
-  text-align:center;
-  color:#fff
+  z-index: 100;
+}
+
+.popup {
+  background: linear-gradient(135deg, #0a0347, #3c298f);
+  color: #cfcfcf;
+  padding: 5vh 2vw;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.pollDoneButtons {
+  display: flex;
+  justify-content: center;
+  gap: 10%;
 }
 
 .pollDoneButtons button {
-  flex-direction:row;
   border: none;
   cursor: pointer;
-  margin-left: 5vw;
-  margin-right: 5vw;
-  margin-top: 10vh;
+  margin: 4vh 2vw 1vh;
   font-size: 20px;
-  font-weight:bold;
+  font-weight: bold;
   background-color: rgb(255, 136, 0);
   color: #1e084f;
   border-radius: 10px;
-  padding: 10px 20px;
+  padding: 1vh 2vw;
   box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, transform 0.3s ease;
-  text-align: center;
+}
+.pollDoneButtons #goBack{
+  background-color:#cfcfcf;
 }
 
-.pollDone button:hover {
-  background-color: rgb(227, 122, 1);
-  box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
-  transform: scale(1.2);
-}
-
-.startPollButton {
-  display: block;
-  justify-content:center;
-  flex-direction:column;
-  font-size: 20px;
-  font-weight:bold;
-  color: #fff;
-  text-align: center;
-}
-.startPollButton button{
-  border: none;
-  cursor: pointer; 
-  margin: 5% ;
-  font-size: 20px;
-  background-color: rgb(255, 136, 0);
-  color: #1e084f;
-  border-radius: 10px;
-  padding: 10px 20px;
-  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  text-align: center;
-}
-.startPollButton button:hover{
+.pollDoneButtons button:hover {
   background-color: rgb(227, 122, 1);
   box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
   transform: scale(1.2);
