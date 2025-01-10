@@ -84,12 +84,12 @@ export default {
       selectedColor: "#ff0000",
       participants: [],
       colors: [
-        {hex: "#FFA07A"},
-        {hex: "#CD5C5C"},
-        {hex: "#DC143C"},
-        {hex: "#20B2AA"},
-        {hex: "#008B8B"},
-        {hex: "#4682B4"},
+        {hex: "#0015ff"},
+        {hex: "#ff00a1"},
+        {hex: "#90fe00"},
+        {hex: "#8400ff"},
+        {hex: "#00fff7"},
+        {hex: "#ff7300"},
       ],
       showPopup: false,
       popupShown: false,
@@ -250,7 +250,7 @@ input[type="text"]:hover {
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
   transition: background-color 0.3s ease; 
-  width: 220px;
+  width: 230px;
 }
 
 .participateButton button:hover:not(:disabled) {

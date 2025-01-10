@@ -17,7 +17,7 @@
 	"rulesli1":"Du deltar i spelet med totalt 2 liv",
 	"rulesli2":"Om du svarar fel på en fråga förlorar du ett liv",
 	"rulesli3":"Du åker ut ur spelet om du förlorar dina två liv",
-	"rulesli4":"Välj ett svar och dra för att låsa in ditt svar inom tidsgränsen",
+	"rulesli4":"Välj ett svar och dra ner gallret för att låsa in ditt svar inom tidsgränsen",
 	"rulesli5":"Spelaren med flest rätta svar vinner, om flera deltagare har flest rätta svar vinner spelaren med snabbast senaste svar",
 	"question": "Fråga ",
 	"wrongAnswer": "Fel svar",
