@@ -1,15 +1,9 @@
 <template>
   <div id="playerview">
-  <!--<div id="bars">-->
     <SliderCompoment @sendAnswer="submitAnswer()"
         v-bind:sent="sent"
         v-bind:seeAlternatives="seeAlternatives"
         v-bind:questionActive="questionActive"/>
-  <!--</div>-->
-      <!-- <div id="bars" @mousedown="pressedDown" @touchstart="pressedDown"></div> -->
-      <!-- gör denna till egen komponent sen, slidercomponent-->
-
-
     <div id="container" v-if="questionActive || seeAlternatives" class="answeralternatives"> <!-- v-if="questionActive || seeAlternatives" class="answeralternatives"-->
       <div class="timerBarContainer">
         <div class="timerBar" :style="{ width: percentage + '%' }"></div>
@@ -32,31 +26,7 @@
           
         </div>
       </div>
-      <!--
-      <button class="answeralternative" 
-        :class="{ 
-          selected: a === selectedAnswer, 
-          sended: a === selectedAnswer && sent, 
-          showCorrect: a === selectedAnswer && showCorrectAnswer && isCorrectAnswer, 
-          showIncorrect: a === selectedAnswer && showCorrectAnswer && !isCorrectAnswer, 
-          showAudienceAnswer: a === audienceAnswer,
-        }"        
-        v-for="a in question.a" 
-        v-on:click="selectAnswer(a)" 
-        v-bind:key="a"
-        :disabled="isDisabled(a)">
-        {{ a }}
-      </button> <br/>-->
     </div>
-    
-    
-    <!--<button class="submitbutton" v-on:click="answer">
-      Submit answer
-    </button>-->
-    
-    <!--<div id="slidercontainer">
-        <SliderCompoment @sendAnswer="answer"/>
-      </div>-->
   </div>
   
 </template>
@@ -77,22 +47,10 @@ export default {
   },
   data: function(){
     return{
-      selectedAnswer:'',
+      selectedAnswer:null,
       sent:false,
       fiftyFify: [],
       audienceAnswer:'',
-
-      //till slidern:
-      // placePressed: 0,
-      // pressed: false,
-      // sliderOffsetLeft: 0, // Håller reda på var slidern börjar
-      // maxPosition: 0, // Maximal position för slidern
-      // minPosition: 0, // Minimal position för slidern
-      // heightPx:0,
-      // topPosition: 0, 
-      // bottomPosition: 0,
-      // currentPlace:0,
-      // maxBottom:0,
 
       //till för countdownen
       question: {
@@ -115,7 +73,7 @@ export default {
 
     socket.on('startCountdownPlayer', question =>{
       console.log('startCountdown körs: ', question)
-      this.question = question.q; // ger frågan och random order på svaren
+      this.question = question.q; 
       this.questionNumber = question.questionNumber;
       this.countdownPlayer();
     })
@@ -154,13 +112,14 @@ export default {
     },
     submitAnswer: function () {
       socket.emit("submitAnswer", {pollId: this.pollId, questionNumber: this.questionNumber, answer: this.selectedAnswer, userId: this.userId, time: Math.ceil(this.timeLeft/1000)}) 
-      this.isQuestionAnswered = true;
       this.usedFiftyFiftyThisRound = false;
+      this.isQuestionAnswered = true;
       console.log('frågan är besvarad, svaret är: ', this.selectedAnswer)
     },
     countdownPlayer: function() {
       console.log('kör countdownPlayer')
       this.sent=false;
+      this.selectedAnswer=null;
       this.isCorrectAnswer = false;
       this.seeAlternatives = false;
       this.showCorrectAnswer = false;
@@ -212,97 +171,8 @@ export default {
             clearInterval(interval);
           }, 2000)
         }
-          /*
-          if (!this.answerChecked) {
-            console.log('hej')
-            //console.log('checked answer innan: ', this.answerChecked)
-            // en nya socket är som kollar om svaret är sant eller ej 
-            //socket.emit("checkUserAnswer", {pollId: this.pollId, questionNumber: this.questionNumber,userId: this.userId});
-            this.answerChecked = true
-            //console.log('checked answer efter: ', this.answerChecked)
-          }
-        } else {
-          this.showCorrectAnswer = true;
-          clearInterval(interval)
-        }*/
       }, 100);  
     },
-    //gallret
-    // pressedDown: function(e){
-    //         console.log("i pressedDown")
-    //         if(!this.sent && this.seeAlternatives){
-    //             //console.log(e.clientX)
-    //             if(e.type=="touchstart"){
-    //                 e.preventDefault();
-    //                 this.placePressed = e.touches[0].clientY
-    //             }
-    //             else{
-    //                 this.placePressed = e.clientY;
-    //             }
-    //             this.pressed = true;
-    //             window.addEventListener("mousemove",this.move) //inte this.move() för då kallar den inte konstant
-    //             window.addEventListener("mouseup", this.mouseReleased)
-    //             window.addEventListener("touchmove",this.move)
-    //             window.addEventListener("touchend", this.mouseReleased)
-    //         }
-    //     },
-    //     move: function(e){
-    //         console.log("i move")
-    //         let bar = document.getElementById("bars")
-    //         if(bar){
-    //             if(e.type =="touchmove"){
-    //                 this.currentPlace = e.touches[0].clientY;
-    //             }
-    //             else{
-    //                 console.log("y pos: ", e.clientY)
-    //                 this.currentPlace = e.clientY
-    //             }
-    //             const barRect = bar.getBoundingClientRect();
-    //             this.topPosition = barRect.top;
-    //             this.bottomPosition = barRect.bottom;
-    //             console.log("top: ", this.topPosition, " bottom: ", this.bottomPosition)
-
-    //             if(this.pressed){
-    //                 let movedPlaced = this.currentPlace-this.placePressed
-    //                 if (movedPlaced < 0){
-    //                     bar.style.top='-90%'; //0+'px'
-    //                 }
-    //                 else if (this.bottomPosition > this.maxBottom){
-    //                     bar.style.bottom = '0';//;(this.maxPosition - (this.bottomPosition-this.topPosition))+'px'
-    //                   }
-    //                 else{
-    //                     bar.style.top = -90+((this.currentPlace-this.placePressed)/this.heightPx)*100+'%';;// //-this.placePressed då vi vill ha den i sliderBox och inte på hela sidan
-    //                 }    
-    //             }
-    //             else{
-    //                 return 0
-    //             }
-    //         }  
-    //     },
-    //     mouseReleased: function(e){
-    //       let bar = document.getElementById("bars")
-    //       this.pressed = false;
-    //         if(bar){
-    //             //console.log("mouse släppt")
-    //             //fick massa fel när jag hade removeeventlistener här, och frågetecknen
-    //             if (this.bottomPosition >= this.maxBottom) {
-    //                 bar.style.bottom='0'//slider.style.right = (this.maxPosition - (this.rightPosition-this.leftPosition))+'px';
-    //                 bar.style.top='0'
-    //                 this.sent = true;
-    //                 this.sendAnswer();
-    //             } else {
-    //                 console.log("else")
-    //                 bar.style.top = '-90%';
-    //             }
-    //         }
-    //         document.removeEventListener("mousemove",this.move)
-    //         document.removeEventListener("mouseup", this.mouseReleased)
-    //         document.removeEventListener("touchmove",this.move)
-    //         document.removeEventListener("touchend", this.mouseReleased)
-    //     },
-    //     //gör funktion som skriver hej, ska köras när den släpps på 100%
-    //     //slidern ska också då fastna på 100% och man kan inte längre flytta den
-    //     //annars ska den hamna på start igen
   },
   mounted(){
     this.sent=false
@@ -314,7 +184,6 @@ export default {
     this.maxBottom = playerviewRect.bottom
   }
 }
-//ha en "selected button, så om en knapp trycks på så väljs den knappen till selected, den ändrar också färg?"
 </script>
 
 <style scoped>

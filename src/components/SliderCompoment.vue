@@ -5,11 +5,9 @@
 <script>
 export default {
     props: {
-        //heightPx:Number,
         sent: Boolean,
         seeAlternatives: Boolean,
         questionActive: Boolean,
-        //maxBottom:Number
     },
     data() {
         return {
@@ -23,27 +21,10 @@ export default {
             bottomPosition: 0,
             currentPlace:0,
             maxBottom:0,
-            //sent:false,
-            //seeAlternatives:false
         };
     },
     emits: ["sendAnswer"],
     mounted() {
-        // Beräkna räckvidden för slidern
-        /*this.windowWidth = document.documentElement.clientWidth;
-        this.minPosition = this.windowWidth*0.1;
-        console.log('minposition: ',this.minPosition)
-        this.maxPosition = this.windowWidth*0.9;
-        console.log('maxposition: ',this.maxPosition)
-        this.rightPosition = this.windowWidth*0.2;
-        // console.log('start right: ', this.rightPosition)*/
-        // let sliderBox = document.getElementById("sliderBox");
-
-        // const sliderBoxRect = sliderBox.getBoundingClientRect();
-        // this.minPosition = sliderBoxRect.left; // Vänstra gränsen
-        // this.maxPosition = sliderBoxRect.right; // Högra gränsen
-        // //console.log('minPosition: ', this.minPosition, 'maxPosition: ', this.maxPosition);
-        //this.sent=false
         let playerview = document.getElementById("playerview");
         const playerviewRect = playerview.getBoundingClientRect();
         this.heightPx = playerviewRect.bottom-playerviewRect.top;
@@ -106,12 +87,15 @@ export default {
         mouseReleased: function(e){
           let bar = document.getElementById("bars")
           this.pressed = false;
+          document.removeEventListener("mousemove",this.move)
+            document.removeEventListener("mouseup", this.mouseReleased)
+            document.removeEventListener("touchmove",this.move)
+            document.removeEventListener("touchend", this.mouseReleased)
             if(bar){
-                //console.log("mouse släppt")
-                //fick massa fel när jag hade removeeventlistener här, och frågetecknen
+
                 if (this.bottomPosition >= this.maxBottom) {
-                    bar.style.bottom='0'//slider.style.right = (this.maxPosition - (this.rightPosition-this.leftPosition))+'px';
                     bar.style.top='0'
+                    bar.style.bottom='0'
                     //this.sent = true;
                     this.sendAnswer();
                 } else {
@@ -119,14 +103,8 @@ export default {
                     bar.style.top = '-90%';
                 }
             }
-            document.removeEventListener("mousemove",this.move)
-            document.removeEventListener("mouseup", this.mouseReleased)
-            document.removeEventListener("touchmove",this.move)
-            document.removeEventListener("touchend", this.mouseReleased)
+            
         },
-        //gör funktion som skriver hej, ska köras när den släpps på 100%
-        //slidern ska också då fastna på 100% och man kan inte längre flytta den
-        //annars ska den hamna på start igen
         sendAnswer: function(e){
             this.$emit("sendAnswer")
             console.log("ska skicka svar från slidern");
@@ -144,6 +122,8 @@ export default {
             let bar = document.getElementById("bars")
             if(newValue==false){
                 bar.style.top='-90%'
+                this.topPosition='0'
+                this.bottomPosition='0'
             }
         }
     }
