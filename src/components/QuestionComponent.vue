@@ -78,6 +78,10 @@ export default {
       this.countdownPlayer();
     })
 
+    socket.on('sendCorrectedUserAnswer', checkedUserAnswer => {
+      this.isCorrectAnswer = checkedUserAnswer
+    });
+
     socket.on('sendFiftyFifty', incorrects => {
       if (incorrects.user == this.userId) {
         this.fiftyFify = incorrects.answers
@@ -154,25 +158,42 @@ export default {
           this.percentage = Math.floor(this.timeLeft / 100);
           this.questionActive = true;
         } else {
-          if (!this.isQuestionAnswered) { // frågan är om detta ens behövs??
-            this.submitAnswer();
-          }
-          this.percentage = 0
-          this.questionActive = false;
+          this.endCountdown()
+          clearInterval(interval);
+          // if (!this.isQuestionAnswered) { // frågan är om detta ens behövs??
+          //   this.submitAnswer();
+          // }
+          // console.log('kör else i countdown, dvs time=0')
+          // this.percentage = 0
+          // this.questionActive = false;
 
-          socket.emit('getPlayer', {pollId: this.pollId, userId: this.userId})
-          socket.emit('getCorrectedUserAnswer', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId})
-          socket.on('sendCorrectedUserAnswer', checkedUserAnswer => {
-            this.isCorrectAnswer = checkedUserAnswer
-          });
-          this.showCorrectAnswer = true
-          setTimeout(() => {
-            this.seeAlternatives = false;
-            clearInterval(interval);
-          }, 2000)
+          // socket.emit('getPlayer', {pollId: this.pollId, userId: this.userId})
+          // socket.emit('getCorrectedUserAnswer', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId})
+          // socket.on('sendCorrectedUserAnswer', checkedUserAnswer => {
+          //   this.isCorrectAnswer = checkedUserAnswer
+          // });
+          // this.showCorrectAnswer = true
+          // setTimeout(() => {
+          //   this.seeAlternatives = false;
+          //   clearInterval(interval);
+          // }, 2000)
         }
       }, 100);  
     },
+    endCountdown: function() {
+      if (!this.isQuestionAnswered) { // frågan är om detta ens behövs??
+        this.submitAnswer();
+      }
+      this.percentage = 0
+      this.questionActive = false;
+
+      socket.emit('getPlayer', {pollId: this.pollId, userId: this.userId})
+      socket.emit('getCorrectedUserAnswer', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId})
+      this.showCorrectAnswer = true
+      setTimeout(() => {
+        this.seeAlternatives = false;
+      }, 2000)
+    }
   },
   mounted(){
     this.sent=false

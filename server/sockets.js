@@ -64,7 +64,6 @@ function sockets(io, socket, data) {
 
   socket.on('getPlayer', function(d) {
     let user = data.getOneParticipant(d.pollId, d.userId);
-    //console.log('i socket, user är: ', user)
     io.to(d.pollId).emit('sendPlayerStats', user);
   }); 
 
