@@ -94,6 +94,13 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
             socket.on('resetTime', () => {
               timeLeftTest=0;
               endQuestion=true;
+              this.showCorrectAnswer=true
+              this.percentage=0;
+              setTimeout(()=>{
+                console.log('kör clearInterval resetTimer')
+                clearInterval(interval)
+                this.$emit("countDownOverSend")
+              },1000)
             })
             if (timeLeftTest > timerQuestion) {
               this.timeLeftBeforeQuestion = Math.floor((4000 - elapsedTime)/1000); //uppdaterar inte?
