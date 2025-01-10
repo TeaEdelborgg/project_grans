@@ -7,11 +7,20 @@
 </template>
 
 <script>
+import io from 'socket.io-client';
+const socket = io(sessionStorage.getItem("dataServer"));
+
 export default {
     name: "PopupEndGame",
     props: {
         showEndGame: Boolean,
         questions: Object,
+        uiLabels: Object,
+    },
+    created: function() {
+        socket.on( "uiLabels", labels => this.uiLabels = labels);
+        socket.emit( "getUILabels", this.lang );
+        socket.emit( "joinPoll", this.pollId);
     },
     methods: {
         close() {

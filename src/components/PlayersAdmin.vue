@@ -24,6 +24,7 @@ export default {
     name: "PlayersAdmin",
     props: {
         pollData: Object,
+        uiLabels: Object,
     },
 };
 </script>

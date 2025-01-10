@@ -2,20 +2,29 @@
     <div class="popup-questions-content">
         <button class="close-button" @click="close">x</button>
         <h3>{{uiLabels.questionsAnswers}}</h3>
-            <li v-for="(question, index) in pollData.questions" :key="index">
-                <strong>{{ uiLabels.question + (index + 1) }}:</strong> {{ question.q }}<br>
-                <strong>{{uiLabels.correctAnswer}}</strong> {{ question.a.correct }}<br>
-                <strong>{{uiLabels.wrongAnswer}}</strong> {{ question.a.wrong.join(', ') }}<br><br>
-            </li>
+        <li v-for="(question, index) in questions" :key="index">
+            <strong>{{ uiLabels.question + (index + 1) }}:</strong> {{ question.q }}<br>
+            <strong>{{uiLabels.correctAnswer}}</strong> {{ question.a.correct }}<br>
+            <strong>{{uiLabels.wrongAnswer}}</strong> {{ question.a.wrong.join(', ') }}<br><br>
+        </li>
     </div>
 </template>
 
 <script>
+import io from 'socket.io-client';
+const socket = io(sessionStorage.getItem("dataServer"));
+
 export default {
     name: "PopupQuestions",
     props: {
         showQuestions: Boolean,
         questions: Object,
+        uiLabels: Object,
+    },
+    created: function() {
+        socket.on("uiLabels", labels => this.uiLabels = labels);
+        socket.emit( "getUILabels", this.lang );
+        socket.emit("joinPoll", this.pollId);
     },
     methods: {
         close() {
