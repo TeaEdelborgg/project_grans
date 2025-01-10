@@ -174,7 +174,7 @@ Data.prototype.getQuestionAnswerRandom = function(pollId, qId = null) {
       answers[avalibleSlots[index]]=wrongAnsw;
       avalibleSlots.splice(index,1);
     };
-    var test={q:poll.questions[poll.currentQuestion].q, a:answers, correct:currentQuest.a.correct}
+    var test={q:poll.questions[poll.currentQuestion].q, a:answers}
     return(test)
   }
   return {}
@@ -221,11 +221,13 @@ Data.prototype.getSubmittedAnswers = function(pollId) { //behövs den här??? Vi
 }
 
 Data.prototype.submitAnswer = function(pollId, questionNumber, answer, userId, timeLeft) {
+  console.log('pollId: ', pollId, 'qNo: ', questionNumber, 'answer: ', answer, 'userId: ', userId, 'timeleft: ', timeLeft)
   if (this.pollExists(pollId)) {
     const user = this.polls[pollId].participants.find(user => user.userId == userId)
+    console.log('user är: ', user)
     if (answer == null) {
-      console.log('i submitanswer, om det crashar', user.information.answers[questionNumber])
-      user.information.answers[questionNumber] = ["-", 0] // denna verkar crasha ibland?
+      console.log('i submitanswer, om det crashar', user?.information.answers[questionNumber])
+      user.information.answers[questionNumber] = ["-", 0] // denna verkar crasha ibland? tror det är om userId inte skickas med
     } else {
       user.information.answers[questionNumber] = [answer, timeLeft]
     }

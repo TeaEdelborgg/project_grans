@@ -1,13 +1,16 @@
 <template>
-    <div id="sliderBox">
-        <div id="slider" @mousedown="pressedDown" @touchstart="pressedDown">
-            <p>Slide to lock</p>
-        </div>
-    </div>
+    <div id="bars" @mousedown="pressedDown" @touchstart="pressedDown"></div>
 </template>
 
 <script>
 export default {
+    props: {
+        //heightPx:Number,
+        sent: Boolean,
+        seeAlternatives: Boolean,
+        questionActive: Boolean,
+        //maxBottom:Number
+    },
     data() {
         return {
             placePressed: 0,
@@ -15,12 +18,16 @@ export default {
             sliderOffsetLeft: 0, // Håller reda på var slidern börjar
             maxPosition: 0, // Maximal position för slidern
             minPosition: 0, // Minimal position för slidern
-            leftPosition: 0, 
-            rightPosition: 0,
-            sent:false ,
+            heightPx:0,
+            topPosition: 0, 
+            bottomPosition: 0,
             currentPlace:0,
+            maxBottom:0,
+            //sent:false,
+            //seeAlternatives:false
         };
     },
+    emits: ["sendAnswer"],
     mounted() {
         // Beräkna räckvidden för slidern
         /*this.windowWidth = document.documentElement.clientWidth;
@@ -29,24 +36,32 @@ export default {
         this.maxPosition = this.windowWidth*0.9;
         console.log('maxposition: ',this.maxPosition)
         this.rightPosition = this.windowWidth*0.2;
-        console.log('start right: ', this.rightPosition)*/
-        let sliderBox = document.getElementById("sliderBox");
+        // console.log('start right: ', this.rightPosition)*/
+        // let sliderBox = document.getElementById("sliderBox");
 
-        const sliderBoxRect = sliderBox.getBoundingClientRect();
-        this.minPosition = sliderBoxRect.left; // Vänstra gränsen
-        this.maxPosition = sliderBoxRect.right; // Högra gränsen
-        //console.log('minPosition: ', this.minPosition, 'maxPosition: ', this.maxPosition);
+        // const sliderBoxRect = sliderBox.getBoundingClientRect();
+        // this.minPosition = sliderBoxRect.left; // Vänstra gränsen
+        // this.maxPosition = sliderBoxRect.right; // Högra gränsen
+        // //console.log('minPosition: ', this.minPosition, 'maxPosition: ', this.maxPosition);
+        //this.sent=false
+        let playerview = document.getElementById("playerview");
+        const playerviewRect = playerview.getBoundingClientRect();
+        this.heightPx = playerviewRect.bottom-playerviewRect.top;
+        this.minPosition='0%'
+        this.maxPosition='100%'
+        this.maxBottom = playerviewRect.bottom
     },
     methods: {
         pressedDown: function(e){
-            if(!this.sent){
+            console.log("i pressedDown")
+            if(!this.sent && this.seeAlternatives){
                 //console.log(e.clientX)
                 if(e.type=="touchstart"){
                     e.preventDefault();
-                    this.placePressed = e.touches[0].clientX
+                    this.placePressed = e.touches[0].clientY
                 }
                 else{
-                    this.placePressed = e.clientX;
+                    this.placePressed = e.clientY;
                 }
                 this.pressed = true;
                 window.addEventListener("mousemove",this.move) //inte this.move() för då kallar den inte konstant
@@ -56,29 +71,31 @@ export default {
             }
         },
         move: function(e){
-            let slider = document.getElementById("slider")
-            if(slider){
+            console.log("i move")
+            let bar = document.getElementById("bars")
+            if(bar){
                 if(e.type =="touchmove"){
-                this.currentPlace = e.touches[0].clientX;
+                    this.currentPlace = e.touches[0].clientY;
                 }
                 else{
-                    this.currentPlace = e.clientX
+                    console.log("y pos: ", e.clientY)
+                    this.currentPlace = e.clientY
                 }
-                const sliderRect = slider.getBoundingClientRect();
-                this.leftPosition = sliderRect.left;
-                this.rightPosition = sliderRect.right;
-                //console.log("gräns höger: ", this.rightPosition)
+                const barRect = bar.getBoundingClientRect();
+                this.topPosition = barRect.top;
+                this.bottomPosition = barRect.bottom;
+                console.log("top: ", this.topPosition, " bottom: ", this.bottomPosition)
 
                 if(this.pressed){
                     let movedPlaced = this.currentPlace-this.placePressed
                     if (movedPlaced < 0){
-                        slider.style.left=0+'px';
+                        bar.style.top='-90%'; //0+'px'
                     }
-                    else if (this.rightPosition > this.maxPosition){
-                        slider.style.right = (this.maxPosition - (this.rightPosition-this.leftPosition))+'px';
-                    }
+                    else if (this.bottomPosition > this.maxBottom){
+                        bar.style.bottom = '0';//;(this.maxPosition - (this.bottomPosition-this.topPosition))+'px'
+                      }
                     else{
-                        slider.style.left = (this.currentPlace-this.placePressed)+'px'; //-this.placePressed då vi vill ha den i sliderBox och inte på hela sidan
+                        bar.style.top = -90+((this.currentPlace-this.placePressed)/this.heightPx)*100+'%';;// //-this.placePressed då vi vill ha den i sliderBox och inte på hela sidan
                     }    
                 }
                 else{
@@ -87,17 +104,19 @@ export default {
             }  
         },
         mouseReleased: function(e){
-            let slider = document.getElementById("slider")
-            this.pressed = false;
-            if(slider){
+          let bar = document.getElementById("bars")
+          this.pressed = false;
+            if(bar){
                 //console.log("mouse släppt")
                 //fick massa fel när jag hade removeeventlistener här, och frågetecknen
-                if (this.rightPosition >= this.maxPosition) {
-                    slider.style.right = (this.maxPosition - (this.rightPosition-this.leftPosition))+'px';
-                    this.sent = true;
-                    this.sendAnswer(e);
+                if (this.bottomPosition >= this.maxBottom) {
+                    bar.style.bottom='0'//slider.style.right = (this.maxPosition - (this.rightPosition-this.leftPosition))+'px';
+                    bar.style.top='0'
+                    //this.sent = true;
+                    this.sendAnswer();
                 } else {
-                    slider.style.left = 0+'px';
+                    console.log("else")
+                    bar.style.top = '-90%';
                 }
             }
             document.removeEventListener("mousemove",this.move)
@@ -119,32 +138,27 @@ export default {
         document.removeEventListener("mouseup", this.mouseReleased)
         document.removeEventListener("touchmove",this.move)
         document.removeEventListener("touchend", this.mouseReleased)
+    },
+    watch:{
+        questionActive(newValue){
+            let bar = document.getElementById("bars")
+            if(newValue==false){
+                bar.style.top='-90%'
+            }
+        }
     }
 };
 </script>
 
 <style scoped>
-#sliderBox {
-    width: 80vw;
-    height: 5vh;
-    margin: auto;
-    background-color: #39A2DB;
-    position: relative;
-    border-radius: 0.5em;
-}
-
-#slider {
-    width: 20%;
-    height: 100%;
-    background-color: orange;
-    position: absolute;
-    left: 0; /* Startar vid vänsterkanten */
-    user-select: none;
-    border-radius: 0.5em;
-    display: flex;
-}
-#slider p {
-    margin: auto;
-    flex-direction: column;
+#bars{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url('/img/bars2.png');
+  background-size: cover;
+  background-position: center;
+  top:-90%;
+  z-index: 2;
 }
 </style>
