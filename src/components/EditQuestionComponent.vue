@@ -1,11 +1,10 @@
 <template>
     <div class="questionBoxes">
       <div v-if="question.isEditing">
-        <p>{{ uiLabels.editingQuestion + ' ' + (index + 1) }}</p>
+        {{ uiLabels.editingQuestion + ' ' + (index + 1) }}
         <input type="text" v-model="localQuestion.q" placeholder="Edit question" />
-        <p>Edit correct answer</p>
+        Edit answers
         <input type="text" v-model="localQuestion.a.correct" placeholder="Edit correct answer" id="editCorrectAnswerBox" />
-        <p>Edit wrong answers</p>
         <input
           v-for="(_, i) in localQuestion.a.wrong"
           :key="'editWrongAnswer' + index + i"
@@ -53,13 +52,14 @@
   display: block;
   flex-direction:column;
   align-items: center; 
-  gap: 20px; 
-  margin: 20px auto; 
-  width: 20vw; 
+  gap: 2%; 
+  margin: 1vh auto; 
+  width: 80%; 
+  max-width: 40vw;
   padding: 10px;
   cursor: pointer;
   font-size: 15px;
-  background-color: rgb(255, 136, 0, 0.5);
+  background-color: #0d1137;
   color: #fff;
   border-radius: 10px;
   text-align: center;
@@ -70,15 +70,19 @@
   width: 100%;
   font-size: 15px;
   padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
   border: none;
   border-radius: 5px;
   background-color: #cfcfcf;
   color:#1e084f;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  word-wrap: break-word; 
+  white-space: normal;
   text-align: center;
   box-sizing: border-box;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+
 }
 #editCorrectAnswerBox{
     color:rgb(0, 127, 4);
@@ -89,5 +93,8 @@
 
 .questionBoxes button{
     background-color: rgb(255, 136, 0);
+    color:#1e084f;
+    font-weight:bold;
+
 }
 </style>

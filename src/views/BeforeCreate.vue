@@ -5,7 +5,7 @@
     </router-link>
 
     <router-link to="/selectQuiz/">
-        <button class="selectQuizButton">{{ uiLabels.selectQuiz }}</button>
+        <button>{{ uiLabels.selectQuiz }}</button>
     </router-link>
     </div>
 </template>
@@ -52,8 +52,10 @@ export default {
   text-align: center;
   box-sizing: border-box; 
 }
-
-.makeQuizButton, .selectQuizButton{
+.makeQuizButton{
+  margin-top:25%;
+}
+button{
   border: none;
   cursor: pointer;
   margin-left: 10%; 
@@ -72,8 +74,7 @@ export default {
   text-decoration: none;
 }
 
-.makeQuizButton:hover, 
-.selectQuizButton:hover {
+button:hover {
   background-color: rgb(227, 122, 1);
   box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
   transform: scale(1.2); 

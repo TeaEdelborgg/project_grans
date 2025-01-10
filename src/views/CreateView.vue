@@ -2,7 +2,7 @@
   <div class="container">
     <div v-if = "!doneWithPoll">
       <header class="topSection">
-        <p class="showId">{{ uiLabels.pollId }} {{pollId}}</p>
+        <div class="showId">{{ uiLabels.pollId }} {{pollId}}</div>
         <button v-on:click="doneWithPoll=true" class="continueButton">
           {{ uiLabels.doneWithQuiz }}
         </button>
@@ -132,46 +132,53 @@ export default {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  width: 100vw;
+  max-width: 100vw;
   color:#cfcfcf;
   background: linear-gradient(135deg, #0a0347, #3c298f);
   /*background-attachment: fixed;*/
   background-size: cover;
   text-align: center;
   box-sizing: border-box;
+  overflow-x:hidden;
 }
 
 .topSection {
-  display: flex;
-  align-items: center; 
-  position: relative; 
-  margin-top:55px;
+  display: flex; 
+  flex-wrap: wrap; 
+  justify-content: center; 
+  align-items: center;
+  position: relative;
+  margin-top: 20vh;
+  margin-bottom: 0vh;
+  gap: 1vh; 
 }
 
 .showId {
-  justify-content:center;
   font-size: 20px;
   font-weight: bold;
   color:#000;
   background-color: #cfcfcf;
   border-radius: 10px;
   padding: 10px 20px;
-  position: absolute; 
   align-items: middle;
+  align-self:left;
+  margin-right:10vw;
 }
 
 .continueButton {
-  position: absolute;
-  right: 0vw;
+  margin-left:10vw;
+  align-self: right;
   border: none;
   cursor: pointer;
   font-size: 20px;
+  font-weight:bold;
   background-color: rgb(255, 136, 0);
-  color: #fff;
+  color: #1e084f;
   border-radius: 10px;
   padding: 10px 20px;
   box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+
 }
 
 
@@ -181,8 +188,9 @@ export default {
   transform: scale(1.2);
 }
 
+h1{margin:1vh}
 h3{
-  margin-top:5vh;
+  margin-top:2vh;
 }
 
 
@@ -203,12 +211,13 @@ h3{
   margin-right: 5vw;
   margin-top: 10vh;
   font-size: 20px;
+  font-weight:bold;
   background-color: rgb(255, 136, 0);
-  color: #fff;
+  color: #1e084f;
   border-radius: 10px;
   padding: 10px 20px;
   box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
   text-align: center;
 }
 
@@ -223,6 +232,7 @@ h3{
   justify-content:center;
   flex-direction:column;
   font-size: 20px;
+  font-weight:bold;
   color: #fff;
   text-align: center;
 }
@@ -232,11 +242,11 @@ h3{
   margin: 5% ;
   font-size: 20px;
   background-color: rgb(255, 136, 0);
-  color: #fff;
+  color: #1e084f;
   border-radius: 10px;
   padding: 10px 20px;
   box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
   text-align: center;
 }
 .startPollButton button:hover{
