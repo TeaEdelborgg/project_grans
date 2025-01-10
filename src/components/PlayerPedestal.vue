@@ -1,9 +1,9 @@
 <template> 
       <div class="pedestal">
         <div id="circle" :style="{
-          background: player.information.answers[questionNumber]!=null && questionActive ? 'lightyellow' : 'radial-gradient(circle at bottom, #8f8f8f, #4f4f4f', 
-          boxShadow: player.information.answers[questionNumber]!=null && questionActive ? '0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.5)': 'none',
-          borderColor: player.information.answers[questionNumber]!=null && questionActive ? 'lightyellow':'black'
+          background: lightPedestal && questionActive ? 'lightyellow' : 'radial-gradient(circle at bottom, #8f8f8f, #4f4f4f', 
+          boxShadow: lightPedestal && questionActive ? '0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.5)': 'none',
+          borderColor: lightPedestal && questionActive ? 'lightyellow':'black'
           }"></div>
           <div class="playerpedestalTest" :style="{background: 'linear-gradient(to right, '+player.information.color+' 0%, #c0c0c0 45% 55%, '+player.information.color+' 100%)' }"> 
         <div id="nameBox" :style="{boxShadow: player.information.in ? '0 0 10px rgba(255, 255, 255, 0.5)': '0 0 0 0'}"> 
@@ -29,7 +29,8 @@ export default {
     player: Object,
     questionActive:Boolean,
     questionNumber:Number,
-    uiLabels: Object
+    uiLabels: Object,
+    lightPedestal: Boolean
   },
   data: function(){
     return{

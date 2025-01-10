@@ -25,7 +25,8 @@
         "timerBeforeQuestion":{"timeLeft":3, "interval":null},    
         "allCorrectedAnswers": {},   
         "moneyBoxes": [], 
-        "started": false  
+        "started": false,
+        "pedestalLight":[]
     },
     "quiz2": {
         "lang": "sv",

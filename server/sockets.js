@@ -57,6 +57,7 @@ function sockets(io, socket, data) {
   socket.on('startPoll', function(pollId) {
     data.getQuestionAmount(pollId);
     data.setAnswersFalse(pollId);
+    data.setPedestalLightFalse(pollId);
     data.createBoxes(pollId);
     /*data.polls[pollId].started = true;*/
     io.to(pollId).emit('startPoll');
@@ -90,8 +91,11 @@ function sockets(io, socket, data) {
 
   socket.on('submitAnswer', function(d) { // körs när man skickar in sitt svar
     data.submitAnswer(d.pollId, d.questionNumber, d.answer, d.userId, d.time);
-    io.to(d.pollId).emit('updatePedestalPlayer', data.getParticipants(d.pollId));
-    io.to(d.pollId).emit('participantsUpdate', data.getParticipants(d.pollId));
+    let updatePedestal = data.updatePedestalPlayer(d.pollId, d.userId)
+    let participant=data.getParticipants(d.pollId)
+    console.log("socket, pedestalLight: ", updatePedestal)
+    io.to(d.pollId).emit('updatePedestalPlayer', updatePedestal); //gör om till egen
+    io.to(d.pollId).emit('participantsUpdate', participant);
 
     data.newCheckUserAnswer(d.pollId,d.questionNumber,d.userId); // uppdaterar data med det nya svaret
     //console.log('submitAnswer i socket har kört')
@@ -112,8 +116,9 @@ function sockets(io, socket, data) {
   socket.on('runCountdown', function(d){
     let randomOrder = data.getQuestionAnswerRandom(d.pollId, d.questionNumber);
     let correctAnswer = data.getCorrectAnswer(d.pollId, d.questionNumber)
+    let pedestalLight = data.resetPedestalLight(d.pollId)
     io.to(d.pollId).emit('startCountdownPlayer', {q:randomOrder, questionNumber:d.questionNumber});
-    io.to(d.pollId).emit('startCountdownResults',{q:randomOrder,questionNumber:d.questionNumber, correctAnswer:correctAnswer}); //lägg till det rätta svaret också
+    io.to(d.pollId).emit('startCountdownResults',{q:randomOrder,questionNumber:d.questionNumber, correctAnswer:correctAnswer, pedestalLight:pedestalLight}); //lägg till det rätta svaret också
     io.to(d.pollId).emit('currentQuestionUpdate', d.questionNumber);
   });
 
@@ -133,8 +138,9 @@ function sockets(io, socket, data) {
     const levelValues = data.getLevelValues(pollId)
     const levelColors = data.updateLevelBoxes(pollId)
     const participants = data.getParticipants(pollId)
+    const pedestalLight = data.getPedestalLight(pollId)
     // console.log("försöker skicka levelCOlor")
-    io.to(pollId).emit('loadStats', {amountOfQuestions:amountOfQuestions, levelValues:levelValues, levelColors:levelColors, participants:participants}) //skicka som object
+    io.to(pollId).emit('loadStats', {amountOfQuestions:amountOfQuestions, levelValues:levelValues, levelColors:levelColors, participants:participants, pedestalLight:pedestalLight}) //skicka som object
   });
 
   socket.on('getStartColors', function(pollId){

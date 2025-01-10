@@ -10,7 +10,7 @@
 
     <div class="adminButtons">
       <router-link v-bind:to="'/admin/' +pollId" >
-        <button :disabled="!openResult" v-on:click="startPoll">admin View
+        <button :disabled="!openResult" v-on:click="startPoll">{{ uiLabels.adminView }}
         </button>
       </router-link>
       <router-link
@@ -19,10 +19,10 @@
         v-slot="{ href }"
       >
         <a :href="href" target="_blank">
-          <button v-on:click="enableAdminButton">Show on board</button>
+          <button v-on:click="enableAdminButton">{{ uiLabels.showBoard }}</button>
         </a>
       </router-link>
-      <p>Let all participants join before clicking the admin button!</p>
+      <p>{{ uiLabels.letParticipantsJoin }}</p>
       <!--<router-link v-bind:to="'/result/' + pollId">
         <button v-on:click="startPoll">Check result</button>
       </router-link>-->
@@ -48,12 +48,12 @@
 
       <div :class="['overlay', {show:gameRules}]" v-on:click="closeGameRules"></div>
       <div :class="['RulesPopup', {show:gameRules}]">
-        <h4>Instructions:</h4>
-          <li>Open the Show on board button to show the Poll ID to the players and ask them to join the lobby.</li>
-          <li>The game will play on the 'show on board page'.</li>
-          <li>Make sure all participants has joined the lobby before clicking admin button.</li>
-          <li>After everyone has joined the lobby: Click the admin button to administrate the game.</li>
-          <h2>Good Luck!</h2>
+        <h4>{{uiLabels.Instructions}}</h4>
+          <li>{{ uiLabels.instructLi1 }}</li>
+          <li>{{ uiLabels.instructLi2 }}</li>
+          <li>{{ uiLabels.instructLi3 }}</li>
+          <li>{{ uiLabels.instructLi4 }}</li>
+          <h2>{{ uiLabels.goodluck }}</h2>
 
 
         <button @click="closeGameRules">X</button>
@@ -202,6 +202,7 @@ h4 {
   width: 130px;
   height:30px;
   text-decoration: none;
+  font-weight: bold;
 }
 
 .adminButtons button:hover{

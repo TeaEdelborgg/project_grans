@@ -74,5 +74,14 @@
 	"losers": "The losers are..",
 	"returnHomeButton": "Return to home page",
 	"congratsWon": "Congrats you won",
-	"betterLuck": "Better luck next time"
+	"betterLuck": "Better luck next time",
+	"adminView": "Admin View",
+	"showBoard": "Show on board",
+	"letParticipantsJoin": "Let all participants join before clicking the admin button!",
+	"Instructions": "Instructions",
+	"instructLi1": "Open the 'Show on board' button to show the Poll ID to the players and ask them to join the lobby.",
+	"instructLi2": "The game will play on the 'show on board page'.",
+	"instructLi3": "Make sure all participants has joined the lobby before clicking admin button.",
+	"instructLi4": "After everyone has joined the lobby: Click the admin button to administrate the game.",
+	"goodluck": "Good Luck!"
 }

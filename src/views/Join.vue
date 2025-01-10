@@ -110,6 +110,7 @@ button {
   transition: background-color 0.3s ease; 
   width: 220px;
   text-decoration: none;
+  font-weight: bold;
 }
 
 button:hover {

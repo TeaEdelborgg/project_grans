@@ -74,5 +74,14 @@
 	"losers": "Förlorarna är..",
 	"returnHomeButton": "Gå tillbaka till start sidan",
 	"congratsWon": "Grattis du vann",
-	"betterLuck": "Bättre lycka nästa gång"
+	"betterLuck": "Bättre lycka nästa gång",
+	"adminView": "Admin Vyn",
+	"showBoard": "Visa på skärm",
+	"letParticipantsJoin": "Låt alla deltagare gå med innan du klickar på admin-knappen!",
+	"Instructions": "Instruktioner",
+	"instructLi1": "Öppna knappen 'Visa på skärm' för att visa Poll-ID för spelarna och be dem gå med i lobbyn.",
+	"instructLi2": "Spelet kommer att spelas på 'Visa på skärm' sidan för deltagarna.",
+	"instructLi3": "Se till att alla deltagare har gått med i lobbyn innan du klickar på admin-knappen.",
+	"instructLi4": "När alla har gått med i lobbyn: Klicka på admin-knappen för att administrera spelet.",
+	"goodluck": "Lycka Till!"
 }

@@ -16,11 +16,12 @@
     </div> 
     <br>
     <div id="pedestaler">
-      <PlayerPedestal v-if="participants.length>0" v-for="player in participants" 
+      <PlayerPedestal v-if="participants.length>0 && pedestalLight?.length>0" v-for="(player,index) in participants" 
         v-bind:questionNumber="questionNumber" 
         v-bind:uiLabels="uiLabels" 
         v-bind:player="player" 
         v-bind:questionActive="questionActive"
+        v-bind:lightPedestal="pedestalLight?.[index]"
         :key="player.id" />
     </div>
   </div>
@@ -58,7 +59,8 @@ export default {
       moneyBoxes:[],
       moneyValues:[],
       questionNumber:0,
-      correctAnswer:''
+      correctAnswer:'',
+      pedestalLight:[]
     }
   },
   created: function () {
@@ -66,7 +68,7 @@ export default {
     socket.on( "uiLabels", labels => this.uiLabels = labels );
 
     socket.on( "updatePedestalPlayer", p => { 
-      this.participants = p;
+      this.pedestalLight = p;
     })
 
     socket.on("updateAfterQuestion", d=>{ 
@@ -79,6 +81,7 @@ export default {
       this.questionNumber=data.questionNumber
       this.correctAnswer=data.correctAnswer
       this.questionActive=true
+      this.pedestalLight=data.pedestalLight
       console.log("question true: ", this.questionActive)
     });
     socket.on('loadStats', d => {
@@ -86,6 +89,7 @@ export default {
       this.moneyValues = d.levelValues
       this.moneyBoxes = d.levelColors
       this.participants= d.participants
+      this.pedestalLight= d.pedestalLight
     })
 
     socket.on('gameFinished', ()=>
