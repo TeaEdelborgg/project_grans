@@ -102,15 +102,14 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh; 
-  min-width: 100vw; 
+  max-width: 100vw; 
   color:#cfcfcf;
   background: linear-gradient(135deg, #0a0347, #3c298f); 
   background-attachment: fixed; 
   background-size: cover;
   text-align: center;
   box-sizing: border-box; 
-  overflow: hidden;
-
+  overflow-x:hidden;
 }
 
 button{
@@ -134,7 +133,10 @@ button:hover {
 }
 
 h1{
-  margin-top:5vh;
+  margin: 15vh 10vw 5vh; 
+  word-wrap: break-word; 
+  white-space: normal;
+  text-align: center; 
 }
 
 .pollButtons {
@@ -177,15 +179,19 @@ h1{
 .questionBoxes{
   display: block; 
   justify-content: center;
-  margin: 3vh 40vw 3vh;
+  margin: 3vh auto;
   font-size: 15px; 
-  background-color: rgb(255, 136, 0, 0.4);
-  color: #1e084f; 
+  width: 80%; /* Restrict width to a percentage of the container */
+  max-width: 50vw;
+  background-color: #1e084f;
+  color: #cfcfcf; 
   border-radius: 10px; 
   box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1); 
   transition: background-color 0.3s ease; 
   padding: 1vh 1.5vw;
-  text-align: center;
+  word-wrap: break-word; 
+  white-space: normal;
+  text-align: center; 
   box-sizing: border-box;
 }
 

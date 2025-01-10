@@ -73,46 +73,51 @@
   </script>
 
 <style>
-::placeholder{
-  
+
+::placeholder {
+  color:#000;
+  opacity:70%;
+  font-style: italic;
 }
+
 .addButton {
   border: none;
   cursor: pointer;
   font-size: 20px;
+  font-weight:bold;
   background-color: rgb(255, 136, 0);
-  color: #fff;
+  color: #1e084f;
   border-radius: 10px;
   padding: 10px 20px;
   box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
+
 .addButton:hover {
   background-color: rgb(227, 122, 1);
   box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
   transform: scale(1.2);
 }
-.questionBox{
-  font-size: 20px;   
-  color: #1e084f;
+
+.questionBox {
+  font-size: 20px;
+  color: #000;
   background-color: #cfcfcf;
-  border-radius: 10px; 
+  border-radius: 10px;
   border: none;
-  cursor: pointer;
-  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1); 
-  transition: background-color 0.3s ease; 
+  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
   width: 48vw;
-  height:10vh;
+  height: 10vh;
   text-align: center;
 }
+
 .answerBoxes {
-  display: grid; 
-  grid-template-columns: repeat(2, 1fr); 
-  gap: 20px; 
-  margin: 10px auto; 
-  width: 50vw; 
-  padding: 10px; 
-  border: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2vh 1vw;
+  margin: 1vh auto;
+  width: 50vw;
+  padding: 10px;
   font-size: 15px;
   border-radius: 10px;
   text-align: center;
@@ -120,23 +125,23 @@
 }
 
 .answerBoxes input {
-  width: 100%; 
+  width: 100%;
   padding: 30px;
   font-size: 20px;
   border: none;
-  background-color: #cfcfcf;
-  /*color: #1e084f;*/
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
   box-sizing: border-box;
 }
-.correctAnswerBox{
-    /*background-color:rgb(160, 254, 163);*/
-  color: rgb(1, 115, 5);
+
+.correctAnswerBox,
+.correctAnswerBox::placeholder {
+  color: rgb(28, 102, 30);
 }
-.wrongAnswerBox{
-    /*background-color: rgb(253, 125, 127);*/
-  color: rgb(139, 0, 2);
+
+.wrongAnswerBox,
+.wrongAnswerBox::placeholder {
+  color: rgb(143, 21, 23);
 }
 </style>
