@@ -15,9 +15,6 @@
               <div class="line"></div>
             </div>
             <br>
-            <div v-if="showQuestion && questionActive==false">
-              <h1>{{timeLeftBeforeAnswers}}</h1>
-            </div>
             <div v-if="questionActive" id="rectangleContainer">
               <div v-for="(a,index) in question.a" class="testRect" id="a">
                 <div class="line"></div>
@@ -32,7 +29,9 @@
           <div v-if="!showQuestion">
             <SpeakBubble v-bind:uiLabels="uiLabels" v-bind:timeLeftBeforeQuestion="timeLeftBeforeQuestion"></SpeakBubble>
           </div>
-          <!--v-if inte aktiv-->
+          <div v-if="showQuestion && questionActive==false">
+              <h1>{{timeLeftBeforeAnswers}}</h1>
+          </div>
         </div>
 </template>
     
@@ -94,13 +93,8 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
             socket.on('resetTime', () => {
               timeLeftTest=0;
               endQuestion=true;
-              this.showCorrectAnswer=true
-              this.percentage=0;
-              setTimeout(()=>{
-                console.log('kör clearInterval resetTimer')
-                clearInterval(interval)
-                this.$emit("countDownOverSend")
-              },1000)
+              this.endCountdown()
+              clearInterval(interval)
             })
             if (timeLeftTest > timerQuestion) {
               this.timeLeftBeforeQuestion = Math.floor((4000 - elapsedTime)/1000); //uppdaterar inte?
@@ -113,17 +107,20 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
               this.percentage = Math.floor((timeLeftTest) / 100);
             }
             else {
-              this.showCorrectAnswer=true
-              this.percentage=0;
-              setTimeout(()=>{
-                console.log('kör clearInterval orginal')
-                clearInterval(interval)
-                this.$emit("countDownOverSend")
-              },1000)
+              this.endCountdown()
+              clearInterval(interval)
             }
             }
           }, 100);  
         },
+        endCountdown: function(){
+          this.showCorrectAnswer=true
+          this.percentage=0;
+          setTimeout(()=>{
+                console.log('kör clearInterval orginal')
+                this.$emit("countDownOverSend")
+              },1000)
+        }
       }
     }
 </script>
@@ -140,7 +137,6 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
   
 }
 .testRect{
-  flex:1;
   display: flex;
   flex-direction: column;
   align-content: center;
@@ -154,8 +150,7 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
   box-shadow: 0 0 5px lightyellow;
 }
 .rectangle h3{
-  align-content: center;
-  justify-content: center;
+  margin:0;
   color: white;
 }
 .rectangle p{
@@ -173,7 +168,7 @@ import SpeakBubble from '@/components/SpeakBubble.vue';
   height: 40%;
   display: grid;
   grid-template-columns: 50% 50%;
-  grid-row: auto auto;
+  grid-row: 50% 50%;
   justify-content: center;
   position:absolute;
   margin: auto;

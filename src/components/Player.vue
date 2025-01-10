@@ -1,7 +1,7 @@
 <template>
   <div id="player">
     <div id="pile" :style="{
-      background: 'linear-gradient(to right, '+player.information.color+', #c0c0c0, '+player.information.color+')', 
+      background: 'linear-gradient(to right, '+player.information.color+' 0%, #c0c0c0 45% 55%, '+player.information.color+' 100%)', 
       height: calculateHeight(),
       filter: player.information.in==false ? 'brightness(50%)':'none'
       }">
