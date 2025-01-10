@@ -104,7 +104,7 @@ export default {
       this.checkForDisabledColors(); 
     });
     socket.on("startPoll", () =>
-      this.$router.push("/poll/" + this.pollId + "/" + this.userID)
+      this.$router.push("/player/" + this.pollId + "/" + this.userID)
     );
     socket.on("colorSelectionUpdate", (updatedParticipants) => {
       this.participants = updatedParticipants;
