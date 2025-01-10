@@ -1,15 +1,13 @@
 <template>
   <div class="player-background">
-    <div class="playerView">
-      <div id="upperHalf">
-        <div class="player-statistics">
-        <div class="player-hearts"> Liv:
-          <img :src="this.userStats?.information?.lives>=1 ? '/img/hjartaRod.png':'/img/hjartaGro.png'" class="heart">
-          <img :src="this.userStats?.information?.lives>=2 ? '/img/hjartaRod.png':'/img/hjartaGro.png'" class="heart">
-        </div>
-        <div class="player-time">Tid: {{ this.userStats?.information?.time }} sekunder </div>
+    <div id="upperHalf">
+      <div class="player-statistics">
+      <div class="player-hearts">
+        <img :src="this.userStats?.information?.lives>=1 ? '/img/hjartaRod.png':'/img/hjartaGro.png'" class="heart">
+        <img :src="this.userStats?.information?.lives>=2 ? '/img/hjartaRod.png':'/img/hjartaGro.png'" class="heart">
       </div>
-      </div>
+      <div class="player-time">{{ this.userStats?.information?.time }} s </div>
+    </div>
 
     </div>
     <div>
@@ -48,7 +46,6 @@ export default {
       questionNumber: null,
       questionActive: false,
       usedFiftyFiftyThisRound: false,
-      usedAskAudienceThisRound: false, // denna kanske ej behövs?
     }
   },
   created: function () {
@@ -90,35 +87,34 @@ export default {
 <style scoped>
 #bottomHalf{
   width: 100%;
-  background-color: black;
+  background: radial-gradient(#1a237e, #0d1137);
   height: 20%;
   position: absolute;
   bottom: 0;
 }
 #upperHalf{
   width: 100%;
-  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(#1a237e, #0d1137);
   height: 20%;
   position: absolute;
   top: 0;
   z-index: 3;
 }
 .player-background {
-  background-color: #001F3F;
   color: #FFFFFF;
   position: fixed;
   width: 100%;
   height: 100%;
 }
 .player-statistics {
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2%;
-  padding: 2%;
-  height: 50%;
-  background-color: black;
+  padding-top: 2vh;
+  padding-bottom: 2vh;
 }
 .player-hearts {
   display: flex;
@@ -131,7 +127,10 @@ export default {
   margin: 5%;
 }
 .player-time {
-  border: 2px solid #cdcdcd;
+  font-size: 2em;
+  font-weight: bold;
+  color: #f9ac33;
+  margin: 0 5vw 0 5vw;
 }
 .help-buttons {
   display: flex;
@@ -139,13 +138,13 @@ export default {
   align-items: center;
 }
 .life-line {
-  height: 5vh;
-  margin: 5%;
-  border: 5px solid #cdcdcd;
+  width: 15vh;
+  margin: 1vh 1vw 1vh 1vw;
+  border: 5px solid #be8426;
   border-radius: 50%;
 }
 .life-line.dimmed {
-  border: 5px solid #454545;
+  border: 5px solid #825b1c;
   filter: brightness(50%);
 }
 </style>

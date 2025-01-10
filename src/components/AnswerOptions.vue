@@ -4,7 +4,7 @@
         v-bind:sent="sent"
         v-bind:seeAlternatives="seeAlternatives"
         v-bind:questionActive="questionActive"/>
-    <div id="container" v-if="questionActive || seeAlternatives" class="answeralternatives">
+    <div id="container" v-if="questionActive || seeAlternatives" class="answeralternatives"> <!-- v-if="questionActive || seeAlternatives" -->
       <div class="timerBarContainer">
         <div class="timerBar" :style="{ width: percentage + '%' }"></div>
       </div>
@@ -244,11 +244,13 @@ export default {
   height: 100%;
   /*background: linear-gradient(#393a93, #7bb0f3, #393a93); */
   background-color: #101c3e;
-  color:white;
+  color:#e3e3e3;
   clip-path: polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%);
   align-content: center;
   justify-content: center;
   position: relative;
+  font-size: 1.2em;
+  font-weight: bold;
 }
 .borderRect{
   clip-path: polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%);
@@ -260,40 +262,38 @@ export default {
   box-shadow: 0 0 5px lightyellow;
 }
 .selected {
-  background-color: #FF5700;
-  border-color: #FF5700;
-  color: white; 
+  background-color: #f9ac33;
+  border-color: #ffa618;
+  color: #e3e3e3; 
 }
 .sended {
-  background-color: #FFAD66; 
-  border-color: #FFAD66;
-  color: white; 
+  background-color: #ff8f2d; 
+  border-color: #ca7022;
+  color: #e3e3e3; 
 }
 .showCorrect {
-  background-color: #2ECC40; 
-  border-color: #2ECC40;
-  color: white;
+  background-color: #56c763; 
+  border-color: #36ce47;
+  color: #e3e3e3;
 }
 .showIncorrect {
-  background-color: #FF4136; 
+  background-color: #fd4d47; 
   border-color: #FF4136;
-  color: white;
+  color: #e3e3e3;
 }
 .showAudienceAnswer {
-  background-color: yellow;
+  background-color: rgb(107, 124, 255);
   color: black;
-}
-.submitbutton {
-  width: 80vw;
 }
 button:disabled {
   background-color: grey;
+  border-color: rgb(95, 95, 95);
 }
 .timerBarContainer {
   width: 95%; 
   /*height: 20px;*/
   height: 5%;
-  background-color: white;
+  background-color: #e3e3e3;
   border-radius: 10px;
   overflow: hidden;
   /*margin: 3vh 0;*/
@@ -314,7 +314,7 @@ button:disabled {
   width: 100%;
   height: 60%;
   top:20%;
-  background: linear-gradient(45deg,#0f131f, #3a3790, #0f131f);
+  background: radial-gradient(#1a237e, #0d1137);
   z-index: 0;
 }
 </style>
