@@ -3,21 +3,21 @@
       <input 
         type="text" 
         v-model="newQuestion.q" 
-        placeholder="Enter the question" 
+        :placeholder="uiLabels.enterQuestion"
         class="questionBox"
       />
       
       <div class="answerBoxes">
         <input 
           v-model="newQuestion.a.correct" 
-          placeholder="Enter correct answer" 
+          :placeholder="uiLabels.correctAnswer" 
           class="correctAnswerBox" 
         />
         <input 
           v-for="(_, index) in newQuestion.a.wrong" 
           :key="'wrongAnswer' + index" 
           v-model="newQuestion.a.wrong[index]" 
-          placeholder="Enter wrong answer" 
+          :placeholder="uiLabels.wrongAnswer" 
           class="wrongAnswerBox"
         />
       </div>
@@ -25,8 +25,7 @@
       <button 
         @click="addQuestion" 
         :disabled="isAddDisabled" 
-        class="addButton"
-      >
+        class="addButton">
         {{ uiLabels.addQuestion }}
       </button>
     </div>
