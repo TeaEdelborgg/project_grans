@@ -10,14 +10,14 @@
       <div class="answerBoxes">
         <input 
           v-model="newQuestion.a.correct" 
-          :placeholder="uiLabels.correctAnswer" 
+          :placeholder="uiLabels.enterCorrectAnswer" 
           class="correctAnswerBox" 
         />
         <input 
           v-for="(_, index) in newQuestion.a.wrong" 
           :key="'wrongAnswer' + index" 
           v-model="newQuestion.a.wrong[index]" 
-          :placeholder="uiLabels.wrongAnswer" 
+          :placeholder="uiLabels.enterWrongAnswer" 
           class="wrongAnswerBox"
         />
       </div>
