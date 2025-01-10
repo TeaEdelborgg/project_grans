@@ -69,6 +69,7 @@ Data.prototype.createPoll = function(pollId, lang="en") {
     poll.moneyBoxes = []; 
     poll.started = false;  
     poll.scoreBoard = []; 
+    poll.pedestalLight = [];
     this.polls[pollId] = poll;
     console.log("poll created", pollId, poll);
   }
@@ -234,6 +235,19 @@ Data.prototype.submitAnswer = function(pollId, questionNumber, answer, userId, t
     
     console.log(user.information.answers, 'lyckades i submit answer')
   }
+
+}
+Data.prototype.updatePedestalPlayer = function(pollId, userId){
+  if(this.pollExists(pollId)){
+    let particpants = this.polls[pollId].participants
+    console.log('participants: ',particpants)
+    let userIds = particpants.map((particpant)=>particpant.userId)
+    let index= userIds.indexOf(Number(userId))
+    console.log(userIds, index)
+    this.polls[pollId].pedestalLight[index] = true
+    return this.polls[pollId].pedestalLight
+  }
+  return []
 }
 
 Data.prototype.newCheckUserAnswer = function(pollId, qId, userId) {
@@ -304,6 +318,23 @@ Data.prototype.setAnswersFalse = function(pollId){
       user.information.answers = new Array(this.polls[pollId].questionAmount).fill([null, 0])
       //console.log("setFalse: ", user.information.answers)
     }
+  }
+}
+
+Data.prototype.setPedestalLightFalse = function(pollId){
+  if(this.pollExists(pollId)){
+      this.polls[pollId].pedestalLight = new Array(this.polls[pollId].participants.length).fill(false)
+  }
+}
+Data.prototype.getPedestalLight = function(pollId){
+  if(this.pollExists(pollId)){
+    return this.polls[pollId].pedestalLight
+  }
+}
+Data.prototype.resetPedestalLight = function(pollId){
+  if(this.pollExists(pollId)){
+    this.polls[pollId].pedestalLight=this.polls[pollId].pedestalLight.map(()=>false)
+    return this.polls[pollId].pedestalLight
   }
 }
 
