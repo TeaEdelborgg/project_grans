@@ -37,7 +37,6 @@
         <button id="goBack" v-on:click="doneWithPoll = false">{{ uiLabels.goBack }} </button>
           <router-link v-bind:to="'/adminLobby/' +pollId">
             <button> {{ uiLabels.startPoll }}</button>
-          <!--<button v-on:click="startPoll">{{uiLabels.startPoll}}</button>-->
           </router-link>
       </div>
     </div>
@@ -92,7 +91,7 @@ export default {
   },
   methods: {
     generatePollId() {
-      return Math.random().toString(36).substring(2, 10).toUpperCase();
+      return Math.random().toString(36).substring(2, 8).toUpperCase();
     },
     createPoll() {
       this.pollId = this.generatePollId();
@@ -118,9 +117,6 @@ export default {
         questionToUpdate: updatedQuestion,
       });
     },
-    /*startPoll() {
-      socket.emit("startPoll", this.pollId);
-    },*/
   },
 };
 </script>
@@ -135,7 +131,6 @@ export default {
   max-width: 100vw;
   color:#cfcfcf;
   background: linear-gradient(135deg, #0a0347, #3c298f);
-  /*background-attachment: fixed;*/
   background-size: cover;
   text-align: center;
   box-sizing: border-box;
@@ -254,6 +249,5 @@ h3{
   box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
   transform: scale(1.2);
 }
-
 
 </style>
