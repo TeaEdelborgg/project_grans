@@ -2,7 +2,7 @@
     <div id="podiumContainer">
         <div v-for="n in 3" class="podium" :style="{height: n==2 ? '50%':'30%'}">
             <h3 v-if="showNameWinners[n-1] && winners[n-1]!=null" :style="{
-                top: n==2 ? '-11%':'-18%'}" > 
+                top: n==2 ? '-13%':'-23%'}" > 
                 {{ winners[n-1].information.name }}</h3>
             <h1 :style="{
                 color: n==1 ?'#C0C0C0': n==2?'#FFD700':n==3?'#cd7f32':'none', 
