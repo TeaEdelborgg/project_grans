@@ -1,22 +1,22 @@
 <template>
   <div class="admin">
-    <h1>Admin Panel</h1>
+    <h1>{{uiLabels.adminPanel}}</h1>
     <section class="game-status">
-      <h2>Spelstatus</h2>
+      <h2>{{uiLabels.gameStatus}}</h2>
       <div>
-        <p>Antal svar inkommna: {{ numberPlayersAnswered }}/{{ numberPlayers }}</p>
-        <p>Nuvarande fråga: {{ pollData.currentQuestion + 1 }}/{{ pollData.questionAmount }}</p>
+        <p>{{uiLabels.numberOfAnswers + numberPlayersAnswered }}/{{ numberPlayers }}</p>
+        <p>{{uiLabels.currentQuestion + (pollData.currentQuestion + 1) }}/{{ pollData.questionAmount }}</p>
       </div>
       <div class="questions">
-        <button class="game-button" @click="toggleQuestions">Visa frågor och svar</button>
+        <button class="game-button" @click="toggleQuestions">{{uiLabels.viewQuestionsAnswers}}</button>
         <div class="popup" v-if="showQuestions" @click.self="toggleQuestions">
           <div class="popup-questions-content">
             <button class="close-button" @click="toggleQuestions">x</button>
-            <h3>Frågor och svar</h3>
+            <h3>{{uiLabels.questionsAnswers}}</h3>
             <li v-for="(question, index) in pollData.questions" :key="index">
-              <strong>Fråga {{ index + 1 }}:</strong> {{ question.q }}<br>
-              <strong>Rätt svar:</strong> {{ question.a.correct }}<br>
-              <strong>Fel svar:</strong> {{ question.a.wrong.join(', ') }}<br><br>
+              <strong>{{ uiLabels.question + (index + 1) }}:</strong> {{ question.q }}<br>
+              <strong>{{uiLabels.correctAnswer}}</strong> {{ question.a.correct }}<br>
+              <strong>{{uiLabels.wrongAnswer}}</strong> {{ question.a.wrong.join(', ') }}<br><br>
             </li>
           </div>
         </div>
@@ -24,29 +24,29 @@
     </section>
 
     <section class="game-controls">
-      <h2>Styr spelet</h2>
-      <button class="game-button" v-if="pollData.currentQuestion == -1" @click="runQuestion">Starta Spel</button>
+      <h2>{{uiLabels.controlGame}}</h2>
+      <button class="game-button" v-if="pollData.currentQuestion == -1" @click="runQuestion">{{uiLabels.startGame}}</button>
       <button class="game-button" v-else-if="pollData.currentQuestion + 1 != pollData.questionAmount && canStartNextQuestion" 
         @click="runQuestion">
-        Nästa fråga
+        {{uiLabels.nextQuestion}}
       </button>
       <button class="game-button" v-else-if="!canStartNextQuestion" 
         @click="endQuestion">
-        Avsluta aktuell fråga
+        {{uiLabels.finishQuestion}}
       </button> 
       <button class="game-button" v-else 
         @click="finishGame">
-        Visa slutresultat
+        {{uiLabels.ViewFinalResults}}
       </button>
     </section> <br>
 
     <section class="participant-controls"> <!-- lägga in för att kunna ta bort spelare här? -->
-      <h2>Spelare</h2>
+      <h2>{{uiLabels.players}}</h2>
       <div class="participants"> 
         <div class="one-participant" v-for="(participant, index) in pollData.participants" :key="index"> 
           <p class="player-name">{{ participant.information.name }}</p> <!-- sätta som p ist? -->
           <hr>
-          <div v-if="pollData.currentQuestion == -1">Answer</div>
+          <div v-if="pollData.currentQuestion == -1">{{uiLabels.answer}}</div>
           <div v-else-if="participant.information.answers?.[pollData.currentQuestion]?.[0] == null">
             <div class="loading-dots">
               <div class="animatedDots"></div><div class="animatedDots"></div><div class="animatedDots"></div>
@@ -60,17 +60,17 @@
     </section>
 
     <section class="end-game">
-      <button class="game-button" @click="toggleEndGame">Avsluta spelet tidigare?</button>
+      <button class="game-button" @click="toggleEndGame">{{uiLabels.finishEarly}}</button>
       <div class="popup" v-if="showEndGame" @click.self="toggleEndGame">
         <div class="popup-end-game-content">
           <p>Är du säker?</p>
-          <button class="continue-button" @click="toggleEndGame">fortsätt spel</button>
-          <button class="end-button" @click="finishGame">avsluta spel</button>
+          <button class="continue-button" @click="toggleEndGame"></button>
+          <button class="end-button" @click="finishGame"></button>
         </div>
       </div>
     </section>
     
-    <router-link v-bind:to="'/result/' + pollId">Check result</router-link>
+    <router-link v-bind:to="'/result/' + pollId">{{uiLabels.checkResult}}</router-link>
     
   </div>
 </template>
