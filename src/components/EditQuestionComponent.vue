@@ -2,14 +2,14 @@
     <div class="questionBoxes">
       <div v-if="question.isEditing">
         {{ uiLabels.editingQuestion + ' ' + (index + 1) }}
-        <input type="text" v-model="localQuestion.q" placeholder="Edit question" />
-        Edit answers
-        <input type="text" v-model="localQuestion.a.correct" placeholder="Edit correct answer" id="editCorrectAnswerBox" />
+        <input type="text" v-model="localQuestion.q" :placeholder="uiLabels.enterQuestion" />
+        {{ uiLabels.editAnswer }}
+        <input type="text" v-model="localQuestion.a.correct" :placeholder="uiLabels.correctAnswer" id="editCorrectAnswerBox" />
         <input
           v-for="(_, i) in localQuestion.a.wrong"
           :key="'editWrongAnswer' + index + i"
           v-model="localQuestion.a.wrong[i]"
-          placeholder="Edit wrong answer"
+          :placeholder="uiLabels.wrongAnswer"
           id="editWrongAnswerBox"
         />
         <button @click="saveQuestion">{{ uiLabels.saveQuestion }}</button>
@@ -17,7 +17,7 @@
       <div v-else>
         <p>{{ uiLabels.question + " " + (index + 1) + ": " + question.q }}</p>
         <p>{{ uiLabels.correctAnswer + ": " + question.a.correct }}</p>
-        <p>{{ uiLabels.wrongAnswer + ": " + question.a.wrong }}</p>
+        <p>{{ uiLabels.wrongAnswer + ": " + question.a.wrong + question.a.wrong.join(', ') }}</p>
         <button @click="editQuestion">{{ uiLabels.editQuestion }}</button>
       </div>
     </div>

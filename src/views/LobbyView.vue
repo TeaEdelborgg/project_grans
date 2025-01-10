@@ -250,7 +250,8 @@ input[type="text"]:hover {
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
   transition: background-color 0.3s ease; 
-  width: 230px;
+  width: 235px;
+  font-weight: bold;
 }
 
 .participateButton button:hover:not(:disabled) {

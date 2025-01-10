@@ -138,6 +138,8 @@ h1{
   height:auto;
   padding: 2vh 3vw;
   margin: 5vh 5vw;
+  color:#000;
+  font-weight:bold;
 }
 
 .pollButtons img{

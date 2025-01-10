@@ -36,7 +36,7 @@
       <div class="pollDoneButtons">
         <button id="goBack" v-on:click="doneWithPoll = false">{{ uiLabels.goBack }} </button>
           <router-link v-bind:to="'/adminLobby/' +pollId">
-            <button> {{ uiLabels.startPoll }}</button>
+            <button> {{ uiLabels.continue }}</button>
           </router-link>
       </div>
     </div>
