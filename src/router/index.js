@@ -10,9 +10,9 @@ const router = createRouter({
       component: StartView
     },
       {
-      path: '/poll/:id/:userId', // skapa en till dynamisk rutt med id
-      name: 'PollView',
-      component: () => import('../views/PollView.vue')
+      path: '/player/:id/:userId', // skapa en till dynamisk rutt med id
+      name: 'PlayerView',
+      component: () => import('../views/PlayerView.vue')
     },
     {
       path: '/admin/:id',
@@ -44,6 +44,11 @@ const router = createRouter({
         name: 'AdminLobbyView',
         component: ()=> import('../views/AdminLobbyView.vue')
     },
+    {
+      path: '/resultLobby/:id',
+      name: 'ResultLobbyView',
+      component: ()=> import('../views/ResultLobbyView.vue')
+  },
     {
       path: '/result/:id',
       name: 'ResultView',

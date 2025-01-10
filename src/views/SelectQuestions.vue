@@ -1,42 +1,35 @@
 <template>
   <div class="container">
-    <div v-if="!continueToStart">
-
     <h1>{{ uiLabels.choosePollText }}</h1>
     <div class="pollButtons">
       <button v-on:click="choosePoll('quiz1')">
-        History
+        Historia
         <img src="/public/img/history_icon.png" alt="icon1"/>
       </button>
 
       <button v-on:click="choosePoll('poll2')">
-        Geography
+        Geografi
         <img src="/public/img/geography_icon.png" alt="icon2"/>
       </button>
 
       <button v-on:click="choosePoll('poll2')">
-        Science
+        Vetenskap
         <img src="/public/img/science_icon.png" alt="icon3"/>
       </button>
     </div>    
-    <button class="continue" v-on:click="continueToStart=true" :disabled="!chosenPoll">
-      {{ uiLabels.choosePoll }}
+    <button 
+      class="continue" 
+      :disabled="!chosenPoll"
+      v-on:click="continueToLobby">
+        {{ uiLabels.choosePoll }}
     </button>
+
     <div v-for="(q, index) in pollData.questions" :key="index" class="questionBoxes">
         <p>{{ uiLabels.question + " " + (index + 1) + ": " + q.q }}</p>
         <p>{{ uiLabels.correctAnswer + ": " + q.a.correct }}</p>
         <p>{{ uiLabels.wrongAnswer + ": " + q.a.wrong }}</p>
     </div>
     </div>
-    <div v-if="continueToStart" class="startPollButton">
-    <h3> {{ uiLabels.readyMessage }}</h3>
-    <h1>{{ uiLabels.pollId }} {{ pollId }}</h1>
-    <router-link v-bind:to="'/admin/' +pollId" > 
-    <button v-on:click="startPoll">
-      {{uiLabels.startPoll}}</button>
-    </router-link>
-    </div>
-  </div>
   </template>
   
   <script>
@@ -57,7 +50,6 @@
         questionNumber: 0,
         pollData: {},
         uiLabels: {},
-        continueToStart: false,
         chosenPoll:false,
         
       }
@@ -78,17 +70,10 @@
         socket.emit("joinPoll", this.pollId);
         
       },
-
-      startPoll: function () {
-        socket.emit("startPoll", this.pollId)
-      },
-      addQuestion: function () {
-        console.log(this.answers)
-        console.log({pollId: this.pollId, q: this.question, a: this.answers})
-      },
-  
-      runQuestion: function () {
-        socket.emit("runQuestion", {pollId: this.pollId, questionNumber: this.questionNumber})
+      continueToLobby() {
+        if (this.chosenPoll) {
+        this.$router.push(`/adminLobby/${this.pollId}`);
+        }
       }
     }
   }
@@ -153,6 +138,8 @@ h1{
   height:auto;
   padding: 2vh 3vw;
   margin: 5vh 5vw;
+  color:#000;
+  font-weight:bold;
 }
 
 .pollButtons img{
@@ -166,7 +153,8 @@ h1{
   width: auto;
   height:auto;
   padding: 3vh 2vw;
-  margin: 5vh auto; /*5vw; */
+  margin: 5vh auto;
+  font-weight:bold;
 }
 
 .continue:disabled {
@@ -181,7 +169,7 @@ h1{
   justify-content: center;
   margin: 3vh auto;
   font-size: 15px; 
-  width: 80%; /* Restrict width to a percentage of the container */
+  width: 80%;
   max-width: 50vw;
   background-color: #1e084f;
   color: #cfcfcf; 
@@ -193,19 +181,6 @@ h1{
   white-space: normal;
   text-align: center; 
   box-sizing: border-box;
-}
-
-.startPollButton {
-  display: block;
-  justify-content:center;
-  flex-direction:column;
-  font-size: 20px;
-  color: #cfcfcf;
-  text-align: center;
-}
-.startPollButton button{
-  margin: 5% ;
-  padding: 3vh 2vw;
 }
 
 </style>

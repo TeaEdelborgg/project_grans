@@ -64,9 +64,7 @@ function sockets(io, socket, data) {
   });
 
   socket.on('getPlayer', function(d) {
-    let user = data.getOneParticipant(d.pollId, d.userId);
-    //console.log('i socket, user är: ', user)
-    io.to(d.pollId).emit('sendPlayerStats', user);
+    io.to(d.pollId).emit('sendPlayerStats', data.getOneParticipant(d.pollId, d.userId));
   }); 
 
   socket.on('runQuestion', function(d) {  // verkar inte användas
@@ -81,12 +79,14 @@ function sockets(io, socket, data) {
 
   socket.on('fiftyFifty', function(d) { // skickar in pollId och questionNumber
     console.log('i fiftyFifty socket', d)
-    io.to(d.pollId).emit('sendFiftyFifty', data.getFiftyFifty(d.pollId, d.questionNumber, d.userId))
+    io.to(d.pollId).emit('sendFiftyFifty', data.getFiftyFifty(d.pollId, d.userId))
+    io.to(d.pollId).emit('sendPlayerStats', data.getOneParticipant(d.pollId, d.userId));
   });
 
   socket.on('audienceAnswer', function(d) {
     console.log('i audienceAnswer socket', d)
-    io.to(d.pollId).emit('sendAudienceAnswer', data.getAudienceAnswer(d.pollId, d.questionNumber, d.userId, d.usedFiftyFifty))
+    io.to(d.pollId).emit('sendAudienceAnswer', data.getAudienceAnswer(d.pollId, d.userId, d.usedFiftyFifty))
+    io.to(d.pollId).emit('sendPlayerStats', data.getOneParticipant(d.pollId, d.userId));
   })
 
   socket.on('submitAnswer', function(d) { // körs när man skickar in sitt svar

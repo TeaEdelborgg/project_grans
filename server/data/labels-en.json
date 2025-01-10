@@ -20,8 +20,9 @@
 	"rulesli4":"Pick an answer and slide down the grid on top to lock your final answer within the time limit",
 	"rulesli5":"The player with most right answers win, if there are multiple players with most right answers, the one with fastest last answer wins",
 	"question": "Question ",
-	"wrongAnswer": "Wrong answer",
-    "correctAnswer":"Correct answer",
+	"enterQuestion": "Enter the question",
+	"wrongAnswer": "Enter wrong answer",
+    "correctAnswer":"Enter correct answer",
     "addQuestion": "Add question",
     "doneWithQuiz": "Done with quiz",
     "addedQuestions": "Added questions:",
@@ -53,5 +54,14 @@
 	"losers": "The losers are..",
 	"returnHomeButton": "Return to home page",
 	"congratsWon": "Congrats you won",
-	"betterLuck": "Better luck next time"
+	"betterLuck": "Better luck next time",
+	"adminView": "Admin View",
+	"showBoard": "Show on board",
+	"letParticipantsJoin": "Let all participants join before clicking the admin button!",
+	"Instructions": "Instructions",
+	"instructLi1": "Open the 'Show on board' button to show the Poll ID to the players and ask them to join the lobby.",
+	"instructLi2": "The game will play on the 'show on board page'.",
+	"instructLi3": "Make sure all participants has joined the lobby before clicking admin button.",
+	"instructLi4": "After everyone has joined the lobby: Click the admin button to administrate the game.",
+	"goodluck": "Good Luck!"
 }
