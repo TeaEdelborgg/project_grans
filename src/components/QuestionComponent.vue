@@ -4,7 +4,7 @@
         v-bind:sent="sent"
         v-bind:seeAlternatives="seeAlternatives"
         v-bind:questionActive="questionActive"/>
-    <div id="container" v-if="questionActive || seeAlternatives" class="answeralternatives"> <!-- v-if="questionActive || seeAlternatives" class="answeralternatives"-->
+    <div id="container" v-if="questionActive || seeAlternatives" class="answeralternatives">
       <div class="timerBarContainer">
         <div class="timerBar" :style="{ width: percentage + '%' }"></div>
       </div>
@@ -23,7 +23,6 @@
               {{ a }}
             </button>
           </div>
-          
         </div>
       </div>
     </div>
@@ -34,12 +33,12 @@
 <script>
 import SliderCompoment from './SliderCompoment.vue';
 import io from 'socket.io-client';
-const socket = io(sessionStorage.getItem("dataServer"))
+const socket = io(sessionStorage.getItem("dataServer"));
 
 export default {
   name: 'QuestionComponent',
   components: {
-    SliderCompoment
+    SliderCompoment,
   },
   props: {
     userId: String,
@@ -68,62 +67,52 @@ export default {
       }
   },
   created: function () {
-    //socket.emit( "getUILabels", this.lang ); tror ej denna behövs
     socket.emit( "joinPoll", this.pollId );
 
     socket.on('startCountdownPlayer', question =>{
-      console.log('startCountdown körs: ', question)
       this.question = question.q; 
       this.questionNumber = question.questionNumber;
       this.countdownPlayer();
-    })
-
-    socket.on('sendCorrectedUserAnswer', checkedUserAnswer => {
-      this.isCorrectAnswer = checkedUserAnswer
     });
-
+    socket.on('sendCorrectedUserAnswer', checkedUserAnswer => {
+      this.isCorrectAnswer = checkedUserAnswer;
+    });
     socket.on('sendFiftyFifty', incorrects => {
       if (incorrects.user == this.userId) {
-        this.fiftyFify = incorrects.answers
-        console.log('läser in sendFiftyFifty', this.fiftyFify)
+        this.fiftyFify = incorrects.answers;
       }
-    })
-
+    });
     socket.on('sendAudienceAnswer', audienceAnswer => {
       if (audienceAnswer.user == this.userId) {
-        this.audienceAnswer = audienceAnswer.answer
-        console.log('läser in publikens svar', this.audienceAnswer)
+        this.audienceAnswer = audienceAnswer.answer;
       }
-    })
+    });
   },
-  emits: ["answer"],
+  emits: ["answer", "updateQuestionActive"],
   methods: {
     selectAnswer: function(answer){
       if (this.questionActive && !this.sent) {
-        console.log('selectanswer: ', answer)
-        this.selectedAnswer = answer
+        this.selectedAnswer = answer;
       }
     },
     isDisabled: function (a){
       if (this.fiftyFify.length > 0) {
         for (let i=0; i < 2; i++) {
           if (a == this.fiftyFify[i]){
-            return true
+            return true;
           }
-        } 
-        return false
+        }
+        return false;
       }
     },
     submitAnswer: function () {
-      socket.emit("submitAnswer", {pollId: this.pollId, questionNumber: this.questionNumber, answer: this.selectedAnswer, userId: this.userId, time: Math.ceil(this.timeLeft/1000)}) 
+      socket.emit("submitAnswer", {pollId: this.pollId, questionNumber: this.questionNumber, answer: this.selectedAnswer, userId: this.userId, time: Math.ceil(this.timeLeft/1000)});
       this.usedFiftyFiftyThisRound = false;
       this.isQuestionAnswered = true;
-      console.log('frågan är besvarad, svaret är: ', this.selectedAnswer)
     },
     countdownPlayer: function() {
-      console.log('kör countdownPlayer')
-      this.sent=false;
-      this.selectedAnswer=null;
+      this.sent = false;
+      this.selectedAnswer = null;
       this.isCorrectAnswer = false;
       this.seeAlternatives = false;
       this.showCorrectAnswer = false;
@@ -131,7 +120,6 @@ export default {
       this.percentage = 100;
 
       let startTime = Date.now();
-
       let timerDuration = 18000;
       let timerQuestion = 15000;
       let timerAnswer = 10000;
@@ -144,9 +132,9 @@ export default {
           this.timeLeft = timerDuration - elapsedTime;
         }
         socket.on('resetTime', () => {
-            this.timeLeft = 0
-            this.percentage = 0
-            endQuestion = true
+            this.timeLeft = 0;
+            this.percentage = 0;
+            endQuestion = true;
           })
 
         if (this.timeLeft > timerQuestion) {
@@ -158,51 +146,39 @@ export default {
           this.percentage = Math.floor(this.timeLeft / 100);
           this.questionActive = true;
         } else {
-          this.endCountdown()
+          this.endCountdown();
           clearInterval(interval);
-          // if (!this.isQuestionAnswered) { // frågan är om detta ens behövs??
-          //   this.submitAnswer();
-          // }
-          // console.log('kör else i countdown, dvs time=0')
-          // this.percentage = 0
-          // this.questionActive = false;
-
-          // socket.emit('getPlayer', {pollId: this.pollId, userId: this.userId})
-          // socket.emit('getCorrectedUserAnswer', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId})
-          // socket.on('sendCorrectedUserAnswer', checkedUserAnswer => {
-          //   this.isCorrectAnswer = checkedUserAnswer
-          // });
-          // this.showCorrectAnswer = true
-          // setTimeout(() => {
-          //   this.seeAlternatives = false;
-          //   clearInterval(interval);
-          // }, 2000)
         }
       }, 100);  
     },
     endCountdown: function() {
-      if (!this.isQuestionAnswered) { // frågan är om detta ens behövs??
+      if (!this.isQuestionAnswered) {
         this.submitAnswer();
       }
       this.percentage = 0
       this.questionActive = false;
 
-      socket.emit('getPlayer', {pollId: this.pollId, userId: this.userId})
-      socket.emit('getCorrectedUserAnswer', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId})
-      this.showCorrectAnswer = true
+      socket.emit('getPlayer', {pollId: this.pollId, userId: this.userId});
+      socket.emit('getCorrectedUserAnswer', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId});
+      this.showCorrectAnswer = true;
       setTimeout(() => {
         this.seeAlternatives = false;
       }, 2000)
     }
   },
   mounted(){
-    this.sent=false
+    this.sent = false;
     let playerview = document.getElementById("playerview");
     const playerviewRect = playerview.getBoundingClientRect();
     this.heightPx = playerviewRect.bottom-playerviewRect.top;
-    this.minPosition='0%'
-    this.maxPosition='100%'
+    this.minPosition = '0%'
+    this.maxPosition = '100%'
     this.maxBottom = playerviewRect.bottom
+  },
+  watch: {
+    questionActive(newValue) {
+      this.$emit('updateQuestionActive', newValue);
+    }
   }
 }
 </script>
@@ -273,7 +249,6 @@ export default {
   align-content: center;
   justify-content: center;
   position: relative;
-  
 }
 .borderRect{
   clip-path: polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%);
@@ -342,5 +317,4 @@ button:disabled {
   background: linear-gradient(45deg,#0f131f, #3a3790, #0f131f);
   z-index: 0;
 }
-
 </style>

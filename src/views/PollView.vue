@@ -11,19 +11,18 @@
       </div>
       </div>
 
-      </div>
-      <div  > <!--v-if="questionActive || seeAlternatives", class="answeralternatives"-->
-        <QuestionComponent 
-          ref="questionComponent" 
-          v-bind:userId="userId" 
-          v-bind:pollId="pollId"/>
-      </div>
-      <div id="bottomHalf">
-        <div class="help-buttons" >  <!--v-if="questionActive || seeAlternatives"-->
-        <img src="/img/50-50.png" class="fifty-fifty" @click="fiftyFifty" v-if="!this.userStats?.information?.usedFiftyFifty || !usedFiftyFiftyThisRound">
-        <img src="/img/50-50-used.png" class="fifty-fifty-used" v-else />
-        <img src="/img/AskAudience.png" class="ask-audience" @click="askAudience" v-if="!this.userStats?.information?.usedAskAudience || !usedAskAudienceThisRound"/>
-        <img src="/img/AskedAudience.png" class="ask-audience-used" v-else/> <!-- varför funkar inte detta? -->
+    </div>
+    <div>
+      <QuestionComponent 
+        ref="questionComponent" 
+        v-bind:userId="userId" 
+        v-bind:pollId="pollId"
+        @updateQuestionActive="handleQuestionActive"/>
+    </div>
+    <div id="bottomHalf">
+      <div class="help-buttons">
+        <img src="/img/50-50.png" class="life-line" :class="{ 'dimmed': userStats?.information?.usedFiftyFifty || !questionActive }" @click="fiftyFifty"/>
+        <img src="/img/AskAudience.png" class="life-line" :class="{ 'dimmed': userStats?.information?.usedAskAudience || !questionActive }" @click="askAudience"/>
         <!-- frågan är om man vill ha denna som en popup eller ska den lysa upp en knapp som nu? -->
       </div>
     </div>
@@ -44,12 +43,12 @@ export default {
   data: function () {
     return {
       userId:'',
-      userStats: {}, // måste fixa så att det speglas från servern istället
+      userStats: {},
       pollId: "inactive poll",
       questionNumber: null,
-      questionActive: false, // om den fortfarande syns på stora tavlan
+      questionActive: false,
       usedFiftyFiftyThisRound: false,
-      usedAskAudienceThisRound: false,
+      usedAskAudienceThisRound: false, // denna kanske ej behövs?
     }
   },
   created: function () {
@@ -70,29 +69,21 @@ export default {
     socket.emit('getPlayer', {pollId: this.pollId, userId: this.userId})
   },
   methods: {
+    handleQuestionActive(isActive) {
+      this.questionActive = isActive;
+    },
     fiftyFifty: function() {
-      if (this.questionActive) {
-        socket.emit('fiftyFifty', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId})
+      if (!this.userStats.information.usedFiftyFifty && this.questionActive) {
+        socket.emit('fiftyFifty', {pollId: this.pollId, userId: this.userId})
         this.usedFiftyFiftyThisRound = true
       }
     },
     askAudience: function() {
-      if (this.questionActive) {
-        socket.emit('audienceAnswer', {pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId, usedFiftyFifty: this.usedFiftyFiftyThisRound})
-        this.usedAskAudienceThisRound = true
+      if (!this.userStats.information.usedAskAudience && this.questionActive) {
+        socket.emit('audienceAnswer', {pollId: this.pollId, userId: this.userId, usedFiftyFifty: this.usedFiftyFiftyThisRound})
       }
     },
   },
-  computed: { //plocka bort sen
-    //låter skärmen vara fixed så att den inte går att scrolla i
-    mounted (){
-      this.windowHeight = document.documentElement.clientHeight
-      this.windowWidth = document.documentElement.clientWidth;
-      const backgroundPlayer = document.getElementById('background');
-      backgroundPlayer.style.width=this.windowWidth +"px";
-      backgroundPlayer.style.height=this.windowHeight + "px";
-    },
-  }
 }
 </script>
 
@@ -147,28 +138,14 @@ export default {
   justify-content: center;
   align-items: center;
 }
-.fifty-fifty {
+.life-line {
   height: 5vh;
   margin: 5%;
   border: 5px solid #cdcdcd;
   border-radius: 50%;
 }
-.fifty-fifty-used {
-  height: 5vh;
-  margin: 5%;
-  border: 5px solid #555;
-  border-radius: 50%;
-}
-.ask-audience {
-  height: 5vh;
-  margin: 5%;
-  border: 5px solid #cdcdcd;
-  border-radius: 50%;
-}
-.ask-audience-used {
-  height: 5vh;
-  margin: 5%;
-  border: 5px solid #555;
-  border-radius: 50%;
+.life-line.dimmed {
+  border: 5px solid #454545;
+  filter: brightness(50%);
 }
 </style>

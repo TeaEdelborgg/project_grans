@@ -34,7 +34,7 @@ export default {
     },
     methods: {
         pressedDown: function(e){
-            console.log("i pressedDown")
+            //console.log("i pressedDown")
             if(!this.sent && this.seeAlternatives){
                 //console.log(e.clientX)
                 if(e.type=="touchstart"){
@@ -52,20 +52,20 @@ export default {
             }
         },
         move: function(e){
-            console.log("i move")
+            // console.log("i move")
             let bar = document.getElementById("bars")
             if(bar){
                 if(e.type =="touchmove"){
                     this.currentPlace = e.touches[0].clientY;
                 }
                 else{
-                    console.log("y pos: ", e.clientY)
+                    // console.log("y pos: ", e.clientY)
                     this.currentPlace = e.clientY
                 }
                 const barRect = bar.getBoundingClientRect();
                 this.topPosition = barRect.top;
                 this.bottomPosition = barRect.bottom;
-                console.log("top: ", this.topPosition, " bottom: ", this.bottomPosition)
+                // console.log("top: ", this.topPosition, " bottom: ", this.bottomPosition)
 
                 if(this.pressed){
                     let movedPlaced = this.currentPlace-this.placePressed
@@ -99,7 +99,7 @@ export default {
                     //this.sent = true;
                     this.sendAnswer();
                 } else {
-                    console.log("else")
+                    // console.log("else")
                     bar.style.top = '-90%';
                 }
             }
