@@ -7,12 +7,12 @@
         <img src="/public/img/history_icon.png" alt="icon1"/>
       </button>
 
-      <button v-on:click="choosePoll('poll2')">
+      <button v-on:click="choosePoll('quiz2')">
         Geografi
         <img src="/public/img/geography_icon.png" alt="icon2"/>
       </button>
 
-      <button v-on:click="choosePoll('poll2')">
+      <button v-on:click="choosePoll('quiz3')">
         Vetenskap
         <img src="/public/img/science_icon.png" alt="icon3"/>
       </button>
@@ -26,8 +26,8 @@
 
     <div v-for="(q, index) in pollData.questions" :key="index" class="questionBoxes">
         <p>{{ uiLabels.question + " " + (index + 1) + ": " + q.q }}</p>
-        <p>{{ uiLabels.correctAnswer + ": " + q.a.correct }}</p>
-        <p>{{ uiLabels.wrongAnswer + ": " + q.a.wrong }}</p>
+        <p>{{ uiLabels.correctAnswer + q.a.correct }}</p>
+        <p>{{ uiLabels.wrongAnswer + q.a.wrong.join(', ') }}</p>
     </div>
     </div>
   </template>
