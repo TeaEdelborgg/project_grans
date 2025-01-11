@@ -9,10 +9,7 @@
 
 
     <div class="adminButtons">
-      <router-link v-bind:to="'/admin/' +pollId" >
-        <button :disabled="!openResult" v-on:click="startPoll">{{ uiLabels.startPoll }}
-        </button>
-      </router-link>
+      <button ref="startPollButton" :disabled="!openResult" @click="handleStartPollClick">{{ uiLabels.startPoll }}</button>
       <router-link
         :to="'/resultLobby/' + pollId"
         custom
@@ -22,10 +19,8 @@
           <button v-on:click="enableAdminButton">{{ uiLabels.showBoard }}</button>
         </a>
       </router-link>
-      <p>{{ uiLabels.letParticipantsJoin }}</p>
-      <!--<router-link v-bind:to="'/result/' + pollId">
-        <button v-on:click="startPoll">Check result</button>
-      </router-link>-->
+      
+
     </div>
     </div>
 
@@ -48,7 +43,7 @@
 
       <div :class="['overlay', {show:gameRules}]" v-on:click="closeGameRules"></div>
       <div :class="['RulesPopup', {show:gameRules}]">
-        <h4>{{uiLabels.Instructions}}</h4>
+        <h3>{{uiLabels.Instructions}}</h3>
           <li>{{ uiLabels.instructLi1 }}</li>
           <li>{{ uiLabels.instructLi2 }}</li>
           <li>{{ uiLabels.instructLi3 }}</li>
@@ -58,6 +53,16 @@
 
         <button @click="closeGameRules">X</button>
       </div>
+      
+      <div :class="['overlay', { show: startPollPopup }]" @click="closePollPopup"></div>
+      <div :class="['PollPopup', { show: startPollPopup }]">
+        <h3>{{ uiLabels.letParticipantsJoin }}</h3>
+        <button id="goBack" @click="closePollPopup">{{uiLabels.goBack}}</button>
+        <router-link :to="'/admin/' + pollId">
+          <button @click="startPoll">{{ uiLabels.startPoll }}</button>
+        </router-link>
+      </div>
+      
   </div>
 </template>
 
@@ -76,7 +81,8 @@ export default{
         uiLabels: {},
         participants: [],
         gameRules: false,
-        openResult: false
+        openResult: false,
+        startPollPopup: false,
         };
     },
 
@@ -109,6 +115,14 @@ export default{
       enableAdminButton() {
       this.openResult = true; // Enable the Admin View button
       },
+      handleStartPollClick() {
+      if (!this.$refs.startPollButton.disabled) {
+        this.startPollPopup = true; // Show the start poll confirmation popup
+      }
+    },
+    closePollPopup() {
+      this.startPollPopup = false; // Close the poll popup
+    }
 
 
 }
@@ -170,7 +184,7 @@ h1 {
   color: rgb(255, 255, 255);
   font-size: 450%;
 }
-h4 {
+3 {
   color: #000000;
   font-size: 200%;
   margin-bottom: 16px;
@@ -211,7 +225,7 @@ h4 {
   transform: scale(1.2);
 }
 .adminButtons button:disabled {
-  cursor: default;
+  cursor: not-allowed;
   opacity: 50%;
   box-shadow: none; 
   transform: none; 
@@ -278,7 +292,7 @@ h4 {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.842);
+  background: rgba(0, 0, 0, 0.7);
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
@@ -295,5 +309,55 @@ h4 {
   text-align: left;
   margin-bottom: 8px;
 }
+
+.PollPopup {
+  background: linear-gradient(135deg, #0a0347, #3c298f);
+  color: #cfcfcf;
+  padding: 5vh 5vw;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 80%;
+  max-width: 30vw;
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  z-index: 100;
+  gap:10%;
+}
+
+.PollPopup.show {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+
+.PollPopup button {
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: rgb(255, 136, 0);
+  color: #1e084f;
+  border-radius: 10px;
+  margin: 1vh 2vw;
+  padding: 1vh 1vw;
+  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.PollPopup #goBack{
+  background-color: #cfcfcf;
+}
+
+.PollPopup button:hover {
+  background-color: rgb(227, 122, 1);
+  box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
+  transform: scale(1.2);
+}
+
+
 </style>
 
