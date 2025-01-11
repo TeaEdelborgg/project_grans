@@ -16,8 +16,8 @@
       </div>
       <div v-else>
         <p>{{ uiLabels.question + " " + (index + 1) + ": " + question.q }}</p>
-        <p>{{ uiLabels.correctAnswer + ": " + question.a.correct }}</p>
-        <p>{{ uiLabels.wrongAnswer + ": " + question.a.wrong + question.a.wrong.join(', ') }}</p>
+        <p>{{ uiLabels.correctAnswer + question.a.correct }}</p>
+        <p>{{ uiLabels.wrongAnswer + question.a.wrong.join(', ')}}</p>
         <button @click="editQuestion">{{ uiLabels.editQuestion }}</button>
       </div>
     </div>
