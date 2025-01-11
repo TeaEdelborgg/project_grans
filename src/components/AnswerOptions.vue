@@ -198,7 +198,7 @@ export default {
   z-index: 0;
 }
 #container{
-  top:10%;
+  top:15%;
   position: absolute;
   height: 90%;
   width: 100%;
