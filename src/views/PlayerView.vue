@@ -87,7 +87,7 @@ export default {
 <style scoped>
 #bottomHalf{
   width: 100%;
-  background: radial-gradient(#1a237e, #0d1137);
+  background: linear-gradient(#101010, rgb(16, 16, 16, 0.95));
   height: 20%;
   position: absolute;
   bottom: 0;
@@ -97,14 +97,15 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(#1a237e, #0d1137);
-  height: 20%;
+  background: linear-gradient(#101010, rgb(16, 16, 16, 0.95));
+  height: 15%;
   position: absolute;
   top: 0;
   z-index: 3;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
 }
 .player-background {
-  color: #FFFFFF;
+  background: radial-gradient(#1a237e, #0d1137);
   position: fixed;
   width: 100%;
   height: 100%;
@@ -123,7 +124,7 @@ export default {
   margin: 0 5vw 0 5vw;
 }
 .heart {
-  height: 5vh;
+  height: 2em;
   margin: 5%;
 }
 .player-time {
@@ -138,7 +139,7 @@ export default {
   align-items: center;
 }
 .life-line {
-  width: 15vh;
+  height: 10vh;
   margin: 1vh 1vw 1vh 1vw;
   border: 5px solid #be8426;
   border-radius: 50%;

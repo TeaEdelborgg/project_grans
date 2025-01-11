@@ -228,12 +228,12 @@ Data.prototype.submitAnswer = function(pollId, questionNumber, answer, userId, t
   if (this.pollExists(pollId)) {
     const user = this.polls[pollId].participants.find(user => user.userId == userId)
     console.log('user är: ', user)
-    if (answer == null) {
+    /*if (answer == null) {
       console.log('i submitanswer, om det crashar', user?.information.answers[questionNumber])
       user.information.answers[questionNumber] = ["-", 0] // denna verkar crasha ibland? tror det är om userId inte skickas med
-    } else {
+    } else {*/
       user.information.answers[questionNumber] = [answer, timeLeft]
-    }
+    // }
     
     console.log(user.information.answers, 'lyckades i submit answer')
   }

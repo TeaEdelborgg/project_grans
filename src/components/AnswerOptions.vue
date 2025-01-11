@@ -1,9 +1,11 @@
 <template>
   <div id="playerview">
-    <SliderCompoment @sendAnswer="submitAnswer()"
+    <SliderCompoment @sendAnswer="submitAnswer(selectedAnswer)"
         v-bind:sent="sent"
         v-bind:seeAlternatives="seeAlternatives"
-        v-bind:questionActive="questionActive"/>
+        v-bind:questionActive="questionActive"
+        v-bind:questionNumber="questionNumber"
+        v-bind:selectedAnswer="selectedAnswer"/>
     <div id="container" v-if="questionActive || seeAlternatives" class="answeralternatives"> <!-- v-if="questionActive || seeAlternatives" -->
       <div class="timerBarContainer">
         <div class="timerBar" :style="{ width: percentage + '%' }"></div>
@@ -58,7 +60,6 @@ export default {
       },
       questionNumber: null,
       questionActive: false, 
-      isQuestionAnswered: false, 
       isCorrectAnswer: false,
       showCorrectAnswer: false, 
       seeAlternatives: false, 
@@ -105,10 +106,11 @@ export default {
         return false;
       }
     },
-    submitAnswer: function () {
-      socket.emit("submitAnswer", {pollId: this.pollId, questionNumber: this.questionNumber, answer: this.selectedAnswer, userId: this.userId, time: Math.ceil(this.timeLeft/1000)});
+    submitAnswer: function (answer) {
+      console.log('skickar svaret: ', answer)
+      socket.emit("submitAnswer", {pollId: this.pollId, questionNumber: this.questionNumber, answer: answer, userId: this.userId, time: Math.ceil(this.timeLeft/1000)});
+      this.sent = true;
       this.usedFiftyFiftyThisRound = false;
-      this.isQuestionAnswered = true;
     },
     countdownPlayer: function() {
       this.sent = false;
@@ -116,7 +118,6 @@ export default {
       this.isCorrectAnswer = false;
       this.seeAlternatives = false;
       this.showCorrectAnswer = false;
-      this.isQuestionAnswered = false;
       this.percentage = 100;
 
       let startTime = Date.now();
@@ -152,8 +153,8 @@ export default {
       }, 100);  
     },
     endCountdown: function() {
-      if (!this.isQuestionAnswered) {
-        this.submitAnswer();
+      if (!this.sent) {
+        this.submitAnswer('-');
       }
       this.percentage = 0
       this.questionActive = false;
@@ -166,15 +167,17 @@ export default {
       }, 2000)
     }
   },
-  mounted(){
-    this.sent = false;
-    let playerview = document.getElementById("playerview");
-    const playerviewRect = playerview.getBoundingClientRect();
-    this.heightPx = playerviewRect.bottom-playerviewRect.top;
-    this.minPosition = '0%'
-    this.maxPosition = '100%'
-    this.maxBottom = playerviewRect.bottom
-  },
+  // mounted(){
+  //   this.sent = false;
+  //   let playerview = document.getElementById("playerview");
+  //   console.log(playerview)
+  //   const playerviewRect = playerview.getBoundingClientRect();
+  //   this.heightPx = playerviewRect.bottom-playerviewRect.top;
+  //   this.minPosition = '0%'
+  //   this.maxPosition = '100%'
+  //   this.maxBottom = playerviewRect.bottom
+  //   console.log(this.maxBottom)
+  // },
   watch: {
     questionActive(newValue) {
       this.$emit('updateQuestionActive', newValue);
@@ -184,15 +187,15 @@ export default {
 </script>
 
 <style scoped>
-#bars{
+#playerview {
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  height: 100%;
-  background-image: url('/img/bars2.png');
-  background-size: cover;
-  background-position: center;
-  top:-90%;
-  z-index: 2;
+  height: 65%;
+  top: 15%;
+  z-index: 0;
 }
 #container{
   top:10%;
@@ -224,7 +227,6 @@ export default {
   justify-content: center;
   position:absolute;
   margin: auto;
-  animation: showAnswers 0.5s;
 }
 .line{
   height: 2px;
@@ -242,7 +244,6 @@ export default {
 .rectangle{
   width: 100%;
   height: 100%;
-  /*background: linear-gradient(#393a93, #7bb0f3, #393a93); */
   background-color: #101c3e;
   color:#e3e3e3;
   clip-path: polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%);
@@ -261,33 +262,28 @@ export default {
   background-color: lightyellow;
   box-shadow: 0 0 5px lightyellow;
 }
-.selected {
-  background-color: #f9ac33;
-  border-color: #ffa618;
-  color: #e3e3e3; 
-}
-.sended {
-  background-color: #ff8f2d; 
-  border-color: #ca7022;
-  color: #e3e3e3; 
-}
-.showCorrect {
-  background-color: #56c763; 
-  border-color: #36ce47;
-  color: #e3e3e3;
-}
-.showIncorrect {
-  background-color: #fd4d47; 
-  border-color: #FF4136;
-  color: #e3e3e3;
-}
 .showAudienceAnswer {
   background-color: rgb(107, 124, 255);
   color: black;
 }
 button:disabled {
   background-color: grey;
-  border-color: rgb(95, 95, 95);
+}
+.selected {
+  background-color: #f9ac33;
+  color: #e3e3e3; 
+}
+.sended {
+  background-color: #e07618;
+  color: #e3e3e3; 
+}
+.showCorrect {
+  background-color: #56c763; 
+  color: #e3e3e3;
+}
+.showIncorrect {
+  background-color: #fd4d47; 
+  color: #e3e3e3;
 }
 .timerBarContainer {
   width: 95%; 
@@ -304,17 +300,6 @@ button:disabled {
 .timerBar {
   height: 100%;
   background-color: #FF851B;
-  transition: width 0.1s linear;
-}
-#playerview {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  height: 60%;
-  top:20%;
-  background: radial-gradient(#1a237e, #0d1137);
-  z-index: 0;
+  transition: width 0.3s linear;
 }
 </style>
