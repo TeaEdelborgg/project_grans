@@ -1,5 +1,10 @@
 <template>
-    <div id="bars" @mousedown="pressedDown" @touchstart="pressedDown"></div>
+    <div id="bars" :class="{verticalMove: seeAlternatives && !sent && selectedAnswer != null }" @mousedown="pressedDown" @touchstart="pressedDown">
+    </div>
+    <div id="arrow-container" v-if="questionNumber==0 && selectedAnswer != null && !pressed && !sent" :class="{verticalMove: seeAlternatives }">
+        <img id="arrow" src="/img/arrow.png"/>
+        <p id="arrow-text">Lock<br>answer</p>
+    </div>
 </template>
 
 <script>
@@ -8,12 +13,13 @@ export default {
         sent: Boolean,
         seeAlternatives: Boolean,
         questionActive: Boolean,
+        questionNumber: Number,
+        selectedAnswer: String,
     },
     data() {
         return {
             placePressed: 0,
             pressed: false,
-            sliderOffsetLeft: 0, // Håller reda på var slidern börjar
             maxPosition: 0, // Maximal position för slidern
             minPosition: 0, // Minimal position för slidern
             heightPx:0,
@@ -70,13 +76,13 @@ export default {
                 if(this.pressed){
                     let movedPlaced = this.currentPlace-this.placePressed
                     if (movedPlaced < 0){
-                        bar.style.top='-90%'; //0+'px'
+                        bar.style.top='-85%'; //0+'px'
                     }
                     else if (this.bottomPosition > this.maxBottom){
                         bar.style.bottom = '0';//;(this.maxPosition - (this.bottomPosition-this.topPosition))+'px'
                       }
                     else{
-                        bar.style.top = -90+((this.currentPlace-this.placePressed)/this.heightPx)*100+'%';;// //-this.placePressed då vi vill ha den i sliderBox och inte på hela sidan
+                        bar.style.top = -85+((this.currentPlace-this.placePressed)/this.heightPx)*100+'%';;// //-this.placePressed då vi vill ha den i sliderBox och inte på hela sidan
                     }    
                 }
                 else{
@@ -93,21 +99,22 @@ export default {
             document.removeEventListener("touchend", this.mouseReleased)
             if(bar){
 
-                if (this.bottomPosition >= this.maxBottom) {
+                if (this.bottomPosition >= this.maxBottom && this.selectedAnswer != null) {
                     bar.style.top='0'
                     bar.style.bottom='0'
                     //this.sent = true;
                     this.sendAnswer();
                 } else {
                     // console.log("else")
-                    bar.style.top = '-90%';
+                    bar.style.top = '-85%';
                 }
             }
         },
         sendAnswer: function(e){
-            this.$emit("sendAnswer")
-            console.log("ska skicka svar från slidern");
-
+            if (!this.sent) {
+                this.$emit("sendAnswer")
+                console.log("ska skicka svar från slidern");
+            }
         }
     },
     unmounted(){
@@ -120,7 +127,7 @@ export default {
         questionActive(newValue){
             let bar = document.getElementById("bars")
             if(newValue==false){
-                bar.style.top='-90%'
+                bar.style.top='-85%'
                 this.topPosition='0'
                 this.bottomPosition='0'
             }
@@ -135,9 +142,35 @@ export default {
   width: 100%;
   height: 100%;
   background-image: url('/img/bars2.png');
+  background-position: bottom;
   background-size: cover;
-  background-position: center;
-  top:-90%;
+  top:-85%;
   z-index: 2;
+}
+#arrow-container {
+  display: flex;
+  flex-direction: column;
+  z-index: 6;
+  margin-left: auto;
+  margin-right: 0.5em;
+  margin-top: 10vh;
+}
+#arrow {
+  width: 10vw;
+  margin: auto;
+}
+#arrow-text {
+    font-size: 1em;
+    font-weight: bold;
+    margin-top:0em;
+    color: #c6c6c6;
+}
+.verticalMove {
+    -webkit-animation: mover 0.75s infinite  alternate;
+    animation: mover 0.75s infinite  alternate;
+}
+@keyframes mover {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-10px); }
 }
 </style>
