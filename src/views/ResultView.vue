@@ -39,7 +39,7 @@ import Frame from '@/components/Frame.vue';
 const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
 
 export default {
-  name: 'ResultView',
+  name: 'ResultView', //GameView
   components: {
     BarsComponent,
     PlayerPedestal,
@@ -82,7 +82,6 @@ export default {
       this.correctAnswer=data.correctAnswer
       this.questionActive=true
       this.pedestalLight=data.pedestalLight
-      console.log("question true: ", this.questionActive)
     });
     socket.on('loadStats', d => {
       this.amountOfQuestions=d.amountOfQuestions
@@ -116,20 +115,6 @@ export default {
 </script>
 
 <style>
-#box-test{
-  height: 100%;
-  width: 80%;
-  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-  background-color: black;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-}
-#line-test{
-  width: 100%;
-  height: 5%;
-  background-color: white;
-}
 #pedestaler{
   width:100%;
   display: flex;
