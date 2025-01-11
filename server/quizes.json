@@ -52,7 +52,7 @@
         "pedestalLight":[]
     },
     "quiz3": {
-        "lang": "en",
+        "lang": "sv",
         "questions": [
         {"q":"What is the most common element on earth?",
         "a": { "correct": "Oxygen", "wrong": [ "Nitrogen", "Carbon", "Hydrogen" ] }},

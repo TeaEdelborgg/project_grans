@@ -13,7 +13,7 @@
       </button>
 
       <button v-on:click="choosePoll('quiz3')">
-        Vetenskap
+        Science
         <img src="/public/img/science_icon.png" alt="icon3"/>
       </button>
     </div>    
