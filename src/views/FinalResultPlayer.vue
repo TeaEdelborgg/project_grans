@@ -43,14 +43,6 @@ export default {
         socket.emit( "getUILabels", this.lang );
 
     },
-    mounted(){
-        socket.emit('getScoreBoard', this.pollId) //måste kanske ha om sidorna inte hinner laddas in i tid, annars låt den andra sidan skicka till andra
-        this.windowHeight = document.documentElement.clientHeight
-        this.windowWidth = document.documentElement.clientWidth;
-        const backgroundPlayer = document.getElementById('background');
-        backgroundPlayer.style.width=this.windowWidth +"px";
-        backgroundPlayer.style.height=this.windowHeight + "px";
-    },
     methods:{
         //gör metod för att räkna ut platsen
         findPlayerPlace: function(scoreBoard){

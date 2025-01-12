@@ -10,7 +10,9 @@
       <div id="answersContainer">
         <div v-for="(a, index) in question.a" class="containerButton">
           <div class="line"></div>
-          <div class="borderRect">
+          <div class="borderRect" :style="{filter: isDisabled(a) ? 'brightness(30%)':'none'}"> 
+            <!--backgroundColor: isDisabled(a) ? 'rgb(38, 38, 38)': 'lightyellow',
+            borderColor: isDisabled(a) ? 'rgb(38, 38, 38)': 'lightyellow'-->
             <button class="rectangle" :class="{
               selected: a === selectedAnswer,
               sended: a === selectedAnswer && sent,
@@ -288,12 +290,13 @@ export default {
 }
 
 .showAudienceAnswer {
-  background-color: rgb(107, 124, 255);
-  color: black;
+  background-color: rgb(60, 69, 138);
+  color: rgb(235, 235, 235);
 }
 
 button:disabled {
-  background-color: grey;
+  background-color: rgb(59, 59, 59);
+  color: #6d6d6d;
 }
 
 .selected {
