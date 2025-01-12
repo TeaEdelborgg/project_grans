@@ -1,26 +1,18 @@
 <template>
     <div class="popup-end-game-content">
-        <p>Är du säker?</p>
-        <button class="continue-button" @click="close">fortsätt spel</button>
-        <button class="end-button" @click="end">avsluta spel</button>
+        <p>{{ uiLabels.areYouSure }}</p>
+        <button class="continue-button" @click="close">{{ uiLabels.continueGame }}</button>
+        <button class="end-button" @click="end">{{ uiLabels.finishGame}}</button>
     </div>
 </template>
 
 <script>
-import io from 'socket.io-client';
-const socket = io(sessionStorage.getItem("dataServer"));
-
 export default {
     name: "PopupEndGame",
     props: {
         showEndGame: Boolean,
         questions: Object,
         uiLabels: Object,
-    },
-    created: function() {
-        socket.on( "uiLabels", labels => this.uiLabels = labels);
-        socket.emit( "getUILabels", this.lang );
-        socket.emit( "joinPoll", this.pollId);
     },
     methods: {
         close() {

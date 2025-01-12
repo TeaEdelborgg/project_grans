@@ -6,16 +6,16 @@
         "a": { "correct": "1919", "wrong": [ "1913", "1945", "1909" ] }},
         {"q":"Vilken dag firas Gustav II Adolf?",
         "a": { "correct": "6 november", "wrong": [ "6 juni", "6 oktober", "6 februari" ] }},
-        {"q":"Till vilken tro abdikerade drottning Kristina?",
+        {"q":"Till vilken tro konverterade drottning Kristina?",
         "a": { "correct": "Katolicismen", "wrong": [ "Scientologin", "Islam", "Protestantismen" ] }},
         {"q":"Vem av Gustav Vasas söner blev inte kung?",
         "a": { "correct": "Magnus", "wrong": [ "Johan", "Erik", "Karl" ] }},
-        {"q":"När flyttade utn till uthgård?",
-        "a": { "correct": "1995", "wrong": [ "1880", "2020", "1955" ] }},
         {"q":"Hur dog Adolf Fredrik Vasa? Han :",
         "a": { "correct": "åt för många semlor", "wrong": [ "trillade av hästen", "blev skjuten", "har aldrig existerat" ] }},
         {"q":"Vilket år grundades Uppsala universitet",
-        "a": { "correct": "1477", "wrong": [ "1632", "1523", "1120" ] }}
+        "a": { "correct": "1477", "wrong": [ "1632", "1523", "1120" ] }},
+        {"q":"När flyttade utn till uthgård?",
+        "a": { "correct": "1995", "wrong": [ "1880", "2020", "1955" ] }}
         ],
         "answers": [],   
         "questionAmount": 7,
@@ -31,13 +31,47 @@
     "quiz2": {
         "lang": "sv",
         "questions": [
-        {"q":"fråga 1",
-        "a": { "correct": "Ja", "wrong": [ "Nej", "Kanske", "Tja" ] }},
-        {"q":"fråga 2",
-        "a": { "correct": "Nej", "wrong": [ "Ja", "Kanske", "Tja" ] }}
+        {"q":"Vilken stad ligger längst mot norr?",
+        "a": { "correct": "Helsingfors", "wrong": [ "Stockholm", "Oslo", "Uppsala" ] }},
+        {"q":"Vilket är Sveriges längsta vattendrag?",
+        "a": { "correct": "Göta älv", "wrong": [ "Indalsälven", "Dalälven", "Ljusnan" ] }},
+        {"q":"Vilken amerikansk delstat sträcker sig längst västerut?",
+        "a": { "correct": "Texas", "wrong": [ "North Dakota", "Nebraska", "Iowa" ] }},
+        {"q":"Vilken kommun har flest invånare?",
+        "a": { "correct": "Norrtälje", "wrong": [ "Falun", "Nyköping", "Uddevalla" ] }}
         ],
         "answers": [],   
+        "questionAmount": 7,
         "currentQuestion": -1,
-        "participants": []
+        "participants": [],
+        "timer":{"timeLeft":10,"interval":null}, 
+        "timerBeforeQuestion":{"timeLeft":3, "interval":null},    
+        "allCorrectedAnswers": {},   
+        "moneyBoxes": [], 
+        "started": false,
+        "pedestalLight":[]
+    },
+    "quiz3": {
+        "lang": "sv",
+        "questions": [
+        {"q":"What is the most common element on earth?",
+        "a": { "correct": "Oxygen", "wrong": [ "Nitrogen", "Carbon", "Hydrogen" ] }},
+        {"q":"What of the following is not a moon of Jupiter?",
+        "a": { "correct": "Tellus", "wrong": [ "Europa", "Io", "Ganymede" ] }},
+        {"q":"What is the speed of light?",
+        "a": { "correct": "300 000km/s", "wrong": [ "30 000km/s", "300 000 000km/s", "3000km/s" ] }},
+        {"q":"What bases make up DNA?",
+        "a": { "correct": "ATGC", "wrong": [ "ACDC", "ABGC", "HDMI" ] }}
+        ],
+        "answers": [],   
+        "questionAmount": 7,
+        "currentQuestion": -1,
+        "participants": [],
+        "timer":{"timeLeft":10,"interval":null}, 
+        "timerBeforeQuestion":{"timeLeft":3, "interval":null},    
+        "allCorrectedAnswers": {},   
+        "moneyBoxes": [], 
+        "started": false,
+        "pedestalLight":[]
     }
 }

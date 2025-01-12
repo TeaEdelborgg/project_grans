@@ -15,6 +15,7 @@ function Data() {
   this.polls = {};
   this.polls['quiz1']= quizes.quiz1;
   this.polls['quiz2']= quizes.quiz2;
+  this.polls['quiz3']= quizes.quiz3;
   this.polls['test'] = {
     lang: "sv",
     questions: [

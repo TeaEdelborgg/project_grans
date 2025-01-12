@@ -23,7 +23,7 @@
         @click="runQuestion">
         {{uiLabels.nextQuestion}}
       </button>
-      <button class="game-button" v-else-if="!canStartNextQuestion" 
+      <button class="game-button finish-button" v-else-if="!canStartNextQuestion" 
         @click="endQuestion">
         {{uiLabels.finishQuestion}}
       </button> 
@@ -33,20 +33,17 @@
       </button>
     </section> <br>
 
-    <section class="participant-controls"> <!-- lägga in för att kunna ta bort spelare här? -->
+    <section class="participant-controls">
       <h2>{{uiLabels.players}}</h2>
       <PlayersAdmin :pollData="pollData" :uiLabels="uiLabels"/>
     </section>
 
     <section class="end-game">
-      <button class="game-button" @click="toggleEndGame">{{uiLabels.finishEarly}}</button>
+      <button class="game-button finish-button" @click="toggleEndGame">{{uiLabels.finishEarly}}</button>
       <div class="popup" v-if="showEndGame" @click.self="toggleEndGame">
         <PopupEndGame :showEndGame="showEndGame" :uiLabels="uiLabels" @close="toggleEndGame" @end="finishGame" />
       </div>
     </section>
-
-    <router-link v-bind:to="'/result/' + pollId">{{uiLabels.checkResult}}</router-link>
-
   </div>
 </template>
 
@@ -196,10 +193,20 @@ h1 {
   text-transform: uppercase;
 }
 
-.game-button:hover:enabled {
+.game-button:hover {
   background-image: linear-gradient(135deg, #d16f00 40%, #dd8800);
   border-color: #bd782a;
   color: #d6b79f
+}
+
+.finish-button {
+  background-image: linear-gradient(135deg, #ff5e3e 40%, #ff7700);
+  border-color: #e85537;
+}
+
+.finish-button:hover {
+  background-image: linear-gradient(135deg, #d44e33 40%, #c95e01);
+  border-color: #c8482e;
 }
 
 .end-game {
