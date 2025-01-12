@@ -1,5 +1,5 @@
 <template>
-    <div id="podiumContainer"> 
+    <div id="podium-container"> 
         <div v-for="n in 3" class="podium" :style="{height: n==2 ? '50%':'30%'}">
             <h3 v-if="showNameWinners[n-1] && winners[n-1]!=null" :style="{
                 top: n==2 ? '-13%':'-23%'}" > 
@@ -28,7 +28,7 @@
 }
 </script>
 <style scoped>
-#podiumContainer{
+#podium-container{
     height: 60%;
     width: 65%;
     position: relative;

@@ -1,7 +1,7 @@
 <template>
-    <div id="speachBubbleContainer">
-        <img src="/img/SpeachBubble.png" id="speachBubble">
-        <div id="textContainer">
+    <div id="speach-bubble-container">
+        <img src="/img/SpeachBubble.png" id="speach-bubble">
+        <div id="text-container">
             <h1>{{uiLabels.readyBeforeQuestion}}</h1>
             <h2>
                 {{ timeLeftBeforeQuestion }}
@@ -19,7 +19,7 @@ export default{
 }
 </script>
 <style scoped>
-#speachBubbleContainer{
+#speach-bubble-container{
     position:fixed;
     z-index:3;
     width:40%;
@@ -27,12 +27,12 @@ export default{
     right:10%;
     top:0;
 }
-#speachBubble{
+#speach-bubble{
     width: 100%;
     height: auto;
     object-fit: contain;
 }
-#textContainer{
+#text-container{
     position:absolute;
     z-index:5;
     top: 50%; 
@@ -40,7 +40,7 @@ export default{
     transform: translate(-50%, -50%); 
     text-align: center;  
 }
-#textContainer h1, h2{
+#text-container h1, h2{
     color:black;
 }
 </style>

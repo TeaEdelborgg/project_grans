@@ -2,11 +2,11 @@
     <div id="background">
         <div v-if="showNameWinners[1]" id="confetti">
         </div>
-        <div id="scoreBoardContainer" v-if="winners.length>0">
+        <div id="score-board-container" v-if="winners.length>0">
             <HeadLight v-bind:direction="'left'"></HeadLight>
             <HeadLight v-bind:direction="'right'"></HeadLight>
             <Podium v-bind:numberOrder="numberOrder" v-bind:showNameWinners="showNameWinners" v-bind:winners="winners"></Podium>
-            <div id="losercontainer">
+            <div id="loser-container">
                 <p v-for="(player, index) in losers" v-if="showNameLosers"> <span>{{ index + 4 }}.</span> {{ player.information.name }}</p> <br>   
             </div>
         </div>
@@ -129,7 +129,7 @@ export default {
         opacity: 0;
     }
 }
-#scoreBoardContainer{
+#score-board-container{
     height: 100%;
     width: 80%;
     margin: auto;
@@ -141,18 +141,7 @@ export default {
     position: relative;
     z-index:2;
 }
-#podiumContainer{
-    height: 60%;
-    width: 65%;
-    position: relative;
-    margin-top:5%;
-    display: grid;
-    grid-template-columns: 20% 30% 20%;
-    justify-content: center;
-    text-align: center;
-    align-items: end;
-}
-#losercontainer{
+#loser-container{
     flex:1;
     width: 40%;
     margin-top: 7%;
@@ -162,7 +151,7 @@ export default {
     justify-content: center;
     z-index: 2;
 }
-#losercontainer p{
+#loser-container p{
     color:#FF851B;
     box-shadow: 0 0 20px lightyellow;
     height: 20%;

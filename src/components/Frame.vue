@@ -1,10 +1,10 @@
 <template>
-    <div id="movingBorder">
+    <div id="moving-border">
         <div v-if="!questionActive" class="frame">
-            <div id="moneyframe">
+            <div id="money-frame">
                 <Moneybox v-for="index in amountOfQuestions" v-bind:boxState="moneyBoxes[index-1]" v-bind:value="moneyValues[index-1]" :id="index"/>
             </div>
-            <div id="playersFrame">
+            <div id="players-frame">
                 <PlayerPillar v-if="participants.length>0"  v-for="player in participants" v-bind:player="player" v-bind:amountOfQuestions="amountOfQuestions":key="player.id" />
             </div>
         </div>
@@ -46,7 +46,7 @@ export default{
 }
 </script>
 <style>
-#movingBorder{
+#moving-border{
     display: flex;
     position: relative;
     height: 90%;
@@ -75,14 +75,14 @@ export default{
         background-position: 100% 0;
     }
 }
-#moneyframe{
+#money-frame{
   height: 100%;
   width: 20%;
   display: flex;
   justify-content: space-evenly;
   flex-direction: column-reverse;
 }
-#playersFrame{
+#players-frame{
   width:80%;
   display: flex;
   justify-content: space-evenly;

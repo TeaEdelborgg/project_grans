@@ -1,7 +1,7 @@
 <template>
   <div id="dimmed-overlay"></div>
-  <div id="questionFrame">
-    <div id="progressbar">
+  <div id="question-frame">
+    <div id="progress-bar">
       <div id="progress" :style="{ width: percentage + '%', animation: percentage <= 30 ? 'shake 0.5s infinite' : 'none' }">
       </div>
     </div>
@@ -124,7 +124,7 @@ export default {
   width: 100%;
 }
 
-#questionFrame {
+#question-frame {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -134,12 +134,11 @@ export default {
   position: absolute;
 }
 
-#questionFrame h1,
-h2 {
+#question-frame h1,h2 {
   color: White;
 }
 
-#progressbar {
+#progress-bar {
   width: 100%;
   overflow: hidden;
   height: 20px;
@@ -164,7 +163,6 @@ h2 {
     transform: translateY(10%);
     background-color: red;
     box-shadow: 0 0 20px red;
-    /**blinka rött */
   }
 
   100% {

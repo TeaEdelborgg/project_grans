@@ -1,5 +1,5 @@
 <template> 
-      <div class="pedestalContainer">
+      <div class="pedestal-container">
         <HalfCircle v-bind:lightPedestal="lightPedestal" v-bind:questionActive="questionActive"></HalfCircle>
         <div class="pedestal" :style="{background: 'linear-gradient(to right, '+player.information.color+' 0%, #c0c0c0 45% 55%, '+player.information.color+' 100%)' }"> 
           <NameBox v-bind:player="player"></NameBox>
@@ -32,14 +32,12 @@ export default {
 </script>
 
 <style>
-  .pedestalContainer{
+  .pedestal-container{
   flex:1;
   max-width: 12%;
   height:100%;
   margin:auto;
   position: relative;
-  box-sizing: content-box;
-
 }
   .pedestal{
     position: absolute;

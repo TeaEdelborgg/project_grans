@@ -1,5 +1,5 @@
 <template>
-    <div class="hostContainer">
+    <div class="host-container">
         <img :src="questionActive ? '/img/gubbe1.png':'/img/gubbe2.png'" alt="HostPlayer">
         <div id="shadow"></div>
     </div>
@@ -13,13 +13,13 @@ export default{
 }
 </script>
 <style>
-.hostContainer{
+.host-container{
   position: relative;
   width: 20%;
   height: auto;
   bottom: -10%;
 }
-.hostContainer img{
+.host-container img{
     position:absolute;
     bottom: 5%;
     left:30%;

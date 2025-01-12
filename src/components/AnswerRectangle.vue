@@ -1,7 +1,7 @@
 <template>
-  <div v-for="(a, index) in question.a" class="RectangleContainer" id="a">
+  <div v-for="(a, index) in question.a" class="rectangle-container" id="a">
     <div class="line"></div>
-    <div class="borderRect">
+    <div class="border-rectangle">
       <div class="rectangle" :style="{ backgroundColor: a == correctAnswer && showCorrectAnswer ? '#FF851B' : 'none' }">
         <h3 :style="{ color: a == correctAnswer && showCorrectAnswer ? 'black' : 'none' }">
           <span :style="{ color: a == correctAnswer && showCorrectAnswer ? 'black' : 'none' }">{{ answersLetters[index] }}:
@@ -38,7 +38,7 @@ export default {
   position: relative;
 }
 
-.borderRect {
+.border-rectangle {
   clip-path: polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%);
   border: 2px solid lightyellow;
   position: absolute;
@@ -51,7 +51,7 @@ export default {
   box-shadow: 0 0 5px lightyellow;
 }
 
-.RectangleContainer {
+.rectangle-container {
   display: flex;
   flex-direction: column;
   align-content: center;

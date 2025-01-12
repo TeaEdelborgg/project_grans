@@ -6,7 +6,7 @@
     <div class="line"></div>
   </div>
   <br>
-  <div v-if="questionActive" id="AnswerGrid">
+  <div v-if="questionActive" id="answer-grid">
     <AnswerRectangle v-bind:question="question" v-bind:correctAnswer="correctAnswer" v-bind:showCorrectAnswer="showCorrectAnswer"></AnswerRectangle>
   </div>  
 </template>
@@ -43,7 +43,7 @@ export default{
   margin-top:10%;
   background-color: #101c3e;
 }
-#AnswerGrid{
+#answer-grid{
   bottom:5%;
   width: 100%;
   height: 40%;

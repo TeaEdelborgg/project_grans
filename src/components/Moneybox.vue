@@ -1,5 +1,5 @@
 <template>
-    <div class="moneybox">
+    <div class="money-box">
         <div :class="{
             lightBulb: boxState === 'done',
             darkLightBulb: boxState == 'future',
@@ -23,7 +23,7 @@
 }
 </script>
 <style scoped>
-.moneybox{
+.money-box{
     flex:1;
     width: 80%;
     max-height: 100%;
@@ -41,13 +41,13 @@
     box-shadow:0 0 15px #f9ac33; 
     padding:0.5%;
 }
-.moneybox p{
+.money-box p{
     color:#f9ac33;
     font-weight: bold;
     font-size: 1.2em;
     margin:0;
 }
-.moneybox div{
+.money-box div{
     width: 50%;
     height: 50%;
     max-width: 20px;

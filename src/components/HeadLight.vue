@@ -1,5 +1,5 @@
 <template>
-    <div class="headlight" :class="{
+    <div class="head-light" :class="{
         left: direction=='left',
         right: direction=='right'
     }">
@@ -14,7 +14,7 @@ export default{
 }
 </script>
 <style>
-.headlight{
+.head-light{
     width: 35%;
     height: 5%;
     background: linear-gradient(black,#545454,black);

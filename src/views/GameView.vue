@@ -1,6 +1,6 @@
 <template>
   <div id="background">
-    <div id="rowContainer">
+    <div id="row-container">
       <Frame 
       v-on:countDownOver="countDownOver" 
       v-bind:amountOfQuestions="amountOfQuestions"  
@@ -102,9 +102,6 @@ export default {
     socket.emit('getStats', this.pollId); 
 
   },
-  mounted (){
-    
-  },
   methods:{
     countDownOver: function(){
       setTimeout(()=>{
@@ -122,12 +119,10 @@ export default {
   display: flex;
   justify-content: space-evenly;
   height:25%;
-  margin-left:auto;
-  margin-right:auto;
   bottom:0;
   position: relative;
 }
-#rowContainer{
+#row-container{
   display: flex;
   flex-direction: row;
   height: 75%;

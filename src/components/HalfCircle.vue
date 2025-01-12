@@ -1,5 +1,5 @@
 <template>
-    <div class="halfCircle" :class="{ 
+    <div class="half-circle" :class="{ 
         light: lightPedestal && questionActive
     }"></div>
 </template>
@@ -13,7 +13,7 @@ export default{
 }
 </script>
 <style>
-.halfCircle{
+.half-circle{
     height:10%;
     width: 50%;
     margin: auto;

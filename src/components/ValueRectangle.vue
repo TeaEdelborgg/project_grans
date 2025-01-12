@@ -1,5 +1,5 @@
 <template>
-    <div class="borderRect">
+    <div class="border-rectangle">
       <div class="rectangle"><p>{{currentValue}}</p></div>
     </div>
 </template>
@@ -21,7 +21,7 @@ export default{
   justify-content: center;
   position: relative;
 }
-.borderRect{
+.border-rectangle{
   clip-path: polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%);
   border: 2px solid lightyellow;
   position: absolute;

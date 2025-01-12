@@ -37,14 +37,12 @@ export default {
             this.findPlayerPlace(scoreBoard);  
         })
         
-        //socket on den som skickar tillbaka scores
         socket.on( "uiLabels", labels => this.uiLabels = labels );
         socket.emit( "joinPoll", this.pollId );
         socket.emit( "getUILabels", this.lang );
 
     },
     methods:{
-        //gör metod för att räkna ut platsen
         findPlayerPlace: function(scoreBoard){
             console.log("scoreboard: ",scoreBoard)
             const index = scoreBoard.findIndex(player => player.userId == this.userId)
@@ -54,15 +52,6 @@ export default {
             else{
                 this.place=index+1
             }
-            /*for(let i=0;i<scoreBoard.length;i++){
-                let player = scoreBoard[i]
-                if(player.userId==this.userId){
-                    if(i==0){
-                        this.winner=true
-                    }
-                    this.place=i+1
-                }
-            }*/
         }
     }
 }
