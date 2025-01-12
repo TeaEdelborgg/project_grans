@@ -38,7 +38,6 @@ export default {
       sent: false,
       fiftyFify: [],
       audienceAnswer: '',
-      answerLetters: ['A', 'B', 'C', 'D'],
 
       //till för countdownen
       question: {
@@ -192,12 +191,10 @@ button:disabled {
 
 .timerBarContainer {
   width: 95%;
-  /*height: 20px;*/
   height: 5%;
   background-color: #e3e3e3;
   border-radius: 10px;
   overflow: hidden;
-  /*margin: 3vh 0;*/
   margin: 2%;
   padding: 0;
   position: relative;

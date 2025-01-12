@@ -143,6 +143,11 @@ export default {
     text-align: left;
 }
 
+.showAudienceAnswer {
+    background-color: rgb(60, 69, 138);
+    color: rgb(235, 235, 235);
+}
+
 .selected {
     background-color: #f9ac33;
     color: #e3e3e3;
@@ -161,10 +166,5 @@ export default {
 .showIncorrect {
     background-color: #fd4d47;
     color: #e3e3e3;
-}
-
-.showAudienceAnswer {
-    background-color: rgb(60, 69, 138);
-    color: rgb(235, 235, 235);
 }
 </style>

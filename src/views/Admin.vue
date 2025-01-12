@@ -1,45 +1,45 @@
 <template>
   <div class="admin">
-    <h1>{{uiLabels.adminPanel}}</h1>
+    <h1>{{ uiLabels.adminPanel }}</h1>
     <section class="game-status">
-      <h2>{{uiLabels.gameStatus}}</h2>
+      <h2>{{ uiLabels.gameStatus }}</h2>
       <div>
-        <p>{{uiLabels.numberOfAnswers + numberPlayersAnswered }}/{{ numberPlayers }}</p>
-        <p>{{uiLabels.currentQuestion + (pollData.currentQuestion + 1) }}/{{ pollData.questionAmount }}</p>
+        <p>{{ uiLabels.numberOfAnswers + numberPlayersAnswered }}/{{ numberPlayers }}</p>
+        <p>{{ uiLabels.currentQuestion + (pollData.currentQuestion + 1) }}/{{ pollData.questionAmount }}</p>
       </div>
       <div class="questions">
-        <button class="game-button" @click="toggleQuestions">{{uiLabels.viewQuestionsAnswers}}</button>
+        <button class="game-button" @click="toggleQuestions">{{ uiLabels.viewQuestionsAnswers }}</button>
         <div class="popup" v-if="showQuestions" @click.self="toggleQuestions">
           <PopupQuestions :showQuestions="showQuestions" :questions="pollData.questions" :uiLabels="uiLabels"
-            @close="toggleQuestions"/>
+            @close="toggleQuestions" />
         </div>
       </div>
     </section>
 
     <section class="game-controls">
-      <h2>{{uiLabels.controlGame}}</h2>
-      <button class="game-button" v-if="pollData.currentQuestion == -1" @click="runQuestion">{{uiLabels.startGame}}</button>
-      <button class="game-button" v-else-if="pollData.currentQuestion + 1 != pollData.questionAmount && canStartNextQuestion" 
+      <h2>{{ uiLabels.controlGame }}</h2>
+      <button class="game-button" v-if="pollData.currentQuestion == -1"
+        @click="runQuestion">{{ uiLabels.startGame }}</button>
+      <button class="game-button"
+        v-else-if="pollData.currentQuestion + 1 != pollData.questionAmount && canStartNextQuestion"
         @click="runQuestion">
-        {{uiLabels.nextQuestion}}
+        {{ uiLabels.nextQuestion }}
       </button>
-      <button class="game-button finish-button" v-else-if="!canStartNextQuestion" 
-        @click="endQuestion">
-        {{uiLabels.finishQuestion}}
-      </button> 
-      <button class="game-button" v-else 
-        @click="finishGame">
-        {{uiLabels.ViewFinalResults}}
+      <button class="game-button finish-button" v-else-if="!canStartNextQuestion" @click="endQuestion">
+        {{ uiLabels.finishQuestion }}
+      </button>
+      <button class="game-button" v-else @click="finishGame">
+        {{ uiLabels.ViewFinalResults }}
       </button>
     </section> <br>
 
     <section class="participant-controls">
-      <h2>{{uiLabels.players}}</h2>
-      <PlayersAdmin :pollData="pollData" :uiLabels="uiLabels"/>
+      <h2>{{ uiLabels.players }}</h2>
+      <PlayersAdmin :pollData="pollData" :uiLabels="uiLabels" />
     </section>
 
     <section class="end-game">
-      <button class="game-button finish-button" @click="toggleEndGame">{{uiLabels.finishEarly}}</button>
+      <button class="game-button finish-button" @click="toggleEndGame">{{ uiLabels.finishEarly }}</button>
       <div class="popup" v-if="showEndGame" @click.self="toggleEndGame">
         <PopupEndGame :showEndGame="showEndGame" :uiLabels="uiLabels" @close="toggleEndGame" @end="finishGame" />
       </div>

@@ -3,7 +3,7 @@
         <div class="one-participant" v-for="(participant, index) in pollData?.participants" :key="index">
             <p class="player-name">{{ participant.information.name }}</p>
             <hr>
-            <div v-if="pollData.currentQuestion == -1">{{uiLabels.answer}}</div>
+            <div v-if="pollData.currentQuestion == -1">{{ uiLabels.answer }}</div>
             <div v-else-if="participant.information.answers?.[pollData.currentQuestion]?.[0] == null">
                 <div class="loading-dots">
                     <div class="animatedDots"></div>
@@ -16,7 +16,6 @@
             </div>
         </div>
     </div>
-
 </template>
 
 <script>
