@@ -46,6 +46,7 @@ export default {
     text-align: center;
     width: 10vw;
     min-height: 13vh;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .player-name {

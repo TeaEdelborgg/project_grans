@@ -59,6 +59,8 @@
           <li>{{uiLabels.rulesli2}}</li>
           <li>{{uiLabels.rulesli3}}</li>
           <li>{{uiLabels.rulesli4}}</li>
+          <li>{{uiLabels.rulesli6}}</li>
+          <li>{{uiLabels.rulesli7}}</li>
           <li>{{ uiLabels.rulesli5 }}</li>
         <button @click="closeGameRules">X</button>
       </div>
@@ -144,6 +146,10 @@ export default {
       if (!this.popupShown && this.colors.some(color => this.isColorDisabled(color.hex))) {
         this.showPopup = true; 
         this.popupShown = true; 
+
+        setTimeout(() => {
+        this.showPopup = false;
+      }, 4000);
       }
     },
     closePopup() {
@@ -289,6 +295,7 @@ input[type="text"]:hover {
   padding-right: 24px;
   position: absolute;
   top: 2px;
+  color: white;
 }
 .popup button{
   background: rgb(192, 5, 5);
@@ -296,6 +303,7 @@ input[type="text"]:hover {
   position: absolute; 
   top: 9px; 
   right: 10px; 
+  color: white;
 }
 
 h1 {

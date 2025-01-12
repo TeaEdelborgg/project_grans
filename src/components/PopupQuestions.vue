@@ -80,6 +80,6 @@ export default {
 }
 
 .close-button:hover {
-    background: #bd782a;
+    filter: brightness(75%)
 }
 </style>

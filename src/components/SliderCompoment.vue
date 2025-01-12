@@ -5,7 +5,7 @@
     <div id="arrow-container" v-if="selectedAnswer != null && !pressed && !sent && questionNumber==0"
         :class="{ verticalMove: seeAlternatives }">
         <img id="arrow" src="/img/arrow.png" />
-        <p id="arrow-text">Lock<br>answer</p>
+        <p id="arrow-text">{{ uiLabels.lockAnswer }}</p>
     </div>
 </template>
 
@@ -17,6 +17,7 @@ export default {
         questionActive: Boolean,
         selectedAnswer: String,
         questionNumber: Number,
+        uiLabels: Object,
     },
     data() {
         return {
@@ -158,7 +159,7 @@ export default {
 #arrow-text {
     font-size: 1em;
     font-weight: bold;
-    margin-top: 0em;
+    margin-top: 1em;
     color: #c6c6c6;
 }
 

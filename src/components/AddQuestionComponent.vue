@@ -71,7 +71,7 @@
   };
   </script>
 
-<style>
+<style scoped>
 
 ::placeholder {
   color:#000;
@@ -136,11 +136,11 @@
 
 .correctAnswerBox,
 .correctAnswerBox::placeholder {
-  color: rgb(28, 102, 30);
+  color: rgb(0, 154, 5);
 }
 
 .wrongAnswerBox,
 .wrongAnswerBox::placeholder {
-  color: rgb(143, 21, 23);
+  color: rgb(182, 2, 5);
 }
 </style>

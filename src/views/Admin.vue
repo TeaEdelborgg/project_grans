@@ -194,19 +194,13 @@ h1 {
 }
 
 .game-button:hover {
-  background-image: linear-gradient(135deg, #d16f00 40%, #dd8800);
-  border-color: #bd782a;
-  color: #d6b79f
+  transform: scale(1.05);
+  filter: brightness(80%)
 }
 
 .finish-button {
   background-image: linear-gradient(135deg, #ff5e3e 40%, #ff4800);
   border-color: #e85537;
-}
-
-.finish-button:hover {
-  background-image: linear-gradient(135deg, #d44e33 40%, #c95e01);
-  border-color: #c8482e;
 }
 
 .end-game {

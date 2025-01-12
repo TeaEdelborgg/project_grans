@@ -147,7 +147,7 @@ export default {
   justify-content: center;
   align-items: center;
   position: relative;
-  margin-top: 20vh;
+  margin-top: 15vh;
   gap: 1vh;
 }
 

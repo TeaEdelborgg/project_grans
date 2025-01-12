@@ -2,15 +2,16 @@
   <div id="playerview">
     <SliderCompoment @sendAnswer="submitAnswer(selectedAnswer)" v-bind:sent="sent"
       v-bind:seeAlternatives="seeAlternatives" v-bind:questionActive="questionActive"
-      v-bind:selectedAnswer="selectedAnswer" v-bind:questionNumber="questionNumber"/>
+      v-bind:selectedAnswer="selectedAnswer" v-bind:questionNumber="questionNumber"
+      v-bind:uiLabels="uiLabels"/>
     <div id="container" v-if="questionActive || seeAlternatives" class="answeralternatives"> 
       <div class="timerBarContainer">
-        <div class="timerBar" :style="{ width: percentage + '%' }"></div>
+        <div class="timerBar" :class="{ shake: percentage <= 30 }" :style="{ width: percentage + '%' }"></div>
       </div>
       <div id="answersContainer">
         <div v-for="(a, index) in question.a" class="containerButton">
           <div class="line"></div>
-          <div class="borderRect">
+          <div class="borderRect" :style="{filter: isDisabled(a) ? 'brightness(30%)':'none'}"> 
             <button class="rectangle" :class="{
               selected: a === selectedAnswer,
               sended: a === selectedAnswer && sent,
@@ -43,6 +44,7 @@ export default {
   props: {
     userId: String,
     pollId: String,
+    uiLabels: Object,
   },
   data: function () {
     return {
@@ -288,12 +290,13 @@ export default {
 }
 
 .showAudienceAnswer {
-  background-color: rgb(107, 124, 255);
-  color: black;
+  background-color: rgb(60, 69, 138);
+  color: rgb(235, 235, 235);
 }
 
 button:disabled {
-  background-color: grey;
+  background-color: rgb(59, 59, 59);
+  color: #6d6d6d;
 }
 
 .selected {
@@ -333,5 +336,26 @@ button:disabled {
   height: 100%;
   background-color: #FF851B;
   transition: width 0.3s linear;
+}
+
+.timerBar.shake {
+  animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(10%);
+    background-color: red;
+    box-shadow: 0 0 20px red;
+    /**blinka rött */
+  }
+
+  100% {
+    transform: translateY(0);
+  }
 }
 </style>
