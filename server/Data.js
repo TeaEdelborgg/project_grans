@@ -455,4 +455,10 @@ Data.prototype.clearParticipants = function(pollId){
   }
 }
 
+/*Data.prototype.calculatePillarHeight = function(pollId,userId){
+  if(this.pollExists(pollId)){
+    let heightSteps = 100/this.polls[pollId].amountQuestions
+  }
+}*/
+
 export { Data };

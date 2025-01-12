@@ -1,7 +1,6 @@
 <template>
     <div id="movingBorder">
-        <div id="frame">
-        <div v-if="!questionActive" class="frameState">
+        <div v-if="!questionActive" class="frame">
             <div id="moneyframe">
                 <Moneybox v-for="index in amountOfQuestions" v-bind:boxState="moneyBoxes[index-1]" v-bind:value="moneyValues[index-1]" :id="index"/>
             </div>
@@ -9,16 +8,15 @@
                 <Player v-if="participants.length>0"  v-for="player in participants" v-bind:player="player" v-bind:amountOfQuestions="amountOfQuestions":key="player.id" />
             </div>
         </div>
-        <div v-if="questionActive" class="frameState">
+        <div v-if="questionActive" class="frame">
             <QuestionCountDown v-if="questionActive" v-bind:currentValue="moneyValues[questionNumber]" v-bind:correctAnswer="correctAnswer" v-bind:uiLabels="uiLabels" v-bind:question="question" v-on:countDownOverSend="countDownOverSend" ></QuestionCountDown> <!--Sätta den i frame så som en TV?-->
         </div>
-    </div>
     </div>
     
 </template>
 <script>
 import Moneybox from '@/components/Moneybox.vue';
-import Player from '@/components/Player.vue';
+import Player from '@/components/PlayerPillar.vue';
 import QuestionCountDown from '@/components/QuestionCountDown.vue';
 
 export default{
@@ -76,15 +74,6 @@ export default{
         background-position: 100% 0;
     }
 }
-#frame{
-  height:100%; 
-  width: 100%;
-  border-radius: 3%;
-  background: radial-gradient( #7bb0f3,#393a93); 
-  display:flex;
-  position: relative;
-  overflow:hidden;
-}
 #moneyframe{
   height: 100%;
   width: 20%;
@@ -99,10 +88,13 @@ export default{
   height:100%;
   margin: auto;
 }
-.frameState{
+.frame{
     display: flex;
     width: 100%;
     height: 100%;
-    position:absolute;
+    position:relative;
+    overflow:hidden;
+    background: radial-gradient( #7bb0f3,#393a93); 
+    border-radius: 3%;
 }
 </style>

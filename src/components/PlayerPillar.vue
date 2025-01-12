@@ -12,7 +12,7 @@
 <script>
 
 export default {
-  name: 'Player',
+  name: 'PlayerPillar',
   props: {
     player: Object,
     amountOfQuestions: Number

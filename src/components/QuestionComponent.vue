@@ -27,14 +27,6 @@ export default{
           AnswerRectangle,
           ValueRectangle
         },
-        data: function(){
-            return{
-              
-            }
-        },
-        methods:{
-           
-        }
 }
 </script>
 <style>

@@ -1,7 +1,6 @@
 <template>
-    <div id="backgroundFrame"></div> <!--ändra till något som beskriver att den är mörk-->
+    <div id="dimmed-overlay"></div> 
         <div id="questionFrame">
-          <div>
             <div id="progressbar">
                 <div id="progress" :style="{width:percentage+'%', animation: percentage<=30 ? 'shake 0.5s infinite':'none'}"></div>
             </div>
@@ -14,7 +13,6 @@
           </div>
           <div v-if="showQuestion && questionActive==false">
               <h1>{{timeLeftBeforeAnswers}}</h1>
-          </div>
         </div>
 </template>
     
@@ -54,13 +52,10 @@ import QuestionComponent from './QuestionComponent.vue';
         socket.emit( "joinPoll", this.pollId );
       },
       mounted(){
-        console.log("correctAnswer i mounted: ",this.correctAnswer)
         this.countdownResult()
       },
       methods:{
-        //ha countdown här, när den är färdig skickas metod till vanliga som skickar socket.emit + gör denna osynlig
         countdownResult: function(){
-          console.log("fråga borde visas")
           let startTime = Date.now();
           let timeLeftTest=0;
           let endQuestion = false;
@@ -81,7 +76,7 @@ import QuestionComponent from './QuestionComponent.vue';
               clearInterval(interval)
             })
             if (timeLeftTest > timerQuestion) {
-              this.timeLeftBeforeQuestion = Math.floor((4000 - elapsedTime)/1000); //uppdaterar inte?
+              this.timeLeftBeforeQuestion = Math.floor((4000 - elapsedTime)/1000); 
             } else if (timeLeftTest>timerAnswer){
               this.showQuestion = true
               this.timeLeftBeforeAnswers = Math.floor((9000-elapsedTime)/1000)
@@ -101,7 +96,6 @@ import QuestionComponent from './QuestionComponent.vue';
           this.showCorrectAnswer=true
           this.percentage=0;
           setTimeout(()=>{
-                console.log('kör clearInterval orginal')
                 this.$emit("countDownOverSend")
               },1000)
         }
@@ -117,7 +111,7 @@ import QuestionComponent from './QuestionComponent.vue';
     opacity: 1;
   }
 }
-#backgroundFrame{
+#dimmed-overlay{
   position:fixed;
   opacity: 0.5;
   background-color: black;
@@ -133,9 +127,6 @@ import QuestionComponent from './QuestionComponent.vue';
   overflow:hidden;
   margin: auto;
   z-index: 3;
-  /*left:50%;
-  top:40%;*/
-  /*transform: translate(-50%,-50%);*/
   background: linear-gradient(45deg,#0f131f, #3a3790, #0f131f);
   position: absolute;
 }

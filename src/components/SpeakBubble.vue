@@ -15,13 +15,7 @@ export default{
         props:{
             timeLeftBeforeQuestion: Number,
             uiLabels: Object
-        },
-        data: function(){
-            return{
-                
-            }
-        },
-        
+        }, 
 }
 </script>
 <style scoped>
@@ -37,8 +31,6 @@ export default{
     width: 100%;
     height: auto;
     object-fit: contain;
-    /*transform:translateX(100%);
-    transition: transform 1s ease-in-out;*/
 }
 #textContainer{
     position:absolute;
@@ -47,8 +39,6 @@ export default{
     left: 50%;
     transform: translate(-50%, -50%); 
     text-align: center;  
-    /*transform:translateX(100%);
-    transition: transform 1s ease-in-out;*/
 }
 #textContainer h1, h2{
     color:black;

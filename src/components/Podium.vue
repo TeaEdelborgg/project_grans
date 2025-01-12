@@ -1,5 +1,5 @@
 <template>
-    <div id="podiumContainer">
+    <div id="podiumContainer"> 
         <div v-for="n in 3" class="podium" :style="{height: n==2 ? '50%':'30%'}">
             <h3 v-if="showNameWinners[n-1] && winners[n-1]!=null" :style="{
                 top: n==2 ? '-13%':'-23%'}" > 
@@ -9,8 +9,8 @@
                 fontSize: n==2 ? '6em':'4em'}">
                 {{ numberOrder[n-1] }}</h1>
         </div>
-        <div id="holder"></div>
-        <div id="holder" :style="{
+        <div id="platform"></div> 
+        <div id="platform" :style="{
             zIndex:'-2',
             background:'linear-gradient(to right, black, #858585, black)',
             bottom:'-15%',
@@ -25,12 +25,6 @@
             showNameWinners: Array,
             winners: Array
         },
-        data: function(){
-            return{
-
-            }
-        },
-        
 }
 </script>
 <style scoped>
@@ -73,7 +67,7 @@
     transform: translate(-50%,-50%);
     text-shadow: 0 1px 0 #4a4646, 0 3px 0 #4a4646, 0 0 2px #4a4646;
 }
-#holder{
+#platform{
     position: absolute;
     width: 100%;
     height: 20%;

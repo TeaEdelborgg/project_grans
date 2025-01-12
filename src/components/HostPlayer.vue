@@ -1,10 +1,6 @@
 <template>
-    <div v-if="!questionActive" class="test">
-            <img src="/img/gubbe2.png" alt="">
-            <div id="shadow"></div>
-    </div>
-    <div v-if="questionActive" class="test">
-        <img src="/img/gubbe1.png" alt="" >
+    <div class="hostContainer">
+        <img :src="questionActive ? '/img/gubbe1.png':'/img/gubbe2.png'" alt="HostPlayer">
         <div id="shadow"></div>
     </div>
 </template>
@@ -13,24 +9,17 @@ export default{
         name:'HostPlayer',
         props:{
             questionActive: Boolean
-        },
-        data: function(){
-            return{
-                
-            }
-        },
-        
+        },        
 }
 </script>
 <style>
-.test{
+.hostContainer{
   position: relative;
   width: 20%;
   height: auto;
   bottom: -10%;
 }
-
-.test img{
+.hostContainer img{
     position:absolute;
     bottom: 5%;
     left:30%;

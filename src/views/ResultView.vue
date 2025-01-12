@@ -1,4 +1,4 @@
-<template>
+<template> <!--byt namn till GameView-->
   <div id="background">
     <div id="rowContainer">
       <Frame 
@@ -77,7 +77,7 @@ export default {
     })
  
     socket.on('startCountdownResults', data =>{ 
-      this.question=data.q; //lägg ihop dessa till en
+      this.question=data.q; 
       this.questionNumber=data.questionNumber
       this.correctAnswer=data.correctAnswer
       this.questionActive=true

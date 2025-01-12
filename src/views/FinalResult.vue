@@ -15,8 +15,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
-
 import io from 'socket.io-client';
 import Podium from '../components/Podium.vue';
 import HeadLight from '../components/HeadLight.vue';
