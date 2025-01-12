@@ -1,8 +1,8 @@
 <template>
-    <div id="bars" :class="{ verticalMove: seeAlternatives && !sent && selectedAnswer != null }" @mousedown="pressedDown"
-        @touchstart="pressedDown">
+    <div id="bars" :class="{ verticalMove: seeAlternatives && !sent && selectedAnswer != null }"
+        @mousedown="pressedDown" @touchstart="pressedDown">
     </div>
-    <div id="arrow-container" v-if="selectedAnswer != null && !pressed && !sent && questionNumber==0"
+    <div id="arrow-container" v-if="selectedAnswer != null && !pressed && !sent && questionNumber == 0"
         :class="{ verticalMove: seeAlternatives }">
         <img id="arrow" src="/img/arrow.png" />
         <p id="arrow-text">{{ uiLabels.lockAnswer }}</p>
@@ -108,7 +108,6 @@ export default {
         sendAnswer: function (e) {
             if (!this.sent) {
                 this.$emit("sendAnswer")
-                console.log("ska skicka svar från slidern");
             }
         }
     },
