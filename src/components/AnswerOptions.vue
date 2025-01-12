@@ -6,7 +6,7 @@
       v-bind:uiLabels="uiLabels"/>
     <div id="container" v-if="questionActive || seeAlternatives" class="answeralternatives"> 
       <div class="timerBarContainer">
-        <div class="timerBar" :style="{ width: percentage + '%' }"></div>
+        <div class="timerBar" :class="{ shake: percentage <= 30 }" :style="{ width: percentage + '%' }"></div>
       </div>
       <div id="answersContainer">
         <div v-for="(a, index) in question.a" class="containerButton">
@@ -336,5 +336,26 @@ button:disabled {
   height: 100%;
   background-color: #FF851B;
   transition: width 0.3s linear;
+}
+
+.timerBar.shake {
+  animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(10%);
+    background-color: red;
+    box-shadow: 0 0 20px red;
+    /**blinka rött */
+  }
+
+  100% {
+    transform: translateY(0);
+  }
 }
 </style>
