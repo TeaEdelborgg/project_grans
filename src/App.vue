@@ -21,12 +21,23 @@ button {
   padding: 0;
   position: absolute;
   z-index: 100;
-  left: 2px;
-  top: 9px
+  top: 0; 
+  right: 87%; 
+  width: 17%; 
+  height: 17%; 
 }
 
 button img {
-  width: 140px; 
-  height: auto;
+  width: 100%; 
+  height: 100%;
+  object-fit: contain; 
+}
+@media (max-width: 480px) {
+  button {
+    right: 75%; 
+    width: 30%;
+    height: 30%; 
+    top: -7%;
+  }
 }
 </style>
