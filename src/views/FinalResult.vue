@@ -1,19 +1,11 @@
 <template>
     <div id="background">
         <div v-if="showNameWinners[1]" id="confetti">
-            <img src="/img/confetti2.png" alt="">
+            <img src="/img/confetti2.png" alt="confetti">
         </div>
-        <div id="scoreBoard" v-if="winners.length>0"> <!--Gör sedan att winner är namnet, och losers är endast listan av namnen-->
-            <div class="headlight" :style="{
-                left:'-5%',
-                transform:'rotate(45deg)',
-                filter:'drop-shadow(400px 0 80px rgb(250, 245, 181)) drop-shadow(270px 0 100px rgb(250, 245, 181))'}">
-                </div>
-            <div class="headlight" :style="{
-                right:'-5%',
-                transform:'rotate(-45deg)',
-                filter:'drop-shadow(-400px 0 80px rgb(250, 245, 181)) drop-shadow(-270px 0 120px rgb(250, 245, 181))'}">
-                </div>
+        <div id="scoreBoardContainer" v-if="winners.length>0">
+            <HeadLight v-bind:direction="'left'"></HeadLight>
+            <HeadLight v-bind:direction="'right'"></HeadLight>
             <Podium v-bind:numberOrder="numberOrder" v-bind:showNameWinners="showNameWinners" v-bind:winners="winners"></Podium>
             <div id="losercontainer">
                 <p v-for="(player, index) in losers" v-if="showNameLosers"> <span>{{ index + 4 }}.</span> {{ player.information.name }}</p> <br>   
@@ -27,13 +19,15 @@
 
 import io from 'socket.io-client';
 import Podium from '../components/Podium.vue';
+import HeadLight from '../components/HeadLight.vue';
 //const socket = io("localhost:3000");
 const socket = io(sessionStorage.getItem("dataServer")) 
 
 export default {
     name: 'FinalResultView',
     components: {
-    Podium
+    Podium,
+    HeadLight
     },
     data: function () {
         return {
@@ -135,15 +129,7 @@ export default {
         opacity: 0;
     }
 }
-.headlight{
-    width: 35%;
-    height: 5%;
-    background: linear-gradient(black,#545454,black);
-    position: absolute;
-    z-index:3;
-    top:-19%;
-}
-#scoreBoard{
+#scoreBoardContainer{
     height: 100%;
     width: 80%;
     margin: auto;

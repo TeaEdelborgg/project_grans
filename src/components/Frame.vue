@@ -1,7 +1,7 @@
 <template>
     <div id="movingBorder">
         <div id="frame">
-        <div v-if="!questionActive" class="test2">
+        <div v-if="!questionActive" class="frameState">
             <div id="moneyframe">
                 <Moneybox v-for="index in amountOfQuestions" v-bind:boxState="moneyBoxes[index-1]" v-bind:value="moneyValues[index-1]" :id="index"/>
             </div>
@@ -9,8 +9,8 @@
                 <Player v-if="participants.length>0"  v-for="player in participants" v-bind:player="player" v-bind:amountOfQuestions="amountOfQuestions":key="player.id" />
             </div>
         </div>
-        <div v-if="questionActive" class="test2">
-            <QuestionComponentResult v-if="questionActive" v-bind:currentValue="moneyValues[questionNumber]" v-bind:correctAnswer="correctAnswer" v-bind:uiLabels="uiLabels" v-bind:question="question" v-on:countDownOverSend="countDownOverSend" ></QuestionComponentResult> <!--Sätta den i frame så som en TV?-->
+        <div v-if="questionActive" class="frameState">
+            <QuestionCountDown v-if="questionActive" v-bind:currentValue="moneyValues[questionNumber]" v-bind:correctAnswer="correctAnswer" v-bind:uiLabels="uiLabels" v-bind:question="question" v-on:countDownOverSend="countDownOverSend" ></QuestionCountDown> <!--Sätta den i frame så som en TV?-->
         </div>
     </div>
     </div>
@@ -19,14 +19,14 @@
 <script>
 import Moneybox from '@/components/Moneybox.vue';
 import Player from '@/components/Player.vue';
-import QuestionComponentResult from '@/components/QuestionComponentResult.vue';
+import QuestionCountDown from '@/components/QuestionCountDown.vue';
 
 export default{
         name:'Frame',
         components:{
             Moneybox,
             Player,
-            QuestionComponentResult
+            QuestionCountDown
         },
         props:{
             amountOfQuestions:Number,
@@ -38,11 +38,6 @@ export default{
             uiLabels: Object,
             questionNumber:Number,
             correctAnswer:String
-        },
-        data: function(){
-            return{
-                //boxColor: '#7FDBFF'
-            }
         },
         methods:{
             countDownOverSend: function(){
@@ -62,19 +57,13 @@ export default{
     margin-right: 5%;
     border-radius: 5%;
     padding:1%;
-    /*border-style: solid;
-    border-width: 2px;
-    border-color: #14144d;*/
     box-shadow:0 0 20px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.5);
-    /*background-image: linear-gradient(45deg, #ffd467, #be9611); /*#f6860c, #ffe9d1*/
-    /*background-image: linear-gradient(45deg, #5979ea, #e7ebff);*/
     background-image: linear-gradient(45deg, #f79701, #feeacc);
     animation: gradientMove 3s linear infinite;
     background-size: 200% 200%;
     display: flex;
     justify-content: center;
     align-items: center;
-    /*margin-top:4%;*/
 }
 @keyframes gradientMove {
     0%{
@@ -90,9 +79,6 @@ export default{
 #frame{
   height:100%; 
   width: 100%;
-  /*border-style:solid;
-  border-color:#14144d;
-  border-width:2px;*/
   border-radius: 3%;
   background: radial-gradient( #7bb0f3,#393a93); 
   display:flex;
@@ -100,7 +86,6 @@ export default{
   overflow:hidden;
 }
 #moneyframe{
-  /*background-color: #39A2DB;*/
   height: 100%;
   width: 20%;
   display: flex;
@@ -112,10 +97,9 @@ export default{
   display: flex;
   justify-content: space-evenly;
   height:100%;
-  /*background-color: #4b6ab8;*/
   margin: auto;
 }
-.test2{
+.frameState{
     display: flex;
     width: 100%;
     height: 100%;
