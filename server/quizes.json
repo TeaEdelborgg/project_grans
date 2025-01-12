@@ -1,5 +1,34 @@
 {
-    "quiz1": {
+    "quiz1En": {
+        "lang": "en",
+        "questions": [
+        {"q": "In what year did Swedish women gain the right to vote?",
+        "a": { "correct": "1919", "wrong": [ "1913", "1945", "1909" ] }},
+        {"q": "On which day is Gustav II Adolf celebrated?",
+        "a": { "correct": "November 6", "wrong": [ "June 6", "October 6", "February 6" ] }},
+        {"q": "To which faith did Queen Christina convert?",
+        "a": { "correct": "Catholicism", "wrong": [ "Scientology", "Islam", "Protestantism" ] }},
+        {"q": "Which of Gustav Vasa's sons did not become king?",
+        "a": { "correct": "Magnus", "wrong": [ "John", "Eric", "Charles" ] }},
+        {"q": "How did Adolf Frederick of Sweden die? He:",
+        "a": { "correct": "ate too many semlas", "wrong": [ "fell off a horse", "was shot", "never existed" ] }},
+        {"q": "In what year was Uppsala University founded?",
+        "a": { "correct": "1477", "wrong": [ "1632", "1523", "1120" ] }},
+        {"q": "When did Utn move to Uthgård?",
+        "a": { "correct": "1995", "wrong": [ "1880", "2020", "1955" ] }}
+        ],
+        "answers": [],   
+        "questionAmount": 7,
+        "currentQuestion": -1,
+        "participants": [],
+        "timer":{"timeLeft":10,"interval":null}, 
+        "timerBeforeQuestion":{"timeLeft":3, "interval":null},    
+        "allCorrectedAnswers": {},   
+        "moneyBoxes": [], 
+        "started": false,
+        "pedestalLight":[]
+    },
+    "quiz1Sv": {
         "lang": "sv",
         "questions": [
         {"q":"Vilket år fick svenska kvinnor rösträtt?",
@@ -28,7 +57,30 @@
         "started": false,
         "pedestalLight":[]
     },
-    "quiz2": {
+    "quiz2En": {
+        "lang": "en",
+        "questions": [
+            {"q": "Which city is located the farthest north?",
+                "a": { "correct": "Helsinki", "wrong": [ "Stockholm", "Oslo", "Uppsala" ] }},
+            {"q": "What is Sweden's longest river?",
+                "a": { "correct": "Göta River", "wrong": [ "Indal River", "Dal River", "Ljusnan" ] }},
+            {"q": "Which U.S. state extends the farthest west?",
+                "a": { "correct": "Texas", "wrong": [ "North Dakota", "Nebraska", "Iowa" ] }},
+            {"q": "Which municipality has the most inhabitants?",
+                "a": { "correct": "Norrtälje", "wrong": [ "Falun", "Nyköping", "Uddevalla" ] }}
+        ],
+        "answers": [],   
+        "questionAmount": 7,
+        "currentQuestion": -1,
+        "participants": [],
+        "timer":{"timeLeft":10,"interval":null}, 
+        "timerBeforeQuestion":{"timeLeft":3, "interval":null},    
+        "allCorrectedAnswers": {},   
+        "moneyBoxes": [], 
+        "started": false,
+        "pedestalLight":[]
+    },
+    "quiz2Sv": {
         "lang": "sv",
         "questions": [
         {"q":"Vilken stad ligger längst mot norr?",
@@ -51,8 +103,8 @@
         "started": false,
         "pedestalLight":[]
     },
-    "quiz3": {
-        "lang": "sv",
+    "quiz3En": {
+        "lang": "en",
         "questions": [
         {"q":"What is the most common element on earth?",
         "a": { "correct": "Oxygen", "wrong": [ "Nitrogen", "Carbon", "Hydrogen" ] }},
@@ -61,6 +113,29 @@
         {"q":"What is the speed of light?",
         "a": { "correct": "300 000km/s", "wrong": [ "30 000km/s", "300 000 000km/s", "3000km/s" ] }},
         {"q":"What bases make up DNA?",
+        "a": { "correct": "ATGC", "wrong": [ "ACDC", "ABGC", "HDMI" ] }}
+        ],
+        "answers": [],   
+        "questionAmount": 7,
+        "currentQuestion": -1,
+        "participants": [],
+        "timer":{"timeLeft":10,"interval":null}, 
+        "timerBeforeQuestion":{"timeLeft":3, "interval":null},    
+        "allCorrectedAnswers": {},   
+        "moneyBoxes": [], 
+        "started": false,
+        "pedestalLight":[]
+    },
+    "quiz3Sv": {
+        "lang": "sv",
+        "questions": [
+        {"q": "Vilket är det vanligaste grundämnet på jorden?",
+        "a": { "correct": "Syre", "wrong": [ "Kväve", "Kol", "Väte" ] }},
+        {"q": "Vilket av följande är inte en måne till Jupiter?",
+        "a": { "correct": "Tellus", "wrong": [ "Europa", "Io", "Ganymedes" ] }},
+        {"q": "Vad är ljusets hastighet?",
+        "a": { "correct": "300 000 km/s", "wrong": [ "30 000 km/s", "300 000 000 km/s", "3000 km/s" ] }},
+        {"q": "Vilka baser består DNA av?",
         "a": { "correct": "ATGC", "wrong": [ "ACDC", "ABGC", "HDMI" ] }}
         ],
         "answers": [],   
