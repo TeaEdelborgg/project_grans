@@ -127,12 +127,12 @@ h1 {
 }
 @media (max-width: 480px) {
   h1 {
-    font-size: 60%;
+    font-size: 150%;
     margin-top: 0%;
-    padding-top:50%;
+    padding-top:30%;
   }
   #board {
-    margin-top: 35%;
+    margin-top: 55%;
     width: 55%;
     margin-left: 60px;
     padding: none;
