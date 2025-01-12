@@ -159,7 +159,7 @@ h1 {
   }
 
   .enterButton, .createButton {
-    width: 35%; 
+    width: 38%; 
     height: 8%;
     margin: 2%;
     font-size: 3.5vw;
