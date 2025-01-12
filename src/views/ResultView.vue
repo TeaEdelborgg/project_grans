@@ -11,7 +11,8 @@
       v-bind:questionActive="questionActive" 
       v-bind:moneyBoxes="moneyBoxes" 
       v-bind:moneyValues="moneyValues" 
-      v-bind:participants="participants"></Frame>
+      v-bind:participants="participants"
+      v-bind:timer="timer"></Frame>
       <HostPlayer v-bind:questionActive="questionActive"></HostPlayer>
     </div> 
     <br>
@@ -60,7 +61,8 @@ export default {
       moneyValues:[],
       questionNumber:0,
       correctAnswer:'',
-      pedestalLight:[]
+      pedestalLight:[],
+      timer:{}
     }
   },
   created: function () {
@@ -89,6 +91,8 @@ export default {
       this.moneyBoxes = d.levelColors
       this.participants= d.participants
       this.pedestalLight= d.pedestalLight
+      this.timer=d.timer
+      //timer här
     })
 
     socket.on('gameFinished', ()=>

@@ -13,9 +13,12 @@ const quizes = require('./quizes.json');
 // Store data in an object to keep the global namespace clean. In an actual implementation this would be interfacing a database...
 function Data() {
   this.polls = {};
-  this.polls['quiz1']= quizes.quiz1;
-  this.polls['quiz2']= quizes.quiz2;
-  this.polls['quiz3']= quizes.quiz3;
+  this.polls['quiz1En']= quizes.quiz1En;
+  this.polls['quiz1Sv']= quizes.quiz1Sv;
+  this.polls['quiz2En']= quizes.quiz2En;
+  this.polls['quiz2Sv']= quizes.quiz2Sv;
+  this.polls['quiz3En']= quizes.quiz3En;
+  this.polls['quiz3Sv']= quizes.quiz3Sv;
   this.polls['test'] = {
     lang: "sv",
     questions: [
@@ -63,10 +66,8 @@ Data.prototype.createPoll = function(pollId, lang="en") {
     poll.answers = [];
     poll.questionAmount = 0;
     poll.participants = [];
-    poll.currentQuestion = -1; //var innan 0
-    poll.timer = {timeLeft:10,interval:null} // tror ej detta används
-    poll.timerBeforeQuestion = {timeLeft:3, interval:null} // inte detta heller
-    poll.allCorrectedAnswers = {} // eller detta
+    poll.currentQuestion = -1; 
+    poll.timer = {timerDuration: 23000, timerQuestion:20000, timerAnswers:15000, timeShowCorrectAnswer:2000};
     poll.moneyBoxes = []; 
     poll.started = false;  
     poll.scoreBoard = []; 
@@ -456,10 +457,10 @@ Data.prototype.clearParticipants = function(pollId){
   }
 }
 
-/*Data.prototype.calculatePillarHeight = function(pollId,userId){
+Data.prototype.getTimer = function(pollId){
   if(this.pollExists(pollId)){
-    let heightSteps = 100/this.polls[pollId].amountQuestions
+    return this.polls[pollId].timer
   }
-}*/
+}
 
 export { Data };

@@ -3,17 +3,17 @@
     <h1>{{ uiLabels.choosePollText }}</h1>
     <div class="pollButtons">
       <button v-on:click="choosePoll('quiz1')">
-        Historia
+        {{ uiLabels.historyQuiz }}
         <img src="/public/img/history_icon.png" alt="icon1"/>
       </button>
 
       <button v-on:click="choosePoll('quiz2')">
-        Geografi
+        {{ uiLabels.geographyQuiz }}
         <img src="/public/img/geography_icon.png" alt="icon2"/>
       </button>
 
       <button v-on:click="choosePoll('quiz3')">
-        Science
+        {{ uiLabels.scienceQuiz }}
         <img src="/public/img/science_icon.png" alt="icon3"/>
       </button>
     </div>    
@@ -64,7 +64,10 @@
     methods: {
 
       choosePoll: function(id) {
-        this.pollId = id; 
+        if (this.lang==="sv"){
+          this.pollId = (id + "Sv")
+        }
+        else {this.pollId = (id + "En")}
         this.chosenPoll=true;
         socket.emit("createPoll", { pollId: this.pollId, lang: this.lang });
         socket.emit("joinPoll", this.pollId);

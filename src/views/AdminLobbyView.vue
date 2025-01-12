@@ -1,10 +1,11 @@
 <template>
   <div class="container">
-    <div class="adminSection">
+    <h1>Adminview</h1>
+    <div>
 
 
     <div class="PollID">
-      <h1>{{ uiLabels.pollId }} {{ pollId }}</h1>
+      <h2>{{ uiLabels.pollId }} {{ pollId }}</h2>
     </div>
 
 
@@ -43,12 +44,12 @@
 
       <div :class="['overlay', {show:gameRules}]" v-on:click="closeGameRules"></div>
       <div :class="['RulesPopup', {show:gameRules}]">
-        <h3>{{uiLabels.Instructions}}</h3>
+        <h4>{{uiLabels.Instructions}}</h4>
           <li>{{ uiLabels.instructLi1 }}</li>
           <li>{{ uiLabels.instructLi2 }}</li>
           <li>{{ uiLabels.instructLi3 }}</li>
           <li>{{ uiLabels.instructLi4 }}</li>
-          <h2>{{ uiLabels.goodluck }}</h2>
+          <h3>{{ uiLabels.goodluck }}</h3>
 
 
         <button @click="closeGameRules">X</button>
@@ -56,7 +57,7 @@
       
       <div :class="['overlay', { show: startPollPopup }]" @click="closePollPopup"></div>
       <div :class="['PollPopup', { show: startPollPopup }]">
-        <h3>{{ uiLabels.letParticipantsJoin }}</h3>
+        <h4>{{ uiLabels.letParticipantsJoin }}</h4>
         <button id="goBack" @click="closePollPopup">{{uiLabels.goBack}}</button>
         <router-link :to="'/admin/' + pollId">
           <button @click="startPoll">{{ uiLabels.startPoll }}</button>
@@ -146,6 +147,10 @@ export default{
   text-align: center;
   box-sizing: border-box;
 }
+h1 {
+  color: #cfcfcf;
+  text-transform: uppercase;
+}
 .PollID {
   text-align: center;
   padding: 20px;
@@ -153,9 +158,7 @@ export default{
   border-radius: 10px;
   width: 600px;
   height: 150px;
-  margin: 60px auto;
-  margin-top: 110px;
-  margin-bottom: 20px;
+  margin: 30px auto 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   font-family: monospace;
 }
@@ -176,15 +179,15 @@ export default{
   font-family: Verdana, Tahoma, sans-serif;
   margin-top: 0;
 }
-h2 {
+h3 {
   color: #000000;
   font-size: 100%;
 }
-h1 {
+h2 {
   color: rgb(255, 255, 255);
   font-size: 450%;
 }
-3 {
+h4 {
   color: #000000;
   font-size: 200%;
   margin-bottom: 16px;

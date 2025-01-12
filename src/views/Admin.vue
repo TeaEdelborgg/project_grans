@@ -9,7 +9,7 @@
       </div>
       <div class="questions">
         <button class="game-button" @click="toggleQuestions">{{uiLabels.viewQuestionsAnswers}}</button>
-        <div class="popup" v-if="showQuestions" @click.self="close">
+        <div class="popup" v-if="showQuestions" @click.self="toggleQuestions">
           <PopupQuestions :showQuestions="showQuestions" :questions="pollData.questions" :uiLabels="uiLabels"
             @close="toggleQuestions"/>
         </div>
@@ -200,7 +200,7 @@ h1 {
 }
 
 .finish-button {
-  background-image: linear-gradient(135deg, #ff5e3e 40%, #ff7700);
+  background-image: linear-gradient(135deg, #ff5e3e 40%, #ff4800);
   border-color: #e85537;
 }
 

@@ -9,7 +9,7 @@
             </div>
         </div>
         <div v-if="questionActive" class="frame">
-            <QuestionCountDown v-if="questionActive" v-bind:currentValue="moneyValues[questionNumber]" v-bind:correctAnswer="correctAnswer" v-bind:uiLabels="uiLabels" v-bind:question="question" v-on:countDownOverSend="countDownOverSend" ></QuestionCountDown> <!--Sätta den i frame så som en TV?-->
+            <QuestionCountDown v-if="questionActive" v-bind:currentValue="moneyValues[questionNumber]" v-bind:correctAnswer="correctAnswer" v-bind:uiLabels="uiLabels" v-bind:question="question" v-bind:timer="timer" v-on:countDownOverSend="countDownOverSend" ></QuestionCountDown> <!--Sätta den i frame så som en TV?-->
         </div>
     </div>
     
@@ -35,7 +35,8 @@ export default{
             question: Object, 
             uiLabels: Object,
             questionNumber:Number,
-            correctAnswer:String
+            correctAnswer:String,
+            timer:Object
         },
         methods:{
             countDownOverSend: function(){
