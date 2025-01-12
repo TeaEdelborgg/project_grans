@@ -2,7 +2,8 @@
   <div id="playerview">
     <SliderCompoment @sendAnswer="submitAnswer(selectedAnswer)" v-bind:sent="sent"
       v-bind:seeAlternatives="seeAlternatives" v-bind:questionActive="questionActive"
-      v-bind:selectedAnswer="selectedAnswer" v-bind:questionNumber="questionNumber"/>
+      v-bind:selectedAnswer="selectedAnswer" v-bind:questionNumber="questionNumber"
+      v-bind:uiLabels="uiLabels"/>
     <div id="container" v-if="questionActive || seeAlternatives" class="answeralternatives"> 
       <div class="timerBarContainer">
         <div class="timerBar" :style="{ width: percentage + '%' }"></div>
@@ -11,8 +12,6 @@
         <div v-for="(a, index) in question.a" class="containerButton">
           <div class="line"></div>
           <div class="borderRect" :style="{filter: isDisabled(a) ? 'brightness(30%)':'none'}"> 
-            <!--backgroundColor: isDisabled(a) ? 'rgb(38, 38, 38)': 'lightyellow',
-            borderColor: isDisabled(a) ? 'rgb(38, 38, 38)': 'lightyellow'-->
             <button class="rectangle" :class="{
               selected: a === selectedAnswer,
               sended: a === selectedAnswer && sent,
@@ -45,6 +44,7 @@ export default {
   props: {
     userId: String,
     pollId: String,
+    uiLabels: Object,
   },
   data: function () {
     return {

@@ -11,7 +11,7 @@
       <div class="barRim"></div>
     </div>
     <AnswerOptions ref="AnswerOptions" v-bind:userId="userId" v-bind:pollId="pollId"
-      @updateQuestionActive="handleQuestionActive" />
+      v-bind:uiLabels="uiLabels" @updateQuestionActive="handleQuestionActive" />
     <div id="bottomHalf">
       <div class="barRim" :style="{top:'0'}"></div>
       <div class="help-buttons">
@@ -37,6 +37,7 @@ export default {
   },
   data: function () {
     return {
+      uiLabels: {},
       userId: '',
       userStats: {},
       pollId: "inactive poll",
@@ -161,10 +162,20 @@ export default {
   border: 5px solid #be8426;
   border-radius: 50%;
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+
+.life-line:hover {
+  transform: scale(1.2); /* Ökar storleken när man hovrar */
 }
 
 .life-line.dimmed {
   filter: brightness(50%);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.life-line.dimmed:hover {
+  transform: scale(1); 
+  cursor: default;
 }
 </style>

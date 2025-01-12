@@ -37,8 +37,7 @@ export default {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
-.continue-button {
-    background: #4caf50;
+.popup-end-game-content button {
     color: #ffffff;
     border-radius: 8px;
     border: none;
@@ -50,24 +49,16 @@ export default {
     cursor: pointer;
 }
 
-.continue-button:hover {
-    background: #408b44;
+.popup-end-game-content button:hover {
+    transform: scale(1.1);
+    filter: brightness(85%)
+}
+
+.continue-button {
+    background: #4caf50;
 }
 
 .end-button {
     background: #f44336;
-    color: #ffffff;
-    border-radius: 8px;
-    border: none;
-    padding: 0.5em 1em;
-    margin: 0.5em;
-    font-size: 1em;
-    font-weight: bold;
-    text-transform: uppercase;
-    cursor: pointer;
-}
-
-.end-button:hover {
-    background: #c62828;
 }
 </style>

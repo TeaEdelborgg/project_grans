@@ -52,6 +52,7 @@
 	"makeQuiz": "Make your own questions",
 	"selectQuiz": "Use premade questions",
 	"heading": "Who Wants to Be a Millionaire",
+	"lockAnswer": "Slide to lock in answer",
 	"adminPanel": "Admin Panel",
 	"gameStatus": "Game status",
 	"numberOfAnswers": "Number of answers: ",

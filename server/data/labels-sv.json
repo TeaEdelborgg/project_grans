@@ -52,6 +52,7 @@
 	"makeQuiz": "Skapa egna frågor",
 	"selectQuiz": "Använd färdiga frågor",
 	"heading": "Vem Vill Bli En Miljonär",
+	"lockAnswer": "Dra för att låsa in svar",
 	"adminPanel": "Adminpanel",
 	"gameStatus": "Spelstatus",
 	"numberOfAnswers": "Antal svar inkommna: ",
