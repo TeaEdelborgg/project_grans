@@ -51,7 +51,7 @@
         socket.on("uiLabels", (labels) => (this.uiLabels = labels));
         /*socket.on("startPoll", (this.pollId ))*/
         socket.on('startPoll', () => 
-      this.$router.push('/result/'+this.pollId)
+      this.$router.push('/game/'+this.pollId)
     );
         socket.on("participantsUpdate", (p) => {
           this.participants = p;

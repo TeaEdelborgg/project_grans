@@ -48,7 +48,7 @@
     border-top-right-radius: 0;
 }
 #podiumContainer h3{
-    color:#FF851B;
+    color:#f9ac33;
     font-size:1.5em;
     margin: 0;
     z-index:5;

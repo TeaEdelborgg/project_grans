@@ -19,26 +19,6 @@ function Data() {
   this.polls['quiz2Sv']= quizes.quiz2Sv;
   this.polls['quiz3En']= quizes.quiz3En;
   this.polls['quiz3Sv']= quizes.quiz3Sv;
-  this.polls['test'] = {
-    lang: "sv",
-    questions: [
-      {q: "Hur långt är ett civilingenjörsprogram?", 
-       a: { "correct": "5 år", "wrong": [ "3 år", "6 år", "4 år" ] }
-      },
-      {q: "Vad är Sveriges sjätte största stad?", 
-       a: { "correct": "Västerås", wrong: ['Uppsala', 'Linköping', 'Helsingborg']}
-      }, 
-      {q: "Vad heter huvudstaden i Frankrike?", 
-        a: { "correct": "Paris", wrong: ['London', 'Stockholm', 'Oslo']}
-       },
-       {q: "Hur många invånare finns i Sverige?", 
-        a: { "correct": "10 miljoner", wrong: ['9 miljoner', '5 miljoner', '15 miljoner']}
-       },
-    ],
-    answers: [], 
-    currentQuestion: -1, 
-    participants: []
-  }
 }
 /***********************************************
 For performance reasons, methods are added to the
@@ -65,6 +45,7 @@ Data.prototype.createPoll = function(pollId, lang="en") {
     poll.questions = [];
     poll.answers = [];
     poll.questionAmount = 0;
+    poll.heightSteps = 0;
     poll.participants = [];
     poll.currentQuestion = -1; 
     poll.timer = {timerDuration: 23000, timerQuestion:20000, timerAnswers:15000, timeShowCorrectAnswer:2000};
@@ -73,7 +54,6 @@ Data.prototype.createPoll = function(pollId, lang="en") {
     poll.scoreBoard = []; 
     poll.pedestalLight = [];
     this.polls[pollId] = poll;
-    console.log("poll created", pollId, poll);
   }
   return this.polls[pollId];
 }
@@ -93,9 +73,8 @@ Data.prototype.hasPollStarted = function(pollId) {
 }
 
 Data.prototype.participateInPoll = function(pollId, name, userId, color) {
-  console.log("participant will be added to", pollId, name, userId, color);
   if (this.pollExists(pollId)) {
-    this.polls[pollId].participants.push({userId: userId, information: {name: name, color: color, answers: [], correctedAnswers:[], in:true, coloredBoxes:[], time:0, lives:2, usedFiftyFifty:false, usedAskAudience:false}}) //lägg till liv, tid ect alltså allt som är samma till en början
+    this.polls[pollId].participants.push({userId: userId, information: {name: name, color: color, answers: [], correctedAnswers:[], in:true, pillarBoxes:[], time:0, lives:2, usedFiftyFifty:false, usedAskAudience:false, pillarHeight:2}}) 
   }
 }
 
@@ -114,7 +93,6 @@ Data.prototype.updateColorSelection = function (info) {
 
 Data.prototype.getParticipants = function(pollId) {
   const poll = this.polls[pollId];
-  console.log("participants requested for", pollId);
   if (this.pollExists(pollId)) { 
     return this.polls[pollId].participants
   }
@@ -132,7 +110,6 @@ Data.prototype.getOneParticipant = function(pollId, userId) {
 
 Data.prototype.addQuestion = function(pollId, q) {
   if (this.pollExists(pollId)) {
-    console.log("frågan: ",q);
     this.polls[pollId].questions.push(q);
   }
 }
@@ -140,16 +117,15 @@ Data.prototype.addQuestion = function(pollId, q) {
 Data.prototype.updateQuestion = function (pollId, questionToUpdate) {
   if (this.pollExists(pollId)) {
     const poll = this.polls[pollId];
-    console.log("frågan vi vill åt:", questionToUpdate );
     const newQuestion=questionToUpdate;
-    const questionIndex = poll.questions.findIndex((q) => q.id === newQuestion.id); //hittar id för den fråga i poll som matchar den updaterade frågans id
+    const questionIndex = poll.questions.findIndex((q) => q.id === newQuestion.id); 
     if (questionIndex !== -1) {
-      poll.questions[questionIndex] = newQuestion; //om frågan hittas ersätts den av den updaterade frågan
+      poll.questions[questionIndex] = newQuestion; 
     }
   }
 }
 
-Data.prototype.getQuestion = function(pollId, qId = null) { //borde gå att göra om, vill ha den nedanför istället
+Data.prototype.getQuestion = function(pollId, qId = null) { 
   if (this.pollExists(pollId)) {
     const poll = this.polls[pollId];
     if (qId !== null) {
@@ -160,7 +136,7 @@ Data.prototype.getQuestion = function(pollId, qId = null) { //borde gå att gör
   return {}
 }
 
-Data.prototype.getQuestionAnswerRandom = function(pollId, qId = null) {
+Data.prototype.getAnswerRandomOrder = function(pollId, qId = null) {
   if (this.pollExists(pollId)) {
     const poll = this.polls[pollId];
     if (qId !== null) {
@@ -177,8 +153,7 @@ Data.prototype.getQuestionAnswerRandom = function(pollId, qId = null) {
       answers[avalibleSlots[index]]=wrongAnsw;
       avalibleSlots.splice(index,1);
     };
-    var test={q:poll.questions[poll.currentQuestion].q, a:answers}
-    return(test)
+    return({q:poll.questions[poll.currentQuestion].q, a:answers})
   }
   return {}
 }
@@ -189,7 +164,6 @@ Data.prototype.getFiftyFifty = function(pollId, userId) {
     const user = this.polls[pollId].participants.find(user => user.userId == userId)
     user.information.usedFiftyFifty = true
     const twoIncorrect = this.polls[pollId].questions[questionNumber].a.wrong.slice(1,3)
-    console.log({answers: twoIncorrect, user: userId})
     return {answers: twoIncorrect, user: userId}
   }
 }
@@ -201,7 +175,6 @@ Data.prototype.getAudienceAnswer = function(pollId, userId, usedFiftyFifty) {
     user.information.usedAskAudience = true
     let answer
     let random = Math.random()
-    console.log('i getAudienceAnswer', random)
     if (random < 0.9) {
       answer = this.polls[pollId].questions[questionNumber].a.correct
     } else if (!usedFiftyFifty) {
@@ -226,85 +199,64 @@ Data.prototype.getSubmittedAnswers = function(pollId) { //behövs den här??? Vi
 }
 
 Data.prototype.submitAnswer = function(pollId, questionNumber, answer, userId, timeLeft) {
-  console.log('pollId: ', pollId, 'qNo: ', questionNumber, 'answer: ', answer, 'userId: ', userId, 'timeleft: ', timeLeft)
   if (this.pollExists(pollId)) {
     const user = this.polls[pollId].participants.find(user => user.userId == userId)
-    console.log('user är: ', user)
-    /*if (answer == null) {
-      console.log('i submitanswer, om det crashar', user?.information.answers[questionNumber])
-      user.information.answers[questionNumber] = ["-", 0] // denna verkar crasha ibland? tror det är om userId inte skickas med
-    } else {*/
       user.information.answers[questionNumber] = [answer, timeLeft]
-    // }
-    
-    console.log(user.information.answers, 'lyckades i submit answer')
   }
-
 }
-Data.prototype.updatePedestalPlayer = function(pollId, userId){
+Data.prototype.updatePedestalLight = function(pollId, userId){
   if(this.pollExists(pollId)){
     let particpants = this.polls[pollId].participants
-    console.log('participants: ',particpants)
     let userIds = particpants.map((particpant)=>particpant.userId)
     let index= userIds.indexOf(Number(userId))
-    console.log(userIds, index)
     this.polls[pollId].pedestalLight[index] = true
     return this.polls[pollId].pedestalLight
   }
   return []
 }
 
-Data.prototype.newCheckUserAnswer = function(pollId, qId, userId) {
-  console.log('i nya checkuseranswer')
+Data.prototype.checkUserAnswer = function(pollId, qId, userId) {
   if(this.pollExists(pollId)){
     const user = this.polls[pollId].participants.find(user=> user.userId ==userId)
-    /*console.log('i nya, user är: ', user)
-    console.log('hela svaret, svar + tid: ', user.information.answers[qId])
-    console.log('svaret som skickas är: ', user.information.answers[qId][0])*/
     if(user.information.answers[qId][0]==null){
       user.information.answers[qId]=["-",0]
     }
     if (user.information.answers[qId][0] == this.polls[pollId].questions[qId].a.correct) {
       user.information.correctedAnswers[qId] = true
       user.information.time += user.information.answers[qId][1];
-      console.log('svaret är korrekt')
     } else {
       if(user.information.lives>0){ 
         user.information.lives--;
       }
       user.information.correctedAnswers[qId] = false
-      console.log('svaret är fel')
     }
   }
 };
 
 Data.prototype.getCorrectedAnswer = function (pollId, qId, userId) {
-  console.log('i data getCorrectedAnswer')
   if(this.pollExists(pollId)){
     const user = this.polls[pollId].participants.find(user=> user.userId == userId)
     if (user) {
-      console.log('har svarat rätt: ', user.information.correctedAnswers[qId])
       return user.information.correctedAnswers[qId];
     }
   }
   return null;
 };
 
-Data.prototype.getQuestionAmount = function (pollId) {
+Data.prototype.setQuestionAmount = function (pollId) {
   if(this.pollExists(pollId)){
     this.polls[pollId].questionAmount = this.polls[pollId].questions.length;
+    this.polls[pollId].heightSteps = 100/this.polls[pollId].questionAmount
   }
 }
-
 
 Data.prototype.createBoxes = function(pollId){
   if(this.pollExists(pollId)){
     const poll = this.polls[pollId]
     const numberOfQuestions = poll.questionAmount
-    console.log('i createBoxes: ', numberOfQuestions)
     for (let player of poll.participants){
       for (let n=0; n<numberOfQuestions;n++){
-        player.information.coloredBoxes.push(false)
+        player.information.pillarBoxes.push(false)
       }
     }
     for (let i=0; i<numberOfQuestions;i++){
@@ -312,7 +264,6 @@ Data.prototype.createBoxes = function(pollId){
       if(value>1000000){value=1000000}
       poll.moneyBoxes.push(value)
     }
-    console.log("money levlar: ",poll.moneyBoxes)
   }
 }
 Data.prototype.setAnswersFalse = function(pollId){
@@ -320,7 +271,6 @@ Data.prototype.setAnswersFalse = function(pollId){
     const users = this.polls[pollId].participants
     for(let user of users){
       user.information.answers = new Array(this.polls[pollId].questionAmount).fill([null, 0])
-      //console.log("setFalse: ", user.information.answers)
     }
   }
 }
@@ -342,20 +292,23 @@ Data.prototype.resetPedestalLight = function(pollId){
   }
 }
 
-Data.prototype.updateColoredBoxes = function(pollId){
+Data.prototype.updatePillarHeight = function(pollId){
   if(this.pollExists(pollId)){
     const poll = this.polls[pollId]
     for(let player of poll.participants){
       if(player.information.in){
-        
         let answers = player.information.correctedAnswers
-        
         for (let i=0;  i<answers.length;i++){
-            player.information.coloredBoxes[i]=true
+            player.information.pillarBoxes[i]=true
         }
         if(player.information.lives==0){
           player.information.in = false
         }
+        const pillarTrue = player.information.pillarBoxes.filter(value => value===true).length;
+        if(pillarTrue==0){
+          player.information.pillarHeight=2
+        }
+          player.information.pillarHeight= poll.heightSteps*pillarTrue
       }
     }
     return poll.participants
@@ -404,14 +357,10 @@ Data.prototype.countScore = function(pollId){ //Selection sort
         if(playerOnePoints<playerTwoPoints){
           smallest = n
         }
-        else if(playerOnePoints==playerTwoPoints){ //kan sätta ihop vissa av villkoren
-          if(playerOne.information.lives<playerTwo.information.lives){
+        else if(playerOnePoints==playerTwoPoints){ 
+          let bool =this.compareLivesAndTime(playerOne,playerTwo)
+          if(bool){
             smallest=n
-          }
-          else if(playerOne.information.lives == playerTwo.information.lives){
-            if(playerOne.information.time<playerTwo.information.time){
-              smallest=n
-            }
           }
         }
       }
@@ -419,14 +368,13 @@ Data.prototype.countScore = function(pollId){ //Selection sort
       scoreBoard[i] = scoreBoard[smallest]
       scoreBoard[smallest] = x
     }
-    console.log(scoreBoard)
     this.polls[pollId].scoreBoard=scoreBoard
     return scoreBoard
   }
   return []
 }
 Data.prototype.countPoints = function(player){
-  let scoreCard = player.information.coloredBoxes
+  let scoreCard = player.information.pillarBoxes
   let points = 0
   for(let i=0; i<scoreCard.length;i++){
     if(scoreCard[i]==true){
@@ -434,6 +382,17 @@ Data.prototype.countPoints = function(player){
     }
   }
   return points
+}
+Data.prototype.compareLivesAndTime = function(playerOne, playerTwo){
+  if(playerOne.information.lives<playerTwo.information.lives){
+    return true
+  }
+  else if(playerOne.information.lives == playerTwo.information.lives){
+    if(playerOne.information.time<playerTwo.information.time){
+      return true
+    }
+  }
+  return false
 }
 Data.prototype.getScoreBoard = function(pollId){
   if(this.pollExists(pollId)){
@@ -451,7 +410,6 @@ Data.prototype.getCorrectAnswer = function(pollId, qId){
 
 Data.prototype.clearParticipants = function(pollId){
   if(this.pollExists(pollId)){
-    console.log('i data, participants är: ', this.polls[pollId].participants)
     this.polls[pollId].participants = []
     this.polls[pollId].currentQuestion = -1
   }

@@ -61,29 +61,29 @@ export default {
   methods: {
     countdownResult: function () {
       let startTime = Date.now();
-      let timeLeftTest = 0;
+      let timeLeft = 0;
       let endQuestion = false;
 
       let interval = setInterval(() => {
         if (!endQuestion) {
           let elapsedTime = Date.now() - startTime;
-          timeLeftTest = this.timer.timerDuration - elapsedTime;
+          timeLeft = this.timer.timerDuration - elapsedTime;
 
           socket.on('resetTime', () => {
-            timeLeftTest = 0;
+            timeLeft = 0;
             endQuestion = true;
             this.endCountdown()
             clearInterval(interval)
           })
-          if (timeLeftTest > this.timer.timerQuestion) {
+          if (timeLeft > this.timer.timerQuestion) {
             this.timeLeftBeforeQuestion = Math.floor((4000 - elapsedTime) / 1000);
-          } else if (timeLeftTest > this.timer.timerAnswers) {
+          } else if (timeLeft > this.timer.timerAnswers) {
             this.showQuestion = true
             this.timeLeftBeforeAnswers = Math.floor((9000 - elapsedTime) / 1000)
           }
-          else if (timeLeftTest > 0) {
+          else if (timeLeft > 0) {
             this.questionActive = true;
-            this.percentage = Math.floor((timeLeftTest) / 150);
+            this.percentage = Math.floor((timeLeft) / 150);
           }
           else {
             this.endCountdown()

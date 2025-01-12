@@ -50,9 +50,9 @@ const router = createRouter({
       component: ()=> import('../views/ResultLobbyView.vue')
   },
     {
-      path: '/result/:id',
-      name: 'ResultView',
-      component: () => import('../views/ResultView.vue')
+      path: '/game/:id',
+      name: 'GameView',
+      component: () => import('../views/GameView.vue')
     },
     {
       path: '/join/',
@@ -60,14 +60,14 @@ const router = createRouter({
       component: () => import('../views/Join.vue')
     },
     {
-      path:'/finalResult/:id',
-      name:'FinalResultView',
-      component: () => import('../views/FinalResult.vue')
+      path:'/result/:id',
+      name:'resultView',
+      component: () => import('../views/Result.vue')
     },
     {
-      path:'/finalResultPlayer/:id/:userId',
-      name:'FinalResultPlayerView',
-      component: () => import('../views/FinalResultPlayer.vue')
+      path:'/resultPlayer/:id/:userId',
+      name:'ResultPlayerView',
+      component: () => import('../views/ResultPlayer.vue')
     }
 
   ]

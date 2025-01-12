@@ -56,7 +56,7 @@ export default {
       }
     })
     socket.on("gameFinished", () =>
-      this.$router.push("/finalResultPlayer/" + this.pollId + "/" + this.userId)
+      this.$router.push("/resultPlayer/" + this.pollId + "/" + this.userId)
     );
     socket.emit("getUILabels", this.lang);
     socket.emit("joinPoll", this.pollId);

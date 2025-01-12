@@ -5,7 +5,7 @@
                 <Moneybox v-for="index in amountOfQuestions" v-bind:boxState="moneyBoxes[index-1]" v-bind:value="moneyValues[index-1]" :id="index"/>
             </div>
             <div id="playersFrame">
-                <Player v-if="participants.length>0"  v-for="player in participants" v-bind:player="player" v-bind:amountOfQuestions="amountOfQuestions":key="player.id" />
+                <PlayerPillar v-if="participants.length>0"  v-for="player in participants" v-bind:player="player" v-bind:amountOfQuestions="amountOfQuestions":key="player.id" />
             </div>
         </div>
         <div v-if="questionActive" class="frame">
@@ -16,14 +16,14 @@
 </template>
 <script>
 import Moneybox from '@/components/Moneybox.vue';
-import Player from '@/components/PlayerPillar.vue';
+import PlayerPillar from '@/components/PlayerPillar.vue';
 import QuestionCountDown from '@/components/QuestionCountDown.vue';
 
 export default{
         name:'Frame',
         components:{
             Moneybox,
-            Player,
+            PlayerPillar,
             QuestionCountDown
         },
         props:{
