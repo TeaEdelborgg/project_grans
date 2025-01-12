@@ -2,7 +2,7 @@
     <div id="bars" :class="{ verticalMove: seeAlternatives && !sent && selectedAnswer != null }" @mousedown="pressedDown"
         @touchstart="pressedDown">
     </div>
-    <div id="arrow-container" v-if="questionNumber == 0 && selectedAnswer != null && !pressed && !sent"
+    <div id="arrow-container" v-if="selectedAnswer != null && !pressed && !sent"
         :class="{ verticalMove: seeAlternatives }">
         <img id="arrow" src="/img/arrow.png" />
         <p id="arrow-text">Lock<br>answer</p>
@@ -15,7 +15,6 @@ export default {
         sent: Boolean,
         seeAlternatives: Boolean,
         questionActive: Boolean,
-        questionNumber: Number,
         selectedAnswer: String,
     },
     data() {
@@ -146,8 +145,7 @@ export default {
     display: flex;
     flex-direction: column;
     z-index: 6;
-    margin-left: auto;
-    margin-right: 0.5em;
+    margin: auto;
     margin-top: 10vh;
 }
 

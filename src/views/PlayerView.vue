@@ -8,12 +8,9 @@
         </div>
         <div class="player-time">{{ this.userStats?.information?.time }} s </div>
       </div>
-
     </div>
-    <div>
-      <AnswerOptions ref="AnswerOptions" v-bind:userId="userId" v-bind:pollId="pollId"
-        @updateQuestionActive="handleQuestionActive" />
-    </div>
+    <AnswerOptions ref="AnswerOptions" v-bind:userId="userId" v-bind:pollId="pollId"
+      @updateQuestionActive="handleQuestionActive" />
     <div id="bottomHalf">
       <div class="help-buttons">
         <img src="/img/50-50.png" class="life-line"

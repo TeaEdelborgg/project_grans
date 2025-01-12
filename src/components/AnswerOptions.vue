@@ -2,7 +2,7 @@
   <div id="playerview">
     <SliderCompoment @sendAnswer="submitAnswer(selectedAnswer)" v-bind:sent="sent"
       v-bind:seeAlternatives="seeAlternatives" v-bind:questionActive="questionActive"
-      v-bind:questionNumber="questionNumber" v-bind:selectedAnswer="selectedAnswer" />
+      v-bind:selectedAnswer="selectedAnswer" />
     <div id="container" v-if="questionActive || seeAlternatives" class="answeralternatives">
       <div class="timerBarContainer">
         <div class="timerBar" :style="{ width: percentage + '%' }"></div>
@@ -161,17 +161,6 @@ export default {
       }, 2000)
     }
   },
-  // mounted(){
-  //   this.sent = false;
-  //   let playerview = document.getElementById("playerview");
-  //   console.log(playerview)
-  //   const playerviewRect = playerview.getBoundingClientRect();
-  //   this.heightPx = playerviewRect.bottom-playerviewRect.top;
-  //   this.minPosition = '0%'
-  //   this.maxPosition = '100%'
-  //   this.maxBottom = playerviewRect.bottom
-  //   console.log(this.maxBottom)
-  // },
   watch: {
     questionActive(newValue) {
       this.$emit('updateQuestionActive', newValue);
