@@ -57,7 +57,7 @@
       
       <div :class="['overlay', { show: startPollPopup }]" @click="closePollPopup"></div>
       <div :class="['PollPopup', { show: startPollPopup }]">
-        <h4>{{ uiLabels.letParticipantsJoin }}</h4>
+        <p>{{ uiLabels.letParticipantsJoin }}</p>
         <button id="goBack" @click="closePollPopup">{{uiLabels.goBack}}</button>
         <router-link :to="'/admin/' + pollId">
           <button @click="startPoll">{{ uiLabels.startPoll }}</button>
@@ -316,6 +316,7 @@ h4 {
 .PollPopup {
   background: linear-gradient(135deg, #0a0347, #3c298f);
   color: #cfcfcf;
+  font-size:20px;
   padding: 5vh 5vw;
   border-radius: 10px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
