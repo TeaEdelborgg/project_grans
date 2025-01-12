@@ -60,8 +60,6 @@ export default {
 }
 
 .rectangle h3 {
-  width: 10%;
-  word-wrap: normal;
   margin: 0;
   color: white;
 }

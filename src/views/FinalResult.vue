@@ -1,7 +1,6 @@
 <template>
     <div id="background">
         <div v-if="showNameWinners[1]" id="confetti">
-            <img src="/img/confetti2.png" alt="confetti">
         </div>
         <div id="scoreBoardContainer" v-if="winners.length>0">
             <HeadLight v-bind:direction="'left'"></HeadLight>
@@ -108,6 +107,9 @@ export default {
     animation: fallingconfetti 5s ease-out;
     overflow: hidden;
     opacity: 0;
+    background-image: url('/img/confetti2.png');
+    background-size: 30%;
+    background-repeat: repeat;
 }
 #confetti img{
     width: 100%;
