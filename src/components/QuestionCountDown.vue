@@ -1,8 +1,9 @@
 <template>
   <div id="dimmed-overlay"></div>
-  <div id="questionFrame">
-    <div id="progressbar">
-      <div id="progress" :style="{ width: percentage + '%', animation: percentage <= 30 ? 'shake 0.5s infinite' : 'none' }">
+  <div id="question-frame">
+    <div id="progress-bar">
+      <div id="progress"
+        :style="{ width: percentage + '%', animation: percentage <= 30 ? 'shake 0.5s infinite' : 'none' }">
       </div>
     </div>
     <div v-if="showQuestion">
@@ -38,7 +39,7 @@ export default {
     uiLabels: Object,
     currentValue: Number,
     correctAnswer: String,
-    timer:Object
+    timer: Object
   },
   data: function () {
     return {
@@ -61,29 +62,29 @@ export default {
   methods: {
     countdownResult: function () {
       let startTime = Date.now();
-      let timeLeftTest = 0;
+      let timeLeft = 0;
       let endQuestion = false;
 
       let interval = setInterval(() => {
         if (!endQuestion) {
           let elapsedTime = Date.now() - startTime;
-          timeLeftTest = this.timer.timerDuration - elapsedTime;
+          timeLeft = this.timer.timerDuration - elapsedTime;
 
           socket.on('resetTime', () => {
-            timeLeftTest = 0;
+            timeLeft = 0;
             endQuestion = true;
             this.endCountdown()
             clearInterval(interval)
           })
-          if (timeLeftTest > this.timer.timerQuestion) {
+          if (timeLeft > this.timer.timerQuestion) {
             this.timeLeftBeforeQuestion = Math.floor((4000 - elapsedTime) / 1000);
-          } else if (timeLeftTest > this.timer.timerAnswers) {
+          } else if (timeLeft > this.timer.timerAnswers) {
             this.showQuestion = true
             this.timeLeftBeforeAnswers = Math.floor((9000 - elapsedTime) / 1000)
           }
-          else if (timeLeftTest > 0) {
+          else if (timeLeft > 0) {
             this.questionActive = true;
-            this.percentage = Math.floor((timeLeftTest) / 150);
+            this.percentage = Math.floor((timeLeft) / 150);
           }
           else {
             this.endCountdown()
@@ -124,7 +125,7 @@ export default {
   width: 100%;
 }
 
-#questionFrame {
+#question-frame {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -134,12 +135,12 @@ export default {
   position: absolute;
 }
 
-#questionFrame h1,
+#question-frame h1,
 h2 {
   color: White;
 }
 
-#progressbar {
+#progress-bar {
   width: 100%;
   overflow: hidden;
   height: 20px;
@@ -164,7 +165,6 @@ h2 {
     transform: translateY(10%);
     background-color: red;
     box-shadow: 0 0 20px red;
-    /**blinka rött */
   }
 
   100% {
