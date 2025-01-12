@@ -13,9 +13,12 @@ const quizes = require('./quizes.json');
 // Store data in an object to keep the global namespace clean. In an actual implementation this would be interfacing a database...
 function Data() {
   this.polls = {};
-  this.polls['quiz1']= quizes.quiz1;
-  this.polls['quiz2']= quizes.quiz2;
-  this.polls['quiz3']= quizes.quiz3;
+  this.polls['quiz1En']= quizes.quiz1En;
+  this.polls['quiz1Sv']= quizes.quiz1Sv;
+  this.polls['quiz2En']= quizes.quiz2En;
+  this.polls['quiz2Sv']= quizes.quiz2Sv;
+  this.polls['quiz3En']= quizes.quiz3En;
+  this.polls['quiz3Sv']= quizes.quiz3Sv;
   this.polls['test'] = {
     lang: "sv",
     questions: [
