@@ -122,5 +122,27 @@
         "started": false,
         "pedestalLight":[],
         "timer" : {"timerDuration": 23000, "timerQuestion":20000, "timerAnswers":15000, "timeShowCorrectAnswer":2000}
+    },
+    "quiz3Sv": {
+        "lang": "sv",
+        "questions": [
+            {"q":"Vad är det vanligaste ämnet på jorden?",
+            "a": { "correct": "Syre", "wrong": [ "Kväve", "Kol", "Väte" ] }},
+            {"q":"Vilken av följande är inte en måne till Jupiter?",
+            "a": { "correct": "Tellus", "wrong": [ "Europa", "Io", "Ganymede" ] }},
+            {"q":"Vad är ljusets hastighet?",
+            "a": { "correct": "300 000 km/s", "wrong": [ "30 000 km/s", "300 000 000 km/s", "3000 km/s" ] }},
+            {"q":"Vilka baser utgör DNA?",
+            "a": { "correct": "ATGC", "wrong": [ "ACDC", "ABGC", "HDMI" ] }}
+        ],
+        "answers": [],   
+        "questionAmount": 7,
+        "currentQuestion": -1,
+        "participants": [],   
+        "allCorrectedAnswers": {},   
+        "moneyBoxes": [], 
+        "started": false,
+        "pedestalLight":[],
+        "timer" : {"timerDuration": 23000, "timerQuestion":20000, "timerAnswers":15000, "timeShowCorrectAnswer":2000}
     }
 }
