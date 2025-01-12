@@ -67,6 +67,10 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('sendPlayerStats', data.getOneParticipant(d.pollId, d.userId));
   }); 
 
+  socket.on('getTimer', function(pollId) {
+    io.to(pollId).emit('sendTimer', data.getTimer(pollId));
+  })
+
   socket.on('runQuestion', function(d) {  // verkar inte användas
     let question = data.getQuestion(d.pollId, d.questionNumber);
     let randomOrder = data.getQuestionAnswerRandom(d.pollId, d.questionNumber);
@@ -139,8 +143,8 @@ function sockets(io, socket, data) {
     const levelColors = data.updateLevelBoxes(pollId)
     const participants = data.getParticipants(pollId)
     const pedestalLight = data.getPedestalLight(pollId)
-    // console.log("försöker skicka levelCOlor")
-    io.to(pollId).emit('loadStats', {amountOfQuestions:amountOfQuestions, levelValues:levelValues, levelColors:levelColors, participants:participants, pedestalLight:pedestalLight}) //skicka som object
+    const timer = data.getTimer(pollId)
+    io.to(pollId).emit('loadStats', {amountOfQuestions:amountOfQuestions, levelValues:levelValues, levelColors:levelColors, participants:participants, pedestalLight:pedestalLight, timer:timer}) //skicka som object
   });
 
   socket.on('getStartColors', function(pollId){

@@ -2,8 +2,8 @@
   <div id="playerview">
     <SliderCompoment @sendAnswer="submitAnswer(selectedAnswer)" v-bind:sent="sent"
       v-bind:seeAlternatives="seeAlternatives" v-bind:questionActive="questionActive"
-      v-bind:selectedAnswer="selectedAnswer" />
-    <div id="container"  class="answeralternatives"> <!--v-if="questionActive || seeAlternatives"-->
+      v-bind:selectedAnswer="selectedAnswer" v-bind:questionNumber="questionNumber"/>
+    <div id="container" v-if="questionActive || seeAlternatives" class="answeralternatives"> 
       <div class="timerBarContainer">
         <div class="timerBar" :style="{ width: percentage + '%' }"></div>
       </div>
@@ -64,11 +64,15 @@ export default {
       seeAlternatives: false,
       percentage: 100,
       timeLeft: 0,
+      timer: {},
     }
   },
   created: function () {
     socket.emit("joinPoll", this.pollId);
 
+    socket.on('sendTimer', timer => {
+      this.timer = timer;
+    })
     socket.on('startCountdownPlayer', question => {
       this.question = question.q;
       this.questionNumber = question.questionNumber;
@@ -87,6 +91,7 @@ export default {
         this.audienceAnswer = audienceAnswer.answer;
       }
     });
+    socket.emit('getTimer', this.pollId)
   },
   emits: ["answer", "updateQuestionActive"],
   methods: {
@@ -116,19 +121,16 @@ export default {
       this.isCorrectAnswer = false;
       this.seeAlternatives = false;
       this.showCorrectAnswer = false;
+      let endQuestion = false;
       this.percentage = 100;
 
       let startTime = Date.now();
-      let timerDuration = 18000;
-      let timerQuestion = 15000;
-      let timerAnswer = 10000;
-      let endQuestion = false;
 
       let interval = setInterval(() => {
         let elapsedTime = Date.now() - startTime;
 
         if (!endQuestion) {
-          this.timeLeft = timerDuration - elapsedTime;
+          this.timeLeft = this.timer.timerDuration - elapsedTime;
         }
         socket.on('resetTime', () => {
           this.timeLeft = 0;
@@ -136,15 +138,16 @@ export default {
           endQuestion = true;
         })
 
-        if (this.timeLeft > timerQuestion) {
+        if (this.timeLeft > this.timer.timerQuestion) {
           // lägg in en countdown för innan frågan
-        } else if (this.timeLeft > timerAnswer) {
+        } else if (this.timeLeft > this.timer.timerAnswers) {
           // läs frågan på skärmen
-        } else if (this.timeLeft > 0) {
+        } else if (this.timeLeft > 0) { //this.timeLeft< this.timer.timerAnswer &&
           this.seeAlternatives = true
-          this.percentage = Math.floor(this.timeLeft / 100);
+          this.percentage = Math.floor(this.timeLeft / 150);
           this.questionActive = true;
         } else {
+          console.log('stoppar countdown')
           this.endCountdown();
           clearInterval(interval);
         }
@@ -162,7 +165,7 @@ export default {
       this.showCorrectAnswer = true;
       setTimeout(() => {
         this.seeAlternatives = false;
-      }, 5000)
+      }, this.timer.timeShowCorrectAnswer)
     }
   },
   watch: {
