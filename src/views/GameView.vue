@@ -50,7 +50,7 @@ export default {
       uiLabels: {},
       lang: localStorage.getItem("lang") || "en",
       pollId: "",
-      question:"",
+      question:{},
       participants: [],
       questionActive:false,
       amountOfQuestions:0,
