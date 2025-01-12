@@ -2,7 +2,8 @@
   <div id="dimmed-overlay"></div>
   <div id="question-frame">
     <div id="progress-bar">
-      <div id="progress" :style="{ width: percentage + '%', animation: percentage <= 30 ? 'shake 0.5s infinite' : 'none' }">
+      <div id="progress"
+        :style="{ width: percentage + '%', animation: percentage <= 30 ? 'shake 0.5s infinite' : 'none' }">
       </div>
     </div>
     <div v-if="showQuestion">
@@ -38,7 +39,7 @@ export default {
     uiLabels: Object,
     currentValue: Number,
     correctAnswer: String,
-    timer:Object
+    timer: Object
   },
   data: function () {
     return {
@@ -134,7 +135,8 @@ export default {
   position: absolute;
 }
 
-#question-frame h1,h2 {
+#question-frame h1,
+h2 {
   color: White;
 }
 

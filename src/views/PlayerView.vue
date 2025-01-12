@@ -3,17 +3,19 @@
     <div id="upperHalf">
       <div class="player-statistics">
         <div class="player-hearts">
-          <img :src="this.userStats?.information?.lives >= 1 ? '/img/hjartaRod.png' : '/img/hjartaGro.png'" class="heart">
-          <img :src="this.userStats?.information?.lives >= 2 ? '/img/hjartaRod.png' : '/img/hjartaGro.png'" class="heart">
+          <img :src="this.userStats?.information?.lives >= 1 ? '/img/hjartaRod.png' : '/img/hjartaGro.png'"
+            class="heart">
+          <img :src="this.userStats?.information?.lives >= 2 ? '/img/hjartaRod.png' : '/img/hjartaGro.png'"
+            class="heart">
         </div>
         <div class="player-time">{{ this.userStats?.information?.time }} s </div>
       </div>
       <div class="barRim"></div>
     </div>
-    <AnswerOptions ref="AnswerOptions" v-bind:userId="userId" v-bind:pollId="pollId"
-      v-bind:uiLabels="uiLabels" @updateQuestionActive="handleQuestionActive" />
+    <AnswerOptions ref="AnswerOptions" v-bind:userId="userId" v-bind:pollId="pollId" v-bind:uiLabels="uiLabels"
+      @updateQuestionActive="handleQuestionActive" />
     <div id="bottomHalf">
-      <div class="barRim" :style="{top:'0'}"></div>
+      <div class="barRim" :style="{ top: '0' }"></div>
       <div class="help-buttons">
         <img src="/img/50-50.png" class="life-line"
           :class="{ 'dimmed': userStats?.information?.usedFiftyFifty || !questionActive }" @click="fiftyFifty" />
@@ -83,14 +85,15 @@ export default {
 </script>
 
 <style scoped>
-.barRim{
+.barRim {
   width: 100%;
   height: 15%;
-  bottom:0;
-  background: linear-gradient( black 0% 2%,#959595 30% 32%,black 60% 100%);
+  bottom: 0;
+  background: linear-gradient(black 0% 2%, #959595 30% 32%, black 60% 100%);
   position: absolute;
-  z-index:4;
+  z-index: 4;
 }
+
 #bottomHalf {
   width: 100%;
   background: #303030;
@@ -104,7 +107,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #303030; /**linear-gradient(#101010, rgb(16, 16, 16, 0.95)) rgb(71, 71, 71)*/
+  background-color: #303030;
+  /**linear-gradient(#101010, rgb(16, 16, 16, 0.95)) rgb(71, 71, 71)*/
   height: 15%;
   position: relative;
   top: 0;
@@ -166,7 +170,8 @@ export default {
 }
 
 .life-line:hover {
-  transform: scale(1.2); /* Ökar storleken när man hovrar */
+  transform: scale(1.2);
+  /* Ökar storleken när man hovrar */
 }
 
 .life-line.dimmed {
@@ -175,7 +180,7 @@ export default {
 }
 
 .life-line.dimmed:hover {
-  transform: scale(1); 
+  transform: scale(1);
   cursor: default;
 }
 </style>

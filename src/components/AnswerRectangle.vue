@@ -4,7 +4,8 @@
     <div class="border-rectangle">
       <div class="rectangle" :style="{ backgroundColor: a == correctAnswer && showCorrectAnswer ? '#FF851B' : 'none' }">
         <h3 :style="{ color: a == correctAnswer && showCorrectAnswer ? 'black' : 'none' }">
-          <span :style="{ color: a == correctAnswer && showCorrectAnswer ? 'black' : 'none' }">{{ answersLetters[index] }}:
+          <span :style="{ color: a == correctAnswer && showCorrectAnswer ? 'black' : 'none' }">{{ answersLetters[index]
+            }}:
           </span>
           {{ a }}
         </h3>

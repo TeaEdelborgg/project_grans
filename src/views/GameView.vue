@@ -1,29 +1,17 @@
 <template>
   <div id="background">
     <div id="row-container">
-      <Frame 
-      v-on:countDownOver="countDownOver" 
-      v-bind:amountOfQuestions="amountOfQuestions"  
-      v-bind:correctAnswer="correctAnswer" 
-      v-bind:questionNumber="questionNumber" 
-      v-bind:question="question" 
-      v-bind:uiLabels="uiLabels" 
-      v-bind:questionActive="questionActive" 
-      v-bind:moneyBoxes="moneyBoxes" 
-      v-bind:moneyValues="moneyValues" 
-      v-bind:participants="participants"
-      v-bind:timer="timer"></Frame>
+      <Frame v-on:countDownOver="countDownOver" v-bind:amountOfQuestions="amountOfQuestions"
+        v-bind:correctAnswer="correctAnswer" v-bind:questionNumber="questionNumber" v-bind:question="question"
+        v-bind:uiLabels="uiLabels" v-bind:questionActive="questionActive" v-bind:moneyBoxes="moneyBoxes"
+        v-bind:moneyValues="moneyValues" v-bind:participants="participants" v-bind:timer="timer"></Frame>
       <HostPlayer v-bind:questionActive="questionActive"></HostPlayer>
-    </div> 
+    </div>
     <br>
     <div id="pedestaler">
-      <PlayerPedestal v-if="participants.length>0 && pedestalLight?.length>0" v-for="(player,index) in participants" 
-        v-bind:questionNumber="questionNumber" 
-        v-bind:uiLabels="uiLabels" 
-        v-bind:player="player" 
-        v-bind:questionActive="questionActive"
-        v-bind:lightPedestal="pedestalLight?.[index]"
-        :key="player.id" />
+      <PlayerPedestal v-if="participants.length > 0 && pedestalLight?.length > 0" v-for="(player, index) in participants"
+        v-bind:questionNumber="questionNumber" v-bind:uiLabels="uiLabels" v-bind:player="player"
+        v-bind:questionActive="questionActive" v-bind:lightPedestal="pedestalLight?.[index]" :key="player.id" />
     </div>
   </div>
 </template>
@@ -39,7 +27,7 @@ import Frame from '@/components/Frame.vue';
 const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
 
 export default {
-  name: 'GameView', 
+  name: 'GameView',
   components: {
     PlayerPedestal,
     HostPlayer,
@@ -50,92 +38,94 @@ export default {
       uiLabels: {},
       lang: localStorage.getItem("lang") || "en",
       pollId: "",
-      question:{},
+      question: {},
       participants: [],
-      questionActive:false,
-      amountOfQuestions:0,
-      userId:'',
-      moneyBoxes:[],
-      moneyValues:[],
-      questionNumber:0,
-      correctAnswer:'',
-      pedestalLight:[],
-      timer:{}
+      questionActive: false,
+      amountOfQuestions: 0,
+      userId: '',
+      moneyBoxes: [],
+      moneyValues: [],
+      questionNumber: 0,
+      correctAnswer: '',
+      pedestalLight: [],
+      timer: {}
     }
   },
   created: function () {
     this.pollId = this.$route.params.id
-    socket.on( "uiLabels", labels => this.uiLabels = labels );
+    socket.on("uiLabels", labels => this.uiLabels = labels);
 
-    socket.on( "updatePedestalLight", p => { 
+    socket.on("updatePedestalLight", p => {
       this.pedestalLight = p;
     })
 
-    socket.on("updateAfterQuestion", d=>{ 
-      this.participants = d.participants 
+    socket.on("updateAfterQuestion", d => {
+      this.participants = d.participants
       this.moneyBoxes = d.levelBoxes
     })
- 
-    socket.on('startCountdownResults', data =>{ 
-      this.question=data.q; 
-      this.questionNumber=data.questionNumber
-      this.correctAnswer=data.correctAnswer
-      this.questionActive=true
-      this.pedestalLight=data.pedestalLight
+
+    socket.on('startCountdownResults', data => {
+      this.question = data.q;
+      this.questionNumber = data.questionNumber
+      this.correctAnswer = data.correctAnswer
+      this.questionActive = true
+      this.pedestalLight = data.pedestalLight
     });
     socket.on('loadStats', d => {
-      this.amountOfQuestions=d.amountOfQuestions
+      this.amountOfQuestions = d.amountOfQuestions
       this.moneyValues = d.levelValues
       this.moneyBoxes = d.levelColors
-      this.participants= d.participants
-      this.pedestalLight= d.pedestalLight
-      this.timer=d.timer
+      this.participants = d.participants
+      this.pedestalLight = d.pedestalLight
+      this.timer = d.timer
       //timer här
     })
 
-    socket.on('gameFinished', ()=>
-      this.$router.push('/result/'+this.pollId)
+    socket.on('gameFinished', () =>
+      this.$router.push('/result/' + this.pollId)
     )
 
-    socket.emit( "getUILabels", this.lang );
-    socket.emit( "joinPoll", this.pollId );
-    socket.emit('getStats', this.pollId); 
+    socket.emit("getUILabels", this.lang);
+    socket.emit("joinPoll", this.pollId);
+    socket.emit('getStats', this.pollId);
 
   },
-  methods:{
-    countDownOver: function(){
-      setTimeout(()=>{
-          socket.emit("getAllAnswers", this.pollId) 
-          this.questionActive=false 
-        },2000)
+  methods: {
+    countDownOver: function () {
+      setTimeout(() => {
+        socket.emit("getAllAnswers", this.pollId)
+        this.questionActive = false
+      }, 2000)
     }
   }
 }
 </script>
 
 <style>
-#pedestaler{
-  width:100%;
+#pedestaler {
+  width: 100%;
   display: flex;
   justify-content: space-evenly;
-  height:25%;
-  bottom:0;
+  height: 25%;
+  bottom: 0;
   position: relative;
 }
-#row-container{
+
+#row-container {
   display: flex;
   flex-direction: row;
   height: 75%;
   position: relative;
 }
-#background{
+
+#background {
   background: radial-gradient(#1a237e, #0d1137);
-  background-size:cover ;
+  background-size: cover;
   height: 100vh;
   width: 100vw;
   position: fixed;
   z-index: 1;
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
 }
 </style>
