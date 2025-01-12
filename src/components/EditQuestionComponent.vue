@@ -47,7 +47,7 @@
   };
   </script>
 
-<style>
+<style scoped>
 .questionBoxes{
   display: block;
   flex-direction:column;
@@ -85,10 +85,10 @@
 
 }
 #editCorrectAnswerBox{
-    color:rgb(0, 127, 4);
+    color:rgb(0, 154, 5);
 }
 #editWrongAnswerBox{
-    color: rgb(169, 0, 3);
+    color: rgb(182, 2, 5);
 }
 
 .questionBoxes button{

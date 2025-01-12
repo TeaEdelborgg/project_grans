@@ -59,6 +59,8 @@
           <li>{{uiLabels.rulesli2}}</li>
           <li>{{uiLabels.rulesli3}}</li>
           <li>{{uiLabels.rulesli4}}</li>
+          <li>{{uiLabels.rulesli6}}</li>
+          <li>{{uiLabels.rulesli7}}</li>
           <li>{{ uiLabels.rulesli5 }}</li>
         <button @click="closeGameRules">X</button>
       </div>
