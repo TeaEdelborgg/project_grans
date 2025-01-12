@@ -158,7 +158,7 @@ export default {
       this.showCorrectAnswer = true;
       setTimeout(() => {
         this.seeAlternatives = false;
-      }, 2000)
+      }, 5000)
     }
   },
   watch: {
