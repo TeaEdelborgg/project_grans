@@ -8,10 +8,12 @@
         </div>
         <div class="player-time">{{ this.userStats?.information?.time }} s </div>
       </div>
+      <div class="barRim"></div>
     </div>
     <AnswerOptions ref="AnswerOptions" v-bind:userId="userId" v-bind:pollId="pollId"
       @updateQuestionActive="handleQuestionActive" />
     <div id="bottomHalf">
+      <div class="barRim" :style="{top:'0'}"></div>
       <div class="help-buttons">
         <img src="/img/50-50.png" class="life-line"
           :class="{ 'dimmed': userStats?.information?.usedFiftyFifty || !questionActive }" @click="fiftyFifty" />
@@ -80,9 +82,17 @@ export default {
 </script>
 
 <style scoped>
+.barRim{
+  width: 100%;
+  height: 15%;
+  bottom:0;
+  background: linear-gradient( black 0% 2%,#959595 30% 32%,black 60% 100%);
+  position: absolute;
+  z-index:4;
+}
 #bottomHalf {
   width: 100%;
-  background: linear-gradient(#101010, rgb(16, 16, 16, 0.95));
+  background: #303030;
   height: 20%;
   position: absolute;
   bottom: 0;
@@ -93,9 +103,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(#101010, rgb(16, 16, 16, 0.95));
+  background-color: #303030; /**linear-gradient(#101010, rgb(16, 16, 16, 0.95)) rgb(71, 71, 71)*/
   height: 15%;
-  position: absolute;
+  position: relative;
   top: 0;
   z-index: 3;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
@@ -114,6 +124,9 @@ export default {
   align-items: center;
   padding-top: 2vh;
   padding-bottom: 2vh;
+  background-color: #e3e3e3;
+  border-radius: 10%/50%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 }
 
 .player-hearts {
@@ -131,7 +144,7 @@ export default {
 .player-time {
   font-size: 2em;
   font-weight: bold;
-  color: #f9ac33;
+  color: #000000;
   margin: 0 5vw 0 5vw;
 }
 
@@ -139,6 +152,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  transform: translateY(25%);
 }
 
 .life-line {
@@ -146,10 +160,11 @@ export default {
   margin: 1vh 1vw 1vh 1vw;
   border: 5px solid #be8426;
   border-radius: 50%;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
 }
 
 .life-line.dimmed {
-  border: 5px solid #825b1c;
   filter: brightness(50%);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 }
 </style>

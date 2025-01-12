@@ -3,12 +3,12 @@
     <SliderCompoment @sendAnswer="submitAnswer(selectedAnswer)" v-bind:sent="sent"
       v-bind:seeAlternatives="seeAlternatives" v-bind:questionActive="questionActive"
       v-bind:selectedAnswer="selectedAnswer" />
-    <div id="container" v-if="questionActive || seeAlternatives" class="answeralternatives">
+    <div id="container"  class="answeralternatives"> <!--v-if="questionActive || seeAlternatives"-->
       <div class="timerBarContainer">
         <div class="timerBar" :style="{ width: percentage + '%' }"></div>
       </div>
       <div id="answersContainer">
-        <div v-for="a in question.a" class="containerButton">
+        <div v-for="(a, index) in question.a" class="containerButton">
           <div class="line"></div>
           <div class="borderRect">
             <button class="rectangle" :class="{
@@ -18,7 +18,10 @@
               showIncorrect: a === selectedAnswer && showCorrectAnswer && !isCorrectAnswer,
               showAudienceAnswer: a === audienceAnswer,
             }" v-on:click="selectAnswer(a)" v-bind:key="a" :disabled="isDisabled(a)">
-              {{ a }}
+                <div class="textContainer"> 
+                  <span class="answerLetters"> {{ answerLetters[index] }}: </span>
+                  <h3> {{ a }} </h3>
+                </div>
             </button>
           </div>
         </div>
@@ -47,6 +50,7 @@ export default {
       sent: false,
       fiftyFify: [],
       audienceAnswer: '',
+      answerLetters: ['A', 'B', 'C', 'D'],
 
       //till för countdownen
       question: {
@@ -236,11 +240,38 @@ export default {
   background-color: #101c3e;
   color: #e3e3e3;
   clip-path: polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%);
+  position: relative;
+  font-weight: bold;
+}
+
+.textContainer{
+  position: absolute;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
   align-content: center;
   justify-content: center;
+  text-align: center;
+  align-items: center;
+  transform: translateY(-50%);
+}
+
+.rectangle h3 {
+  width: 75%;
+  margin:0;
   position: relative;
   font-size: 1.2em;
-  font-weight: bold;
+  overflow-wrap: break-word;
+}
+
+.answerLetters {
+  width: 5%;
+  color: #FF851B;
+  left: 0;
+  position: relative;
+  margin:0;
+  font-size: 1.2em;
+  text-align: left;
 }
 
 .borderRect {
