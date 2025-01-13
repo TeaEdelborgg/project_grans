@@ -9,7 +9,7 @@
 
 <script>
 export default {
-    name: 'EndingMessage', 
+    name: 'EndingMessage',
     props: {
         uiLabels: Object,
     }

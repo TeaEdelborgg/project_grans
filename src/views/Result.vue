@@ -44,7 +44,6 @@ export default {
     created: function () {
         this.quizId = this.$route.params.id
         socket.on("sendScoreBoard", val => {
-            console.log("val: ", val)
             this.winners = val.slice(0, 3)
             this.showNameWinners = new Array(this.winners.length).fill(false)
 
@@ -68,7 +67,6 @@ export default {
             this.showingOrder = this.showingOrderAlternativs[this.totalWinners]
 
             for (let i = 0; i < this.showingOrder.length; i++) {
-                console.log('i: ', i, 'plats: ', this.showingOrder[i])
                 let time = (i + 1) * 2000
                 let index = this.showingOrder[i]
                 this.showNamesCountDown(index, time)
@@ -78,7 +76,6 @@ export default {
         },
         showNamesCountDown: function (index, time) {
             setTimeout(() => {
-                console.log("tid uppe")
                 if (index <= this.totalWinners) {
                     this.showNameWinners[index] = true
                 }

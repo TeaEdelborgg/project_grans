@@ -3,9 +3,9 @@
     <BarComponent @sendAnswer="submitAnswer()" v-bind:sent="sent" v-bind:seeAlternatives="seeAlternatives"
       v-bind:questionActive="questionActive" v-bind:selectedAnswer="selectedAnswer"
       v-bind:questionNumber="questionNumber" v-bind:uiLabels="uiLabels" />
-    <div id="container" v-if="questionActive || seeAlternatives" class="answeralternatives">
-      <div class="timerBarContainer">
-        <div class="timerBar" :class="{ shake: percentage <= 30 }" :style="{ width: percentage + '%' }"></div>
+    <div id="container" v-if="questionActive || seeAlternatives" class="answer-alternatives">
+      <div class="timer-bar-container">
+        <div class="timer-bar" :class="{ shake: percentage <= 30 }" :style="{ width: percentage + '%' }"></div>
       </div>
       <AnswerContainer @answerSelected="answerSelected" v-bind:answerAlternatives="question.a"
         v-bind:selectedAnswer="selectedAnswer" v-bind:sent="sent" v-bind:showCorrectAnswer="showCorrectAnswer"
@@ -16,10 +16,11 @@
 </template>
 
 <script>
-import BarComponent from './BarComponent.vue';
-import AnswerContainer from './AnswerContainer.vue';
 import io from 'socket.io-client';
 const socket = io(sessionStorage.getItem("dataServer"));
+
+import BarComponent from './BarComponent.vue';
+import AnswerContainer from './AnswerContainer.vue';
 
 export default {
   name: 'AnswerOptions',
@@ -112,16 +113,11 @@ export default {
           this.percentage = 0;
           endQuestion = true;
         })
-
-        if (this.timeLeft > this.timer.timerQuestion) {
-          // lägg in en countdown för innan frågan
-        } else if (this.timeLeft > this.timer.timerAnswers) {
-          // läs frågan på skärmen
-        } else if (this.timeLeft > 0) {
+        if (this.timeLeft < this.timer.timerAnswers && this.timeLeft > 0) {
           this.seeAlternatives = true
           this.percentage = Math.floor(this.timeLeft / 150);
           this.questionActive = true;
-        } else {
+        } else if (this.timeLeft <= 0) {
           this.endCountdown();
           clearInterval(interval);
         }
@@ -173,7 +169,7 @@ export default {
   justify-content: center;
 }
 
-.answeralternative {
+.answer-alternative {
   background-color: #f79743;
   border-color: #FFAD66;
   border-style: solid;
@@ -189,7 +185,7 @@ button:disabled {
   color: #6d6d6d;
 }
 
-.timerBarContainer {
+.timer-bar-container {
   width: 95%;
   height: 5%;
   background-color: #e3e3e3;
@@ -200,13 +196,13 @@ button:disabled {
   position: relative;
 }
 
-.timerBar {
+.timer-bar {
   height: 100%;
   background-color: #FF851B;
   transition: width 0.3s linear;
 }
 
-.timerBar.shake {
+.timer-bar.shake {
   animation: shake 0.5s infinite;
 }
 
@@ -219,7 +215,6 @@ button:disabled {
     transform: translateY(10%);
     background-color: red;
     box-shadow: 0 0 20px red;
-    /**blinka rött */
   }
 
   100% {

@@ -2,10 +2,10 @@
     <div id="bottom-half">
         <div class="bar-rim" :style="{ top: '0' }"></div>
         <div class="help-buttons">
-            <img src="/img/50-50.png" class="life-line"
+            <img src="/img/50-50.png" class="life-line" alt="50-50"
                 :class="{ 'dimmed': userStats?.information?.usedFiftyFifty || !questionActive }"
                 v-on:click="fiftyFifty" />
-            <img src="/img/AskAudience.png" class="life-line"
+            <img src="/img/AskAudience.png" class="life-line" alt="AskAudience"
                 :class="{ 'dimmed': userStats?.information?.usedAskAudience || !questionActive }"
                 v-on:click="askAudience" />
         </div>
