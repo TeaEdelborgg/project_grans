@@ -157,7 +157,7 @@ export default {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
-h1 {
+.admin h1 {
   font-size: 2em;
   margin: 0.5em;
   color: #eae9e9;
