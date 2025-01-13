@@ -11,15 +11,23 @@
         <button class="game-button finish-button" v-else-if="!canStartNextQuestion" @click="endQuestion">
             {{ uiLabels.finishQuestion }}
         </button>
-        <button class="game-button" v-else @click="finishGame">
+        <button class="game-button" v-else-if="currentQuestion == currentQuestion" @click="finishGame">
             {{ uiLabels.ViewFinalResults }}
         </button>
+        <div class="popup-background" v-if="showPopup">
+            <EndingMessage v-bind:uiLabels="uiLabels"/>
+        </div>
     </section>
 </template>
 
 <script>
+import EndingMessage from './components/EndingMessage.vue';
+
 export default {
     name: 'GameControls',
+    components: {
+        EndingMessage,
+    },
     props: {
         uiLabels: Object,
         currentQuestion: Number,
@@ -28,7 +36,7 @@ export default {
     },
     data: function () {
         return {
-            one: 1,
+            showPopup: false,
         }
     },
     emits: ["runQuestion", "endQuestion", "finishGame"],
@@ -40,6 +48,7 @@ export default {
             this.$emit("endQuestion")
         },
         finishGame: function () {
+            this.showPopup = true
             this.$emit("finishGame")
         }
     }

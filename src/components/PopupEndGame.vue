@@ -5,18 +5,18 @@
             <button class="continue-button" @click="close">{{ uiLabels.continueGame }}</button>
             <button class="end-button" @click="end">{{ uiLabels.finishGame }}</button>
         </div>
-        <div class="ending-message loading-dots" v-else>
-            {{ uiLabels.redirectHomePage }}
-            <div class="animated-dots"></div>
-            <div class="animated-dots"></div>
-            <div class="animated-dots"></div>
-        </div>
+        <EndingMessage v-bind:uiLabels="uiLabels" v-else/>
     </div>
 </template>
 
 <script>
+import EndingMessage from './EndingMessage.vue';
+
 export default {
     name: "PopupEndGame",
+    components: {
+        EndingMessage,
+    },
     props: {
         showEndGame: Boolean,
         questions: Object,
@@ -39,7 +39,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .popup-end-game-content {
     position: relative;
     background: #0d1137;
