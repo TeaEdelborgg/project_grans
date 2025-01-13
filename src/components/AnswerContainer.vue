@@ -44,10 +44,10 @@ export default {
     emits: ["answerSelected"],
     methods: {
         selectAnswer: function (answer) {
-            this.selectedAnswer = answer
+            this.selectedAnswer = answer;
             if (this.questionActive && !this.sent) {
-                this.selectedAnswer = answer
-                this.$emit("answerSelected", this.selectedAnswer)
+                this.selectedAnswer = answer;
+                this.$emit("answerSelected", this.selectedAnswer);
             }
         },
         isDisabled: function (a) {

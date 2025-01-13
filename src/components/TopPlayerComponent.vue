@@ -3,9 +3,9 @@
         <div class="player-statistics">
             <div class="player-hearts">
                 <img :src="this.userStats?.information?.lives >= 1 ? '/img/hjartaRod.png' : '/img/hjartaGro.png'"
-                    class="heart">
+                    class="heart" alt="heart">
                 <img :src="this.userStats?.information?.lives >= 2 ? '/img/hjartaRod.png' : '/img/hjartaGro.png'"
-                    class="heart">
+                    class="heart" alt="heart">
             </div>
             <div class="player-time">{{ this.userStats?.information?.time }} s </div>
         </div>

@@ -1,8 +1,8 @@
 <template>
   <div id="info-box" :style="{ boxShadow: player.information.in ? '0 0 10px rgba(255, 255, 255, 0.5)' : '0 0 0 0' }">
     <div id="hearts">
-      <img :src="player.information.lives >= 1 ? '/img/hjartaRod.png' : '/img/hjartaGro.png'" class="heart">
-      <img :src="player.information.lives >= 2 ? '/img/hjartaRod.png' : '/img/hjartaGro.png'" class="heart">
+      <img :src="player.information.lives >= 1 ? '/img/hjartaRod.png' : '/img/hjartaGro.png'" class="heart" alt="heart">
+      <img :src="player.information.lives >= 2 ? '/img/hjartaRod.png' : '/img/hjartaGro.png'" class="heart" alt="heart">
     </div>
     <br>
     <h1><span :style="{ fontSize: '1.5em' }">{{ player.information.time }}</span>s</h1>

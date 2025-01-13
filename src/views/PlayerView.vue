@@ -10,11 +10,12 @@
 
 <script>
 // @ is an alias to /src
+import io from 'socket.io-client';
+const socket = io(sessionStorage.getItem("dataServer"));
+
 import TopPlayerComponent from '@/components/TopPlayerComponent.vue';
 import AnswerOptions from '@/components/AnswerOptions.vue';
 import BottomPlayerComponent from '../components/BottomPlayerComponent.vue';
-import io from 'socket.io-client';
-const socket = io(sessionStorage.getItem("dataServer"))
 
 export default {
   name: 'PlayerView',
@@ -29,7 +30,6 @@ export default {
       userId: '',
       userStats: {},
       quizId: "inactive quiz",
-      questionNumber: null,
       questionActive: false,
       usedFiftyFiftyThisRound: false,
     }
@@ -43,13 +43,13 @@ export default {
       if (stats.userId == this.userId) {
         this.userStats = user
       }
-    })
+    });
     socket.on("gameFinished", () =>
       this.$router.push("/resultPlayer/" + this.quizId + "/" + this.userId)
     );
     socket.emit("getUILabels", this.lang);
     socket.emit("joinQuiz", this.quizId);
-    socket.emit('getPlayer', { quizId: this.quizId, userId: this.userId })
+    socket.emit('getPlayer', { quizId: this.quizId, userId: this.userId });
   },
   methods: {
     handleQuestionActive(isActive) {
@@ -57,13 +57,13 @@ export default {
     },
     fiftyFifty: function () {
       if (!this.userStats.information.usedFiftyFifty && this.questionActive) {
-        socket.emit('fiftyFifty', { quizId: this.quizId, userId: this.userId })
-        this.usedFiftyFiftyThisRound = true
+        socket.emit('fiftyFifty', { quizId: this.quizId, userId: this.userId });
+        this.usedFiftyFiftyThisRound = true;
       }
     },
     askAudience: function () {
       if (!this.userStats.information.usedAskAudience && this.questionActive) {
-        socket.emit('audienceAnswer', { quizId: this.quizId, userId: this.userId, usedFiftyFifty: this.usedFiftyFiftyThisRound })
+        socket.emit('audienceAnswer', { quizId: this.quizId, userId: this.userId, usedFiftyFifty: this.usedFiftyFiftyThisRound });
       }
     },
   },
@@ -71,7 +71,7 @@ export default {
 </script>
 
 <style>
-.barRim {
+.bar-rim {
   width: 100%;
   height: 15%;
   bottom: 0;

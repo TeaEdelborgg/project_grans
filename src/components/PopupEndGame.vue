@@ -1,12 +1,10 @@
 <template>
-    <div class="popup-end-game-content">
-        <div v-if="!endGame">
-            <p>{{ uiLabels.areYouSure }}</p>
-            <button class="continue-button" @click="close">{{ uiLabels.continueGame }}</button>
-            <button class="end-button" @click="end">{{ uiLabels.finishGame }}</button>
-        </div>
-        <EndingMessage v-bind:uiLabels="uiLabels" v-else/>
+    <div v-if="!endGame" class="popup-end-game-content">
+        <p>{{ uiLabels.areYouSure }}</p>
+        <button class="continue-button" @click="close">{{ uiLabels.continueGame }}</button>
+        <button class="end-button" @click="end">{{ uiLabels.finishGame }}</button>
     </div>
+    <EndingMessage v-if="endGame" class="popup-end-game-content" v-bind:uiLabels="uiLabels" />
 </template>
 
 <script>
@@ -52,6 +50,7 @@ export default {
     margin: 1em;
     font-size: 1em;
     font-weight: bold;
+    text-align: center;
 }
 
 .popup-end-game-content button {

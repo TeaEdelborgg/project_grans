@@ -4,7 +4,7 @@
     </div>
     <div id="arrow-container" v-if="selectedAnswer != null && !pressed && !sent && questionNumber == 0"
         :class="{ verticalMove: seeAlternatives }">
-        <img id="arrow" src="/img/arrow.png" />
+        <img id="arrow" src="/img/arrow.png" alt="arrow" />
         <p id="arrow-text">{{ uiLabels.lockAnswer }}</p>
     </div>
 </template>

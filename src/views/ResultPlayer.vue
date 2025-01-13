@@ -32,7 +32,6 @@ export default {
     this.userId = this.$route.params.userId;
 
     socket.on('sendScoreBoard', scoreBoard => {
-      console.log("tog emot scoreBoard i player")
       this.findPlayerPlace(scoreBoard);
     })
 
@@ -43,7 +42,6 @@ export default {
   },
   methods: {
     findPlayerPlace: function (scoreBoard) {
-      console.log("scoreboard: ", scoreBoard)
       const index = scoreBoard.findIndex(player => player.userId == this.userId)
       if (index == 0) {
         this.winner = true

@@ -4,17 +4,18 @@
     <GameStatus v-bind:uiLabels="uiLabels" v-bind:numberPlayers="numberPlayers"
       v-bind:numberPlayersAnswered="numberPlayersAnswered" v-bind:currentQuestion="quizData.currentQuestion"
       v-bind:questionAmount="quizData.questionAmount" v-bind:questions="quizData.questions" />
-    <GameControls @runQuestion="runQuestion()" @endQuestion="endQuestion()" @finishGame="finishGame()" v-bind:uiLabels="uiLabels"
-      v-bind:currentQuestion="quizData.currentQuestion" v-bind:questionAmount="quizData.questionAmount"
-      v-bind:canStartNextQuestion="canStartNextQuestion" />
-    <ParticipantControls :quizData="quizData" :uiLabels="uiLabels" />
-    <EndGame @finishGame="finishGame" :uiLabels="uiLabels" />
+    <GameControls @runQuestion="runQuestion()" @endQuestion="endQuestion()" @finishGame="finishGame()"
+      v-bind:uiLabels="uiLabels" v-bind:currentQuestion="quizData.currentQuestion"
+      v-bind:questionAmount="quizData.questionAmount" v-bind:canStartNextQuestion="canStartNextQuestion" />
+    <ParticipantControls v-bind:quizData="quizData" v-bind:uiLabels="uiLabels" />
+    <EndGame @finishGame="finishGame" v-bind:uiLabels="uiLabels" />
   </div>
 </template>
 
 <script>
 import io from 'socket.io-client';
 const socket = io(sessionStorage.getItem("dataServer"));
+
 import PopupEndGame from '../components/PopupEndGame.vue';
 import ParticipantControls from '../components/ParticipantControls.vue';
 import GameStatus from '../components/GameStatus.vue';
@@ -91,7 +92,7 @@ export default {
       this.numberPlayersAnswered = 0
       socket.emit('runCountdown', { quizId: this.quizId, questionNumber: currentQuestion })
     },
-    endQuestion() {
+    endQuestion: function () {
       socket.emit('endTimer', this.quizId)
     },
     finishGame: function () {

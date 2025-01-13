@@ -1,6 +1,6 @@
 <template>
     <div id="speach-bubble-container">
-        <img src="/img/SpeachBubble.png" id="speach-bubble">
+        <img src="/img/SpeachBubble.png" id="speach-bubble" alt="speachbubble">
         <div id="text-container">
             <h1>{{ uiLabels.readyBeforeQuestion }}</h1>
             <h2>
