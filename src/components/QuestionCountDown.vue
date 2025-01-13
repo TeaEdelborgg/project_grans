@@ -54,7 +54,7 @@ export default {
   },
   created: function () {
     this.quizId = this.$route.params.id;
-    socket.emit("joinPoll", this.quizId);
+    socket.emit("joinQuiz", this.quizId);
   },
   mounted() {
     this.countdownResult()

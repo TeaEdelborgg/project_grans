@@ -1,27 +1,27 @@
 <template>
   <div class="container">
-    <h1>{{ uiLabels.choosePollText }}</h1>
+    <h1>{{ uiLabels.chooseQuizText }}</h1>
     <div class="quizButtons">
-      <button v-on:click="choosePoll('quiz1')">
+      <button v-on:click="chooseQuiz('quiz1')">
         {{ uiLabels.historyQuiz }}
         <img src="/public/img/history_icon.png" alt="icon1"/>
       </button>
 
-      <button v-on:click="choosePoll('quiz2')">
+      <button v-on:click="chooseQuiz('quiz2')">
         {{ uiLabels.geographyQuiz }}
         <img src="/public/img/geography_icon.png" alt="icon2"/>
       </button>
 
-      <button v-on:click="choosePoll('quiz3')">
+      <button v-on:click="chooseQuiz('quiz3')">
         {{ uiLabels.scienceQuiz }}
         <img src="/public/img/science_icon.png" alt="icon3"/>
       </button>
     </div>    
     <button 
       class="continue" 
-      :disabled="!chosenPoll"
+      :disabled="!chosenQuiz"
       v-on:click="continueToLobby">
-        {{ uiLabels.choosePoll }}
+        {{ uiLabels.chooseQuiz }}
     </button>
 
     <div v-for="(q, index) in quizData.questions" :key="index" class="questionBoxes">
@@ -34,8 +34,7 @@
   
   <script>
   import io from 'socket.io-client';
-  //const socket = io("localhost:3000");
-  const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
+  const socket = io(sessionStorage.getItem("dataServer"));
 
   export default {
     name: 'CreateView',
@@ -50,7 +49,7 @@
         questionNumber: 0,
         quizData: {},
         uiLabels: {},
-        chosenPoll:false,
+        chosenQuiz:false,
         
       }
     },
@@ -63,18 +62,18 @@
     },
     methods: {
 
-      choosePoll: function(id) {
+      chooseQuiz: function(id) {
         if (this.lang==="sv"){
           this.quizId = (id + "Sv")
         }
         else {this.quizId = (id + "En")}
-        this.chosenPoll=true;
-        socket.emit("createPoll", { quizId: this.quizId, lang: this.lang });
-        socket.emit("joinPoll", this.quizId);
+        this.chosenQuiz=true;
+        socket.emit("createQuiz", { quizId: this.quizId, lang: this.lang });
+        socket.emit("joinQuiz", this.quizId);
         
       },
       continueToLobby() {
-        if (this.chosenPoll) {
+        if (this.chosenQuiz) {
         this.$router.push(`/adminLobby/${this.quizId}`);
         }
       }
@@ -194,16 +193,16 @@ button:hover {
 h1{
   margin: 15vh auto 3vh; 
 }
-.pollButtons {
+.quizButtons {
   margin:0vh 1vw;
 }
 
-.pollButtons button{
+.quizButtons button{
   padding: 1vh 1vw;
   margin: 0vh 1vw;
   font-size: 10px;
 }
-.pollButtons img{
+.quizButtons img{
   width: 50%;
   height: 50%; 
   margin-top:2vh;

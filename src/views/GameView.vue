@@ -19,12 +19,11 @@
 <script>
 
 // @ is an alias to /src
-import PlayerPedestal from '@/components/PlayerPedestal.vue';
 import io from 'socket.io-client';
+const socket = io(sessionStorage.getItem("dataServer"));
+import PlayerPedestal from '@/components/PlayerPedestal.vue';
 import HostPlayer from '@/components/HostPlayer.vue';
 import Frame from '@/components/Frame.vue';
-//const socket = io("localhost:3000");
-const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
 
 export default {
   name: 'GameView',
@@ -78,7 +77,6 @@ export default {
       this.participants = d.participants
       this.pedestalLight = d.pedestalLight
       this.timer = d.timer
-      //timer här
     })
 
     socket.on('gameFinished', () =>
@@ -86,7 +84,7 @@ export default {
     )
 
     socket.emit("getUILabels", this.lang);
-    socket.emit("joinPoll", this.quizId);
+    socket.emit("joinQuiz", this.quizId);
     socket.emit('getStats', this.quizId);
 
   },

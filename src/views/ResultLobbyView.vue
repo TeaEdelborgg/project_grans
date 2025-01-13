@@ -3,7 +3,7 @@
     <div class="adminSection">
 
 
-      <div class="PollID">
+      <div class="QuizID">
         <h1>{{ uiLabels.quizId }} {{ quizId }}</h1>
       </div>
 
@@ -48,8 +48,8 @@ export default {
   created() {
     this.quizId = this.$route.params.id;
     socket.on("uiLabels", (labels) => (this.uiLabels = labels));
-    /*socket.on("startPoll", (this.quizId ))*/
-    socket.on('startPoll', () =>
+    /*socket.on("startQuiz", (this.quizId ))*/
+    socket.on('startQuiz', () =>
       this.$router.push('/game/' + this.quizId)
     );
     socket.on("participantsUpdate", (p) => {
@@ -57,15 +57,15 @@ export default {
     });
 
 
-    socket.emit("joinPoll", this.quizId);
+    socket.emit("joinQuiz", this.quizId);
     socket.emit("getParticipants", this.quizId)
     socket.emit("getUILabels", this.lang);
   },
 
 
   methods: {
-    startPoll() {
-      socket.emit("startPoll", this.quizId);
+    startQuiz() {
+      socket.emit("startQuiz", this.quizId);
     },
   }
 }
@@ -87,18 +87,18 @@ export default {
   padding: 0;
   text-align: center;
   box-sizing: border-box;
+  overflow:auto;
 }
 
-.PollID {
+.QuizID {
   text-align: center;
   padding: 20px;
   border: 2px solid rgb(255, 255, 255);
   border-radius: 10px;
-  width: 600px;
-  height: 150px;
-  margin: 60px auto;
-  margin-top: 110px;
-  margin-bottom: 20px;
+  width: 85%;
+  max-width: 600px;
+  height: auto;
+  margin: 5vh auto 2vh;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   font-family: monospace;
 }
@@ -108,10 +108,9 @@ export default {
   padding: 20px;
   background: linear-gradient(135deg, #1e0880, #06012e);
   border-radius: 10px;
-  width:95vw;
+  width:85%;
   height: 23vh;
-  margin: 60px auto;
-  margin-bottom: 0px;
+  margin: 5vh auto 0vh;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -122,56 +121,20 @@ export default {
   margin-top: 0;
 }
 
-h2 {
-  color: #000000;
-  font-size: 100%;
-}
-
 h1 {
   color: rgb(255, 255, 255);
   font-size: 450%;
 }
-
-h4 {
-  color: #000000;
-  font-size: 200%;
-  margin-bottom: 16px;
-  margin-top: 0;
-}
-
 
 .lobbyParticipants {
   list-style: none;
   padding: 0;
 }
 
-.adminButtons button {
-  border: none;
-  cursor: pointer;
-  margin-left: 190px;
-  margin-right: 190px;
-  font-size: 13px;
-  background-color: rgb(255, 136, 0);
-  color: #1e084f;
-  border-radius: 15px;
-  cursor: pointer;
-  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
-  width: 130px;
-  height: 30px;
-  text-decoration: none;
-}
-
-
-.adminButtons button:hover {
-  background-color: rgb(227, 122, 1);
-  box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
-  transform: scale(1.2);
-}
-
 .participantColor {
   display: inline-block;
   padding: 10px 20px;
-  margin: 16px;
+  margin: 1vh;
   border: 2px solid;
   border-radius: 20px;
   font-weight: bold;

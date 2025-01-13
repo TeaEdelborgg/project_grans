@@ -48,7 +48,7 @@ export default {
       this.$router.push("/resultPlayer/" + this.quizId + "/" + this.userId)
     );
     socket.emit("getUILabels", this.lang);
-    socket.emit("joinPoll", this.quizId);
+    socket.emit("joinQuiz", this.quizId);
     socket.emit('getPlayer', { quizId: this.quizId, userId: this.userId })
   },
   methods: {

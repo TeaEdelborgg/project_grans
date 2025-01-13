@@ -18,8 +18,8 @@
       </div>
 
       <div class="participateButton">
-        <button v-on:click="participateInPoll" :disabled="!userName || isColorDisabled(selectedColor) || selectedColor ==='#ff0000'">
-          {{ uiLabels.participateInPoll || "Join Poll" }}
+        <button v-on:click="participateInQuiz" :disabled="!userName || isColorDisabled(selectedColor) || selectedColor ==='#ff0000'">
+          {{ uiLabels.participateInQuiz || "Join Quiz" }}
         </button>
       </div>
 
@@ -70,8 +70,7 @@
 
 <script>
 import io from 'socket.io-client';
-//const socket = io("localhost:3000");
-const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
+const socket = io(sessionStorage.getItem("dataServer"))
 
 export default {
   name: 'LobbyView',
@@ -105,25 +104,25 @@ export default {
       this.participants = p;
       this.checkForDisabledColors(); 
     });
-    socket.on("startPoll", () =>
+    socket.on("startQuiz", () =>
       this.$router.push("/player/" + this.quizId + "/" + this.userID)
     );
     socket.on("colorSelectionUpdate", (updatedParticipants) => {
       this.participants = updatedParticipants;
       this.checkForDisabledColors();
     });
-    socket.emit("joinPoll", this.quizId);
+    socket.emit("joinQuiz", this.quizId);
     socket.emit("getParticipants", this.quizId)
     socket.emit("getUILabels", this.lang);
   },
   methods: {
-    participateInPoll() {
-      this.userID = Math.ceil(Math.random() * 1000000); // Generate unique ID
-      socket.emit("participateInPoll", {
+    participateInQuiz() {
+      this.userID = Math.ceil(Math.random() * 1000000);
+      socket.emit("participateInQuiz", {
         quizId: this.quizId,
         name: this.userName,
         userId: this.userID,
-        color: this.selectedColor, //skickar färg t admin
+        color: this.selectedColor,
       });
       this.joined = true;
       this.gameRules = true

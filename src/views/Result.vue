@@ -17,10 +17,9 @@
 
 <script>
 import io from 'socket.io-client';
+const socket = io(sessionStorage.getItem("dataServer"))
 import Podium from '../components/Podium.vue';
 import HeadLight from '../components/HeadLight.vue';
-//const socket = io("localhost:3000");
-const socket = io(sessionStorage.getItem("dataServer"))
 
 export default {
     name: 'ResultView',
@@ -57,7 +56,7 @@ export default {
             this.showNames()
         })
         socket.on("uiLabels", labels => this.uiLabels = labels);
-        socket.emit("joinPoll", this.quizId);
+        socket.emit("joinQuiz", this.quizId);
         socket.emit("getUILabels", this.lang);
     },
     mounted() {

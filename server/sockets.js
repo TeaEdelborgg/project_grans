@@ -6,9 +6,9 @@ function sockets(io, socket, data) {
     socket.emit('uiLabels', data.getUILabels(lang));
   });
 
-  socket.on('createPoll', function(d) {
-    data.createPoll(d.quizId, d.lang)
-    socket.emit('quizData', data.getPoll(d.quizId));
+  socket.on('createQuiz', function(d) {
+    data.createQuiz(d.quizId, d.lang)
+    socket.emit('quizData', data.getQuiz(d.quizId));
   });
 
   socket.on('addQuestion', function(d) {
@@ -22,13 +22,13 @@ function sockets(io, socket, data) {
     }
   });
 
-  socket.on('joinPoll', function(quizId) {
+  socket.on('joinQuiz', function(quizId) {
     socket.join(quizId);
     socket.emit('questionUpdate', data.getQuestion(quizId))
   });
 
-  socket.on('participateInPoll', function(d) {
-    data.participateInPoll(d.quizId, d.name, d.userId, d.color); 
+  socket.on('participateInQuiz', function(d) {
+    data.participateInQuiz(d.quizId, d.name, d.userId, d.color); 
     io.to(d.quizId).emit('participantsUpdate', data.getParticipants(d.quizId));
   });
 
@@ -41,12 +41,12 @@ function sockets(io, socket, data) {
     io.to(info.quizId).emit("colorSelectionUpdate", updatedParticipants);
   });
 
-  socket.on('startPoll', function(quizId) {
+  socket.on('startQuiz', function(quizId) {
     data.setQuestionAmount(quizId);
     data.setAnswersFalse(quizId);
     data.setPedestalLightFalse(quizId);
     data.createBoxes(quizId);
-    io.to(quizId).emit('startPoll');
+    io.to(quizId).emit('startQuiz');
   });
 
   socket.on('getPlayer', function(d) {
@@ -101,7 +101,7 @@ function sockets(io, socket, data) {
     let correctAnswer = data.getCorrectAnswer(d.quizId, d.questionNumber)
     let pedestalLight = data.resetPedestalLight(d.quizId)
     io.to(d.quizId).emit('startCountdownPlayer', {q:randomOrder, questionNumber:d.questionNumber});
-    io.to(d.quizId).emit('startCountdownResults',{q:randomOrder,questionNumber:d.questionNumber, correctAnswer:correctAnswer, pedestalLight:pedestalLight}); //lägg till det rätta svaret också
+    io.to(d.quizId).emit('startCountdownResults',{q:randomOrder,questionNumber:d.questionNumber, correctAnswer:correctAnswer, pedestalLight:pedestalLight});
     io.to(d.quizId).emit('currentQuestionUpdate', d.questionNumber);
   });
 
@@ -110,17 +110,17 @@ function sockets(io, socket, data) {
   });
 
   socket.on('updateResult', function(quizId){
-    socket.emit('quizData', data.getPoll(quizId));
+    socket.emit('quizData', data.getQuiz(quizId));
   });
 
   socket.on('getStats', function(quizId) {
-    const amountOfQuestions = data.getPoll(quizId).questionAmount
+    const amountOfQuestions = data.getQuiz(quizId).questionAmount
     const levelValues = data.getLevelValues(quizId)
     const levelColors = data.updateLevelBoxes(quizId)
     const participants = data.getParticipants(quizId)
     const pedestalLight = data.getPedestalLight(quizId)
     const timer = data.getTimer(quizId)
-    io.to(quizId).emit('loadStats', {amountOfQuestions:amountOfQuestions, levelValues:levelValues, levelColors:levelColors, participants:participants, pedestalLight:pedestalLight, timer:timer}) //skicka som object
+    io.to(quizId).emit('loadStats', {amountOfQuestions:amountOfQuestions, levelValues:levelValues, levelColors:levelColors, participants:participants, pedestalLight:pedestalLight, timer:timer})
   });
 
   socket.on('getStartColors', function(quizId){

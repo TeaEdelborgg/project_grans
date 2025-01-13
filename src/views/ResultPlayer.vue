@@ -13,8 +13,7 @@
 
 <script>
 import io from 'socket.io-client';
-//const socket = io("localhost:3000");
-const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
+const socket = io(sessionStorage.getItem("dataServer"));
 
 export default {
   name: 'ResultPlayerView',
@@ -38,7 +37,7 @@ export default {
     })
 
     socket.on("uiLabels", labels => this.uiLabels = labels);
-    socket.emit("joinPoll", this.quizId);
+    socket.emit("joinQuiz", this.quizId);
     socket.emit("getUILabels", this.lang);
 
   },

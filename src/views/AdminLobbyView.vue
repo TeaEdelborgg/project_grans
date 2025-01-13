@@ -4,13 +4,13 @@
     <div>
 
 
-    <div class="PollID">
+    <div class="QuizID">
       <h2>{{ uiLabels.quizId }} {{ quizId }}</h2>
     </div>
 
 
     <div class="adminButtons">
-      <button ref="startPollButton" :disabled="!openResult" @click="handleStartPollClick">{{ uiLabels.startPoll }}</button>
+      <button ref="startQuizButton" :disabled="!openResult" @click="handleStartQuizClick">{{ uiLabels.startQuiz }}</button>
       <router-link
         :to="'/resultLobby/' + quizId"
         custom
@@ -55,12 +55,12 @@
         <button @click="closeGameRules">X</button>
       </div>
       
-      <div :class="['overlay', { show: startPollPopup }]" @click="closePollPopup"></div>
-      <div :class="['PollPopup', { show: startPollPopup }]">
+      <div :class="['overlay', { show: startQuizPopup }]" @click="closeQuizPopup"></div>
+      <div :class="['QuizPopup', { show: startQuizPopup }]">
         <p>{{ uiLabels.letParticipantsJoin }}</p>
-        <button id="goBack" @click="closePollPopup">{{uiLabels.goBack}}</button>
+        <button id="goBack" @click="closeQuizPopup">{{uiLabels.goBack}}</button>
         <router-link :to="'/admin/' + quizId">
-          <button @click="startPoll">{{ uiLabels.startPoll }}</button>
+          <button @click="startQuiz">{{ uiLabels.startQuiz }}</button>
         </router-link>
       </div>
       
@@ -83,7 +83,7 @@ export default{
         participants: [],
         gameRules: false,
         openResult: false,
-        startPollPopup: false,
+        startQuizPopup: false,
         };
     },
 
@@ -96,7 +96,7 @@ export default{
       });
 
 
-      socket.emit("joinPoll", this.quizId);
+      socket.emit("joinQuiz", this.quizId);
       socket.emit("getParticipants", this.quizId)
       socket.emit("getUILabels", this.lang);
       this.gameRules = true;
@@ -104,8 +104,8 @@ export default{
 
 
     methods: {
-      startPoll() {
-        socket.emit("startPoll", this.quizId);
+      startQuiz() {
+        socket.emit("startQuiz", this.quizId);
       },
       toggleGameRules() {
       this.gameRules = !this.gameRules;
@@ -114,15 +114,15 @@ export default{
         this.gameRules = false;
       },
       enableAdminButton() {
-      this.openResult = true; // Enable the Admin View button
+        this.openResult = true; // changed to "startQuiz" button
       },
-      handleStartPollClick() {
-      if (!this.$refs.startPollButton.disabled) {
-        this.startPollPopup = true; // Show the start quiz confirmation popup
+      handleStartQuizClick() {
+      if (!this.$refs.startQuizButton.disabled) {
+        this.startQuizPopup = true;
       }
     },
-    closePollPopup() {
-      this.startPollPopup = false; // Close the quiz popup
+    closeQuizPopup() {
+      this.startQuizPopup = false;
     }
 
 
@@ -151,7 +151,7 @@ h1 {
   color: #cfcfcf;
   text-transform: uppercase;
 }
-.PollID {
+.QuizID {
   text-align: center;
   padding: 20px;
   border: 2px solid rgb(255, 255, 255);
@@ -313,7 +313,7 @@ h4 {
   margin-bottom: 8px;
 }
 
-.PollPopup {
+.QuizPopup {
   background: linear-gradient(135deg, #0a0347, #3c298f);
   color: #cfcfcf;
   font-size:20px;
@@ -333,13 +333,13 @@ h4 {
   gap:10%;
 }
 
-.PollPopup.show {
+.QuizPopup.show {
   transform: translate(-50%, -50%) scale(1);
   opacity: 1;
 }
 
 
-.PollPopup button {
+.QuizPopup button {
   border: none;
   cursor: pointer;
   font-size: 20px;
@@ -352,16 +352,59 @@ h4 {
   box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
-.PollPopup #goBack{
+.QuizPopup #goBack{
   background-color: #cfcfcf;
 }
 
-.PollPopup button:hover {
+.QuizPopup button:hover {
   background-color: rgb(227, 122, 1);
   box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
   transform: scale(1.2);
 }
 
-
+@media (max-width: 480px) {
+  .waitingLobby {
+    width:200px;
+    height: 120px;
+    margin-top: 4px;
+  }
+  .waitingLobby p{
+    font-size: 10px;
+  }
+  .participantColor {
+    padding: 8px 16px;
+    margin: 1vw;
+    font-size: 70%;
+  }
+  .QuizID {
+  width: 200px;
+  height: 150px;
+  }
+  h2 {
+  font-size: 300%;
+  }
+  .container {
+  height: 100vh;
+  width: 100vw;
+  }
+  .adminButtons button{
+    margin-left: 1px;
+    margin-right: 1px;
+    font-size: 12px;
+    width: 115px;
+    height:25px;
+  }
+  .RulesPopup button {
+    left: 210px;
+  }
+  .RulesPopup  {
+    margin-top: 50px;
+    font-size: 13px;
+  }
+  .QuizPopup {
+    font-size:20px;
+    max-width: 180px;
+  }
+}
 </style>
 

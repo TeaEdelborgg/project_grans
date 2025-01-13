@@ -4,15 +4,15 @@
       <!--enklare att kanske endast ha lobbyView, kommer annars behöva skicka data emellan?-->
 
   <label>
-      <input type="text" v-model="newPollId" :placeholder= "uiLabels.joinquizPlaceholder">
+      <input type="text" v-model="newQuizId" :placeholder= "uiLabels.joinquizPlaceholder">
     </label>
-  <!-- <router-link v-bind:to="'/lobby/' + newPollId">
-      {{ uiLabels.participatePoll }}
+  <!-- <router-link v-bind:to="'/lobby/' + newQuizId">
+      {{ uiLabels.participateQuiz }}
       <button>join</button>
     </router-link>
-    <button v-on:click="checkPollStatus"> {{ uiLabels.participatePoll }} join</button>-->
+    <button v-on:click="checkQuizStatus"> {{ uiLabels.participateQuiz }} join</button>-->
     <transition name="fade">
-    <router-link v-if="newPollId" v-bind:to="'/lobby/' + newPollId" class="joinButton">
+    <router-link v-if="newQuizId" v-bind:to="'/lobby/' + newQuizId" class="joinButton">
       <button>
         {{ uiLabels.joinquiz }}
       </button>
@@ -23,8 +23,7 @@
 
 <script>
 import io from 'socket.io-client';
-//const socket = io("localhost:3000");
-const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
+const socket = io(sessionStorage.getItem("dataServer"));
 
 export default {
   name: 'Join',
@@ -32,7 +31,7 @@ export default {
    data: function () {
     return {
       uiLabels: {},
-      newPollId: "",
+      newQuizId: "",
       lang: localStorage.getItem( "lang") || "en",
       hideNav: true
     };
@@ -42,13 +41,13 @@ export default {
     socket.emit( "getUILabels", this.lang );
   },
   methods: {
-    checkPollStatus() {
-      socket.emit('joinPoll', this.newPollId);
+    checkQuizStatus() {
+      socket.emit('joinQuiz', this.newQuizId);
       socket.on('quizStatus', (status) => {
         if (status.started) {
           alert("Too late! This quiz has already started...");
         } else {
-          this.$router.push('/lobby/' + this.newPollId);
+          this.$router.push('/lobby/' + this.newQuizId);
         }
       })
     }

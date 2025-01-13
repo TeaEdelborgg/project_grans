@@ -61,7 +61,7 @@ export default {
       socket.emit('finishGame', this.quizId)
     });
 
-    socket.emit("joinPoll", this.quizId);
+    socket.emit("joinQuiz", this.quizId);
     socket.emit("getUILabels", this.lang);
     socket.emit("updateResult", this.quizId);
 
@@ -118,14 +118,11 @@ export default {
 .admin h1 {
   font-size: 2em;
   margin: 0.5em;
-  color: #eae9e9;
   text-transform: uppercase;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  margin: 10px 0;
-  padding: 12px;
-  border-radius: 10px;
+  margin: 0.5em 0;
+  padding: 0.5em;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  transition: background-color 0.3s ease;
 }
 
 .admin h2 {
