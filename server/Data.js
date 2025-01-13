@@ -198,6 +198,7 @@ Data.prototype.getSubmittedAnswers = function(quizId) {
 Data.prototype.submitAnswer = function(quizId, questionNumber, answer, userId, timeLeft) {
   if (this.quizExists(quizId)) {
     const user = this.quizs[quizId].participants.find(user => user.userId == userId)
+    console.log('user är: ', user)
       user.information.answers[questionNumber] = [answer, timeLeft]
   }
 }

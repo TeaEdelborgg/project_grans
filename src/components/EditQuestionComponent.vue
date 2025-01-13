@@ -95,6 +95,10 @@
     background-color: rgb(255, 136, 0);
     color:#1e084f;
     font-weight:bold;
-
+}
+.questionBoxes button:hover{
+  cursor:pointer;
+  background-color: rgb(227, 122, 1);
+  box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
 }
 </style>
