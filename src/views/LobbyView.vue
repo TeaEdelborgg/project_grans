@@ -79,7 +79,7 @@ export default {
     return {
       userID: "",
       userName: "",
-      pollId: "inactive poll",
+      quizId: "inactive quiz",
       uiLabels: {},
       joined: false,
       lang: localStorage.getItem("lang") || "en",
@@ -99,28 +99,28 @@ export default {
     };
   },
   created() {
-    this.pollId = this.$route.params.id;
+    this.quizId = this.$route.params.id;
     socket.on("uiLabels", (labels) => (this.uiLabels = labels));
     socket.on("participantsUpdate", (p) => {
       this.participants = p;
       this.checkForDisabledColors(); 
     });
     socket.on("startPoll", () =>
-      this.$router.push("/player/" + this.pollId + "/" + this.userID)
+      this.$router.push("/player/" + this.quizId + "/" + this.userID)
     );
     socket.on("colorSelectionUpdate", (updatedParticipants) => {
       this.participants = updatedParticipants;
       this.checkForDisabledColors();
     });
-    socket.emit("joinPoll", this.pollId);
-    socket.emit("getParticipants", this.pollId)
+    socket.emit("joinPoll", this.quizId);
+    socket.emit("getParticipants", this.quizId)
     socket.emit("getUILabels", this.lang);
   },
   methods: {
     participateInPoll() {
       this.userID = Math.ceil(Math.random() * 1000000); // Generate unique ID
       socket.emit("participateInPoll", {
-        pollId: this.pollId,
+        quizId: this.quizId,
         name: this.userName,
         userId: this.userID,
         color: this.selectedColor, //skickar färg t admin
@@ -132,7 +132,7 @@ export default {
       if (this.isColorDisabled(color)) return;
       this.selectedColor = color;
       socket.emit("selectColor", {
-        pollId:this.pollId,
+        quizId:this.quizId,
         color,
         userId: this.userID,
       });

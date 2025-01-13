@@ -37,7 +37,7 @@ export default {
     return {
       uiLabels: {},
       lang: localStorage.getItem("lang") || "en",
-      pollId: "",
+      quizId: "",
       question: {},
       participants: [],
       questionActive: false,
@@ -52,7 +52,7 @@ export default {
     }
   },
   created: function () {
-    this.pollId = this.$route.params.id
+    this.quizId = this.$route.params.id
     socket.on("uiLabels", labels => this.uiLabels = labels);
 
     socket.on("updatePedestalLight", p => {
@@ -82,18 +82,18 @@ export default {
     })
 
     socket.on('gameFinished', () =>
-      this.$router.push('/result/' + this.pollId)
+      this.$router.push('/result/' + this.quizId)
     )
 
     socket.emit("getUILabels", this.lang);
-    socket.emit("joinPoll", this.pollId);
-    socket.emit('getStats', this.pollId);
+    socket.emit("joinPoll", this.quizId);
+    socket.emit('getStats', this.quizId);
 
   },
   methods: {
     countDownOver: function () {
       setTimeout(() => {
-        socket.emit("getAllAnswers", this.pollId)
+        socket.emit("getAllAnswers", this.quizId)
         this.questionActive = false
       }, 2000)
     }
