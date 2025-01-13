@@ -139,7 +139,7 @@ function sockets(io, socket, data) {
   
   socket.on('getScoreBoard', function(quizId){
     const scoreBoard = data.getScoreBoard(quizId)
-    socket.emit('sendScoreBoard',scoreBoard) 
+    io.to(quizId).emit('sendScoreBoard',scoreBoard) 
   });
 
   socket.on('clearParticipants', function(quizId){
