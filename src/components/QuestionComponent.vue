@@ -58,4 +58,13 @@ export default {
   margin: auto;
   animation: showAnswers 0.5s;
 }
+@keyframes showAnswers {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
 </style>
