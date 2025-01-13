@@ -10,7 +10,7 @@ const router = createRouter({
       component: StartView
     },
       {
-      path: '/player/:id/:userId', // skapa en till dynamisk rutt med id
+      path: '/player/:id/:userId',
       name: 'PlayerView',
       component: () => import('../views/PlayerView.vue')
     },

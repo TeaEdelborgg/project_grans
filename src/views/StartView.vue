@@ -28,7 +28,7 @@ import io from 'socket.io-client';
 //sessionStorage.setItem("dataServer", "130.243.231.147:3000")
 sessionStorage.setItem("dataServer", "localhost:3000")
 //sessionStorage.setItem("dataServer", ""); // för render
-const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
+const socket = io(sessionStorage.getItem("dataServer"))
 
 export default {
   name: 'StartView',
@@ -36,7 +36,6 @@ export default {
     return {
       uiLabels: {},
       lang: localStorage.getItem( "lang") || "en",
-      //hideNav: true
     }
   },
   created: function () {

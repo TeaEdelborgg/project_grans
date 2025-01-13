@@ -17,10 +17,9 @@
 
 <script>
 import io from 'socket.io-client';
+const socket = io(sessionStorage.getItem("dataServer"))
 import Podium from '../components/Podium.vue';
 import HeadLight from '../components/HeadLight.vue';
-//const socket = io("localhost:3000");
-const socket = io(sessionStorage.getItem("dataServer"))
 
 export default {
     name: 'ResultView',

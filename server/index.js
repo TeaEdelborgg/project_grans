@@ -5,15 +5,6 @@ import express from "express";
 let httpServer;
 let io;
 
-// const httpServer = createServer();
-// const io = new Server(httpServer, {
-//     cors: {
-//       origin:  '*',//"http://localhost:5173",
-//       methods: ["GET"],
-//       credentials: true
-//   }
-// });
-
 if (process.env.NODE_ENV === 'production') {
   const app = express();
   httpServer = createServer(app);
@@ -40,8 +31,6 @@ io = new Server(httpServer, {
 // If you need to change how data is handled, check the Data.js file!
 
 import { Data } from "./Data.js";
-
-//
 import { sockets } from "./sockets.js";
 
 let data = new Data();

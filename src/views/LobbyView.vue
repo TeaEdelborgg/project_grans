@@ -70,8 +70,7 @@
 
 <script>
 import io from 'socket.io-client';
-//const socket = io("localhost:3000");
-const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
+const socket = io(sessionStorage.getItem("dataServer"))
 
 export default {
   name: 'LobbyView',
@@ -118,12 +117,12 @@ export default {
   },
   methods: {
     participateInPoll() {
-      this.userID = Math.ceil(Math.random() * 1000000); // Generate unique ID
+      this.userID = Math.ceil(Math.random() * 1000000);
       socket.emit("participateInPoll", {
         quizId: this.quizId,
         name: this.userName,
         userId: this.userID,
-        color: this.selectedColor, //skickar färg t admin
+        color: this.selectedColor,
       });
       this.joined = true;
       this.gameRules = true

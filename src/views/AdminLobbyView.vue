@@ -114,15 +114,15 @@ export default{
         this.gameRules = false;
       },
       enableAdminButton() {
-      this.openResult = true; // Enable the Admin View button
+        this.openResult = true; // changed to "startQuiz" button
       },
       handleStartPollClick() {
       if (!this.$refs.startPollButton.disabled) {
-        this.startPollPopup = true; // Show the start quiz confirmation popup
+        this.startPollPopup = true;
       }
     },
     closePollPopup() {
-      this.startPollPopup = false; // Close the quiz popup
+      this.startPollPopup = false;
     }
 
 
