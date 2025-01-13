@@ -4,7 +4,7 @@
 
 
       <div class="PollID">
-        <h1>{{ uiLabels.pollId }} {{ pollId }}</h1>
+        <h1>{{ uiLabels.quizId }} {{ quizId }}</h1>
       </div>
 
 
@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       lang: localStorage.getItem("lang") || "en",
-      pollId: "inactive poll",
+      quizId: "inactive quiz",
       uiLabels: {},
       participants: [],
     };
@@ -46,26 +46,26 @@ export default {
 
 
   created() {
-    this.pollId = this.$route.params.id;
+    this.quizId = this.$route.params.id;
     socket.on("uiLabels", (labels) => (this.uiLabels = labels));
-    /*socket.on("startPoll", (this.pollId ))*/
+    /*socket.on("startPoll", (this.quizId ))*/
     socket.on('startPoll', () =>
-      this.$router.push('/game/' + this.pollId)
+      this.$router.push('/game/' + this.quizId)
     );
     socket.on("participantsUpdate", (p) => {
       this.participants = p;
     });
 
 
-    socket.emit("joinPoll", this.pollId);
-    socket.emit("getParticipants", this.pollId)
+    socket.emit("joinPoll", this.quizId);
+    socket.emit("getParticipants", this.quizId)
     socket.emit("getUILabels", this.lang);
   },
 
 
   methods: {
     startPoll() {
-      socket.emit("startPoll", this.pollId);
+      socket.emit("startPoll", this.quizId);
     },
   }
 }

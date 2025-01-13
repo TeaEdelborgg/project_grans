@@ -29,7 +29,7 @@ export default {
     }
   },
   created: function () {
-    this.pollId = this.$route.params.id
+    this.quizId = this.$route.params.id
     this.userId = this.$route.params.userId;
 
     socket.on('sendScoreBoard', scoreBoard => {
@@ -38,7 +38,7 @@ export default {
     })
 
     socket.on("uiLabels", labels => this.uiLabels = labels);
-    socket.emit("joinPoll", this.pollId);
+    socket.emit("joinPoll", this.quizId);
     socket.emit("getUILabels", this.lang);
 
   },

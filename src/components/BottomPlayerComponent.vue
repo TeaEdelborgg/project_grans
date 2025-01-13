@@ -1,6 +1,6 @@
 <template>
-    <div id="bottomHalf">
-        <div class="barRim" :style="{ top: '0' }"></div>
+    <div id="bottom-half">
+        <div class="bar-rim" :style="{ top: '0' }"></div>
         <div class="help-buttons">
             <img src="/img/50-50.png" class="life-line"
                 :class="{ 'dimmed': userStats?.information?.usedFiftyFifty || !questionActive }"
@@ -32,7 +32,7 @@ export default {
 </script>
 
 <style>
-#bottomHalf {
+#bottom-half {
     width: 100%;
     background: #303030;
     height: 20%;

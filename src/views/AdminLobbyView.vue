@@ -5,14 +5,14 @@
 
 
     <div class="PollID">
-      <h2>{{ uiLabels.pollId }} {{ pollId }}</h2>
+      <h2>{{ uiLabels.quizId }} {{ quizId }}</h2>
     </div>
 
 
     <div class="adminButtons">
       <button ref="startPollButton" :disabled="!openResult" @click="handleStartPollClick">{{ uiLabels.startPoll }}</button>
       <router-link
-        :to="'/resultLobby/' + pollId"
+        :to="'/resultLobby/' + quizId"
         custom
         v-slot="{ href }"
       >
@@ -59,7 +59,7 @@
       <div :class="['PollPopup', { show: startPollPopup }]">
         <p>{{ uiLabels.letParticipantsJoin }}</p>
         <button id="goBack" @click="closePollPopup">{{uiLabels.goBack}}</button>
-        <router-link :to="'/admin/' + pollId">
+        <router-link :to="'/admin/' + quizId">
           <button @click="startPoll">{{ uiLabels.startPoll }}</button>
         </router-link>
       </div>
@@ -78,7 +78,7 @@ export default{
     data() {
         return {
         lang: localStorage.getItem("lang") || "en",
-        pollId: "inactive poll",
+        quizId: "inactive quiz",
         uiLabels: {},
         participants: [],
         gameRules: false,
@@ -89,15 +89,15 @@ export default{
 
 
     created() {
-      this.pollId = this.$route.params.id;
+      this.quizId = this.$route.params.id;
       socket.on("uiLabels", (labels) => (this.uiLabels = labels));
       socket.on("participantsUpdate", (p) => {
         this.participants = p;
       });
 
 
-      socket.emit("joinPoll", this.pollId);
-      socket.emit("getParticipants", this.pollId)
+      socket.emit("joinPoll", this.quizId);
+      socket.emit("getParticipants", this.quizId)
       socket.emit("getUILabels", this.lang);
       this.gameRules = true;
     },
@@ -105,7 +105,7 @@ export default{
 
     methods: {
       startPoll() {
-        socket.emit("startPoll", this.pollId);
+        socket.emit("startPoll", this.quizId);
       },
       toggleGameRules() {
       this.gameRules = !this.gameRules;
@@ -118,11 +118,11 @@ export default{
       },
       handleStartPollClick() {
       if (!this.$refs.startPollButton.disabled) {
-        this.startPollPopup = true; // Show the start poll confirmation popup
+        this.startPollPopup = true; // Show the start quiz confirmation popup
       }
     },
     closePollPopup() {
-      this.startPollPopup = false; // Close the poll popup
+      this.startPollPopup = false; // Close the quiz popup
     }
 
 
