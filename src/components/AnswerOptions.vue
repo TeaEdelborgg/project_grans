@@ -1,6 +1,6 @@
 <template>
   <div id="player-view">
-    <SliderCompoment @sendAnswer="submitAnswer()" v-bind:sent="sent" v-bind:seeAlternatives="seeAlternatives"
+    <BarComponent @sendAnswer="submitAnswer()" v-bind:sent="sent" v-bind:seeAlternatives="seeAlternatives"
       v-bind:questionActive="questionActive" v-bind:selectedAnswer="selectedAnswer"
       v-bind:questionNumber="questionNumber" v-bind:uiLabels="uiLabels" />
     <div id="container" v-if="questionActive || seeAlternatives" class="answeralternatives">
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import SliderCompoment from './SliderCompoment.vue';
+import BarComponent from './BarComponent.vue';
 import AnswerContainer from './AnswerContainer.vue';
 import io from 'socket.io-client';
 const socket = io(sessionStorage.getItem("dataServer"));
@@ -24,7 +24,7 @@ const socket = io(sessionStorage.getItem("dataServer"));
 export default {
   name: 'AnswerOptions',
   components: {
-    SliderCompoment,
+    BarComponent,
     AnswerContainer,
   },
   props: {
@@ -117,7 +117,7 @@ export default {
           // lägg in en countdown för innan frågan
         } else if (this.timeLeft > this.timer.timerAnswers) {
           // läs frågan på skärmen
-        } else if (this.timeLeft > 0) { //this.timeLeft< this.timer.timerAnswer &&
+        } else if (this.timeLeft > 0) {
           this.seeAlternatives = true
           this.percentage = Math.floor(this.timeLeft / 150);
           this.questionActive = true;

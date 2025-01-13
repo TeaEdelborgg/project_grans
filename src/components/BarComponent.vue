@@ -79,7 +79,7 @@ export default {
                     else if (this.bottomPosition > this.maxBottom) {
                         bar.style.bottom = '0';
                     }
-                    else { //-this.placePressed då vi vill ha den i sliderBox och inte på hela sidan
+                    else {
                         bar.style.top = -85 + ((this.currentPlace - this.placePressed) / this.heightPx) * 100 + '%';
                     }
                 }
@@ -100,7 +100,7 @@ export default {
                     bar.style.top = '0'
                     bar.style.bottom = '0'
                     this.sendAnswer();
-                } else { // flyttar upp gallret om man inte skickar in svar
+                } else {
                     bar.style.top = '-85%';
                 }
             }
@@ -117,7 +117,7 @@ export default {
         document.removeEventListener("touchmove", this.move)
         document.removeEventListener("touchend", this.mouseReleased)
     },
-    watch: { // flyttar upp gallret när frågan inte längre är aktiv
+    watch: {
         questionActive(newValue) {
             let bar = document.getElementById("bars")
             if (newValue == false) {

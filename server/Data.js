@@ -2,9 +2,6 @@
 import {readFileSync} from "fs";
 import { createRequire } from 'module';
 
-//import {quiz1} from "./quiz1.json" assert{type:'json';
-//import {quiz1} from 'server\quiz1.json';
-
 
 const require = createRequire(import.meta.url);
 const quizes = require('./quizes.json');
@@ -187,7 +184,7 @@ Data.prototype.getAudienceAnswer = function(quizId, userId, usedFiftyFifty) {
   }
 }
 
-Data.prototype.getSubmittedAnswers = function(quizId) { //behövs den här??? Vi borde kunna skriva om våra sockets mycket
+Data.prototype.getSubmittedAnswers = function(quizId) {
   if (this.quizExists(quizId)) {
     const quiz = this.quizs[quizId];
     const answers = quiz.answers[quiz.currentQuestion];
