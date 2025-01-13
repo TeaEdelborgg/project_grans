@@ -199,7 +199,9 @@ Data.prototype.submitAnswer = function(quizId, questionNumber, answer, userId, t
   if (this.quizExists(quizId)) {
     const user = this.quizs[quizId].participants.find(user => user.userId == userId)
     console.log('user är: ', user)
-      user?.information?.answers[questionNumber] = [answer, timeLeft]
+    //if(this.user != undefined){
+      user.information.answers[questionNumber] = [answer, timeLeft]
+    //}
   }
 }
 Data.prototype.updatePedestalLight = function(quizId, userId){
