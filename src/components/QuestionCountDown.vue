@@ -104,16 +104,6 @@ export default {
 }
 </script>
 <style>
-@keyframes showAnswers {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
 #dimmed-overlay {
   position: fixed;
   opacity: 0.5;
@@ -153,7 +143,7 @@ h2 {
   width: 100%;
   height: 100%;
   background-color: #FF851B;
-  transition: width 0.1s;
+  transition: width 1s;
 }
 
 @keyframes shake {
