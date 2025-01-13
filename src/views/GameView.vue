@@ -22,7 +22,7 @@
 import io from 'socket.io-client';
 const socket = io(sessionStorage.getItem("dataServer"));
 import PlayerPedestal from '@/components/PlayerPedestal.vue';
-import HostPlayer from '@/components/hostPlayer.vue';
+import HostPlayer from '@/components/HostPlayer.vue';
 import Frame from '@/components/Frame.vue';
 
 export default {
