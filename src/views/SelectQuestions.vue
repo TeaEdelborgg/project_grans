@@ -121,7 +121,7 @@ button:hover {
 }
 
 h1{
-  margin: 15vh 10vw 5vh; 
+  margin: 10vh 10vw 5vh; 
   word-wrap: break-word; 
   white-space: normal;
   text-align: center; 
@@ -140,7 +140,7 @@ h1{
   width: auto;
   height:auto;
   padding: 2vh 3vw;
-  margin: 5vh 5vw;
+  margin: 0vh 5vw;
   color:#000;
   font-weight:bold;
 }
@@ -186,4 +186,32 @@ h1{
   box-sizing: border-box;
 }
 
+
+@media (max-width: 480px) {
+button:hover {
+  transform: scale(1.1); 
+}
+h1{
+  margin: 15vh auto 3vh; 
+}
+.pollButtons {
+  margin:0vh 1vw;
+}
+
+.pollButtons button{
+  padding: 1vh 1vw;
+  margin: 0vh 1vw;
+  font-size: 10px;
+}
+.pollButtons img{
+  width: 50%;
+  height: 50%; 
+  margin-top:2vh;
+}
+.continue {
+  padding: 3vh 2vw;
+  margin: 2vh auto;
+
+}
+}
 </style>
