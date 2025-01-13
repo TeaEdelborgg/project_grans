@@ -4,17 +4,17 @@
     <div class="quizButtons">
       <button v-on:click="chooseQuiz('quiz1')">
         {{ uiLabels.historyQuiz }}
-        <img src="/public/img/history_icon.png" alt="icon1"/>
+        <img src="/img/history_icon.png" alt="icon1"/>
       </button>
 
       <button v-on:click="chooseQuiz('quiz2')">
         {{ uiLabels.geographyQuiz }}
-        <img src="/public/img/geography_icon.png" alt="icon2"/>
+        <img src="/img/geography_icon.png" alt="icon2"/>
       </button>
 
       <button v-on:click="chooseQuiz('quiz3')">
         {{ uiLabels.scienceQuiz }}
-        <img src="/public/img/science_icon.png" alt="icon3"/>
+        <img src="/img/science_icon.png" alt="icon3"/>
       </button>
     </div>    
     <button 
@@ -64,9 +64,9 @@
 
       chooseQuiz: function(id) {
         if (this.lang==="sv"){
-          this.quizId = (id + "Sv" + (Math.random().toString(36).substring(2, 8).toUpperCase()))
+          this.quizId = (id + "Sv")
         }
-        else {this.quizId = (id + "En" + (Math.random().toString(36).substring(2, 8).toUpperCase()))}
+        else {this.quizId = (id + "En")}
         this.chosenQuiz=true;
         socket.emit("createQuiz", { quizId: this.quizId, lang: this.lang });
         socket.emit("joinQuiz", this.quizId);
