@@ -1,34 +1,42 @@
 <template>
-    <div class="participants">
-        <div class="one-participant" v-for="(participant, index) in pollData?.participants" :key="index">
-            <p class="player-name">{{ participant.information.name }}</p>
-            <hr>
-            <div v-if="pollData.currentQuestion == -1">{{ uiLabels.answer }}</div>
-            <div v-else-if="participant.information.answers?.[pollData.currentQuestion]?.[0] == null">
-                <div class="loading-dots">
-                    <div class="animatedDots"></div>
-                    <div class="animatedDots"></div>
-                    <div class="animatedDots"></div>
+    <section class="participant-controls">
+        <h2>{{ uiLabels.players }}</h2>
+        <div class="participants">
+            <div class="one-participant" v-for="(participant, index) in quizData?.participants" :key="index">
+                <p class="player-name">{{ participant.information.name }}</p>
+                <hr>
+                <div v-if="quizData.currentQuestion == -1">{{ uiLabels.answer }}</div>
+                <div v-else-if="participant.information.answers?.[quizData.currentQuestion]?.[0] == null">
+                    <div class="loading-dots">
+                        <div class="animated-dots"></div>
+                        <div class="animated-dots"></div>
+                        <div class="animated-dots"></div>
+                    </div>
+                </div>
+                <div v-else>
+                    {{ participant.information.answers[quizData.currentQuestion][0] }}
                 </div>
             </div>
-            <div v-else>
-                {{ participant.information.answers[pollData.currentQuestion][0] }}
-            </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <script>
 export default {
     name: "PlayersAdmin",
     props: {
-        pollData: Object,
+        quizData: Object,
         uiLabels: Object,
     },
 };
 </script>
 
-<style scoped>
+<style>
+.participant-controls {
+    max-width: 50%;
+    margin-inline: auto;
+}
+
 .participants {
     display: flex;
     justify-content: center;
@@ -57,7 +65,7 @@ export default {
 }
 
 /* animering av prickar nedan */
-.animatedDots {
+.animated-dots {
     height: 0.3rem;
     width: 0.3rem;
     border-radius: 50%;
@@ -85,19 +93,19 @@ export default {
     }
 }
 
-.animatedDots:nth-child(0) {
+.animated-dots:nth-child(0) {
     animation-delay: 0s;
 }
 
-.animatedDots:nth-child(1) {
+.animated-dots:nth-child(1) {
     animation-delay: 0.2s;
 }
 
-.animatedDots:nth-child(2) {
+.animated-dots:nth-child(2) {
     animation-delay: 0.4s;
 }
 
-.animatedDots:nth-child(3) {
+.animated-dots:nth-child(3) {
     animation-delay: 0.6s;
 }
 </style>

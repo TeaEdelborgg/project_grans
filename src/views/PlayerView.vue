@@ -1,7 +1,7 @@
 <template>
   <div class="player-background">
     <TopPlayerComponent v-bind:userStats="userStats" />
-    <AnswerOptions ref="AnswerOptions" v-bind:userId="userId" v-bind:pollId="pollId" v-bind:uiLabels="uiLabels"
+    <AnswerOptions v-bind:userId="userId" v-bind:quizId="quizId" v-bind:uiLabels="uiLabels"
       @updateQuestionActive="handleQuestionActive" />
     <BottomPlayerComponent v-bind:userStats="userStats" v-bind:questionActive="questionActive"
       @useAskAudience="askAudience" @useFiftyFifty="fiftyFifty" />
@@ -28,14 +28,14 @@ export default {
       uiLabels: {},
       userId: '',
       userStats: {},
-      pollId: "inactive poll",
+      quizId: "inactive quiz",
       questionNumber: null,
       questionActive: false,
       usedFiftyFiftyThisRound: false,
     }
   },
   created: function () {
-    this.pollId = this.$route.params.id;
+    this.quizId = this.$route.params.id;
     this.userId = this.$route.params.userId;
     socket.on("uiLabels", labels => this.uiLabels = labels);
     socket.on('sendPlayerStats', user => {
@@ -45,11 +45,11 @@ export default {
       }
     })
     socket.on("gameFinished", () =>
-      this.$router.push("/resultPlayer/" + this.pollId + "/" + this.userId)
+      this.$router.push("/resultPlayer/" + this.quizId + "/" + this.userId)
     );
     socket.emit("getUILabels", this.lang);
-    socket.emit("joinPoll", this.pollId);
-    socket.emit('getPlayer', { pollId: this.pollId, userId: this.userId })
+    socket.emit("joinPoll", this.quizId);
+    socket.emit('getPlayer', { quizId: this.quizId, userId: this.userId })
   },
   methods: {
     handleQuestionActive(isActive) {
@@ -57,13 +57,13 @@ export default {
     },
     fiftyFifty: function () {
       if (!this.userStats.information.usedFiftyFifty && this.questionActive) {
-        socket.emit('fiftyFifty', { pollId: this.pollId, userId: this.userId })
+        socket.emit('fiftyFifty', { quizId: this.quizId, userId: this.userId })
         this.usedFiftyFiftyThisRound = true
       }
     },
     askAudience: function () {
       if (!this.userStats.information.usedAskAudience && this.questionActive) {
-        socket.emit('audienceAnswer', { pollId: this.pollId, userId: this.userId, usedFiftyFifty: this.usedFiftyFiftyThisRound })
+        socket.emit('audienceAnswer', { quizId: this.quizId, userId: this.userId, usedFiftyFifty: this.usedFiftyFiftyThisRound })
       }
     },
   },

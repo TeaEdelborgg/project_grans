@@ -4,8 +4,7 @@
         <button class="game-button" v-if="currentQuestion == -1" @click="runQuestion">
             {{ uiLabels.startGame }}
         </button>
-        <button class="game-button"
-            v-else-if="currentQuestion + 1 != questionAmount && canStartNextQuestion"
+        <button class="game-button" v-else-if="currentQuestion + 1 != questionAmount && canStartNextQuestion"
             @click="runQuestion">
             {{ uiLabels.nextQuestion }}
         </button>
@@ -20,7 +19,7 @@
 
 <script>
 export default {
-    name: 'GameControles',
+    name: 'GameControls',
     props: {
         uiLabels: Object,
         currentQuestion: Number,
@@ -32,13 +31,16 @@ export default {
             one: 1,
         }
     },
-    emits: ["runQuestion", "endQuestion"],
+    emits: ["runQuestion", "endQuestion", "finishGame"],
     methods: {
-        runQuestion: function() {
+        runQuestion: function () {
             this.$emit("runQuestion")
         },
-        endQuestion: function() {
+        endQuestion: function () {
             this.$emit("endQuestion")
+        },
+        finishGame: function () {
+            this.$emit("finishGame")
         }
     }
 }

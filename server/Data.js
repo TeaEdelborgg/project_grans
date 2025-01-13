@@ -12,13 +12,13 @@ const quizes = require('./quizes.json');
 
 // Store data in an object to keep the global namespace clean. In an actual implementation this would be interfacing a database...
 function Data() {
-  this.polls = {};
-  this.polls['quiz1En']= quizes.quiz1En;
-  this.polls['quiz1Sv']= quizes.quiz1Sv;
-  this.polls['quiz2En']= quizes.quiz2En;
-  this.polls['quiz2Sv']= quizes.quiz2Sv;
-  this.polls['quiz3En']= quizes.quiz3En;
-  this.polls['quiz3Sv']= quizes.quiz3Sv;
+  this.quizs = {};
+  this.quizs['quiz1En']= quizes.quiz1En;
+  this.quizs['quiz1Sv']= quizes.quiz1Sv;
+  this.quizs['quiz2En']= quizes.quiz2En;
+  this.quizs['quiz2Sv']= quizes.quiz2Sv;
+  this.quizs['quiz3En']= quizes.quiz3En;
+  this.quizs['quiz3Sv']= quizes.quiz3Sv;
 }
 /***********************************************
 For performance reasons, methods are added to the
@@ -26,8 +26,8 @@ prototype of the Data object/class
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures
 ***********************************************/
 
-Data.prototype.pollExists = function (pollId) {
-  return typeof this.polls[pollId] !== "undefined"
+Data.prototype.quizExists = function (quizId) {
+  return typeof this.quizs[quizId] !== "undefined"
 }
 
 Data.prototype.getUILabels = function (lang) {
@@ -38,112 +38,112 @@ Data.prototype.getUILabels = function (lang) {
   return JSON.parse(labels);
 }
 
-Data.prototype.createPoll = function(pollId, lang="en") {
-  if (!this.pollExists(pollId)) {
-    let poll = {};
-    poll.lang = lang;  
-    poll.questions = [];
-    poll.answers = [];
-    poll.questionAmount = 0;
-    poll.heightSteps = 0;
-    poll.participants = [];
-    poll.currentQuestion = -1; 
-    poll.timer = {timerDuration: 23000, timerQuestion:20000, timerAnswers:15000, timeShowCorrectAnswer:2000};
-    poll.moneyBoxes = []; 
-    poll.started = false;  
-    poll.scoreBoard = []; 
-    poll.pedestalLight = [];
-    this.polls[pollId] = poll;
+Data.prototype.createPoll = function(quizId, lang="en") {
+  if (!this.quizExists(quizId)) {
+    let quiz = {};
+    quiz.lang = lang;  
+    quiz.questions = [];
+    quiz.answers = [];
+    quiz.questionAmount = 0;
+    quiz.heightSteps = 0;
+    quiz.participants = [];
+    quiz.currentQuestion = -1; 
+    quiz.timer = {timerDuration: 23000, timerQuestion:20000, timerAnswers:15000, timeShowCorrectAnswer:2000};
+    quiz.moneyBoxes = []; 
+    quiz.started = false;  
+    quiz.scoreBoard = []; 
+    quiz.pedestalLight = [];
+    this.quizs[quizId] = quiz;
   }
-  return this.polls[pollId];
+  return this.quizs[quizId];
 }
 
-Data.prototype.getPoll = function(pollId) {
-  if (this.pollExists(pollId)) {
-    return this.polls[pollId];
+Data.prototype.getPoll = function(quizId) {
+  if (this.quizExists(quizId)) {
+    return this.quizs[quizId];
   }
   return {};
 }
 
-Data.prototype.hasPollStarted = function(pollId) {
-  if (this.pollExists(pollId)) {
-    return this.polls[pollId].started;
+Data.prototype.hasPollStarted = function(quizId) {
+  if (this.quizExists(quizId)) {
+    return this.quizs[quizId].started;
   }
   return false;
 }
 
-Data.prototype.participateInPoll = function(pollId, name, userId, color) {
-  if (this.pollExists(pollId)) {
-    this.polls[pollId].participants.push({userId: userId, information: {name: name, color: color, answers: [], correctedAnswers:[], in:true, pillarBoxes:[], time:0, lives:2, usedFiftyFifty:false, usedAskAudience:false, pillarHeight:2}}) 
+Data.prototype.participateInPoll = function(quizId, name, userId, color) {
+  if (this.quizExists(quizId)) {
+    this.quizs[quizId].participants.push({userId: userId, information: {name: name, color: color, answers: [], correctedAnswers:[], in:true, pillarBoxes:[], time:0, lives:2, usedFiftyFifty:false, usedAskAudience:false, pillarHeight:2}}) 
   }
 }
 
 Data.prototype.updateColorSelection = function (info) {
-  const {pollId, color, userId} = info;
-  if (this.pollExists(pollId)) {
-    const poll = this.getPoll(pollId);
-    const participant = poll.participants.find((p) => p.userId === userId);
+  const {quizId, color, userId} = info;
+  if (this.quizExists(quizId)) {
+    const quiz = this.getPoll(quizId);
+    const participant = quiz.participants.find((p) => p.userId === userId);
     if (participant) {
       participant.information.color = color;
     }
-    return poll.participants;
+    return quiz.participants;
   }
   return [];
 }
 
-Data.prototype.getParticipants = function(pollId) {
-  const poll = this.polls[pollId];
-  if (this.pollExists(pollId)) { 
-    return this.polls[pollId].participants
+Data.prototype.getParticipants = function(quizId) {
+  const quiz = this.quizs[quizId];
+  if (this.quizExists(quizId)) { 
+    return this.quizs[quizId].participants
   }
   return [];
 }
 
-Data.prototype.getOneParticipant = function(pollId, userId) {
-  if (this.pollExists(pollId)) {
-    const user = this.polls[pollId].participants.find(user => user.userId == userId)
+Data.prototype.getOneParticipant = function(quizId, userId) {
+  if (this.quizExists(quizId)) {
+    const user = this.quizs[quizId].participants.find(user => user.userId == userId)
     return user
   }
   return {}
 
 }
 
-Data.prototype.addQuestion = function(pollId, q) {
-  if (this.pollExists(pollId)) {
-    this.polls[pollId].questions.push(q);
+Data.prototype.addQuestion = function(quizId, q) {
+  if (this.quizExists(quizId)) {
+    this.quizs[quizId].questions.push(q);
   }
 }
 
-Data.prototype.updateQuestion = function (pollId, questionToUpdate) {
-  if (this.pollExists(pollId)) {
-    const poll = this.polls[pollId];
+Data.prototype.updateQuestion = function (quizId, questionToUpdate) {
+  if (this.quizExists(quizId)) {
+    const quiz = this.quizs[quizId];
     const newQuestion=questionToUpdate;
-    const questionIndex = poll.questions.findIndex((q) => q.id === newQuestion.id); 
+    const questionIndex = quiz.questions.findIndex((q) => q.id === newQuestion.id); 
     if (questionIndex !== -1) {
-      poll.questions[questionIndex] = newQuestion; 
+      quiz.questions[questionIndex] = newQuestion; 
     }
   }
 }
 
-Data.prototype.getQuestion = function(pollId, qId = null) { 
-  if (this.pollExists(pollId)) {
-    const poll = this.polls[pollId];
+Data.prototype.getQuestion = function(quizId, qId = null) { 
+  if (this.quizExists(quizId)) {
+    const quiz = this.quizs[quizId];
     if (qId !== null) {
-      poll.currentQuestion = qId;
+      quiz.currentQuestion = qId;
     }
-    return poll.questions[poll.currentQuestion];
+    return quiz.questions[quiz.currentQuestion];
   }
   return {}
 }
 
-Data.prototype.getAnswerRandomOrder = function(pollId, qId = null) {
-  if (this.pollExists(pollId)) {
-    const poll = this.polls[pollId];
+Data.prototype.getAnswerRandomOrder = function(quizId, qId = null) {
+  if (this.quizExists(quizId)) {
+    const quiz = this.quizs[quizId];
     if (qId !== null) {
-      poll.currentQuestion = qId;
+      quiz.currentQuestion = qId;
     }
     let answers = ['','','','']
-    let currentQuest = poll.questions[poll.currentQuestion];
+    let currentQuest = quiz.questions[quiz.currentQuestion];
     let avalibleSlots = [0,1,2,3];
     var index = Math.floor(Math.random()*4);
     answers[index] = currentQuest.a.correct;
@@ -153,75 +153,75 @@ Data.prototype.getAnswerRandomOrder = function(pollId, qId = null) {
       answers[avalibleSlots[index]]=wrongAnsw;
       avalibleSlots.splice(index,1);
     };
-    return({q:poll.questions[poll.currentQuestion].q, a:answers})
+    return({q:quiz.questions[quiz.currentQuestion].q, a:answers})
   }
   return {}
 }
 
-Data.prototype.getFiftyFifty = function(pollId, userId) {
-  if (this.pollExists(pollId)) {
-    const questionNumber = this.polls[pollId].currentQuestion
-    const user = this.polls[pollId].participants.find(user => user.userId == userId)
+Data.prototype.getFiftyFifty = function(quizId, userId) {
+  if (this.quizExists(quizId)) {
+    const questionNumber = this.quizs[quizId].currentQuestion
+    const user = this.quizs[quizId].participants.find(user => user.userId == userId)
     user.information.usedFiftyFifty = true
-    const twoIncorrect = this.polls[pollId].questions[questionNumber].a.wrong.slice(1,3)
+    const twoIncorrect = this.quizs[quizId].questions[questionNumber].a.wrong.slice(1,3)
     return {answers: twoIncorrect, user: userId}
   }
 }
 
-Data.prototype.getAudienceAnswer = function(pollId, userId, usedFiftyFifty) {
-  if (this.pollExists(pollId)) {
-    const questionNumber = this.polls[pollId].currentQuestion
-    const user = this.polls[pollId].participants.find(user => user.userId == userId)
+Data.prototype.getAudienceAnswer = function(quizId, userId, usedFiftyFifty) {
+  if (this.quizExists(quizId)) {
+    const questionNumber = this.quizs[quizId].currentQuestion
+    const user = this.quizs[quizId].participants.find(user => user.userId == userId)
     user.information.usedAskAudience = true
     let answer
     let random = Math.random()
     if (random < 0.9) {
-      answer = this.polls[pollId].questions[questionNumber].a.correct
+      answer = this.quizs[quizId].questions[questionNumber].a.correct
     } else if (!usedFiftyFifty) {
       random = Math.floor(Math.random()*3)
-      answer = this.polls[pollId].questions[questionNumber].a.wrong[random]
+      answer = this.quizs[quizId].questions[questionNumber].a.wrong[random]
     } else {
-      answer = this.polls[pollId].questions[questionNumber].a.wrong[0]
+      answer = this.quizs[quizId].questions[questionNumber].a.wrong[0]
     }
     return {answer: answer, user: userId}
   }
 }
 
-Data.prototype.getSubmittedAnswers = function(pollId) { //behövs den här??? Vi borde kunna skriva om våra sockets mycket
-  if (this.pollExists(pollId)) {
-    const poll = this.polls[pollId];
-    const answers = poll.answers[poll.currentQuestion];
-    if (typeof poll.questions[poll.currentQuestion] !== 'undefined') {
+Data.prototype.getSubmittedAnswers = function(quizId) { //behövs den här??? Vi borde kunna skriva om våra sockets mycket
+  if (this.quizExists(quizId)) {
+    const quiz = this.quizs[quizId];
+    const answers = quiz.answers[quiz.currentQuestion];
+    if (typeof quiz.questions[quiz.currentQuestion] !== 'undefined') {
       return answers;
     }
   }
   return {}
 }
 
-Data.prototype.submitAnswer = function(pollId, questionNumber, answer, userId, timeLeft) {
-  if (this.pollExists(pollId)) {
-    const user = this.polls[pollId].participants.find(user => user.userId == userId)
+Data.prototype.submitAnswer = function(quizId, questionNumber, answer, userId, timeLeft) {
+  if (this.quizExists(quizId)) {
+    const user = this.quizs[quizId].participants.find(user => user.userId == userId)
       user.information.answers[questionNumber] = [answer, timeLeft]
   }
 }
-Data.prototype.updatePedestalLight = function(pollId, userId){
-  if(this.pollExists(pollId)){
-    let particpants = this.polls[pollId].participants
+Data.prototype.updatePedestalLight = function(quizId, userId){
+  if(this.quizExists(quizId)){
+    let particpants = this.quizs[quizId].participants
     let userIds = particpants.map((particpant)=>particpant.userId)
     let index= userIds.indexOf(Number(userId))
-    this.polls[pollId].pedestalLight[index] = true
-    return this.polls[pollId].pedestalLight
+    this.quizs[quizId].pedestalLight[index] = true
+    return this.quizs[quizId].pedestalLight
   }
   return []
 }
 
-Data.prototype.checkUserAnswer = function(pollId, qId, userId) {
-  if(this.pollExists(pollId)){
-    const user = this.polls[pollId].participants.find(user=> user.userId ==userId)
+Data.prototype.checkUserAnswer = function(quizId, qId, userId) {
+  if(this.quizExists(quizId)){
+    const user = this.quizs[quizId].participants.find(user=> user.userId ==userId)
     if(user.information.answers[qId][0]==null){
       user.information.answers[qId]=["-",0]
     }
-    if (user.information.answers[qId][0] == this.polls[pollId].questions[qId].a.correct) {
+    if (user.information.answers[qId][0] == this.quizs[quizId].questions[qId].a.correct) {
       user.information.correctedAnswers[qId] = true
       user.information.time += user.information.answers[qId][1];
     } else {
@@ -233,9 +233,9 @@ Data.prototype.checkUserAnswer = function(pollId, qId, userId) {
   }
 };
 
-Data.prototype.getCorrectedAnswer = function (pollId, qId, userId) {
-  if(this.pollExists(pollId)){
-    const user = this.polls[pollId].participants.find(user=> user.userId == userId)
+Data.prototype.getCorrectedAnswer = function (quizId, qId, userId) {
+  if(this.quizExists(quizId)){
+    const user = this.quizs[quizId].participants.find(user=> user.userId == userId)
     if (user) {
       return user.information.correctedAnswers[qId];
     }
@@ -243,18 +243,18 @@ Data.prototype.getCorrectedAnswer = function (pollId, qId, userId) {
   return null;
 };
 
-Data.prototype.setQuestionAmount = function (pollId) {
-  if(this.pollExists(pollId)){
-    this.polls[pollId].questionAmount = this.polls[pollId].questions.length;
-    this.polls[pollId].heightSteps = 100/this.polls[pollId].questionAmount
+Data.prototype.setQuestionAmount = function (quizId) {
+  if(this.quizExists(quizId)){
+    this.quizs[quizId].questionAmount = this.quizs[quizId].questions.length;
+    this.quizs[quizId].heightSteps = 100/this.quizs[quizId].questionAmount
   }
 }
 
-Data.prototype.createBoxes = function(pollId){
-  if(this.pollExists(pollId)){
-    const poll = this.polls[pollId]
-    const numberOfQuestions = poll.questionAmount
-    for (let player of poll.participants){
+Data.prototype.createBoxes = function(quizId){
+  if(this.quizExists(quizId)){
+    const quiz = this.quizs[quizId]
+    const numberOfQuestions = quiz.questionAmount
+    for (let player of quiz.participants){
       for (let n=0; n<numberOfQuestions;n++){
         player.information.pillarBoxes.push(false)
       }
@@ -262,40 +262,40 @@ Data.prototype.createBoxes = function(pollId){
     for (let i=0; i<numberOfQuestions;i++){
       let value = Math.ceil((1000000/numberOfQuestions)*(i+1)/10000)*10000
       if(value>1000000){value=1000000}
-      poll.moneyBoxes.push(value)
+      quiz.moneyBoxes.push(value)
     }
   }
 }
-Data.prototype.setAnswersFalse = function(pollId){
-  if(this.pollExists(pollId)){
-    const users = this.polls[pollId].participants
+Data.prototype.setAnswersFalse = function(quizId){
+  if(this.quizExists(quizId)){
+    const users = this.quizs[quizId].participants
     for(let user of users){
-      user.information.answers = new Array(this.polls[pollId].questionAmount).fill([null, 0])
+      user.information.answers = new Array(this.quizs[quizId].questionAmount).fill([null, 0])
     }
   }
 }
 
-Data.prototype.setPedestalLightFalse = function(pollId){
-  if(this.pollExists(pollId)){
-      this.polls[pollId].pedestalLight = new Array(this.polls[pollId].participants.length).fill(false)
+Data.prototype.setPedestalLightFalse = function(quizId){
+  if(this.quizExists(quizId)){
+      this.quizs[quizId].pedestalLight = new Array(this.quizs[quizId].participants.length).fill(false)
   }
 }
-Data.prototype.getPedestalLight = function(pollId){
-  if(this.pollExists(pollId)){
-    return this.polls[pollId].pedestalLight
+Data.prototype.getPedestalLight = function(quizId){
+  if(this.quizExists(quizId)){
+    return this.quizs[quizId].pedestalLight
   }
 }
-Data.prototype.resetPedestalLight = function(pollId){
-  if(this.pollExists(pollId)){
-    this.polls[pollId].pedestalLight=this.polls[pollId].pedestalLight.map(()=>false)
-    return this.polls[pollId].pedestalLight
+Data.prototype.resetPedestalLight = function(quizId){
+  if(this.quizExists(quizId)){
+    this.quizs[quizId].pedestalLight=this.quizs[quizId].pedestalLight.map(()=>false)
+    return this.quizs[quizId].pedestalLight
   }
 }
 
-Data.prototype.updatePillarHeight = function(pollId){
-  if(this.pollExists(pollId)){
-    const poll = this.polls[pollId]
-    for(let player of poll.participants){
+Data.prototype.updatePillarHeight = function(quizId){
+  if(this.quizExists(quizId)){
+    const quiz = this.quizs[quizId]
+    for(let player of quiz.participants){
       if(player.information.in){
         let answers = player.information.correctedAnswers
         for (let i=0;  i<answers.length;i++){
@@ -308,19 +308,19 @@ Data.prototype.updatePillarHeight = function(pollId){
         if(pillarTrue==0){
           player.information.pillarHeight=2
         }
-          player.information.pillarHeight= poll.heightSteps*pillarTrue
+          player.information.pillarHeight= quiz.heightSteps*pillarTrue
       }
     }
-    return poll.participants
+    return quiz.participants
   }
   return {}
 }
 
-Data.prototype.updateLevelBoxes = function(pollId){
-  if(this.pollExists(pollId)){
-    const poll = this.polls[pollId]
-    let current = poll.currentQuestion
-    let amountQuestions = poll.questionAmount
+Data.prototype.updateLevelBoxes = function(quizId){
+  if(this.quizExists(quizId)){
+    const quiz = this.quizs[quizId]
+    let current = quiz.currentQuestion
+    let amountQuestions = quiz.questionAmount
     let boxes =[]
     for(let i =0; i<amountQuestions; i++){
       if(i <=current){
@@ -339,14 +339,14 @@ Data.prototype.updateLevelBoxes = function(pollId){
   }
   return []
 }
-Data.prototype.getLevelValues = function(pollId){
-  if(this.pollExists(pollId)){
-    return this.polls[pollId].moneyBoxes
+Data.prototype.getLevelValues = function(quizId){
+  if(this.quizExists(quizId)){
+    return this.quizs[quizId].moneyBoxes
   }
 }
-Data.prototype.countScore = function(pollId){ //Selection sort
-  var scoreBoard = Object.values(this.polls[pollId].participants)
-  if(this.pollExists(pollId)){
+Data.prototype.countScore = function(quizId){ //Selection sort
+  var scoreBoard = Object.values(this.quizs[quizId].participants)
+  if(this.quizExists(quizId)){
     for(let i=0;i<scoreBoard.length;i++){
       let smallest =i
       for(let n=smallest+1;n<scoreBoard.length;n++){
@@ -368,7 +368,7 @@ Data.prototype.countScore = function(pollId){ //Selection sort
       scoreBoard[i] = scoreBoard[smallest]
       scoreBoard[smallest] = x
     }
-    this.polls[pollId].scoreBoard=scoreBoard
+    this.quizs[quizId].scoreBoard=scoreBoard
     return scoreBoard
   }
   return []
@@ -394,30 +394,30 @@ Data.prototype.compareLivesAndTime = function(playerOne, playerTwo){
   }
   return false
 }
-Data.prototype.getScoreBoard = function(pollId){
-  if(this.pollExists(pollId)){
-    return this.polls[pollId].scoreBoard
+Data.prototype.getScoreBoard = function(quizId){
+  if(this.quizExists(quizId)){
+    return this.quizs[quizId].scoreBoard
   }
   return []
 }
 
-Data.prototype.getCorrectAnswer = function(pollId, qId){
-  if(this.pollExists(pollId)){
-    return this.polls[pollId].questions[qId].a.correct
+Data.prototype.getCorrectAnswer = function(quizId, qId){
+  if(this.quizExists(quizId)){
+    return this.quizs[quizId].questions[qId].a.correct
   }
   return ""
 }
 
-Data.prototype.clearParticipants = function(pollId){
-  if(this.pollExists(pollId)){
-    this.polls[pollId].participants = []
-    this.polls[pollId].currentQuestion = -1
+Data.prototype.clearParticipants = function(quizId){
+  if(this.quizExists(quizId)){
+    this.quizs[quizId].participants = []
+    this.quizs[quizId].currentQuestion = -1
   }
 }
 
-Data.prototype.getTimer = function(pollId){
-  if(this.pollExists(pollId)){
-    return this.polls[pollId].timer
+Data.prototype.getTimer = function(quizId){
+  if(this.quizExists(quizId)){
+    return this.quizs[quizId].timer
   }
 }
 

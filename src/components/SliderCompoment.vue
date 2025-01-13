@@ -34,7 +34,7 @@ export default {
     },
     emits: ["sendAnswer"],
     mounted() {
-        let playerview = document.getElementById("playerview");
+        let playerview = document.getElementById("player-view");
         const playerviewRect = playerview.getBoundingClientRect();
         this.heightPx = playerviewRect.bottom - playerviewRect.top;
         this.minPosition = '0%'

@@ -1,25 +1,14 @@
 <template>
   <div class="admin">
     <h1>{{ uiLabels.adminPanel }}</h1>
-    <GameStatus v-bind:uiLabels="uiLabels" v-bind:numberPlayers="numberPlayers" 
-      v-bind:numberPlayersAnswered="numberPlayersAnswered" v-bind:currentQuestion="pollData.currentQuestion" 
-      v-bind:questionAmount="pollData.questionAmount" v-bind:questions="pollData.questions"/>
-
-    <GameControls @runQuestion="runQuestion()" @endQuestion="endQuestion()"
-    v-bind:uiLabels="uiLabels" v-bind:currentQuestion="pollData.currentQuestion" 
-    v-bind:questionAmount="pollData.questionAmount" v-bind:canStartNextQuestion="canStartNextQuestion"/>
-
-    <section class="participant-controls">
-      <h2>{{ uiLabels.players }}</h2>
-      <PlayersAdmin :pollData="pollData" :uiLabels="uiLabels" />
-    </section>
-
-    <section class="end-game">
-      <button class="game-button finish-button" @click="toggleEndGame">{{ uiLabels.finishEarly }}</button>
-      <div class="popup-background" v-if="showEndGame" @click.self="toggleEndGame">
-        <PopupEndGame :showEndGame="showEndGame" :uiLabels="uiLabels" @close="toggleEndGame" @end="finishGame" />
-      </div>
-    </section>
+    <GameStatus v-bind:uiLabels="uiLabels" v-bind:numberPlayers="numberPlayers"
+      v-bind:numberPlayersAnswered="numberPlayersAnswered" v-bind:currentQuestion="quizData.currentQuestion"
+      v-bind:questionAmount="quizData.questionAmount" v-bind:questions="quizData.questions" />
+    <GameControls @runQuestion="runQuestion()" @endQuestion="endQuestion()" @finishGame="finishGame()" v-bind:uiLabels="uiLabels"
+      v-bind:currentQuestion="quizData.currentQuestion" v-bind:questionAmount="quizData.questionAmount"
+      v-bind:canStartNextQuestion="canStartNextQuestion" />
+    <ParticipantControls :quizData="quizData" :uiLabels="uiLabels" />
+    <EndGame @finishGame="finishGame" :uiLabels="uiLabels" />
   </div>
 </template>
 
@@ -27,64 +16,65 @@
 import io from 'socket.io-client';
 const socket = io(sessionStorage.getItem("dataServer"));
 import PopupEndGame from '../components/PopupEndGame.vue';
-import PlayersAdmin from '../components/PlayersAdmin.vue';
+import ParticipantControls from '../components/ParticipantControls.vue';
 import GameStatus from '../components/GameStatus.vue';
 import GameControls from '../GameControls.vue';
+import EndGame from '../components/EndGame.vue';
 
 export default {
   name: 'AdminView',
   components: {
     PopupEndGame,
-    PlayersAdmin,
+    ParticipantControls,
     GameStatus,
     GameControls,
+    EndGame,
   },
   data: function () {
     return {
       lang: localStorage.getItem("lang") || "en",
-      pollId: "",
+      quizId: "",
       uiLabels: {},
-      pollData: {},
+      quizData: {},
       numberPlayers: 0,
       numberPlayersAnswered: 0,
       canStartNextQuestion: true,
-      showEndGame: false,
     }
   },
   created: function () {
-    this.pollId = this.$route.params.id;
+    this.quizId = this.$route.params.id;
 
     socket.on("uiLabels", labels => this.uiLabels = labels);
-    socket.on("pollData", data => {
-      this.pollData = data
+    socket.on("quizData", data => {
+      this.quizData = data
       this.getNumberPlayers();
     });
     socket.on("participantsUpdate", (p) => {
-      this.pollData.participants = p
+      this.quizData.participants = p
       this.getNumberPlayers();
       this.getnumberPlayersAnswered();
     });
     socket.on('currentQuestionUpdate', (questionNumber) => {
-      this.pollData.currentQuestion = questionNumber
+      this.quizData.currentQuestion = questionNumber
     });
     socket.on('scoreBoardCreated', () => {
-      socket.emit('finishGame', this.pollId)
+      socket.emit('finishGame', this.quizId)
     });
 
-    socket.emit("joinPoll", this.pollId);
+    socket.emit("joinPoll", this.quizId);
     socket.emit("getUILabels", this.lang);
-    socket.emit("updateResult", this.pollId);
+    socket.emit("updateResult", this.quizId);
 
   },
   methods: {
     getNumberPlayers: function () {
-      this.numberPlayers = this.pollData.participants.length
+      this.numberPlayers = this.quizData.participants.length
     },
     getnumberPlayersAnswered: function () {
       this.numberPlayersAnswered = 0
-      const qId = this.pollData.currentQuestion
+      const qId = this.quizData.currentQuestion
       for (let i = 0; i < this.numberPlayers; i++) {
-        if (this.pollData.participants[i].information.answers[qId][0] !== null) {
+        if (this.quizData.participants[i].information.answers[qId][0] !== null) {
           this.numberPlayersAnswered++
           if (this.numberPlayersAnswered == this.numberPlayers) {
             this.endQuestion()
@@ -97,23 +87,20 @@ export default {
     },
     runQuestion: function () {
       this.canStartNextQuestion = false
-      const currentQuestion = this.pollData.currentQuestion + 1;
+      const currentQuestion = this.quizData.currentQuestion + 1;
       this.numberPlayersAnswered = 0
-      socket.emit('runCountdown', { pollId: this.pollId, questionNumber: currentQuestion })
+      socket.emit('runCountdown', { quizId: this.quizId, questionNumber: currentQuestion })
     },
     endQuestion() {
-      socket.emit('endTimer', this.pollId)
+      socket.emit('endTimer', this.quizId)
     },
     finishGame: function () {
-      socket.emit('createScoreBoard', this.pollId)
+      socket.emit('createScoreBoard', this.quizId)
       setTimeout(() => {
-        socket.emit('clearParticipants', this.pollId)
-        this.$router.push('/') // eller skickas någon annanstans? hur ska man göra? idk
-      }, 2000)
+        socket.emit('clearParticipants', this.quizId)
+        this.$router.push('/')
+      }, 5000)
     },
-    toggleEndGame() {
-      this.showEndGame = !this.showEndGame
-    }
   }
 }
 </script>
@@ -174,12 +161,6 @@ export default {
   border-color: #e85537;
 }
 
-.end-game {
-  position: absolute;
-  bottom: 3vh;
-  right: 2vw;
-}
-
 .popup-background {
   position: fixed;
   top: 0;
@@ -192,10 +173,5 @@ export default {
   align-items: center;
   z-index: 1000;
   overflow: hidden;
-}
-
-.participant-controls {
-  max-width: 50%;
-  margin-inline: auto;
 }
 </style>

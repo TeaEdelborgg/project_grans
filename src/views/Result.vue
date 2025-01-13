@@ -31,7 +31,7 @@ export default {
     data: function () {
         return {
             uiLabels: {},
-            pollId: "",
+            quizId: "",
             winners: [],
             losers: [],
             showNameLosers: false,
@@ -43,7 +43,7 @@ export default {
         }
     },
     created: function () {
-        this.pollId = this.$route.params.id
+        this.quizId = this.$route.params.id
         socket.on("sendScoreBoard", val => {
             console.log("val: ", val)
             this.winners = val.slice(0, 3)
@@ -57,11 +57,11 @@ export default {
             this.showNames()
         })
         socket.on("uiLabels", labels => this.uiLabels = labels);
-        socket.emit("joinPoll", this.pollId);
+        socket.emit("joinPoll", this.quizId);
         socket.emit("getUILabels", this.lang);
     },
     mounted() {
-        socket.emit('getScoreBoard', this.pollId)
+        socket.emit('getScoreBoard', this.quizId)
     },
     methods: {
         showNames: function () {

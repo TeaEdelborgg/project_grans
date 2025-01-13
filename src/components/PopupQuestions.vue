@@ -1,11 +1,11 @@
 <template>
     <div class="popup-questions-content">
         <button class="close-button" @click="close">x</button>
-        <h3>{{uiLabels.questionsAnswers}}</h3>
+        <h3>{{ uiLabels.questionsAnswers }}</h3>
         <li v-for="(question, index) in questions" :key="index">
             <strong>{{ uiLabels.question + (index + 1) }}:</strong> {{ question.q }}<br>
-            <strong>{{uiLabels.correctAnswer}}</strong> {{ question.a.correct }}<br>
-            <strong>{{uiLabels.wrongAnswer}}</strong> {{ question.a.wrong.join(', ') }}<br><br>
+            <strong>{{ uiLabels.correctAnswer }}</strong> {{ question.a.correct }}<br>
+            <strong>{{ uiLabels.wrongAnswer }}</strong> {{ question.a.wrong.join(', ') }}<br><br>
         </li>
     </div>
 </template>
