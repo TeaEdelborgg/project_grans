@@ -1,37 +1,13 @@
 <template>
   <div class="admin">
     <h1>{{ uiLabels.adminPanel }}</h1>
-    <section class="game-status">
-      <h2>{{ uiLabels.gameStatus }}</h2>
-      <div>
-        <p>{{ uiLabels.numberOfAnswers + numberPlayersAnswered }}/{{ numberPlayers }}</p>
-        <p>{{ uiLabels.currentQuestion + (pollData.currentQuestion + 1) }}/{{ pollData.questionAmount }}</p>
-      </div>
-      <div class="questions">
-        <button class="game-button" @click="toggleQuestions">{{ uiLabels.viewQuestionsAnswers }}</button>
-        <div class="popup" v-if="showQuestions" @click.self="toggleQuestions">
-          <PopupQuestions :showQuestions="showQuestions" :questions="pollData.questions" :uiLabels="uiLabels"
-            @close="toggleQuestions" />
-        </div>
-      </div>
-    </section>
+    <GameStatus v-bind:uiLabels="uiLabels" v-bind:numberPlayers="numberPlayers" 
+      v-bind:numberPlayersAnswered="numberPlayersAnswered" v-bind:currentQuestion="pollData.currentQuestion" 
+      v-bind:questionAmount="pollData.questionAmount" v-bind:questions="pollData.questions"/>
 
-    <section class="game-controls">
-      <h2>{{ uiLabels.controlGame }}</h2>
-      <button class="game-button" v-if="pollData.currentQuestion == -1"
-        @click="runQuestion">{{ uiLabels.startGame }}</button>
-      <button class="game-button"
-        v-else-if="pollData.currentQuestion + 1 != pollData.questionAmount && canStartNextQuestion"
-        @click="runQuestion">
-        {{ uiLabels.nextQuestion }}
-      </button>
-      <button class="game-button finish-button" v-else-if="!canStartNextQuestion" @click="endQuestion">
-        {{ uiLabels.finishQuestion }}
-      </button>
-      <button class="game-button" v-else @click="finishGame">
-        {{ uiLabels.ViewFinalResults }}
-      </button>
-    </section> <br>
+    <GameControls @runQuestion="runQuestion()" @endQuestion="endQuestion()"
+    v-bind:uiLabels="uiLabels" v-bind:currentQuestion="pollData.currentQuestion" 
+    v-bind:questionAmount="pollData.questionAmount" v-bind:canStartNextQuestion="canStartNextQuestion"/>
 
     <section class="participant-controls">
       <h2>{{ uiLabels.players }}</h2>
@@ -40,7 +16,7 @@
 
     <section class="end-game">
       <button class="game-button finish-button" @click="toggleEndGame">{{ uiLabels.finishEarly }}</button>
-      <div class="popup" v-if="showEndGame" @click.self="toggleEndGame">
+      <div class="popup-background" v-if="showEndGame" @click.self="toggleEndGame">
         <PopupEndGame :showEndGame="showEndGame" :uiLabels="uiLabels" @close="toggleEndGame" @end="finishGame" />
       </div>
     </section>
@@ -50,16 +26,18 @@
 <script>
 import io from 'socket.io-client';
 const socket = io(sessionStorage.getItem("dataServer"));
-import PopupQuestions from '../components/PopupQuestions.vue';
 import PopupEndGame from '../components/PopupEndGame.vue';
 import PlayersAdmin from '../components/PlayersAdmin.vue';
+import GameStatus from '../components/GameStatus.vue';
+import GameControls from '../GameControls.vue';
 
 export default {
   name: 'AdminView',
   components: {
-    PopupQuestions,
     PopupEndGame,
     PlayersAdmin,
+    GameStatus,
+    GameControls,
   },
   data: function () {
     return {
@@ -70,7 +48,6 @@ export default {
       numberPlayers: 0,
       numberPlayersAnswered: 0,
       canStartNextQuestion: true,
-      showQuestions: false,
       showEndGame: false,
     }
   },
@@ -100,9 +77,6 @@ export default {
 
   },
   methods: {
-    test: function () {
-      console.log(this.pollData.participants)
-    },
     getNumberPlayers: function () {
       this.numberPlayers = this.pollData.participants.length
     },
@@ -137,9 +111,6 @@ export default {
         this.$router.push('/') // eller skickas någon annanstans? hur ska man göra? idk
       }, 2000)
     },
-    toggleQuestions() {
-      this.showQuestions = !this.showQuestions;
-    },
     toggleEndGame() {
       this.showEndGame = !this.showEndGame
     }
@@ -147,7 +118,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .admin {
   position: relative;
   min-height: 90.7vh;
@@ -209,17 +180,7 @@ export default {
   right: 2vw;
 }
 
-.game-status {
-  position: absolute;
-  top: 20vh;
-  left: 3vw;
-  background: #4c3100;
-  padding: 10px;
-  color: #c7c7c7;
-  border-radius: 5px;
-}
-
-.popup {
+.popup-background {
   position: fixed;
   top: 0;
   left: 0;
