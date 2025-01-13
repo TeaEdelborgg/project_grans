@@ -61,7 +61,7 @@ export default {
       socket.emit('finishGame', this.quizId)
     });
 
-    socket.emit("joinPoll", this.quizId);
+    socket.emit("joinQuiz", this.quizId);
     socket.emit("getUILabels", this.lang);
     socket.emit("updateResult", this.quizId);
 

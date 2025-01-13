@@ -3,7 +3,7 @@
     <div class="adminSection">
 
 
-      <div class="PollID">
+      <div class="QuizID">
         <h1>{{ uiLabels.quizId }} {{ quizId }}</h1>
       </div>
 
@@ -48,8 +48,8 @@ export default {
   created() {
     this.quizId = this.$route.params.id;
     socket.on("uiLabels", (labels) => (this.uiLabels = labels));
-    /*socket.on("startPoll", (this.quizId ))*/
-    socket.on('startPoll', () =>
+    /*socket.on("startQuiz", (this.quizId ))*/
+    socket.on('startQuiz', () =>
       this.$router.push('/game/' + this.quizId)
     );
     socket.on("participantsUpdate", (p) => {
@@ -57,15 +57,15 @@ export default {
     });
 
 
-    socket.emit("joinPoll", this.quizId);
+    socket.emit("joinQuiz", this.quizId);
     socket.emit("getParticipants", this.quizId)
     socket.emit("getUILabels", this.lang);
   },
 
 
   methods: {
-    startPoll() {
-      socket.emit("startPoll", this.quizId);
+    startQuiz() {
+      socket.emit("startQuiz", this.quizId);
     },
   }
 }
@@ -90,7 +90,7 @@ export default {
   overflow:auto;
 }
 
-.PollID {
+.QuizID {
   text-align: center;
   padding: 20px;
   border: 2px solid rgb(255, 255, 255);

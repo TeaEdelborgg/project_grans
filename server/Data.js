@@ -35,7 +35,7 @@ Data.prototype.getUILabels = function (lang) {
   return JSON.parse(labels);
 }
 
-Data.prototype.createPoll = function(quizId, lang="en") {
+Data.prototype.createQuiz = function(quizId, lang="en") {
   if (!this.quizExists(quizId)) {
     let quiz = {};
     quiz.lang = lang;  
@@ -55,21 +55,21 @@ Data.prototype.createPoll = function(quizId, lang="en") {
   return this.quizs[quizId];
 }
 
-Data.prototype.getPoll = function(quizId) {
+Data.prototype.getQuiz = function(quizId) {
   if (this.quizExists(quizId)) {
     return this.quizs[quizId];
   }
   return {};
 }
 
-Data.prototype.hasPollStarted = function(quizId) {
+Data.prototype.hasQuizStarted = function(quizId) {
   if (this.quizExists(quizId)) {
     return this.quizs[quizId].started;
   }
   return false;
 }
 
-Data.prototype.participateInPoll = function(quizId, name, userId, color) {
+Data.prototype.participateInQuiz = function(quizId, name, userId, color) {
   if (this.quizExists(quizId)) {
     this.quizs[quizId].participants.push({userId: userId, information: {name: name, color: color, answers: [], correctedAnswers:[], in:true, pillarBoxes:[], time:0, lives:2, usedFiftyFifty:false, usedAskAudience:false, pillarHeight:2}}) 
   }
@@ -78,7 +78,7 @@ Data.prototype.participateInPoll = function(quizId, name, userId, color) {
 Data.prototype.updateColorSelection = function (info) {
   const {quizId, color, userId} = info;
   if (this.quizExists(quizId)) {
-    const quiz = this.getPoll(quizId);
+    const quiz = this.getQuiz(quizId);
     const participant = quiz.participants.find((p) => p.userId === userId);
     if (participant) {
       participant.information.color = color;

@@ -84,7 +84,7 @@ export default {
     )
 
     socket.emit("getUILabels", this.lang);
-    socket.emit("joinPoll", this.quizId);
+    socket.emit("joinQuiz", this.quizId);
     socket.emit('getStats', this.quizId);
 
   },

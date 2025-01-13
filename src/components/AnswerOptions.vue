@@ -55,7 +55,7 @@ export default {
     }
   },
   created: function () {
-    socket.emit("joinPoll", this.quizId);
+    socket.emit("joinQuiz", this.quizId);
 
     socket.on('sendTimer', timer => {
       this.timer = timer;

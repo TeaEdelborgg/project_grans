@@ -56,7 +56,7 @@ export default {
             this.showNames()
         })
         socket.on("uiLabels", labels => this.uiLabels = labels);
-        socket.emit("joinPoll", this.quizId);
+        socket.emit("joinQuiz", this.quizId);
         socket.emit("getUILabels", this.lang);
     },
     mounted() {

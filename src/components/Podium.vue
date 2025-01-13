@@ -52,7 +52,7 @@ export default {
     border-top-right-radius: 0;
 }
 
-#podiumContainer h3 {
+#podium-container h3 {
     color: #f9ac33;
     font-size: 1.5em;
     margin: 0;
@@ -63,7 +63,7 @@ export default {
 
 }
 
-#podiumContainer h1 {
+#podium-container h1 {
     color: white;
     margin: 0;
     z-index: 5;

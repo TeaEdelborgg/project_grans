@@ -3,7 +3,7 @@
 
       <header class="topSection">
         <div class="showId">{{ uiLabels.quizId }} {{quizId}}</div>
-        <button v-on:click="doneWithPoll" class="continueButton">
+        <button v-on:click="doneWithQuiz" class="continueButton">
         {{ uiLabels.doneWithQuiz }}
       </button>
       </header>
@@ -38,7 +38,7 @@
             {{ uiLabels.goBack }}
           </button>
           <router-link v-bind:to="'/adminLobby/' + quizId">
-            <button>{{ uiLabels.startPoll }}</button>
+            <button>{{ uiLabels.startQuiz }}</button>
           </router-link>
         </div>
       </div>
@@ -86,16 +86,16 @@ export default {
     socket.on("checkedAnswer", (answers) => (this.checkedAnswers = answers));
     socket.on("getTime", (time) => (this.timeLeft = time));
     socket.on("getTimeBeforeQuestion", (timeTwo) => (this.timeLeftBeforeQuestion = timeTwo));
-    this.createPoll();
+    this.createQuiz();
   },
   methods: {
-    generatePollId() {
+    generateQuizId() {
       return Math.random().toString(36).substring(2, 8).toUpperCase();
     },
-    createPoll() {
-      this.quizId = this.generatePollId();
-      socket.emit("createPoll", { quizId: this.quizId, lang: this.lang });
-      socket.emit("joinPoll", this.quizId);
+    createQuiz() {
+      this.quizId = this.generateQuizId();
+      socket.emit("createQuiz", { quizId: this.quizId, lang: this.lang });
+      socket.emit("joinQuiz", this.quizId);
     },
     addQuestion(newQuestion) {
       newQuestion.id = this.newQuestionId;
@@ -116,7 +116,7 @@ export default {
         questionToUpdate: updatedQuestion,
       });
     },
-    doneWithPoll() {
+    doneWithQuiz() {
       this.donePopup = true;
     },
     closePopup() {
