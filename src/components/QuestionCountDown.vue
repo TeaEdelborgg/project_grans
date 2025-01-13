@@ -43,7 +43,7 @@ export default {
   },
   data: function () {
     return {
-      pollId: "",
+      quizId: "",
       questionActive: false,
       timeLeftBeforeQuestion: 0,
       timeLeftBeforeAnswers: 0,
@@ -53,8 +53,8 @@ export default {
     }
   },
   created: function () {
-    this.pollId = this.$route.params.id;
-    socket.emit("joinPoll", this.pollId);
+    this.quizId = this.$route.params.id;
+    socket.emit("joinPoll", this.quizId);
   },
   mounted() {
     this.countdownResult()

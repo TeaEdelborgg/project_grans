@@ -1,5 +1,5 @@
 <template>
-  <div id="playerview">
+  <div id="player-view">
     <SliderCompoment @sendAnswer="submitAnswer()" v-bind:sent="sent" v-bind:seeAlternatives="seeAlternatives"
       v-bind:questionActive="questionActive" v-bind:selectedAnswer="selectedAnswer"
       v-bind:questionNumber="questionNumber" v-bind:uiLabels="uiLabels" />
@@ -29,7 +29,7 @@ export default {
   },
   props: {
     userId: String,
-    pollId: String,
+    quizId: String,
     uiLabels: Object,
   },
   data: function () {
@@ -55,7 +55,7 @@ export default {
     }
   },
   created: function () {
-    socket.emit("joinPoll", this.pollId);
+    socket.emit("joinPoll", this.quizId);
 
     socket.on('sendTimer', timer => {
       this.timer = timer;
@@ -78,7 +78,7 @@ export default {
         this.audienceAnswer = audienceAnswer.answer;
       }
     });
-    socket.emit('getTimer', this.pollId)
+    socket.emit('getTimer', this.quizId)
   },
   emits: ["answer", "updateQuestionActive"],
   methods: {
@@ -86,7 +86,7 @@ export default {
       this.selectedAnswer = answer
     },
     submitAnswer: function () {
-      socket.emit("submitAnswer", { pollId: this.pollId, questionNumber: this.questionNumber, answer: this.selectedAnswer, userId: this.userId, time: Math.ceil(this.timeLeft / 1000) });
+      socket.emit("submitAnswer", { quizId: this.quizId, questionNumber: this.questionNumber, answer: this.selectedAnswer, userId: this.userId, time: Math.ceil(this.timeLeft / 1000) });
       this.sent = true;
       this.usedFiftyFiftyThisRound = false;
     },
@@ -135,8 +135,8 @@ export default {
       this.percentage = 0
       this.questionActive = false;
 
-      socket.emit('getPlayer', { pollId: this.pollId, userId: this.userId });
-      socket.emit('getCorrectedUserAnswer', { pollId: this.pollId, questionNumber: this.questionNumber, userId: this.userId });
+      socket.emit('getPlayer', { quizId: this.quizId, userId: this.userId });
+      socket.emit('getCorrectedUserAnswer', { quizId: this.quizId, questionNumber: this.questionNumber, userId: this.userId });
       this.showCorrectAnswer = true;
       setTimeout(() => {
         this.seeAlternatives = false;
@@ -152,7 +152,7 @@ export default {
 </script>
 
 <style scoped>
-#playerview {
+#player-view {
   position: absolute;
   display: flex;
   flex-direction: column;

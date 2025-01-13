@@ -2,13 +2,13 @@
   <div class="container">
 
       <header class="topSection">
-        <div class="showId">{{ uiLabels.pollId }} {{pollId}}</div>
+        <div class="showId">{{ uiLabels.quizId }} {{quizId}}</div>
         <button v-on:click="doneWithPoll" class="continueButton">
         {{ uiLabels.doneWithQuiz }}
       </button>
       </header>
     <div>
-      <h2>{{uiLabels.question + (pollData.questions.length+1)}}</h2>
+      <h2>{{uiLabels.question + (quizData.questions.length+1)}}</h2>
       <AddQuestionComponent
           :uiLabels="uiLabels"
           :maxQuestions="maxQuestions"
@@ -19,7 +19,7 @@
     <div>
       <h3>{{ uiLabels.addedQuestions }}</h3>
       <EditQuestionComponent
-        v-for="(q, index) in pollData.questions"
+        v-for="(q, index) in quizData.questions"
         :key="index"
         :question="q"
         :index="index"
@@ -33,11 +33,11 @@
   <div v-if="donePopup" class="overlay" v-on:click="closePopup">
       <div class="popup" v-on:click.stop>
         <h2>{{ uiLabels.doneQuestion }}</h2>
-        <div class="pollDoneButtons">
+        <div class="quizDoneButtons">
           <button id="goBack" v-on:click="closePopup">
             {{ uiLabels.goBack }}
           </button>
-          <router-link v-bind:to="'/adminLobby/' + pollId">
+          <router-link v-bind:to="'/adminLobby/' + quizId">
             <button>{{ uiLabels.startPoll }}</button>
           </router-link>
         </div>
@@ -60,13 +60,13 @@ export default {
   data() {
     return {
       lang: localStorage.getItem("lang") || "en",
-      pollId: "",
+      quizId: "",
       question: "",
       answers: {},
       correctAnswer: "",
       wrongAnswers: ["", "", ""],
       newQuestionId: 1,
-      pollData: {
+      quizData: {
         questions: [],
       },
       maxQuestions: 9,
@@ -80,8 +80,8 @@ export default {
   },
   created() {
     socket.on("uiLabels", (labels) => (this.uiLabels = labels));
-    socket.on("pollData", (data) => (this.pollData = data));
-    socket.on("participantsUpdate", (p) => (this.pollData.participants = p));
+    socket.on("quizData", (data) => (this.quizData = data));
+    socket.on("participantsUpdate", (p) => (this.quizData.participants = p));
     socket.emit("getUILabels", this.lang);
     socket.on("checkedAnswer", (answers) => (this.checkedAnswers = answers));
     socket.on("getTime", (time) => (this.timeLeft = time));
@@ -93,26 +93,26 @@ export default {
       return Math.random().toString(36).substring(2, 8).toUpperCase();
     },
     createPoll() {
-      this.pollId = this.generatePollId();
-      socket.emit("createPoll", { pollId: this.pollId, lang: this.lang });
-      socket.emit("joinPoll", this.pollId);
+      this.quizId = this.generatePollId();
+      socket.emit("createPoll", { quizId: this.quizId, lang: this.lang });
+      socket.emit("joinPoll", this.quizId);
     },
     addQuestion(newQuestion) {
       newQuestion.id = this.newQuestionId;
-      this.pollData.questions.push(newQuestion);
-      socket.emit("addQuestion", { pollId: this.pollId, q: newQuestion });
+      this.quizData.questions.push(newQuestion);
+      socket.emit("addQuestion", { quizId: this.quizId, q: newQuestion });
 
       this.newQuestionId += 1;
     },
 
     editQuestion(index) {
-      this.pollData.questions[index].isEditing = true;
+      this.quizData.questions[index].isEditing = true;
     },
     saveEditedQuestion(updatedQuestion, index) {
       updatedQuestion.isEditing = false;
-      this.pollData.questions[index] = updatedQuestion;
+      this.quizData.questions[index] = updatedQuestion;
       socket.emit("updateQuestion", {
-        pollId: this.pollId,
+        quizId: this.quizId,
         questionToUpdate: updatedQuestion,
       });
     },
@@ -208,13 +208,13 @@ h3 {
   transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
-.pollDoneButtons {
+.quizDoneButtons {
   display: flex;
   justify-content: center;
   gap: 10%;
 }
 
-.pollDoneButtons button {
+.quizDoneButtons button {
   border: none;
   cursor: pointer;
   margin: 4vh 2vw 1vh;
@@ -227,11 +227,11 @@ h3 {
   box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
-.pollDoneButtons #goBack{
+.quizDoneButtons #goBack{
   background-color:#cfcfcf;
 }
 
-.pollDoneButtons button:hover {
+.quizDoneButtons button:hover {
   background-color: rgb(227, 122, 1);
   box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
   transform: scale(1.2);

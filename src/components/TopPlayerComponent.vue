@@ -1,5 +1,5 @@
 <template>
-    <div id="upperHalf">
+    <div id="upper-half">
         <div class="player-statistics">
             <div class="player-hearts">
                 <img :src="this.userStats?.information?.lives >= 1 ? '/img/hjartaRod.png' : '/img/hjartaGro.png'"
@@ -9,7 +9,7 @@
             </div>
             <div class="player-time">{{ this.userStats?.information?.time }} s </div>
         </div>
-        <div class="barRim"></div>
+        <div class="bar-rim"></div>
     </div>
 </template>
 
@@ -23,7 +23,7 @@ export default {
 </script>
 
 <style>
-#upperHalf {
+#upper-half {
     width: 100%;
     display: flex;
     justify-content: center;

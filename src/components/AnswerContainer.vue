@@ -1,8 +1,8 @@
 <template>
-    <div id="answersContainer">
-        <div v-for="(a, index) in answerAlternatives" class="containerButton">
+    <div id="answers-container">
+        <div v-for="(a, index) in answerAlternatives" class="container-button">
             <div class="line"></div>
-            <div class="borderRect" :style="{ filter: isDisabled(a) ? 'brightness(30%)' : 'none' }">
+            <div class="border-rectangle" :style="{ filter: isDisabled(a) ? 'brightness(30%)' : 'none' }">
                 <button class="rectangle" :class="{
                     selected: a === selectedAnswer,
                     sended: a === selectedAnswer && sent,
@@ -10,8 +10,8 @@
                     showIncorrect: a === selectedAnswer && showCorrectAnswer && !isCorrectAnswer,
                     showAudienceAnswer: a === audienceAnswer,
                 }" v-on:click="selectAnswer(a)" v-bind:key="a" :disabled="isDisabled(a)">
-                    <div class="textContainer">
-                        <span class="answerLetters"> {{ answerLetters[index] }}: </span>
+                    <div class="text-container">
+                        <span class="answer-letters"> {{ answerLetters[index] }}: </span>
                         <h3> {{ a }} </h3>
                     </div>
                 </button>
@@ -25,7 +25,7 @@ export default {
     name: 'AnswerContainer',
     props: {
         userId: String,
-        pollId: String,
+        quizId: String,
         uiLabels: Object,
         answerAlternatives: Array,
         sent: Boolean,
@@ -65,7 +65,7 @@ export default {
 </script>
 
 <style>
-#answersContainer {
+#answers-container {
     bottom: 0;
     width: 100%;
     height: 93%;
@@ -78,7 +78,7 @@ export default {
     margin: auto;
 }
 
-.containerButton {
+.container-button {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -93,7 +93,7 @@ export default {
     box-shadow: 0 0 5px lightyellow;
 }
 
-.borderRect {
+.border-rectangle {
     clip-path: polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%);
     border: 2px solid lightyellow;
     position: absolute;
@@ -121,7 +121,7 @@ export default {
     overflow-wrap: break-word;
 }
 
-.textContainer {
+.text-container {
     position: absolute;
     width: 100%;
     display: flex;
@@ -133,7 +133,7 @@ export default {
     transform: translateY(-50%);
 }
 
-.answerLetters {
+.answer-letters {
     width: 5%;
     color: #FF851B;
     left: 0;

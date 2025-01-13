@@ -44,9 +44,9 @@ export default {
   methods: {
     checkPollStatus() {
       socket.emit('joinPoll', this.newPollId);
-      socket.on('pollStatus', (status) => {
+      socket.on('quizStatus', (status) => {
         if (status.started) {
-          alert("Too late! This poll has already started...");
+          alert("Too late! This quiz has already started...");
         } else {
           this.$router.push('/lobby/' + this.newPollId);
         }

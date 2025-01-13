@@ -1,31 +1,45 @@
 <template>
     <div class="popup-end-game-content">
-        <p>{{ uiLabels.areYouSure }}</p>
-        <button class="continue-button" @click="close">{{ uiLabels.continueGame }}</button>
-        <button class="end-button" @click="end">{{ uiLabels.finishGame}}</button>
+        <div v-if="!endGame">
+            <p>{{ uiLabels.areYouSure }}</p>
+            <button class="continue-button" @click="close">{{ uiLabels.continueGame }}</button>
+            <button class="end-button" @click="end">{{ uiLabels.finishGame }}</button>
+        </div>
+        <EndingMessage v-bind:uiLabels="uiLabels" v-else/>
     </div>
 </template>
 
 <script>
+import EndingMessage from './EndingMessage.vue';
+
 export default {
     name: "PopupEndGame",
+    components: {
+        EndingMessage,
+    },
     props: {
         showEndGame: Boolean,
         questions: Object,
         uiLabels: Object,
+    },
+    data() {
+        return {
+            endGame: false,
+        }
     },
     methods: {
         close() {
             this.$emit("close");
         },
         end() {
+            this.endGame = true
             this.$emit("end")
         },
     },
 };
 </script>
 
-<style scoped>
+<style>
 .popup-end-game-content {
     position: relative;
     background: #0d1137;
@@ -35,6 +49,9 @@ export default {
     width: 15%;
     max-height: 80vh;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    margin: 1em;
+    font-size: 1em;
+    font-weight: bold;
 }
 
 .popup-end-game-content button {

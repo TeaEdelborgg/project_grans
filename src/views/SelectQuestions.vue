@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1>{{ uiLabels.choosePollText }}</h1>
-    <div class="pollButtons">
+    <div class="quizButtons">
       <button v-on:click="choosePoll('quiz1')">
         {{ uiLabels.historyQuiz }}
         <img src="/public/img/history_icon.png" alt="icon1"/>
@@ -24,7 +24,7 @@
         {{ uiLabels.choosePoll }}
     </button>
 
-    <div v-for="(q, index) in pollData.questions" :key="index" class="questionBoxes">
+    <div v-for="(q, index) in quizData.questions" :key="index" class="questionBoxes">
         <p>{{ uiLabels.question + " " + (index + 1) + ": " + q.q }}</p>
         <p>{{ uiLabels.correctAnswer + q.a.correct }}</p>
         <p>{{ uiLabels.wrongAnswer + q.a.wrong.join(', ') }}</p>
@@ -42,13 +42,13 @@
     data: function () {
       return {
         lang: localStorage.getItem("lang") || "en",
-        pollId: "",
+        quizId: "",
         question: "",
         answers: {},
         correctAnswer: "",
         wrongAnswers: ["", "", ""],
         questionNumber: 0,
-        pollData: {},
+        quizData: {},
         uiLabels: {},
         chosenPoll:false,
         
@@ -56,8 +56,8 @@
     },
     created: function () {
       socket.on( "uiLabels", labels => this.uiLabels = labels );
-      socket.on( "pollData", data => this.pollData = data );
-      socket.on( "participantsUpdate", p => this.pollData.participants = p );
+      socket.on( "quizData", data => this.quizData = data );
+      socket.on( "participantsUpdate", p => this.quizData.participants = p );
       socket.emit( "getUILabels", this.lang );
       socket.emit("getQuiz");
     },
@@ -65,17 +65,17 @@
 
       choosePoll: function(id) {
         if (this.lang==="sv"){
-          this.pollId = (id + "Sv")
+          this.quizId = (id + "Sv")
         }
-        else {this.pollId = (id + "En")}
+        else {this.quizId = (id + "En")}
         this.chosenPoll=true;
-        socket.emit("createPoll", { pollId: this.pollId, lang: this.lang });
-        socket.emit("joinPoll", this.pollId);
+        socket.emit("createPoll", { quizId: this.quizId, lang: this.lang });
+        socket.emit("joinPoll", this.quizId);
         
       },
       continueToLobby() {
         if (this.chosenPoll) {
-        this.$router.push(`/adminLobby/${this.pollId}`);
+        this.$router.push(`/adminLobby/${this.quizId}`);
         }
       }
     }
@@ -121,31 +121,31 @@ button:hover {
 }
 
 h1{
-  margin: 15vh 10vw 5vh; 
+  margin: 10vh 10vw 5vh; 
   word-wrap: break-word; 
   white-space: normal;
   text-align: center; 
 }
 
-.pollButtons {
+.quizButtons {
   display: flex;
   justify-content: space-around;
   margin:0vh 2vw;
 }
 
-.pollButtons button{
+.quizButtons button{
   display: flex;            
   flex-direction: column;
   justify-content: center;  
   width: auto;
   height:auto;
   padding: 2vh 3vw;
-  margin: 5vh 5vw;
+  margin: 0vh 5vw;
   color:#000;
   font-weight:bold;
 }
 
-.pollButtons img{
+.quizButtons img{
   width: 70%;
   height: 70%; 
   margin-top:2vh;
@@ -186,4 +186,32 @@ h1{
   box-sizing: border-box;
 }
 
+
+@media (max-width: 480px) {
+button:hover {
+  transform: scale(1.1); 
+}
+h1{
+  margin: 15vh auto 3vh; 
+}
+.pollButtons {
+  margin:0vh 1vw;
+}
+
+.pollButtons button{
+  padding: 1vh 1vw;
+  margin: 0vh 1vw;
+  font-size: 10px;
+}
+.pollButtons img{
+  width: 50%;
+  height: 50%; 
+  margin-top:2vh;
+}
+.continue {
+  padding: 3vh 2vw;
+  margin: 2vh auto;
+
+}
+}
 </style>
