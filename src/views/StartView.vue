@@ -156,63 +156,19 @@ h1 {
     width: 38%; 
     height: 8%;
     margin: 2%;
-    font-size: 3.5vw;
+    font-size: 5vw;
     white-space: nowrap;
   }
 
   .questionMark {
     font-size: 50px; 
   }
+
+  .langbutton img {
+    width: 40px; 
+    height: 28px; 
+    margin-left: 27%; 
+    margin-top: 5px; 
+  }
 }
-/*
-  header {
-    background-color: gray;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 2em auto;
-  }
-  .logo {  Kolla cursor i hemsidan, konstigt ändra den så att det blir vanlig pil över logon 
-    text-transform: uppercase;
-    letter-spacing: 0.25em;
-    font-size: 2.5rem;
-    color: white;
-    padding-top:0.2em;
-  }
-  .logo img {
-    height:2.5rem;
-    vertical-align: bottom;
-    margin-right: 0.5rem; 
-  }
-  .hamburger {
-    color:white;
-    width:1em;
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    padding:0.5rem;
-    top:0;
-    left:0;
-    height: 2rem;
-    cursor: pointer;
-    font-size: 1.5rem;
-  }
-
-
-@media screen and (max-width:50em) {
-  .logo {
-    font-size: 5vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .hamburger::before {
-    content: "☰"; 
-  }
-  .close::before {
-    content: "✕";  
-  }
-  .hide {
-    left:-12em;
-  }
-}*/
 </style>
