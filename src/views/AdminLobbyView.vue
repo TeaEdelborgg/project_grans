@@ -167,8 +167,8 @@ h1 {
   padding: 20px;
   background: linear-gradient(135deg, #1e0880,  #06012e);
   border-radius: 10px;
-  width:1100px;
-  height: 100px;
+  width:95vw;
+  height: 23vh;
   margin: 60px auto;
   margin-bottom: 0px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
