@@ -26,9 +26,9 @@
 import io from 'socket.io-client';
 //const socket = io("localhost:3000");
 //sessionStorage.setItem("dataServer", "130.243.231.147:3000")
-sessionStorage.setItem("dataServer", "localhost:3000")
-//sessionStorage.setItem("dataServer", ""); // för render
-const socket = io(sessionStorage.getItem("dataServer"))
+//sessionStorage.setItem("dataServer", "localhost:3000")
+sessionStorage.setItem("dataServer", ""); // för render
+const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
 
 export default {
   name: 'StartView',
