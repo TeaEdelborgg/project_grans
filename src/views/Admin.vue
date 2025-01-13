@@ -92,7 +92,7 @@ export default {
       this.numberPlayersAnswered = 0
       socket.emit('runCountdown', { quizId: this.quizId, questionNumber: currentQuestion })
     },
-    endQuestion: function () {
+    endQuestion() {
       socket.emit('endTimer', this.quizId)
     },
     finishGame: function () {
