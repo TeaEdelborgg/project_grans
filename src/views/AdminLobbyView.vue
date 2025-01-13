@@ -362,6 +362,49 @@ h4 {
   transform: scale(1.2);
 }
 
-
+@media (max-width: 480px) {
+  .waitingLobby {
+    width:200px;
+    height: 120px;
+    margin-top: 4px;
+  }
+  .waitingLobby p{
+    font-size: 10px;
+  }
+  .participantColor {
+    padding: 8px 16px;
+    margin: 1vw;
+    font-size: 70%;
+  }
+  .PollID {
+  width: 200px;
+  height: 150px;
+  }
+  h2 {
+  font-size: 300%;
+  }
+  .container {
+  height: 100vh;
+  width: 100vw;
+  }
+  .adminButtons button{
+    margin-left: 1px;
+    margin-right: 1px;
+    font-size: 12px;
+    width: 115px;
+    height:25px;
+  }
+  .RulesPopup button {
+    left: 210px;
+  }
+  .RulesPopup  {
+    margin-top: 50px;
+    font-size: 13px;
+  }
+  .PollPopup {
+    font-size:20px;
+    max-width: 180px;
+  }
+}
 </style>
 
