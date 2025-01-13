@@ -21,7 +21,7 @@
 // @ is an alias to /src
 import PlayerPedestal from '@/components/PlayerPedestal.vue';
 import io from 'socket.io-client';
-import HostPlayer from '@/components/hostPlayer.vue';
+import HostPlayer from '@/components/HostPlayer.vue';
 import Frame from '@/components/Frame.vue';
 //const socket = io("localhost:3000");
 const socket = io(sessionStorage.getItem("dataServer")) //for mobile phones osv
