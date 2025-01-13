@@ -64,9 +64,9 @@
 
       chooseQuiz: function(id) {
         if (this.lang==="sv"){
-          this.quizId = (id + "Sv")
+          this.quizId = (id + "Sv" + (Math.random().toString(36).substring(2, 8).toUpperCase()))
         }
-        else {this.quizId = (id + "En")}
+        else {this.quizId = (id + "En" + (Math.random().toString(36).substring(2, 8).toUpperCase()))}
         this.chosenQuiz=true;
         socket.emit("createQuiz", { quizId: this.quizId, lang: this.lang });
         socket.emit("joinQuiz", this.quizId);

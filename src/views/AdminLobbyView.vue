@@ -146,6 +146,7 @@ export default{
   padding: 0;
   text-align: center;
   box-sizing: border-box;
+  overflow:auto;
 }
 h1 {
   color: #cfcfcf;
@@ -153,12 +154,12 @@ h1 {
 }
 .QuizID {
   text-align: center;
-  padding: 20px;
+  padding: 10px;
   border: 2px solid rgb(255, 255, 255);
   border-radius: 10px;
   width: 600px;
-  height: 150px;
-  margin: 30px auto 10px;
+  height: auto;
+  margin: 20px auto 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   font-family: monospace;
 }
@@ -168,8 +169,8 @@ h1 {
   background: linear-gradient(135deg, #1e0880,  #06012e);
   border-radius: 10px;
   width:95vw;
-  height: 23vh;
-  margin: 60px auto;
+  height: 20vh;
+  margin: 40px auto;
   margin-bottom: 0px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
