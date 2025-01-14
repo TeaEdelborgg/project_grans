@@ -19,7 +19,7 @@ const socket = io(sessionStorage.getItem("dataServer"));
 import PopupEndGame from '../components/PopupEndGame.vue';
 import ParticipantControls from '../components/ParticipantControls.vue';
 import GameStatus from '../components/GameStatus.vue';
-import GameControls from '../GameControls.vue';
+import GameControls from '../components/GameControls.vue';
 import EndGame from '../components/EndGame.vue';
 
 export default {

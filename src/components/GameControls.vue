@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import EndingMessage from './components/EndingMessage.vue';
+import EndingMessage from './EndingMessage.vue';
 
 export default {
     name: 'GameControls',
